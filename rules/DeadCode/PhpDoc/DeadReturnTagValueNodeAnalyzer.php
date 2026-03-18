@@ -1,12 +1,11 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\DeadCode\PhpDoc;
 
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Function_;
 use PHPStan\Analyser\Scope;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
@@ -23,6 +22,7 @@ use Rector\DeadCode\TypeNodeAnalyzer\MixedArrayTypeNodeAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+
 final class DeadReturnTagValueNodeAnalyzer
 {
     /**

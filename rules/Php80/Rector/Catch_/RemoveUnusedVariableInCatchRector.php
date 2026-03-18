@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php80\Rector\Catch_;
 
 use PhpParser\Node;
@@ -16,6 +17,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php80\Rector\Catch_\RemoveUnusedVariableInCatchRector\RemoveUnusedVariableInCatchRectorTest
  */
@@ -41,7 +43,8 @@ final class RemoveUnusedVariableInCatchRector extends AbstractRector implements 
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Remove unused variable in `catch()`', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove unused variable in `catch()`', [new CodeSample(
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run()
@@ -52,7 +55,8 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run()
@@ -63,7 +67,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>
@@ -92,7 +96,7 @@ CODE_SAMPLE
                 }
                 /** @var string $variableName */
                 $variableName = $this->getName($caughtVar);
-                $isFoundInCatchStmts = (bool) $this->betterNodeFinder->findFirst(array_merge($catch->stmts, $stmt->finally instanceof Finally_ ? $stmt->finally->stmts : []), fn(Node $subNode): bool => $this->exprUsedInNodeAnalyzer->isUsed($subNode, $caughtVar));
+                $isFoundInCatchStmts = (bool) $this->betterNodeFinder->findFirst(array_merge($catch->stmts, $stmt->finally instanceof Finally_ ? $stmt->finally->stmts : []), fn (Node $subNode): bool => $this->exprUsedInNodeAnalyzer->isUsed($subNode, $caughtVar));
                 if ($isFoundInCatchStmts) {
                     continue;
                 }

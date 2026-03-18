@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\DeadCode\SideEffect;
 
-use RectorPrefix202603\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
@@ -20,6 +20,8 @@ use PHPStan\Type\ObjectType;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpParser\Node\BetterNodeFinder;
+use RectorPrefix202603\Nette\Utils\Strings;
+
 final class SideEffectNodeDetector
 {
     /**

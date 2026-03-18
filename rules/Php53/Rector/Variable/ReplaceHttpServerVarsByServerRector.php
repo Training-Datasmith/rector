@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php53\Rector\Variable;
 
 use PhpParser\Node;
@@ -10,6 +11,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php53\Rector\Variable\ReplaceHttpServerVarsByServerRector\ReplaceHttpServerVarsByServerRectorTest
  */

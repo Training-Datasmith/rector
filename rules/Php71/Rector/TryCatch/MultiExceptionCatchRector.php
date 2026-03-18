@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php71\Rector\TryCatch;
 
 use PhpParser\Node;
@@ -11,6 +12,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php71\Rector\TryCatch\MultiExceptionCatchRector\MultiExceptionCatchRectorTest
  */
@@ -26,7 +28,8 @@ final class MultiExceptionCatchRector extends AbstractRector implements MinPhpVe
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change multiple catch statements of the same exception to a single one `|` separated', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change multiple catch statements of the same exception to a single one `|` separated', [new CodeSample(
+            <<<'CODE_SAMPLE'
 try {
     // Some code...
 } catch (ExceptionType1 $exception) {
@@ -35,14 +38,15 @@ try {
     $sameCode;
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 try {
     // Some code...
 } catch (ExceptionType1 | ExceptionType2 $exception) {
     $sameCode;
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

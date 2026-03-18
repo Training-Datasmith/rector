@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php80\NodeFactory;
 
 use PhpParser\Node\Expr;
@@ -16,6 +17,7 @@ use Rector\Php80\NodeAnalyzer\MatchSwitchAnalyzer;
 use Rector\Php80\ValueObject\CondAndExpr;
 use Rector\Php80\ValueObject\MatchResult;
 use Rector\PhpParser\Comparing\NodeComparator;
+
 final class MatchFactory
 {
     /**

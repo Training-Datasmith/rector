@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php83\Rector\Class_;
 
 use PhpParser\Node;
@@ -11,6 +12,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php83\Rector\Class_\ReadOnlyAnonymousClassRector\ReadOnlyAnonymousClassRectorTest
  */
@@ -26,7 +28,8 @@ final class ReadOnlyAnonymousClassRector extends AbstractRector implements MinPh
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Decorate read-only anonymous class with `readonly` attribute', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Decorate read-only anonymous class with `readonly` attribute', [new CodeSample(
+            <<<'CODE_SAMPLE'
 new class
 {
     public function __construct(
@@ -35,7 +38,8 @@ new class
     }
 };
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 new readonly class
 {
     public function __construct(
@@ -44,7 +48,7 @@ new readonly class
     }
 };
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

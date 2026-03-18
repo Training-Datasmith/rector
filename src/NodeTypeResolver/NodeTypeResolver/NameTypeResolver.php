@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\NodeTypeResolver\NodeTypeResolver;
 
 use PhpParser\Node;
@@ -15,6 +16,7 @@ use PHPStan\Type\UnionType;
 use Rector\Enum\ObjectReference;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+
 /**
  * @see \Rector\Tests\NodeTypeResolver\PerNodeTypeResolver\NameTypeResolver\NameTypeResolverTest
  *

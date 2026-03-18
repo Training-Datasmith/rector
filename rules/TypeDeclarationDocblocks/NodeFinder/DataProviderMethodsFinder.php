@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclarationDocblocks\NodeFinder;
 
 use PhpParser\Node\Attribute;
@@ -11,6 +12,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\TypeDeclaration\ValueObject\DataProviderNodes;
 use Rector\TypeDeclarationDocblocks\Enum\TestClassName;
+
 final class DataProviderMethodsFinder
 {
     /**

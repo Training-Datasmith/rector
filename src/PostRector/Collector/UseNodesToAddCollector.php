@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PostRector\Collector;
 
 use PhpParser\Node\Identifier;
@@ -9,6 +10,7 @@ use Rector\Naming\Naming\UseImportsResolver;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\ValueObject\Application\File;
+
 final class UseNodesToAddCollector
 {
     /**

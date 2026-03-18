@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodingStyle\Rector\Stmt;
 
 use PhpParser\Node;
@@ -12,6 +13,7 @@ use Rector\PhpParser\Enum\NodeGroup;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodingStyle\Rector\Stmt\NewlineAfterStatementRector\NewlineAfterStatementRectorTest
  */
@@ -27,7 +29,8 @@ final class NewlineAfterStatementRector extends AbstractRector implements HTMLAv
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add empty new line after different-type statements to improve code readability', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add empty new line after different-type statements to improve code readability', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($input)
@@ -38,7 +41,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($input)
@@ -51,7 +55,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodeQuality\NodeAnalyzer;
 
 use PhpParser\Node\Expr;
@@ -14,6 +15,7 @@ use Rector\CodeQuality\ValueObject\KeyAndExpr;
 use Rector\Exception\NotImplementedYetException;
 use Rector\NodeAnalyzer\ExprAnalyzer;
 use Rector\PhpParser\Node\Value\ValueResolver;
+
 final class VariableDimFetchAssignResolver
 {
     /**
@@ -72,14 +74,14 @@ final class VariableDimFetchAssignResolver
      */
     private function setNestedKeysExpr(array &$exprsByKeys, array $keys, Expr $expr): void
     {
-        $reference =& $exprsByKeys;
+        $reference = & $exprsByKeys;
         $keys = array_reverse($keys);
         foreach ($keys as $key) {
             if ($reference instanceof Array_) {
                 // currently it fails here with Cannot use object of type PhpParser\Node\Expr\Array_ as array
                 throw new NotImplementedYetException();
             }
-            $reference =& $reference[$key];
+            $reference = & $reference[$key];
         }
         $reference = $expr;
     }

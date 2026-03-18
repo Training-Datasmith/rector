@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclarationDocblocks\NodeFinder;
 
 use PhpParser\Node;
@@ -13,6 +14,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PhpParser\Node\BetterNodeFinder;
+
 final class ArrayDimFetchFinder
 {
     /**

@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\DeadCode;
 
 use PhpParser\Node\Expr;
@@ -13,6 +14,7 @@ use PhpParser\Node\Stmt\If_;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Analyser\Scope;
 use Rector\PhpParser\Comparing\NodeComparator;
+
 final class UselessIfCondBeforeForeachDetector
 {
     /**

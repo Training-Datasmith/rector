@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php70\NodeAnalyzer;
 
 use PhpParser\Node\Expr;
@@ -10,6 +11,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
+
 final class MethodCallNameAnalyzer
 {
     public function isLocalMethodCallNamed(Expr $expr, string $desiredMethodName): bool

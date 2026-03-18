@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\NodeAnalyzer\ReturnFilter;
 
 use PhpParser\Node\Expr\FuncCall;
@@ -10,6 +11,7 @@ use PhpParser\Node\Stmt\Return_;
 use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
 use Rector\Reflection\ReflectionResolver;
+
 final class ExclusiveNativeCallLikeReturnMatcher
 {
     /**

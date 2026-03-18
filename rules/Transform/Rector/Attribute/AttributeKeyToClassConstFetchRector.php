@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Transform\Rector\Attribute;
 
 use PhpParser\Node;
@@ -20,9 +21,10 @@ use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Rector\Transform\ValueObject\AttributeKeyToClassConstFetch;
+use RectorPrefix202603\Webmozart\Assert\Assert;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202603\Webmozart\Assert\Assert;
+
 /**
  * @api used in rector-doctrine
  * @see \Rector\Tests\Transform\Rector\Attribute\AttributeKeyToClassConstFetchRector\AttributeKeyToClassConstFetchRectorTest
@@ -52,7 +54,7 @@ class SomeClass
     public $name;
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            , <<<'CODE_SAMPLE'
 use Doctrine\ORM\Mapping\Column;
 use Doctrine\DBAL\Types\Types;
 
@@ -62,7 +64,7 @@ class SomeClass
     public $name;
 }
 CODE_SAMPLE
-, [new AttributeKeyToClassConstFetch('Doctrine\ORM\Mapping\Column', 'type', 'Doctrine\DBAL\Types\Types', ['string' => 'STRING'])])]);
+            , [new AttributeKeyToClassConstFetch('Doctrine\ORM\Mapping\Column', 'type', 'Doctrine\DBAL\Types\Types', ['string' => 'STRING'])])]);
     }
     /**
      * @return array<class-string<Node>>

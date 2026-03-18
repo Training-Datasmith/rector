@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodeQuality\Rector\BooleanOr;
 
 use PhpParser\Node;
@@ -17,6 +18,7 @@ use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodeQuality\Rector\BooleanOr\RepeatedOrEqualToInArrayRector\RepeatedOrEqualToInArrayRectorTest
  */
@@ -32,18 +34,20 @@ final class RepeatedOrEqualToInArrayRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Simplify repeated || compare of same value, to in_array() call', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Simplify repeated || compare of same value, to in_array() call', [new CodeSample(
+            <<<'CODE_SAMPLE'
 if ($value === 10 || $value === 20 || $value === 30) {
     // ...
 }
 
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 if (in_array($value, [10, 20, 30], true)) {
     // ...
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

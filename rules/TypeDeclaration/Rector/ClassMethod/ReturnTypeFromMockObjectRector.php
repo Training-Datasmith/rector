@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
@@ -22,6 +23,7 @@ use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromMockObjectRector\ReturnTypeFromMockObjectRectorTest
  */
@@ -47,7 +49,8 @@ final class ReturnTypeFromMockObjectRector extends AbstractRector implements Min
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add known property and return MockObject types', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add known property and return MockObject types', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeTest extends TestCase
 {
     public function createSomeMock()
@@ -57,7 +60,8 @@ class SomeTest extends TestCase
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeTest extends TestCase
 {
     public function createSomeMock(): \PHPUnit\Framework\MockObject\MockObject
@@ -67,7 +71,7 @@ class SomeTest extends TestCase
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     public function getNodeTypes(): array
     {

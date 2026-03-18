@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodeQuality\Rector\If_;
 
 use PhpParser\Node;
@@ -25,6 +26,7 @@ use Rector\Rector\AbstractRector;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodeQuality\Rector\If_\SimplifyIfNullableReturnRector\SimplifyIfNullableReturnRectorTest
  */
@@ -55,7 +57,8 @@ final class SimplifyIfNullableReturnRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Direct return on if nullable check before return', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Direct return on if nullable check before return', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -72,7 +75,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -84,7 +88,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

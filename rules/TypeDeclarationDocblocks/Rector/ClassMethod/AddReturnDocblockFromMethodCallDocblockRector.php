@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclarationDocblocks\Rector\ClassMethod;
 
 use PhpParser\Node;
@@ -20,6 +21,7 @@ use Rector\TypeDeclarationDocblocks\NodeFinder\ReturnNodeFinder;
 use Rector\TypeDeclarationDocblocks\TagNodeAnalyzer\UsefulArrayTagNodeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\TypeDeclarationDocblocks\Rector\ClassMethod\AddReturnDocblockFromMethodCallDocblockRector\AddReturnDocblockFromMethodCallDocblockRectorTest
  */
@@ -55,7 +57,8 @@ final class AddReturnDocblockFromMethodCallDocblockRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add @return docblock based on detailed type of method call docblock', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add @return docblock based on detailed type of method call docblock', [new CodeSample(
+            <<<'CODE_SAMPLE'
 final class SomeController
 {
     public function getAll(): array
@@ -76,7 +79,8 @@ final class Repository
 }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 final class SomeController
 {
     /**
@@ -99,7 +103,7 @@ final class Repository
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

@@ -1,12 +1,14 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Console;
 
 use Rector\Exception\Configuration\InvalidConfigurationException;
 use RectorPrefix202603\Symfony\Component\Console\Input\ArgvInput;
 use RectorPrefix202603\Symfony\Component\Console\Output\ConsoleOutput;
 use RectorPrefix202603\Symfony\Component\Console\Style\SymfonyStyle;
+
 final class Notifier
 {
     public static function notifyNotSuitableMethodForPHP74(string $calledMethod): void

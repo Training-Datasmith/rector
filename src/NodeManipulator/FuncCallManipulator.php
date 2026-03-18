@@ -1,11 +1,13 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\NodeManipulator;
 
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\FuncCall;
 use Rector\PhpParser\Node\Value\ValueResolver;
+
 final class FuncCallManipulator
 {
     /**

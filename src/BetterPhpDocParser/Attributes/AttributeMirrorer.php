@@ -1,10 +1,12 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\BetterPhpDocParser\Attributes;
 
 use PHPStan\PhpDocParser\Ast\Node;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
+
 final class AttributeMirrorer
 {
     /**

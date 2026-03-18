@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php54\Rector\Array_;
 
 use PhpParser\Node;
@@ -11,6 +12,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php54\Rector\Array_\LongArrayToShortArrayRector\LongArrayToShortArrayRectorTest
  */
@@ -22,7 +24,8 @@ final class LongArrayToShortArrayRector extends AbstractRector implements MinPhp
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Long array to short array', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Long array to short array', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -31,7 +34,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -40,7 +44,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

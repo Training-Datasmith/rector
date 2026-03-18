@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Config\Level;
 
 use Rector\Contract\Rector\RectorInterface;
@@ -23,6 +24,7 @@ use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\AddReturnDocblockForDimFe
 use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\AddReturnDocblockForJsonArrayRector;
 use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\DocblockGetterReturnArrayFromPropertyDocblockVarRector;
 use Rector\TypeDeclarationDocblocks\Rector\ClassMethod\DocblockReturnArrayFromDirectArrayInstanceRector;
+
 final class TypeDeclarationDocblocksLevel
 {
     /**

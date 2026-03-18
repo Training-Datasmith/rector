@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\EarlyReturn\Rector\StmtsAwareInterface;
 
 use PhpParser\Node;
@@ -19,6 +20,7 @@ use Rector\PhpParser\Enum\NodeGroup;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\EarlyReturn\Rector\StmtsAwareInterface\ReturnEarlyIfVariableRector\ReturnEarlyIfVariableRectorTest
  */
@@ -39,7 +41,8 @@ final class ReturnEarlyIfVariableRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Replace if conditioned variable override with direct return', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replace if conditioned variable override with direct return', [new CodeSample(
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run($value)
@@ -52,7 +55,8 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run($value)
@@ -65,7 +69,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

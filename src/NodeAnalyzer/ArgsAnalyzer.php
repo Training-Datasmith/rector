@@ -1,11 +1,13 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\NodeAnalyzer;
 
 use PhpParser\Node\Arg;
 use PhpParser\Node\Identifier;
 use Rector\NodeNameResolver\NodeNameResolver;
+
 final class ArgsAnalyzer
 {
     /**

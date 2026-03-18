@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\VersionBonding;
 
 use Rector\Contract\Rector\RectorInterface;
@@ -8,6 +9,7 @@ use Rector\Php\PhpVersionProvider;
 use Rector\Php\PolyfillPackagesProvider;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Rector\VersionBonding\Contract\RelatedPolyfillInterface;
+
 /**
  * @see \Rector\Tests\VersionBonding\PhpVersionedFilterTest
  */

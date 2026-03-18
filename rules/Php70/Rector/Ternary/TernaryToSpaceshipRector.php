@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php70\Rector\Ternary;
 
 use PhpParser\Node;
@@ -15,6 +16,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php70\Rector\Ternary\TernaryToSpaceshipRector\TernaryToSpaceshipRectorTest
  */
@@ -30,17 +32,19 @@ final class TernaryToSpaceshipRector extends AbstractRector implements MinPhpVer
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Use <=> spaceship instead of ternary with same effect', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Use <=> spaceship instead of ternary with same effect', [new CodeSample(
+            <<<'CODE_SAMPLE'
 function order_func($a, $b) {
     return ($a < $b) ? -1 : (($a > $b) ? 1 : 0);
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 function order_func($a, $b) {
     return $a <=> $b;
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

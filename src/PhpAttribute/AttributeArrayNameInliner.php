@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PhpAttribute;
 
 use PhpParser\Node\Arg;
@@ -11,6 +12,7 @@ use PhpParser\Node\Scalar\Float_;
 use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Scalar\String_;
 use RectorPrefix202603\Webmozart\Assert\Assert;
+
 final class AttributeArrayNameInliner
 {
     /**

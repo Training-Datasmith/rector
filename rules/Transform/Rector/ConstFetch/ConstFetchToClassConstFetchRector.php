@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Transform\Rector\ConstFetch;
 
 use PhpParser\Node;
@@ -9,9 +10,10 @@ use PhpParser\Node\Expr\ConstFetch;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Rector\AbstractRector;
 use Rector\Transform\ValueObject\ConstFetchToClassConstFetch;
+use RectorPrefix202603\Webmozart\Assert\Assert;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202603\Webmozart\Assert\Assert;
+
 /**
  * @see Rector\Tests\Transform\Rector\ConstFetch\ConstFetchToClassConstFetchRector\ConstFetchToClassConstFetchTest
  */

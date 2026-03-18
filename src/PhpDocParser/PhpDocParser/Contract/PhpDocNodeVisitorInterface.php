@@ -1,9 +1,11 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PhpDocParser\PhpDocParser\Contract;
 
 use PHPStan\PhpDocParser\Ast\Node;
+
 /**
  * Inspired by https://github.com/nikic/PHP-Parser/blob/master/lib/PhpParser/NodeVisitor.php
  */

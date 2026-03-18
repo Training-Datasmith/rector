@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\NodeAnalyzer;
 
 use PhpParser\Node\Arg;
@@ -11,6 +12,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\VariadicPlaceholder;
 use Rector\NodeNameResolver\NodeNameResolver;
+
 final class CompactFuncCallAnalyzer
 {
     /**

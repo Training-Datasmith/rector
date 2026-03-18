@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php81\Rector\FuncCall;
 
 use PhpParser\Node;
@@ -18,6 +19,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see https://3v4l.org/cVPim
  * @see \Rector\Tests\Php81\Rector\FuncCall\NullToStrictIntPregSlitFuncCallLimitArgRector\NullToStrictIntPregSlitFuncCallLimitArgRectorTest
@@ -44,7 +46,8 @@ final class NullToStrictIntPregSlitFuncCallLimitArgRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change null to strict int defined preg_split limit arg function call argument', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change null to strict int defined preg_split limit arg function call argument', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -53,7 +56,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -62,7 +66,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

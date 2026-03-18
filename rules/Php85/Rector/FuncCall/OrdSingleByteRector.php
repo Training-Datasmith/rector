@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php85\Rector\FuncCall;
 
 use PhpParser\Node;
@@ -16,6 +17,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see https://wiki.php.net/rfc/deprecations_php_8_5#deprecate_passing_string_which_are_not_one_byte_long_to_ord
  * @see \Rector\Tests\Php85\Rector\FuncCall\OrdSingleByteRector\OrdSingleByteRectorTest
@@ -32,13 +34,15 @@ final class OrdSingleByteRector extends AbstractRector implements MinPhpVersionI
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Replace ord($str) with ord($str[0])', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replace ord($str) with ord($str[0])', [new CodeSample(
+            <<<'CODE_SAMPLE'
 echo ord('abc');
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 echo ord('a');
 CODE_SAMPLE
-)]);
+        )]);
     }
     public function getNodeTypes(): array
     {

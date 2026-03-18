@@ -1,14 +1,15 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\NodeAnalyzer;
 
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Property;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
+
 final class AutowiredClassMethodOrPropertyAnalyzer
 {
     /**

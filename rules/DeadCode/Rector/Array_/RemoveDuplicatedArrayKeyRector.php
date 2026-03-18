@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\DeadCode\Rector\Array_;
 
 use PhpParser\Node;
@@ -15,6 +16,7 @@ use Rector\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\DeadCode\Rector\Array_\RemoveDuplicatedArrayKeyRector\RemoveDuplicatedArrayKeyRectorTest
  */
@@ -35,18 +37,20 @@ final class RemoveDuplicatedArrayKeyRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Remove duplicated key in defined arrays', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove duplicated key in defined arrays', [new CodeSample(
+            <<<'CODE_SAMPLE'
 $item = [
     1 => 'A',
     1 => 'B'
 ];
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 $item = [
     1 => 'B'
 ];
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodingStyle\Rector\ArrowFunction;
 
 use PhpParser\Node;
@@ -9,6 +10,7 @@ use Rector\CodingStyle\Guard\StaticGuard;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodingStyle\Rector\ArrowFunction\StaticArrowFunctionRector\StaticArrowFunctionRectorTest
  */
@@ -24,13 +26,15 @@ final class StaticArrowFunctionRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Changes ArrowFunction to be static when possible', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Changes ArrowFunction to be static when possible', [new CodeSample(
+            <<<'CODE_SAMPLE'
 fn (): string => 'test';
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 static fn (): string => 'test';
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

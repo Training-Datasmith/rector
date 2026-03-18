@@ -1,12 +1,14 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\NodeAnalyzer;
 
 use PhpParser\Node;
 use PhpParser\Node\ComplexType;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
+
 final class ScopeAnalyzer
 {
     /**

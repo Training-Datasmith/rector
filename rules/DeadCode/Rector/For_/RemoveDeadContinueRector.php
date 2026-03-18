@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\DeadCode\Rector\For_;
 
 use PhpParser\Node;
@@ -14,6 +15,7 @@ use PhpParser\Node\Stmt\While_;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\DeadCode\Rector\For_\RemoveDeadContinueRector\RemoveDeadContinueRectorTest
  */
@@ -21,18 +23,20 @@ final class RemoveDeadContinueRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Remove useless continue at the end of loops', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove useless continue at the end of loops', [new CodeSample(
+            <<<'CODE_SAMPLE'
 while ($i < 10) {
     ++$i;
     continue;
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 while ($i < 10) {
     ++$i;
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\DeadCode\Rector\ClassMethod;
 
 use PhpParser\Comment\Doc;
@@ -21,6 +22,7 @@ use Rector\Rector\AbstractRector;
 use Rector\ValueObject\MethodName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\DeadCode\Rector\ClassMethod\RemoveEmptyClassMethodRector\RemoveEmptyClassMethodRectorTest
  */
@@ -56,7 +58,8 @@ final class RemoveEmptyClassMethodRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Remove empty class methods not required by parents', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove empty class methods not required by parents', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class OrphanClass
 {
     public function __construct()
@@ -64,12 +67,13 @@ class OrphanClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class OrphanClass
 {
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

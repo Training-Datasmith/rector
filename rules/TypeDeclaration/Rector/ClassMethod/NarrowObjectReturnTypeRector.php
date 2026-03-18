@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
@@ -25,6 +26,7 @@ use Rector\Reflection\ReflectionResolver;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * Narrows return type from generic object or parent class to specific class in final classes/methods.
  *
@@ -77,7 +79,8 @@ final class NarrowObjectReturnTypeRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Narrows return type from generic `object` or parent class to specific class in final classes/methods', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Narrows return type from generic `object` or parent class to specific class in final classes/methods', [new CodeSample(
+            <<<'CODE_SAMPLE'
 final class TalkFactory extends AbstractFactory
 {
     protected function build(): object
@@ -86,7 +89,8 @@ final class TalkFactory extends AbstractFactory
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 final class TalkFactory extends AbstractFactory
 {
     protected function build(): ConferenceTalk
@@ -95,7 +99,8 @@ final class TalkFactory extends AbstractFactory
     }
 }
 CODE_SAMPLE
-), new CodeSample(<<<'CODE_SAMPLE'
+        ), new CodeSample(
+            <<<'CODE_SAMPLE'
 final class TalkFactory
 {
     public function createConferenceTalk(): Talk
@@ -104,7 +109,8 @@ final class TalkFactory
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 final class TalkFactory
 {
     public function createConferenceTalk(): ConferenceTalk
@@ -113,7 +119,7 @@ final class TalkFactory
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>
@@ -222,7 +228,7 @@ CODE_SAMPLE
         if (!$classReflection instanceof ClassReflection) {
             return \true;
         }
-        $ancestors = array_filter($classReflection->getAncestors(), fn(ClassReflection $ancestorClassReflection): bool => $classReflection->getName() !== $ancestorClassReflection->getName());
+        $ancestors = array_filter($classReflection->getAncestors(), fn (ClassReflection $ancestorClassReflection): bool => $classReflection->getName() !== $ancestorClassReflection->getName());
         $methodName = $this->getName($classMethod);
         foreach ($ancestors as $ancestor) {
             if ($ancestor->getFileName() === null) {

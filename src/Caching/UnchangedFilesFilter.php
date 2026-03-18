@@ -1,9 +1,11 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Caching;
 
 use Rector\Caching\Detector\ChangedFilesDetector;
+
 final class UnchangedFilesFilter
 {
     /**

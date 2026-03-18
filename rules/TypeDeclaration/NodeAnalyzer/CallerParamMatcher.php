@@ -1,14 +1,12 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\NodeAnalyzer;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
-use PhpParser\Node\ComplexType;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
@@ -25,6 +23,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 use Rector\PhpParser\AstResolver;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+
 final class CallerParamMatcher
 {
     /**

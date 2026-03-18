@@ -1,10 +1,12 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodeQuality\ValueObject;
 
 use PhpParser\Comment;
 use PhpParser\Node\Expr;
+
 final class KeyAndExpr
 {
     /**

@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodeQuality\TypeResolver;
 
 use PhpParser\Node\Expr;
@@ -10,6 +11,7 @@ use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+
 final class ArrayDimFetchTypeResolver
 {
     /**

@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\DeadCode\PhpDoc;
 
 use PhpParser\Node;
@@ -19,6 +20,7 @@ use Rector\DeadCode\PhpDoc\Guard\TemplateTypeRemovalGuard;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 use Rector\PHPStan\ScopeFetcher;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+
 final class DeadVarTagValueNodeAnalyzer
 {
     /**

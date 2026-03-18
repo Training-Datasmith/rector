@@ -1,11 +1,13 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\DeadCode\NodeManipulator;
 
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\NodeAnalyzer\ParamAnalyzer;
 use Rector\Removing\NodeManipulator\ComplexNodeRemover;
+
 final class ClassMethodParamRemover
 {
     /**

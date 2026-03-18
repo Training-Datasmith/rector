@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php74\Rector\Assign;
 
 use PhpParser\Node;
@@ -12,6 +13,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php74\Rector\Assign\NullCoalescingOperatorRector\NullCoalescingOperatorRectorTest
  */
@@ -19,15 +21,17 @@ final class NullCoalescingOperatorRector extends AbstractRector implements MinPh
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Use null coalescing operator `??=`', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Use null coalescing operator `??=`', [new CodeSample(
+            <<<'CODE_SAMPLE'
 $array = [];
 $array['user_id'] = $array['user_id'] ?? 'value';
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 $array = [];
 $array['user_id'] ??= 'value';
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

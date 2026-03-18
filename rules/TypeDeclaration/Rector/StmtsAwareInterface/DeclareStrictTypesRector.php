@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\Rector\StmtsAwareInterface;
 
 use PhpParser\Node;
@@ -13,6 +14,7 @@ use Rector\ValueObject\PhpVersion;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\StmtsAwareInterface\DeclareStrictTypesRector\DeclareStrictTypesRectorTest
  */
@@ -28,7 +30,8 @@ final class DeclareStrictTypesRector extends AbstractRector implements HTMLAvers
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add `declare(strict_types=1)` if missing in a namespaced file', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add `declare(strict_types=1)` if missing in a namespaced file', [new CodeSample(
+            <<<'CODE_SAMPLE'
 namespace App;
 
 class SomeClass
@@ -38,7 +41,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 declare(strict_types=1);
 
 namespace App;
@@ -50,7 +54,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @param FileNode $node

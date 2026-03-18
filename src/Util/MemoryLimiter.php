@@ -1,11 +1,13 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Util;
 
-use RectorPrefix202603\Nette\Utils\Strings;
 use Rector\Exception\Configuration\InvalidConfigurationException;
 use Rector\ValueObject\Configuration;
+use RectorPrefix202603\Nette\Utils\Strings;
+
 /**
  * @inspiration https://github.com/phpstan/phpstan-src/commit/ccc046ca473dcdb5ce9225cc05d7808f2e327f40
  */

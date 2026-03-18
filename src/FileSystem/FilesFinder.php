@@ -1,16 +1,18 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\FileSystem;
 
-use RectorPrefix202603\Nette\Utils\FileSystem;
 use Rector\Caching\Detector\ChangedFilesDetector;
 use Rector\Caching\UnchangedFilesFilter;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Skipper\Skipper\PathSkipper;
 use Rector\ValueObject\Configuration;
+use RectorPrefix202603\Nette\Utils\FileSystem;
 use RectorPrefix202603\Symfony\Component\Finder\Finder;
+
 /**
  * @see \Rector\Tests\FileSystem\FilesFinder\FilesFinderTest
  */
@@ -59,7 +61,7 @@ final class FilesFinder
         $filesAndDirectories = $this->filesystemTweaker->resolveWithFnmatch($source);
         // filtering files in files collection
         $filteredFilePaths = $this->fileAndDirectoryFilter->filterFiles($filesAndDirectories);
-        $filteredFilePaths = array_filter($filteredFilePaths, fn(string $filePath): bool => !$this->pathSkipper->shouldSkip($filePath));
+        $filteredFilePaths = array_filter($filteredFilePaths, fn (string $filePath): bool => !$this->pathSkipper->shouldSkip($filePath));
         // fallback append `.php` to be used for both $filteredFilePaths and $filteredFilePathsInDirectories
         $hasOnlySuffix = $onlySuffix !== null && $onlySuffix !== '';
         if ($hasOnlySuffix && substr_compare($onlySuffix, '.php', -strlen('.php')) !== 0) {
@@ -68,16 +70,16 @@ final class FilesFinder
         // filter files by specific suffix
         if ($hasOnlySuffix) {
             /** @var string $onlySuffix */
-            $fileWithSuffixFilter = static fn(string $filePath): bool => substr_compare($filePath, $onlySuffix, -strlen($onlySuffix)) === 0;
+            $fileWithSuffixFilter = static fn (string $filePath): bool => substr_compare($filePath, $onlySuffix, -strlen($onlySuffix)) === 0;
         } elseif ($suffixes !== []) {
             $fileWithSuffixFilter = static function (string $filePath) use ($suffixes): bool {
                 $filePathExtension = pathinfo($filePath, \PATHINFO_EXTENSION);
                 return in_array($filePathExtension, $suffixes, \true);
             };
         } else {
-            $fileWithSuffixFilter = fn(): bool => \true;
+            $fileWithSuffixFilter = fn (): bool => \true;
         }
-        $filteredFilePaths = array_filter($filteredFilePaths, $fileWithSuffixFilter ?? fn($value, $key): bool => !empty($value), $fileWithSuffixFilter === null ? \ARRAY_FILTER_USE_BOTH : 0);
+        $filteredFilePaths = array_filter($filteredFilePaths, $fileWithSuffixFilter ?? fn ($value, $key): bool => !empty($value), $fileWithSuffixFilter === null ? \ARRAY_FILTER_USE_BOTH : 0);
         // add file without extension after file extension filter
         $filteredFilePaths = array_merge($filteredFilePaths, SimpleParameterProvider::provideArrayParameter(Option::FILES_WITHOUT_EXTENSION));
         $filteredFilePaths = array_filter($filteredFilePaths, function (string $file): bool {

@@ -1,11 +1,13 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PHPStanStaticTypeMapper;
 
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
+
 final class DoctrineTypeAnalyzer
 {
     public function isDoctrineCollectionWithIterableUnionType(Type $type): bool

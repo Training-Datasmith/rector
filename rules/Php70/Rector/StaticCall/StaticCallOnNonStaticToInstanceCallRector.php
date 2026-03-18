@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php70\Rector\StaticCall;
 
 use PhpParser\Node;
@@ -27,6 +28,7 @@ use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use ReflectionMethod;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php70\Rector\StaticCall\StaticCallOnNonStaticToInstanceCallRector\StaticCallOnNonStaticToInstanceCallRectorTest
  */
@@ -61,7 +63,8 @@ final class StaticCallOnNonStaticToInstanceCallRector extends AbstractRector imp
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Changes static call to instance call, where not useful', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Changes static call to instance call, where not useful', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class Something
 {
     public function doWork()
@@ -77,7 +80,8 @@ class Another
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class Something
 {
     public function doWork()
@@ -93,7 +97,7 @@ class Another
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

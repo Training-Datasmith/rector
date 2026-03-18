@@ -1,14 +1,9 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Parallel\Application;
 
-use RectorPrefix202603\Clue\React\NDJson\Decoder;
-use RectorPrefix202603\Clue\React\NDJson\Encoder;
-use RectorPrefix202603\Nette\Utils\Random;
-use RectorPrefix202603\React\EventLoop\StreamSelectLoop;
-use RectorPrefix202603\React\Socket\ConnectionInterface;
-use RectorPrefix202603\React\Socket\TcpServer;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Console\Command\ProcessCommand;
@@ -17,6 +12,12 @@ use Rector\Parallel\ValueObject\Bridge;
 use Rector\ValueObject\Error\SystemError;
 use Rector\ValueObject\ProcessResult;
 use Rector\ValueObject\Reporting\FileDiff;
+use RectorPrefix202603\Clue\React\NDJson\Decoder;
+use RectorPrefix202603\Clue\React\NDJson\Encoder;
+use RectorPrefix202603\Nette\Utils\Random;
+use RectorPrefix202603\React\EventLoop\StreamSelectLoop;
+use RectorPrefix202603\React\Socket\ConnectionInterface;
+use RectorPrefix202603\React\Socket\TcpServer;
 use RectorPrefix202603\Symfony\Component\Console\Command\Command;
 use RectorPrefix202603\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix202603\Symplify\EasyParallel\Enum\Action;
@@ -27,6 +28,7 @@ use RectorPrefix202603\Symplify\EasyParallel\ValueObject\ParallelProcess;
 use RectorPrefix202603\Symplify\EasyParallel\ValueObject\ProcessPool;
 use RectorPrefix202603\Symplify\EasyParallel\ValueObject\Schedule;
 use Throwable;
+
 /**
  * Inspired from @see
  * https://github.com/phpstan/phpstan-src/commit/9124c66dcc55a222e21b1717ba5f60771f7dda92#diff-39c7a3b0cbb217bbfff96fbb454e6e5e60c74cf92fbb0f9d246b8bebbaad2bb0

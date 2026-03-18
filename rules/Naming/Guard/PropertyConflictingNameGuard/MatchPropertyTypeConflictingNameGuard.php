@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Naming\Guard\PropertyConflictingNameGuard;
 
 use PhpParser\Node\Stmt\ClassLike;
@@ -8,6 +9,7 @@ use Rector\Naming\ExpectedNameResolver\MatchPropertyTypeExpectedNameResolver;
 use Rector\Naming\PhpArray\ArrayFilter;
 use Rector\Naming\ValueObject\PropertyRename;
 use Rector\NodeNameResolver\NodeNameResolver;
+
 final class MatchPropertyTypeConflictingNameGuard
 {
     /**

@@ -1,9 +1,11 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodeQuality\ValueObject;
 
 use PHPStan\Type\Type;
+
 final class DefinedPropertyWithType
 {
     /**

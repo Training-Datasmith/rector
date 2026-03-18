@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclarationDocblocks\Rector\Class_;
 
 use PhpParser\Node;
@@ -17,6 +18,7 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\TypeDeclarationDocblocks\NodeFinder\DataProviderMethodsFinder;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\TypeDeclarationDocblocks\Rector\Class_\AddReturnArrayDocblockFromDataProviderParamRector\AddReturnArrayDocblockFromDataProviderParamRectorTest
  */
@@ -52,7 +54,8 @@ final class AddReturnArrayDocblockFromDataProviderParamRector extends AbstractRe
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add @return array return from data provider param type', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add @return array return from data provider param type', [new CodeSample(
+            <<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
 
 final class SomeClass extends TestCase
@@ -70,7 +73,8 @@ final class SomeClass extends TestCase
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
 
 final class SomeClass extends TestCase
@@ -91,7 +95,7 @@ final class SomeClass extends TestCase
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

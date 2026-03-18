@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Transform\Rector\FuncCall;
 
 use PhpParser\Node;
@@ -10,9 +11,10 @@ use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Rector\AbstractRector;
 use Rector\Transform\NodeAnalyzer\FuncCallStaticCallToMethodCallAnalyzer;
 use Rector\Transform\ValueObject\FuncCallToMethodCall;
+use RectorPrefix202603\Webmozart\Assert\Assert;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202603\Webmozart\Assert\Assert;
+
 /**
  * @see \Rector\Tests\Transform\Rector\FuncCall\FuncCallToMethodCallRector\FuncCallToMethodCallRectorTest
  */
@@ -41,7 +43,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            , <<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -60,7 +62,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, [new FuncCallToMethodCall('view', 'Namespaced\SomeRenderer', 'render')])]);
+            , [new FuncCallToMethodCall('view', 'Namespaced\SomeRenderer', 'render')])]);
     }
     /**
      * @return array<class-string<Node>>

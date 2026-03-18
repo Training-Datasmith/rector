@@ -1,12 +1,10 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
-use PhpParser\Node\ComplexType;
-use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\NullableType;
@@ -32,6 +30,7 @@ use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromStrictTypedCallRector\ReturnTypeFromStrictTypedCallRectorTest
  */
@@ -82,7 +81,8 @@ final class ReturnTypeFromStrictTypedCallRector extends AbstractRector implement
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add return type from strict return type of call', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add return type from strict return type of call', [new CodeSample(
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function getData()
@@ -96,7 +96,8 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function getData(): int
@@ -110,7 +111,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

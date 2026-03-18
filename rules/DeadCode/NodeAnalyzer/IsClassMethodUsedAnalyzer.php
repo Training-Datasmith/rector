@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\DeadCode\NodeAnalyzer;
 
 use PhpParser\Node;
@@ -28,6 +29,7 @@ use Rector\PhpParser\AstResolver;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Reflection\ReflectionResolver;
+
 final class IsClassMethodUsedAnalyzer
 {
     /**

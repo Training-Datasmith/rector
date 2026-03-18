@@ -1,17 +1,15 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\DeadCode\NodeAnalyzer;
 
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Expr\StaticCall;
 use PHPStan\Reflection\FunctionReflection;
 use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Type\NullType;
 use Rector\Reflection\ReflectionResolver;
+
 final class CallLikeParamDefaultResolver
 {
     /**

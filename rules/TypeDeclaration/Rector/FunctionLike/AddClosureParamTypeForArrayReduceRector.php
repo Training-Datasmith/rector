@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\Rector\FunctionLike;
 
 use PhpParser\Node;
@@ -21,6 +22,7 @@ use Rector\Reflection\ReflectionResolver;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\FunctionLike\AddClosureParamTypeForArrayReduceRector\AddClosureParamTypeForArrayReduceRectorTest
  */
@@ -46,17 +48,19 @@ final class AddClosureParamTypeForArrayReduceRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Applies type hints to array_map closures', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Applies type hints to array_map closures', [new CodeSample(
+            <<<'CODE_SAMPLE'
 array_reduce($strings, function ($carry, $value, $key): string {
     return $carry . $value;
 }, $initialString);
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 array_reduce($strings, function (string $carry, string $value): string {
     return $carry . $value;
 }, $initialString);
 CODE_SAMPLE
-)]);
+        )]);
     }
     public function getNodeTypes(): array
     {

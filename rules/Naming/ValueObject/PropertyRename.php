@@ -1,12 +1,14 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Naming\ValueObject;
 
 use PhpParser\Node\PropertyItem;
 use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\Stmt\Property;
 use Rector\Validation\RectorAssert;
+
 final class PropertyRename
 {
     /**

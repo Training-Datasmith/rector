@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Renaming\Rector\Class_;
 
 use PhpParser\Node;
@@ -15,9 +16,10 @@ use Rector\Rector\AbstractRector;
 use Rector\Renaming\ValueObject\RenameAttribute;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
+use RectorPrefix202603\Webmozart\Assert\Assert;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202603\Webmozart\Assert\Assert;
+
 /**
  * @see \Rector\Tests\Renaming\Rector\Class_\RenameAttributeRector\RenameAttributeRectorTest
  */
@@ -35,13 +37,13 @@ class SomeClass
 {
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            , <<<'CODE_SAMPLE'
 #[BasicRoute()]
 class SomeClass
 {
 }
 CODE_SAMPLE
-, [new RenameAttribute('SimpleRoute', 'BasicRoute')])]);
+            , [new RenameAttribute('SimpleRoute', 'BasicRoute')])]);
     }
     /**
      * @return array<class-string<Node>>

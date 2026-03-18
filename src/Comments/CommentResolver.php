@@ -1,11 +1,13 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Comments;
 
 use PhpParser\Comment;
 use PhpParser\Node\Stmt;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+
 final class CommentResolver
 {
     /**

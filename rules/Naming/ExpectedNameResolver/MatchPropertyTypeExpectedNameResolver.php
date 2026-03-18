@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Naming\ExpectedNameResolver;
 
 use PhpParser\Node;
@@ -17,6 +18,7 @@ use Rector\NodeManipulator\PropertyManipulator;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Reflection\ReflectionResolver;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+
 final class MatchPropertyTypeExpectedNameResolver
 {
     /**

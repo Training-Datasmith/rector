@@ -1,11 +1,13 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Comments\NodeVisitor;
 
 use PhpParser\Node;
 use PhpParser\NodeVisitorAbstract;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+
 final class CommentRemovingNodeVisitor extends NodeVisitorAbstract
 {
     public function enterNode(Node $node): Node

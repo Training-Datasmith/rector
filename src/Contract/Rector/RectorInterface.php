@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Contract\Rector;
 
 use PhpParser\Node;

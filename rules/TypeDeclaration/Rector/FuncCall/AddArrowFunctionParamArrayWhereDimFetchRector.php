@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\Rector\FuncCall;
 
 use PhpParser\Node;
@@ -19,6 +20,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\FuncCall\AddArrowFunctionParamArrayWhereDimFetchRector\AddArrowFunctionParamArrayWhereDimFetchRectorTest
  */
@@ -34,17 +36,19 @@ final class AddArrowFunctionParamArrayWhereDimFetchRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add closure and arrow function param array type, if dim fetch is used inside', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add closure and arrow function param array type, if dim fetch is used inside', [new CodeSample(
+            <<<'CODE_SAMPLE'
 $array = [['name' => 'John']];
 
 $result = array_map(fn ($item) => $item['name'], $array);
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 $array = [['name' => 'John']];
 
 $result = array_map(fn (array $item) => $item['name'], $array);
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

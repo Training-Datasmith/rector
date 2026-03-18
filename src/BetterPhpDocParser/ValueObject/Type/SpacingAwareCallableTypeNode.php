@@ -1,11 +1,12 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\BetterPhpDocParser\ValueObject\Type;
 
 use Override;
 use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
-use Stringable;
+
 final class SpacingAwareCallableTypeNode extends CallableTypeNode
 {
     #[Override]

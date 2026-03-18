@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Renaming\Rector\ClassConstFetch;
 
 use PhpParser\Node;
@@ -12,9 +13,10 @@ use Rector\Rector\AbstractRector;
 use Rector\Renaming\Contract\RenameClassConstFetchInterface;
 use Rector\Renaming\ValueObject\RenameClassAndConstFetch;
 use Rector\Renaming\ValueObject\RenameClassConstFetch;
+use RectorPrefix202603\Webmozart\Assert\Assert;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202603\Webmozart\Assert\Assert;
+
 /**
  * @see \Rector\Tests\Renaming\Rector\ClassConstFetch\RenameClassConstFetchRector\RenameClassConstFetchRectorTest
  */
@@ -30,11 +32,11 @@ final class RenameClassConstFetchRector extends AbstractRector implements Config
 $value = SomeClass::OLD_CONSTANT;
 $value = SomeClass::OTHER_OLD_CONSTANT;
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            , <<<'CODE_SAMPLE'
 $value = SomeClass::NEW_CONSTANT;
 $value = DifferentClass::NEW_CONSTANT;
 CODE_SAMPLE
-, [new RenameClassConstFetch('SomeClass', 'OLD_CONSTANT', 'NEW_CONSTANT'), new RenameClassAndConstFetch('SomeClass', 'OTHER_OLD_CONSTANT', 'DifferentClass', 'NEW_CONSTANT')])]);
+            , [new RenameClassConstFetch('SomeClass', 'OLD_CONSTANT', 'NEW_CONSTANT'), new RenameClassAndConstFetch('SomeClass', 'OTHER_OLD_CONSTANT', 'DifferentClass', 'NEW_CONSTANT')])]);
     }
     /**
      * @return array<class-string<Node>>

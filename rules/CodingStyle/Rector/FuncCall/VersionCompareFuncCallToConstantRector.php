@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodingStyle\Rector\FuncCall;
 
 use PhpParser\Node;
@@ -21,6 +22,7 @@ use Rector\Rector\AbstractRector;
 use Rector\Util\PhpVersionFactory;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodingStyle\Rector\FuncCall\VersionCompareFuncCallToConstantRector\VersionCompareFuncCallToConstantRectorTest
  */
@@ -32,7 +34,8 @@ final class VersionCompareFuncCallToConstantRector extends AbstractRector
     private const OPERATOR_TO_COMPARISON = ['=' => Identical::class, '==' => Identical::class, 'eq' => Identical::class, '!=' => NotIdentical::class, '<>' => NotIdentical::class, 'ne' => NotIdentical::class, '>' => Greater::class, 'gt' => Greater::class, '<' => Smaller::class, 'lt' => Smaller::class, '>=' => GreaterOrEqual::class, 'ge' => GreaterOrEqual::class, '<=' => SmallerOrEqual::class, 'le' => SmallerOrEqual::class];
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Changes use of call to version compare function to use of PHP version constant', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Changes use of call to version compare function to use of PHP version constant', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -41,7 +44,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -50,7 +54,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

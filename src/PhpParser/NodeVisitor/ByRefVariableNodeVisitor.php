@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PhpParser\NodeVisitor;
 
 use PhpParser\Node;
@@ -13,6 +14,7 @@ use PhpParser\NodeVisitorAbstract;
 use Rector\Contract\PhpParser\DecoratingNodeVisitorInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
+
 final class ByRefVariableNodeVisitor extends NodeVisitorAbstract implements DecoratingNodeVisitorInterface
 {
     /**

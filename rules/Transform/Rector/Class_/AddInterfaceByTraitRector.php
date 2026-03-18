@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Transform\Rector\Class_;
 
 use PhpParser\Node;
@@ -10,9 +11,10 @@ use PHPStan\Reflection\ClassReflection;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
+use RectorPrefix202603\Webmozart\Assert\Assert;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202603\Webmozart\Assert\Assert;
+
 /**
  * @api used in rector-doctrine
  * @see \Rector\Tests\Transform\Rector\Class_\AddInterfaceByTraitRector\AddInterfaceByTraitRectorTest
@@ -31,13 +33,13 @@ class SomeClass
     use SomeTrait;
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            , <<<'CODE_SAMPLE'
 class SomeClass implements SomeInterface
 {
     use SomeTrait;
 }
 CODE_SAMPLE
-, ['SomeTrait' => 'SomeInterface'])]);
+            , ['SomeTrait' => 'SomeInterface'])]);
     }
     /**
      * @return array<class-string<Node>>

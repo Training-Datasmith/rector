@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\DeadCode\SideEffect;
 
 use PhpParser\Node\Expr\FuncCall;
@@ -8,6 +9,7 @@ use PhpParser\Node\Name;
 use PHPStan\Reflection\Native\NativeFunctionReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\NodeNameResolver\NodeNameResolver;
+
 final class PureFunctionDetector
 {
     /**

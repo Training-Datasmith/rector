@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\Rector\Function_;
 
 use PhpParser\Node;
@@ -12,6 +13,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\Function_\AddFunctionVoidReturnTypeWhereNoReturnRector\AddFunctionVoidReturnTypeWhereNoReturnRectorTest
  */
@@ -27,15 +29,17 @@ final class AddFunctionVoidReturnTypeWhereNoReturnRector extends AbstractRector 
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add function return type void if there is no return', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add function return type void if there is no return', [new CodeSample(
+            <<<'CODE_SAMPLE'
 function restore() {
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 function restore(): void {
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

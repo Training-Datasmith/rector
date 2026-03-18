@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\Rector\Closure;
 
 use PhpParser\Node;
@@ -12,6 +13,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\Closure\AddClosureVoidReturnTypeWhereNoReturnRector\AddClosureVoidReturnTypeWhereNoReturnRectorTest
  */
@@ -27,15 +29,17 @@ final class AddClosureVoidReturnTypeWhereNoReturnRector extends AbstractRector i
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add closure return type void if there is no return', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add closure return type void if there is no return', [new CodeSample(
+            <<<'CODE_SAMPLE'
 function () {
 };
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 function (): void {
 };
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

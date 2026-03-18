@@ -1,12 +1,14 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php84\NodeAnalyzer;
 
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Variable;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PhpParser\Node\BetterNodeFinder;
+
 final class ForeachKeyUsedInConditionalAnalyzer
 {
     /**

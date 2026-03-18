@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php73\Rector\FuncCall;
 
 use PhpParser\Node;
@@ -13,6 +14,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php73\Rector\FuncCall\StringifyStrNeedlesRector\StringifyStrNeedlesRectorTest
  */
@@ -28,15 +30,17 @@ final class StringifyStrNeedlesRector extends AbstractRector implements MinPhpVe
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Make needles explicit strings', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Make needles explicit strings', [new CodeSample(
+            <<<'CODE_SAMPLE'
 $needle = 5;
 $fivePosition = strpos('725', $needle);
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 $needle = 5;
 $fivePosition = strpos('725', (string) $needle);
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

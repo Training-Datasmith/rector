@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php73\Rector\FuncCall;
 
-use RectorPrefix202603\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Scalar\String_;
 use Rector\NodeTypeResolver\Node\AttributeKey;
@@ -11,8 +11,10 @@ use Rector\Rector\AbstractRector;
 use Rector\Util\StringUtils;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
+use RectorPrefix202603\Nette\Utils\Strings;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php73\Rector\FuncCall\RegexDashEscapeRector\RegexDashEscapeRectorTest
  */
@@ -41,13 +43,15 @@ final class RegexDashEscapeRector extends AbstractRector implements MinPhpVersio
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Escape - in some cases', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Escape - in some cases', [new CodeSample(
+            <<<'CODE_SAMPLE'
 preg_match("#[\w-()]#", 'some text');
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 preg_match("#[\w\-()]#", 'some text');
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

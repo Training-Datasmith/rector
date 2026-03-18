@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\Rector\Property;
 
 use PhpParser\Node;
@@ -32,6 +33,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\Property\TypedPropertyFromAssignsRector\TypedPropertyFromAssignsRectorTest
  */
@@ -119,7 +121,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            , <<<'CODE_SAMPLE'
 final class SomeClass
 {
     private string|null $name = null;
@@ -130,7 +132,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, [self::INLINE_PUBLIC => \false])]);
+            , [self::INLINE_PUBLIC => \false])]);
     }
     /**
      * @return array<class-string<Node>>

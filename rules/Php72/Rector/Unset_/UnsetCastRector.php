@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php72\Rector\Unset_;
 
 use PhpParser\Node;
@@ -14,6 +15,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php72\Rector\Unset_\UnsetCastRector\UnsetCastRectorTest
  */
@@ -25,17 +27,19 @@ final class UnsetCastRector extends AbstractRector implements MinPhpVersionInter
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Remove `(unset)` cast', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove `(unset)` cast', [new CodeSample(
+            <<<'CODE_SAMPLE'
 $different = (unset) $value;
 
 $value = (unset) $value;
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 $different = null;
 
 unset($value);
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

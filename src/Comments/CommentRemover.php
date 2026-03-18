@@ -1,10 +1,12 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Comments;
 
 use PhpParser\Node;
 use Rector\Comments\NodeTraverser\CommentRemovingNodeTraverser;
+
 /**
  * @see \Rector\Tests\Comments\CommentRemover\CommentRemoverTest
  */

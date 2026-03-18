@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodeQuality\Rector\Expression;
 
 use PhpParser\Node;
@@ -13,6 +14,7 @@ use Rector\NodeAnalyzer\ExprAnalyzer;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodeQuality\Rector\Expression\TernaryFalseExpressionToIfRector\TernaryFalseExpressionToIfRectorTest
  */
@@ -28,7 +30,8 @@ final class TernaryFalseExpressionToIfRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change ternary with false to if and explicit call', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change ternary with false to if and explicit call', [new CodeSample(
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run($value, $someMethod)
@@ -37,7 +40,8 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run($value, $someMethod)
@@ -48,7 +52,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

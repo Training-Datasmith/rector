@@ -1,12 +1,14 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\NodeAnalyzer;
 
 use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\FuncCall;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\ValueObject\FuncCallAndExpr;
+
 final class BinaryOpAnalyzer
 {
     /**

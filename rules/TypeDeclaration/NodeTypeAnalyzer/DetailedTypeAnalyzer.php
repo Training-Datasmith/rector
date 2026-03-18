@@ -1,12 +1,14 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\NodeTypeAnalyzer;
 
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
+
 final class DetailedTypeAnalyzer
 {
     /**

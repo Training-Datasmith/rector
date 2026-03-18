@@ -1,10 +1,12 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Application;
 
 use DateTime;
 use Rector\Exception\VersionException;
+
 /**
  * @api
  *

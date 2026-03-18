@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PostRector\Rector;
 
 use PhpParser\Node;
@@ -10,6 +11,7 @@ use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
 use Rector\ValueObject\Application\File;
 use RectorPrefix202603\Webmozart\Assert\Assert;
+
 abstract class AbstractPostRector extends NodeVisitorAbstract implements PostRectorInterface
 {
     private ?\Rector\ValueObject\Application\File $file = null;

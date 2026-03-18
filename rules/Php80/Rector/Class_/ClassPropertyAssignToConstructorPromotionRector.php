@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php80\Rector\Class_;
 
 use PhpParser\Node;
@@ -38,6 +39,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php80\Rector\Class_\ClassPropertyAssignToConstructorPromotionRector\ClassPropertyAssignToConstructorPromotionRectorTest
  */
@@ -142,7 +144,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            , <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function __construct(
@@ -151,7 +153,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, [self::INLINE_PUBLIC => \false, self::RENAME_PROPERTY => \true, self::ALLOW_MODEL_BASED_CLASSES => \true])]);
+            , [self::INLINE_PUBLIC => \false, self::RENAME_PROPERTY => \true, self::ALLOW_MODEL_BASED_CLASSES => \true])]);
     }
     /**
      * @param array<string, mixed> $configuration

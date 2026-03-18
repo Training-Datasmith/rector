@@ -1,15 +1,15 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Arguments\NodeAnalyzer;
 
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Name;
-use Rector\Arguments\ValueObject\ArgumentAdder;
-use Rector\Arguments\ValueObject\ArgumentAdderWithoutDefaultValue;
 use Rector\Enum\ObjectReference;
 use Rector\NodeNameResolver\NodeNameResolver;
+
 final class ArgumentAddingScope
 {
     /**

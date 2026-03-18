@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\NodeManipulator;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Cast;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\UnionType;
@@ -15,6 +15,7 @@ use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\TypeDeclaration\TypeInferer\ReturnTypeInferer;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard;
+
 final class AddReturnTypeFromCast
 {
     /**
@@ -52,7 +53,7 @@ final class AddReturnTypeFromCast
         if ($functionLike instanceof ClassMethod && $this->classMethodReturnTypeOverrideGuard->shouldSkipClassMethod($functionLike, $scope)) {
             return null;
         }
-        $hasNonCastReturn = (bool) $this->betterNodeFinder->findFirstInFunctionLikeScoped($functionLike, static fn(Node $subNode): bool => $subNode instanceof Return_ && !$subNode->expr instanceof Cast);
+        $hasNonCastReturn = (bool) $this->betterNodeFinder->findFirstInFunctionLikeScoped($functionLike, static fn (Node $subNode): bool => $subNode instanceof Return_ && !$subNode->expr instanceof Cast);
         if ($hasNonCastReturn) {
             return null;
         }

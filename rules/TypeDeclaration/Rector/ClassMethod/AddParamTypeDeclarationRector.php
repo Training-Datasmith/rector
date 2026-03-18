@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
@@ -19,9 +20,10 @@ use Rector\Rector\AbstractRector;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\TypeDeclaration\ValueObject\AddParamTypeDeclaration;
 use Rector\ValueObject\PhpVersionFeature;
+use RectorPrefix202603\Webmozart\Assert\Assert;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202603\Webmozart\Assert\Assert;
+
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddParamTypeDeclarationRector\AddParamTypeDeclarationRectorTest
  */
@@ -60,7 +62,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            , <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function process(string $name)
@@ -68,7 +70,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, [new AddParamTypeDeclaration('SomeClass', 'process', 0, new StringType())])]);
+            , [new AddParamTypeDeclaration('SomeClass', 'process', 0, new StringType())])]);
     }
     /**
      * @return array<class-string<Node>>

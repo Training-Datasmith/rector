@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\BetterPhpDocParser\PhpDocParser;
 
 use PhpParser\Node;
@@ -12,6 +13,7 @@ use PHPStan\Reflection\ReflectionProvider;
 use Rector\CodingStyle\NodeAnalyzer\UseImportNameMatcher;
 use Rector\Naming\Naming\UseImportsResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+
 /**
  * Matches "@ORM\Entity" to FQN names based on use imports in the file
  */

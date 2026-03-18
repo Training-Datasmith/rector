@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodeQuality\Rector\LogicalAnd;
 
 use PhpParser\Node;
@@ -12,6 +13,7 @@ use PhpParser\Node\Expr\BinaryOp\LogicalOr;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodeQuality\Rector\LogicalAnd\LogicalToBooleanRector\LogicalToBooleanRectorTest
  */
@@ -19,17 +21,19 @@ final class LogicalToBooleanRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change OR, AND to ||, && with more common understanding', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change OR, AND to ||, && with more common understanding', [new CodeSample(
+            <<<'CODE_SAMPLE'
 if ($f = false or true) {
     return $f;
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 if (($f = false) || true) {
     return $f;
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

@@ -1,10 +1,12 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php80\ValueObject;
 
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\FuncCall;
+
 final class StrStartsWith
 {
     /**

@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Transform\Rector\New_;
 
 use PhpParser\Node;
@@ -8,9 +9,10 @@ use PhpParser\Node\Expr\New_;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Rector\AbstractRector;
 use Rector\Transform\ValueObject\NewToStaticCall;
+use RectorPrefix202603\Webmozart\Assert\Assert;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202603\Webmozart\Assert\Assert;
+
 /**
  * @see \Rector\Tests\Transform\Rector\New_\NewToStaticCallRector\NewToStaticCallRectorTest
  */
@@ -31,7 +33,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            , <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -40,7 +42,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, [new NewToStaticCall('Cookie', 'Cookie', 'create')])]);
+            , [new NewToStaticCall('Cookie', 'Cookie', 'create')])]);
     }
     /**
      * @return array<class-string<Node>>

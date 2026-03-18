@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclarationDocblocks;
 
 use PhpParser\Node\FunctionLike;
@@ -18,6 +19,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Privatization\TypeManipulator\TypeNormalizer;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+
 final class NodeDocblockTypeDecorator
 {
     /**

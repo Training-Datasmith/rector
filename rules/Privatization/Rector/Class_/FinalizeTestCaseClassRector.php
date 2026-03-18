@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Privatization\Rector\Class_;
 
 use PhpParser\Node;
@@ -10,6 +11,7 @@ use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Privatization\Rector\Class_\FinalizeTestCaseClassRector\FinalizeTestCaseClassRectorTest
  */
@@ -30,21 +32,23 @@ final class FinalizeTestCaseClassRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Make PHPUnit test case final', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Make PHPUnit test case final', [new CodeSample(
+            <<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
 
 class SomeClass extends TestCase
 {
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
 
 final class SomeClass extends TestCase
 {
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

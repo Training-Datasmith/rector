@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\EarlyReturn\Rector\If_;
 
 use PhpParser\Node;
@@ -12,6 +13,7 @@ use Rector\NodeManipulator\IfManipulator;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\EarlyReturn\Rector\If_\ChangeOrIfContinueToMultiContinueRector\ChangeOrIfContinueToMultiContinueRectorTest
  */
@@ -27,7 +29,8 @@ final class ChangeOrIfContinueToMultiContinueRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change `if a || b` to early return', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change `if a || b` to early return', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function canDrive(Car $newCar)
@@ -43,7 +46,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function canDrive(Car $newCar)
@@ -62,7 +66,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

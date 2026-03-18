@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php70\Rector\Switch_;
 
 use PhpParser\Node;
@@ -11,6 +12,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php70\Rector\Switch_\ReduceMultipleDefaultSwitchRector\ReduceMultipleDefaultSwitchRectorTest
  */
@@ -22,7 +24,8 @@ final class ReduceMultipleDefaultSwitchRector extends AbstractRector implements 
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Remove first default switch, that is ignored', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove first default switch, that is ignored', [new CodeSample(
+            <<<'CODE_SAMPLE'
 switch ($expr) {
     default:
          echo "Hello World";
@@ -32,14 +35,15 @@ switch ($expr) {
          break;
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 switch ($expr) {
     default:
          echo "Goodbye Moon!";
          break;
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

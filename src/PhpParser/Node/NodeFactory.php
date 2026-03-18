@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PhpParser\Node;
 
 use PhpParser\Builder\Method;
@@ -59,6 +60,7 @@ use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\ValueObject\PhpVersionFeature;
+
 /**
  * @see \Rector\Tests\PhpParser\Node\NodeFactoryTest
  */

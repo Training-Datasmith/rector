@@ -1,12 +1,14 @@
 <?php
 
 declare (strict_types=1);
+
 namespace RectorPrefix202603;
 
-use RectorPrefix202603\OndraM\CiDetector\CiDetector;
 use Rector\Bootstrap\ExtensionConfigResolver;
 use Rector\Caching\ValueObject\Storage\MemoryCacheStorage;
 use Rector\Config\RectorConfig;
+use RectorPrefix202603\OndraM\CiDetector\CiDetector;
+
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->paths([]);
     $rectorConfig->skip([]);

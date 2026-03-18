@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\DeadCode\NodeManipulator;
 
-use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\BinaryOp;
@@ -30,6 +30,7 @@ use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Scalar;
 use PHPStan\Type\ObjectType;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+
 final class LivingCodeManipulator
 {
     /**

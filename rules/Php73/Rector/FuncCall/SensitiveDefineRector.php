@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php73\Rector\FuncCall;
 
 use PhpParser\Node;
@@ -10,6 +11,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php73\Rector\FuncCall\SensitiveDefineRector\SensitiveDefineRectorTest
  */
@@ -21,13 +23,15 @@ final class SensitiveDefineRector extends AbstractRector implements MinPhpVersio
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change case insensitive constant definition to sensitive one', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change case insensitive constant definition to sensitive one', [new CodeSample(
+            <<<'CODE_SAMPLE'
 define('FOO', 42, true);
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 define('FOO', 42);
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

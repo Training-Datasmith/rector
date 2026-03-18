@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodingStyle\Rector\Encapsed;
 
 use PhpParser\Node;
@@ -10,6 +11,7 @@ use PhpParser\Token;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodingStyle\Rector\Encapsed\WrapEncapsedVariableInCurlyBracesRector\WrapEncapsedVariableInCurlyBracesRectorTest
  */
@@ -17,19 +19,21 @@ final class WrapEncapsedVariableInCurlyBracesRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Wrap encapsed variables in curly braces', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Wrap encapsed variables in curly braces', [new CodeSample(
+            <<<'CODE_SAMPLE'
 function run($world)
 {
     echo "Hello $world!";
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 function run($world)
 {
     echo "Hello {$world}!";
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

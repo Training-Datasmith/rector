@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclarationDocblocks\Rector\Class_;
 
 use PhpParser\Node;
@@ -16,6 +17,7 @@ use Rector\TypeDeclarationDocblocks\TagNodeAnalyzer\UsefulArrayTagNodeAnalyzer;
 use Rector\ValueObject\MethodName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\TypeDeclarationDocblocks\Rector\Class_\DocblockVarFromParamDocblockInConstructorRector\DocblockVarFromParamDocblockInConstructorRectorTest
  */
@@ -50,7 +52,8 @@ final class DocblockVarFromParamDocblockInConstructorRector extends AbstractRect
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add @var array docblock to a property based on @param of constructor assign', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add @var array docblock to a property based on @param of constructor assign', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     private array $items;
@@ -64,7 +67,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -81,7 +85,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @param Class_ $node

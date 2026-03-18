@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Config\Level;
 
 use Rector\CodeQuality\Rector\Class_\ReturnIteratorInDataProviderRector;
@@ -67,6 +68,7 @@ use Rector\TypeDeclaration\Rector\FunctionLike\AddReturnTypeDeclarationFromYield
 use Rector\TypeDeclaration\Rector\Property\TypedPropertyFromAssignsRector;
 use Rector\TypeDeclaration\Rector\Property\TypedPropertyFromStrictConstructorRector;
 use Rector\TypeDeclaration\Rector\Property\TypedPropertyFromStrictSetUpRector;
+
 final class TypeDeclarationLevel
 {
     /**

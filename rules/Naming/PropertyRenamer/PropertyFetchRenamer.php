@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Naming\PropertyRenamer;
 
 use PhpParser\Node;
@@ -11,6 +12,7 @@ use PhpParser\Node\Stmt\ClassLike;
 use PhpParser\Node\VarLikeIdentifier;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
+
 final class PropertyFetchRenamer
 {
     /**

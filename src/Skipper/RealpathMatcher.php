@@ -1,9 +1,11 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Skipper;
 
 use Rector\Skipper\FileSystem\PathNormalizer;
+
 final class RealpathMatcher
 {
     public function match(string $matchingPath, string $filePath): bool

@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php81\Rector\Array_;
 
 use PhpParser\Node;
@@ -25,6 +26,7 @@ use Rector\ValueObject\PhpVersion;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see RFC https://wiki.php.net/rfc/first_class_callable_syntax
  * @see \Rector\Tests\Php81\Rector\Array_\ArrayToFirstClassCallableRector\ArrayToFirstClassCallableRectorTest
@@ -51,7 +53,8 @@ class ArrayToFirstClassCallableRector extends AbstractRector implements MinPhpVe
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Upgrade array callable to first class callable', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Upgrade array callable to first class callable', [new CodeSample(
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run()
@@ -64,7 +67,8 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run()
@@ -77,7 +81,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

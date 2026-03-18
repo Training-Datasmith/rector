@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodeQuality\NodeFactory;
 
 use PhpParser\Node\Stmt\Property;
@@ -8,6 +9,7 @@ use PHPStan\Type\Type;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Privatization\TypeManipulator\TypeNormalizer;
+
 final class PropertyTypeDecorator
 {
     /**

@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php85\Rector\Class_;
 
 use PhpParser\Node;
@@ -22,6 +23,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see https://3v4l.org/NS419
  * @see https://3v4l.org/nMOpl
@@ -36,13 +38,15 @@ final class WakeupToUnserializeRector extends AbstractRector implements MinPhpVe
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change __wakeup() to __unserialize()', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change __wakeup() to __unserialize()', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class User {
     public function __wakeup() {
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class User {
     public function __unserialize(array $data): void{
         foreach ($data as $property => $value) {
@@ -53,7 +57,7 @@ class User {
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

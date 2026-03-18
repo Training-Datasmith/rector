@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Reporting;
 
 use Rector\Configuration\Option;
@@ -8,6 +9,7 @@ use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Configuration\VendorMissAnalyseGuard;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
 use RectorPrefix202603\Symfony\Component\Console\Style\SymfonyStyle;
+
 final class MissConfigurationReporter
 {
     /**
@@ -29,7 +31,7 @@ final class MissConfigurationReporter
         $skippedRules = SimpleParameterProvider::provideArrayParameter(Option::SKIPPED_RECTOR_RULES);
         $neverRegisteredSkippedRules = array_unique(array_diff($skippedRules, $registeredRules));
         // remove special PostRectorInterface rules, they are registered in a different way
-        $neverRegisteredSkippedRules = array_filter($neverRegisteredSkippedRules, fn($skippedRule): bool => !is_a($skippedRule, PostRectorInterface::class, \true));
+        $neverRegisteredSkippedRules = array_filter($neverRegisteredSkippedRules, fn ($skippedRule): bool => !is_a($skippedRule, PostRectorInterface::class, \true));
         if ($neverRegisteredSkippedRules === []) {
             return;
         }

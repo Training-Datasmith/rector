@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodeQuality\NodeFactory;
 
 use PhpParser\Modifiers;
@@ -13,6 +14,7 @@ use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\ValueObject\MethodName;
 use Rector\ValueObject\PhpVersionFeature;
+
 final class MissingPropertiesFactory
 {
     /**

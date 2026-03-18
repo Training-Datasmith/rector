@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Stmt\Catch_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Finally_;
 use PhpParser\Node\Stmt\Return_;
@@ -21,6 +21,7 @@ use Rector\TypeDeclaration\NodeAnalyzer\ReturnAnalyzer;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddReturnTypeFromTryCatchTypeRector\AddReturnTypeFromTryCatchTypeRectorTest
  */
@@ -56,7 +57,8 @@ final class AddReturnTypeFromTryCatchTypeRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add known type declarations based on first-level try/catch return values', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add known type declarations based on first-level try/catch return values', [new CodeSample(
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run()
@@ -69,7 +71,8 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run(): int
@@ -82,7 +85,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

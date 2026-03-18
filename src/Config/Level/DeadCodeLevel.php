@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Config\Level;
 
 use Rector\CodeQuality\Rector\FunctionLike\SimplifyUselessVariableRector;
@@ -63,6 +64,7 @@ use Rector\DeadCode\Rector\Switch_\RemoveDuplicatedCaseInSwitchRector;
 use Rector\DeadCode\Rector\Ternary\TernaryToBooleanOrFalseToBooleanAndRector;
 use Rector\DeadCode\Rector\TryCatch\RemoveDeadCatchRector;
 use Rector\DeadCode\Rector\TryCatch\RemoveDeadTryCatchRector;
+
 /**
  * Key 0 = level 0
  * Key 50 = level 50

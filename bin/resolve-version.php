@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace RectorPrefix20220529;
 
 // resolve git version stored in released rector
@@ -17,7 +18,7 @@ final class VersionResolver
      * @var int
      */
     private const SUCCESS_CODE = 0;
-    public function resolve() : string
+    public function resolve(): string
     {
         // resolve current tag
         \exec('git tag --points-at', $tagExecOutput, $tagExecResultCode);

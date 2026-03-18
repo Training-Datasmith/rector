@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\Rector\Class_;
 
 use PhpParser\Node;
@@ -19,6 +20,7 @@ use Rector\Rector\AbstractRector;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\Class_\TypedStaticPropertyInBehatContextRectorTest\TypedStaticPropertyInBehatContextRectorTest
  */
@@ -44,7 +46,8 @@ final class TypedStaticPropertyInBehatContextRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add known property types to Behat context static properties', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add known property types to Behat context static properties', [new CodeSample(
+            <<<'CODE_SAMPLE'
 use Behat\Behat\Context\Context;
 
 final class FeatureContext implements Context
@@ -55,7 +58,8 @@ final class FeatureContext implements Context
     public static $someStaticProperty;
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 use Behat\Behat\Context\Context;
 
 final class FeatureContext implements Context
@@ -63,7 +67,7 @@ final class FeatureContext implements Context
     public static ?SomeObject $someStaticProperty = null;
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     public function getNodeTypes(): array
     {

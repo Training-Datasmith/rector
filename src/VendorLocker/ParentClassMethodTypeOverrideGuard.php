@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\VendorLocker;
 
 use PhpParser\Node;
@@ -14,6 +15,7 @@ use Rector\Reflection\ClassReflectionAnalyzer;
 use Rector\Reflection\ReflectionResolver;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\VendorLocker\Exception\UnresolvableClassException;
+
 final class ParentClassMethodTypeOverrideGuard
 {
     /**

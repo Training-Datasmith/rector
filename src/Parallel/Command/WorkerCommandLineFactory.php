@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Parallel\Command;
 
 use Rector\ChangesReporting\Output\JsonOutputFormatter;
@@ -10,6 +11,7 @@ use RectorPrefix202603\Symfony\Component\Console\Command\Command;
 use RectorPrefix202603\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix202603\Symplify\EasyParallel\Exception\ParallelShouldNotHappenException;
 use RectorPrefix202603\Symplify\EasyParallel\Reflection\CommandFromReflectionFactory;
+
 /**
  * @see \Rector\Tests\Parallel\Command\WorkerCommandLineFactoryTest
  * @todo possibly extract to symplify/easy-parallel

@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\DeadCode;
 
 use PhpParser\Node\Expr\BinaryOp\Equal;
@@ -12,6 +13,7 @@ use Rector\DeadCode\ValueObject\BinaryToVersionCompareCondition;
 use Rector\DeadCode\ValueObject\VersionCompareCondition;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Php\PhpVersionProvider;
+
 final class ConditionEvaluator
 {
     /**

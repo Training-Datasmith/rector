@@ -1,17 +1,16 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PHPStanStaticTypeMapper;
 
-use PhpParser\Node\ComplexType;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Type;
 use Rector\Exception\NotImplementedYetException;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use RectorPrefix202603\Webmozart\Assert\Assert;
+
 final class PHPStanStaticTypeMapper
 {
     /**

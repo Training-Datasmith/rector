@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\DeadCode\Rector\Stmt;
 
 use PhpParser\Node;
@@ -14,6 +15,7 @@ use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\DeadCode\Rector\Stmt\RemoveNextSameValueConditionRector\RemoveNextSameValueConditionRectorTest
  */
@@ -34,7 +36,8 @@ final class RemoveNextSameValueConditionRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Remove already checked if condition repeated in the very next stmt', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove already checked if condition repeated in the very next stmt', [new CodeSample(
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function __construct(array $items)
@@ -50,7 +53,8 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function __construct(array $items)
@@ -63,7 +67,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

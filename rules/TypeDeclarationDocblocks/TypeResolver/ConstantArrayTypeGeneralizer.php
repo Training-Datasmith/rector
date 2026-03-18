@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclarationDocblocks\TypeResolver;
 
 use PHPStan\PhpDocParser\Ast\Type\ArrayShapeNode;
@@ -12,6 +13,7 @@ use PHPStan\Type\NeverType;
 use PHPStan\Type\Type;
 use Rector\Privatization\TypeManipulator\TypeNormalizer;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+
 final class ConstantArrayTypeGeneralizer
 {
     /**

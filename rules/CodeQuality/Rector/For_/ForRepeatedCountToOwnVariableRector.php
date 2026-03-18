@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodeQuality\Rector\For_;
 
 use PhpParser\Node;
@@ -17,6 +18,7 @@ use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodeQuality\Rector\For_\ForRepeatedCountToOwnVariableRector\ForRepeatedCountToOwnVariableRectorTest
  */
@@ -28,7 +30,8 @@ final class ForRepeatedCountToOwnVariableRector extends AbstractRector
     private const COUNTER_NAME = 'counter';
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change count() in for function to own variable', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change count() in for function to own variable', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($items)
@@ -39,7 +42,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($items)
@@ -51,7 +55,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

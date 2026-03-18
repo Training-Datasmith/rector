@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\DeadCode\Rector\ClassMethod;
 
 use PhpParser\Node;
@@ -26,6 +27,7 @@ use Rector\ValueObject\Visibility;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\DeadCode\Rector\ClassMethod\RemoveUnusedPromotedPropertyRector\RemoveUnusedPromotedPropertyRectorTest
  */
@@ -76,7 +78,8 @@ final class RemoveUnusedPromotedPropertyRector extends AbstractRector implements
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Remove unused promoted property', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove unused promoted property', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function __construct(
@@ -91,7 +94,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function __construct(
@@ -105,7 +109,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

@@ -1,10 +1,12 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\NodeCollector\ValueObject;
 
 use PhpParser\Node\Expr;
 use Rector\Validation\RectorAssert;
+
 final class ArrayCallable
 {
     /**

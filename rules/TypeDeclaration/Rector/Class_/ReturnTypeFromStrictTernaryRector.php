@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\Rector\Class_;
 
 use PhpParser\Node;
@@ -24,6 +25,7 @@ use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\Class_\ReturnTypeFromStrictTernaryRector\ReturnTypeFromStrictTernaryRectorTest
  */
@@ -59,7 +61,8 @@ final class ReturnTypeFromStrictTernaryRector extends AbstractRector implements 
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add method return type based on strict ternary values', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add method return type based on strict ternary values', [new CodeSample(
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function getValue($number)
@@ -68,7 +71,8 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function getValue($number): int
@@ -77,7 +81,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

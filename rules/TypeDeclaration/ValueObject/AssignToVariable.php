@@ -1,9 +1,11 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\ValueObject;
 
 use PhpParser\Node\Expr;
+
 final class AssignToVariable
 {
     /**

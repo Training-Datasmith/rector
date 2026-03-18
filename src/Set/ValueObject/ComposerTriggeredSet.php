@@ -1,12 +1,14 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Set\ValueObject;
 
-use RectorPrefix202603\Composer\Semver\Semver;
 use Rector\Composer\ValueObject\InstalledPackage;
 use Rector\Set\Contract\SetInterface;
+use RectorPrefix202603\Composer\Semver\Semver;
 use RectorPrefix202603\Webmozart\Assert\Assert;
+
 /**
  * @api used by extensions
  */

@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Transform\Rector\StaticCall;
 
 use PhpParser\Node;
@@ -14,9 +15,10 @@ use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
 use Rector\Transform\NodeAnalyzer\FuncCallStaticCallToMethodCallAnalyzer;
 use Rector\Transform\ValueObject\StaticCallToMethodCall;
+use RectorPrefix202603\Webmozart\Assert\Assert;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202603\Webmozart\Assert\Assert;
+
 /**
  * @note used in Laravel Rector https://github.com/driftingly/rector-laravel/blob/f46812350e0b4ef535c82d3759e86bb5c6abb651/config/sets/laravel-static-to-injection.php#L23
  *
@@ -49,7 +51,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            , <<<'CODE_SAMPLE'
 use App\Custom\SmartFileSystem;
 
 class SomeClass
@@ -70,7 +72,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, [new StaticCallToMethodCall('Nette\Utils\FileSystem', 'write', 'App\Custom\SmartFileSystem', 'dumpFile')])]);
+            , [new StaticCallToMethodCall('Nette\Utils\FileSystem', 'write', 'App\Custom\SmartFileSystem', 'dumpFile')])]);
     }
     /**
      * @return array<class-string<Node>>

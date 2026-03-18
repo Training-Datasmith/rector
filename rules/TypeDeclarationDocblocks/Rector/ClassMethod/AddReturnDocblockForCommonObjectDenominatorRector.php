@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclarationDocblocks\Rector\ClassMethod;
 
 use PhpParser\Node;
@@ -24,6 +25,7 @@ use Rector\TypeDeclarationDocblocks\NodeFinder\ReturnNodeFinder;
 use Rector\TypeDeclarationDocblocks\TagNodeAnalyzer\UsefulArrayTagNodeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\TypeDeclarationDocblocks\Rector\ClassMethod\AddReturnDocblockForCommonObjectDenominatorRector\AddReturnDocblockForCommonObjectDenominatorRectorTest
  */
@@ -59,7 +61,8 @@ final class AddReturnDocblockForCommonObjectDenominatorRector extends AbstractRe
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add @return docblock array of objects, that have common denominator interface/parent class', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add @return docblock array of objects, that have common denominator interface/parent class', [new CodeSample(
+            <<<'CODE_SAMPLE'
 final class ExtensionProvider
 {
     public function getExtensions(): array
@@ -79,7 +82,8 @@ class SecondExtension implements ExtensionInterface
 {
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 final class ExtensionProvider
 {
     /**
@@ -102,7 +106,7 @@ class SecondExtension implements ExtensionInterface
 {
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

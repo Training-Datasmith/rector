@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Removing\NodeManipulator;
 
 use PhpParser\Node\Stmt\ClassMethod;
@@ -9,6 +10,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTagRemover;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\NodeNameResolver\NodeNameResolver;
+
 final class ComplexNodeRemover
 {
     /**

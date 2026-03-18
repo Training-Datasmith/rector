@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\DeadCode\Rector\ClassMethod;
 
 use PhpParser\Node;
@@ -16,6 +17,7 @@ use Rector\Rector\AbstractRector;
 use Rector\Reflection\ReflectionResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\DeadCode\Rector\ClassMethod\RemoveArgumentFromDefaultParentCallRector\RemoveArgumentFromDefaultParentCallRectorTest
  */
@@ -46,7 +48,8 @@ final class RemoveArgumentFromDefaultParentCallRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Remove default argument from parent call', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove default argument from parent call', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeParent
 {
     public function __construct(array $param = [])
@@ -64,7 +67,8 @@ class ChildClass extends SomeParent
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeParent
 {
     public function __construct(array $param = [])
@@ -82,7 +86,7 @@ class ChildClass extends SomeParent
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>
@@ -103,7 +107,7 @@ CODE_SAMPLE
         if (!$classReflection instanceof ClassReflection) {
             return null;
         }
-        $ancestors = array_filter($classReflection->getAncestors(), fn(ClassReflection $ancestorClassReflection): bool => $classReflection->isClass() && $ancestorClassReflection->getName() !== $classReflection->getName());
+        $ancestors = array_filter($classReflection->getAncestors(), fn (ClassReflection $ancestorClassReflection): bool => $classReflection->isClass() && $ancestorClassReflection->getName() !== $classReflection->getName());
         $hasChanged = \false;
         foreach ($node->getMethods() as $classMethod) {
             if ($classMethod->isPrivate()) {

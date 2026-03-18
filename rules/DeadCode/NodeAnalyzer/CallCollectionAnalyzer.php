@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\DeadCode\NodeAnalyzer;
 
 use PhpParser\Node\Expr\MethodCall;
@@ -14,6 +15,7 @@ use Rector\Enum\ObjectReference;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\StaticTypeMapper\Resolver\ClassNameFromObjectTypeResolver;
+
 final class CallCollectionAnalyzer
 {
     /**

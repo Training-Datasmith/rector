@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php81\Rector\Class_;
 
 use PhpParser\Node;
@@ -14,6 +15,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php81\Rector\Class_\SpatieEnumClassToEnumRector\SpatieEnumClassToEnumRectorTest
  */
@@ -50,7 +52,7 @@ class StatusEnum extends Enum
 {
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            , <<<'CODE_SAMPLE'
 enum StatusEnum : string
 {
     case DRAFT = 'draft';
@@ -58,7 +60,7 @@ enum StatusEnum : string
     case ARCHIVED = 'archived';
 }
 CODE_SAMPLE
-, [self::TO_UPPER_SNAKE_CASE => \false])]);
+            , [self::TO_UPPER_SNAKE_CASE => \false])]);
     }
     /**
      * @return array<class-string<Node>>

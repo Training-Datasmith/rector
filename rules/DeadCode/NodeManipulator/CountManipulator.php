@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\DeadCode\NodeManipulator;
 
 use PhpParser\Node\Expr;
@@ -14,6 +15,7 @@ use PHPStan\Type\NeverType;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpParser\Comparing\NodeComparator;
+
 final class CountManipulator
 {
     /**

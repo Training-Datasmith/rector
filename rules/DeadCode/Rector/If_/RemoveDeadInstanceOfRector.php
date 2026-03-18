@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\DeadCode\Rector\If_;
 
 use PhpParser\Node;
@@ -26,6 +27,7 @@ use Rector\Rector\AbstractRector;
 use Rector\Reflection\ReflectionResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\DeadCode\Rector\If_\RemoveDeadInstanceOfRector\RemoveDeadInstanceOfRectorTest
  */
@@ -46,7 +48,8 @@ final class RemoveDeadInstanceOfRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Remove dead instanceof check on type hinted variable', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove dead instanceof check on type hinted variable', [new CodeSample(
+            <<<'CODE_SAMPLE'
 function run(stdClass $stdClass)
 {
     if (! $stdClass instanceof stdClass) {
@@ -56,13 +59,14 @@ function run(stdClass $stdClass)
     return true;
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 function run(stdClass $stdClass)
 {
     return true;
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

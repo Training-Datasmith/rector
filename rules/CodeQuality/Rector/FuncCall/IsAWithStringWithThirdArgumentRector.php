@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodeQuality\Rector\FuncCall;
 
 use PhpParser\Node;
@@ -9,6 +10,7 @@ use PhpParser\Node\Expr\FuncCall;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodeQuality\Rector\FuncCall\IsAWithStringWithThirdArgumentRector\IsAWithStringWithThirdArgumentRectorTest
  */
@@ -16,7 +18,8 @@ final class IsAWithStringWithThirdArgumentRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Complete missing 3rd argument in case is_a() function in case of strings', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Complete missing 3rd argument in case is_a() function in case of strings', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function __construct(string $value)
@@ -25,7 +28,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function __construct(string $value)
@@ -34,7 +38,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Renaming\NodeManipulator;
 
 use PhpParser\Node;
@@ -24,6 +25,7 @@ use Rector\NodeTypeResolver\ValueObject\OldToNewType;
 use Rector\Renaming\Collector\RenamedNameCollector;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\Util\FileHasher;
+
 final class ClassRenamer
 {
     /**

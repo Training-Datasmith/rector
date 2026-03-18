@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\BetterPhpDocParser;
 
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
@@ -11,6 +12,7 @@ use Rector\PhpDocParser\PhpDocParser\PhpDocNodeTraverser;
 use Rector\PhpDocParser\PhpDocParser\PhpDocNodeVisitor\CloningPhpDocNodeVisitor;
 use Rector\PhpDocParser\PhpDocParser\PhpDocNodeVisitor\ParentConnectingPhpDocNodeVisitor;
 use RectorPrefix202603\Webmozart\Assert\Assert;
+
 /**
  * @see \Rector\Tests\BetterPhpDocParser\PhpDocNodeMapperTest
  */

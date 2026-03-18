@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\Guard;
 
 use PhpParser\Node;
@@ -14,6 +15,7 @@ use PhpParser\NodeVisitor;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\PhpParser\Node\BetterNodeFinder;
+
 final class ParamTypeAddGuard
 {
     /**
@@ -43,11 +45,11 @@ final class ParamTypeAddGuard
                 $isLegal = \false;
                 return NodeVisitor::STOP_TRAVERSAL;
             }
-            if ($subNode instanceof If_ && (bool) $this->betterNodeFinder->findFirst($subNode->cond, fn(Node $node): bool => $node instanceof Variable && $this->nodeNameResolver->isName($node, $paramName))) {
+            if ($subNode instanceof If_ && (bool) $this->betterNodeFinder->findFirst($subNode->cond, fn (Node $node): bool => $node instanceof Variable && $this->nodeNameResolver->isName($node, $paramName))) {
                 $isLegal = \false;
                 return NodeVisitor::STOP_TRAVERSAL;
             }
-            if ($subNode instanceof Ternary && (bool) $this->betterNodeFinder->findFirst($subNode, fn(Node $node): bool => $node instanceof Variable && $this->nodeNameResolver->isName($node, $paramName))) {
+            if ($subNode instanceof Ternary && (bool) $this->betterNodeFinder->findFirst($subNode, fn (Node $node): bool => $node instanceof Variable && $this->nodeNameResolver->isName($node, $paramName))) {
                 $isLegal = \false;
                 return NodeVisitor::STOP_TRAVERSAL;
             }

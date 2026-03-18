@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodeQuality\Rector\ClassMethod;
 
 use PhpParser\Node;
@@ -20,6 +21,7 @@ use Rector\PhpParser\Enum\NodeGroup;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodeQuality\Rector\ClassMethod\InlineArrayReturnAssignRector\InlineArrayReturnAssignRectorTest
  */
@@ -35,7 +37,8 @@ final class InlineArrayReturnAssignRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Inline just in time array dim fetch assigns to direct return', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Inline just in time array dim fetch assigns to direct return', [new CodeSample(
+            <<<'CODE_SAMPLE'
 function getPerson()
 {
     $person = [];
@@ -45,7 +48,8 @@ function getPerson()
     return $person;
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 function getPerson()
 {
     return [
@@ -54,7 +58,7 @@ function getPerson()
     ];
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

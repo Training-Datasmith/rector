@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Application;
 
 use PhpParser\Modifiers;
@@ -31,6 +32,7 @@ use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeAnalyzer\ScopeAnalyzer;
 use Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
+
 /**
  * In case of changed node, we need to re-traverse the PHPStan Scope to make all the new nodes aware of what is going on.
  */
@@ -72,7 +74,7 @@ final class ChangedNodeScopeRefresher
          *              - first rule: - Class_ → ClassMethod → remove stmt with index 0
          *              - second rule: - ClassMethod → here fetch the index 0 that no longer exists
          */
-        SimpleCallableNodeTraverser::traverse($node, fn(Node $subNode): ?Node => \Rector\Application\NodeAttributeReIndexer::reIndexNodeAttributes($subNode));
+        SimpleCallableNodeTraverser::traverse($node, fn (Node $subNode): ?Node => \Rector\Application\NodeAttributeReIndexer::reIndexNodeAttributes($subNode));
         $stmts = $this->resolveStmts($node);
         $this->phpStanNodeScopeResolver->processNodes($stmts, $filePath, $mutatingScope);
     }

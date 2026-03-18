@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
@@ -17,6 +18,7 @@ use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromReturnDirectArrayRector\ReturnTypeFromReturnDirectArrayRectorTest
  */
@@ -37,7 +39,8 @@ final class ReturnTypeFromReturnDirectArrayRector extends AbstractRector impleme
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add return type from return direct array', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add return type from return direct array', [new CodeSample(
+            <<<'CODE_SAMPLE'
 final class AddReturnArray
 {
     public function getArray()
@@ -46,7 +49,8 @@ final class AddReturnArray
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 final class AddReturnArray
 {
     public function getArray(): array
@@ -55,7 +59,7 @@ final class AddReturnArray
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

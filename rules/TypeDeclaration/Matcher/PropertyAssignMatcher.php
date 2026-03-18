@@ -1,12 +1,14 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\Matcher;
 
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Assign;
 use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
+
 final class PropertyAssignMatcher
 {
     /**

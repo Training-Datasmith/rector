@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace RectorPrefix202603;
 
 use PhpParser\Node\Expr\Cast\Bool_;
@@ -31,6 +32,7 @@ use Rector\Renaming\Rector\MethodCall\RenameMethodRector;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\RenameCast;
 use Rector\Renaming\ValueObject\RenameClassAndConstFetch;
+
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->rules([ArrayFirstLastRector::class, RemoveFinfoBufferContextArgRector::class, NullDebugInfoReturnRector::class, ConstAndTraitDeprecatedAttributeRector::class, ColonAfterSwitchCaseRector::class, ArrayKeyExistsNullToEmptyStringRector::class, ChrArgModuloRector::class, SleepToSerializeRector::class, OrdSingleByteRector::class, WakeupToUnserializeRector::class, ShellExecFunctionCallOverBackticksRector::class, AddOverrideAttributeToOverriddenPropertiesRector::class]);
     $rectorConfig->ruleWithConfiguration(RemoveFuncCallArgRector::class, [

@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PhpParser\Printer;
 
-use RectorPrefix202603\Nette\Utils\Strings;
 use Override;
 use PhpParser\Comment;
 use PhpParser\Internal\TokenStream;
@@ -35,6 +35,8 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\FileNode;
 use Rector\Util\NewLineSplitter;
 use Rector\Util\Reflection\PrivatesAccessor;
+use RectorPrefix202603\Nette\Utils\Strings;
+
 /**
  * @see \Rector\Tests\PhpParser\Printer\BetterStandardPrinterTest
  *

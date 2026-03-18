@@ -1,13 +1,15 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\BetterPhpDocParser\PhpDoc;
 
 use PHPStan\PhpDocParser\Ast\NodeAttributes;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
-use Stringable;
+
 final class ArrayItemNode implements PhpDocTagValueNode
 {
+    use NodeAttributes;
     /**
      * @var mixed
      */
@@ -16,7 +18,6 @@ final class ArrayItemNode implements PhpDocTagValueNode
      * @var mixed
      */
     public $key;
-    use NodeAttributes;
     /**
      * @param mixed $value
      * @param mixed $key

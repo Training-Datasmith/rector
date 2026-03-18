@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php74\Rector\Closure;
 
 use PhpParser\Node;
@@ -14,6 +15,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php74\Rector\Closure\ClosureToArrowFunctionRector\ClosureToArrowFunctionRectorTest
  */
@@ -29,7 +31,8 @@ final class ClosureToArrowFunctionRector extends AbstractRector implements MinPh
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change closure to arrow function', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change closure to arrow function', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($meetups)
@@ -40,7 +43,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($meetups)
@@ -49,7 +53,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

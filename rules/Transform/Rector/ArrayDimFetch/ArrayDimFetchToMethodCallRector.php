@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Transform\Rector\ArrayDimFetch;
 
 use PhpParser\Node;
@@ -20,9 +21,10 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\Transform\Enum\MagicPropertyHandler;
 use Rector\Transform\ValueObject\ArrayDimFetchToMethodCall;
+use RectorPrefix202603\Webmozart\Assert\Assert;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202603\Webmozart\Assert\Assert;
+
 /**
  * @see \Rector\Tests\Transform\Rector\ArrayDimFetch\ArrayDimFetchToMethodCallRector\ArrayDimFetchToMethodCallRectorTest
  */
@@ -40,13 +42,13 @@ $object['key'] = 'value';
 isset($object['key']);
 unset($object['key']);
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            , <<<'CODE_SAMPLE'
 $object->get('key');
 $object->set('key', 'value');
 $object->has('key');
 $object->unset('key');
 CODE_SAMPLE
-, [new ArrayDimFetchToMethodCall(new ObjectType('SomeClass'), 'get', 'set', 'has', 'unset')])]);
+            , [new ArrayDimFetchToMethodCall(new ObjectType('SomeClass'), 'get', 'set', 'has', 'unset')])]);
     }
     public function getNodeTypes(): array
     {
@@ -113,7 +115,7 @@ CODE_SAMPLE
             $isset->vars = $issets;
             array_unshift($exprs, $isset);
         }
-        return array_reduce($exprs, fn(?Expr $carry, Expr $expr) => $carry instanceof Expr ? new BooleanAnd($carry, $expr) : $expr);
+        return array_reduce($exprs, fn (?Expr $carry, Expr $expr) => $carry instanceof Expr ? new BooleanAnd($carry, $expr) : $expr);
     }
     /**
      * @return Stmt[]|null

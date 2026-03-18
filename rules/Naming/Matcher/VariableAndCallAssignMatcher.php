@@ -1,17 +1,16 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Naming\Matcher;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Function_;
 use Rector\Naming\ValueObject\VariableAndCallAssign;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PhpParser\Node\BetterNodeFinder;
+
 final class VariableAndCallAssignMatcher
 {
     /**
@@ -48,7 +47,7 @@ final class VariableAndCallAssignMatcher
         if ($variableName === null) {
             return null;
         }
-        $isVariableFoundInCallArgs = (bool) $this->betterNodeFinder->findFirst($call->isFirstClassCallable() ? [] : $call->getArgs(), fn(Node $subNode): bool => $subNode instanceof Variable && $this->nodeNameResolver->isName($subNode, $variableName));
+        $isVariableFoundInCallArgs = (bool) $this->betterNodeFinder->findFirst($call->isFirstClassCallable() ? [] : $call->getArgs(), fn (Node $subNode): bool => $subNode instanceof Variable && $this->nodeNameResolver->isName($subNode, $variableName));
         if ($isVariableFoundInCallArgs) {
             return null;
         }

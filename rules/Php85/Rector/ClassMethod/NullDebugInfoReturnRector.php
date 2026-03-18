@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php85\Rector\ClassMethod;
 
 use PhpParser\Node;
@@ -18,6 +19,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see https://wiki.php.net/rfc/deprecations_php_8_5#deprecate_debuginfo_returning_null
  * @see \Rector\Tests\Php85\Rector\MethodCall\NullDebugInfoReturnRector\NullDebugInfoReturnRectorTest
@@ -34,7 +36,8 @@ final class NullDebugInfoReturnRector extends AbstractRector implements MinPhpVe
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Replaces `null` return value with empty array in `__debugInfo` methods', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replaces `null` return value with empty array in `__debugInfo` methods', [new CodeSample(
+            <<<'CODE_SAMPLE'
 new class
 {
     public function __debugInfo() {
@@ -42,7 +45,8 @@ new class
     }
 };
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 new class
 {
     public function __debugInfo() {
@@ -50,7 +54,7 @@ new class
     }
 };
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Assert\NodeAnalyzer;
 
 use PhpParser\Node\Expr\StaticCall;
@@ -9,6 +10,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\PrettyPrinter\Standard;
 use Rector\Assert\Enum\AssertClassName;
+
 final class ExistingAssertStaticCallResolver
 {
     /**

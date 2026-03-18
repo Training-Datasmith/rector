@@ -1,10 +1,12 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Differ;
 
 use RectorPrefix202603\SebastianBergmann\Diff\Differ;
 use RectorPrefix202603\SebastianBergmann\Diff\Output\StrictUnifiedDiffOutputBuilder;
+
 final class DefaultDiffer
 {
     /**

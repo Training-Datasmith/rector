@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\Rector\Class_;
 
 use PhpParser\Node;
@@ -30,6 +31,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\Class_\PropertyTypeFromStrictSetterGetterRector\PropertyTypeFromStrictSetterGetterRectorTest
  */
@@ -65,7 +67,8 @@ final class PropertyTypeFromStrictSetterGetterRector extends AbstractRector impl
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add property type based on strict setter and getter method', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add property type based on strict setter and getter method', [new CodeSample(
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     private $name = 'John';
@@ -81,7 +84,8 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     private string $name = 'John';
@@ -97,7 +101,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

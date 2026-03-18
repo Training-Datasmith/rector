@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Transform\NodeTypeAnalyzer;
 
 use PhpParser\Node\Expr;
@@ -22,6 +23,7 @@ use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\StaticTypeMapper\Resolver\ClassNameFromObjectTypeResolver;
 use Rector\ValueObject\MethodName;
+
 final class TypeProvidingExprFromClassResolver
 {
     /**

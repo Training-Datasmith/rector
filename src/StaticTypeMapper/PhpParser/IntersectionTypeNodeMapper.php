@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\StaticTypeMapper\PhpParser;
 
 use PhpParser\Node;
@@ -8,6 +9,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\Name\FullyQualified;
 use PHPStan\Type\IntersectionType;
 use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
+
 /**
  * @implements PhpParserNodeMapperInterface<Node\IntersectionType>
  */

@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\TypeAnalyzer;
 
 use PhpParser\Node\ArrayItem;
@@ -16,6 +17,7 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use RectorPrefix202603\Webmozart\Assert\Assert;
+
 final class ParameterTypeFromDataProviderResolver
 {
     /**

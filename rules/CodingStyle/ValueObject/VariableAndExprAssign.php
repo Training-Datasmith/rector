@@ -1,10 +1,12 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodingStyle\ValueObject;
 
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Variable;
+
 final class VariableAndExprAssign
 {
     /**

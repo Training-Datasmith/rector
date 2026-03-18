@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php80\Rector\Identical;
 
 use PhpParser\Node;
@@ -20,6 +21,7 @@ use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Rector\VersionBonding\Contract\RelatedPolyfillInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php80\Rector\Identical\StrStartsWithRector\StrStartsWithRectorTest
  */
@@ -39,7 +41,8 @@ final class StrStartsWithRector extends AbstractRector implements MinPhpVersionI
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change helper functions to str_starts_with()', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change helper functions to str_starts_with()', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -50,7 +53,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -61,7 +65,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

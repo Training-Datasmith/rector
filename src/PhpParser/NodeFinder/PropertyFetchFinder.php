@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PhpParser\NodeFinder;
 
 use PhpParser\Node;
@@ -18,7 +19,6 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
-use PhpParser\Node\Stmt\Trait_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Type\ObjectType;
@@ -33,6 +33,7 @@ use Rector\PhpParser\AstResolver;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Reflection\ReflectionResolver;
 use Rector\StaticTypeMapper\Resolver\ClassNameFromObjectTypeResolver;
+
 final class PropertyFetchFinder
 {
     /**
@@ -168,7 +169,7 @@ final class PropertyFetchFinder
         if ($node instanceof ClassMethod) {
             return [$node];
         }
-        $propertyWithHooks = array_filter($node->getProperties(), fn(Property $property): bool => $property->hooks !== []);
+        $propertyWithHooks = array_filter($node->getProperties(), fn (Property $property): bool => $property->hooks !== []);
         return array_merge($propertyWithHooks, $node->getMethods());
     }
     /**

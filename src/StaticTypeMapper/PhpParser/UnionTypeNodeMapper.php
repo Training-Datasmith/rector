@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\StaticTypeMapper\PhpParser;
 
 use PhpParser\Node;
@@ -11,6 +12,7 @@ use PhpParser\Node\UnionType;
 use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
+
 /**
  * @implements PhpParserNodeMapperInterface<UnionType>
  */

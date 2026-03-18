@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
@@ -24,6 +25,7 @@ use Rector\TypeDeclaration\NodeAnalyzer\CallerParamMatcher;
 use Rector\VendorLocker\ParentClassMethodTypeOverrideGuard;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\ParamTypeByMethodCallTypeRector\ParamTypeByMethodCallTypeRectorTest
  */
@@ -69,7 +71,8 @@ final class ParamTypeByMethodCallTypeRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change param type based on passed method call type', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change param type based on passed method call type', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeTypedService
 {
     public function run(string $name)
@@ -90,7 +93,8 @@ final class UseDependency
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeTypedService
 {
     public function run(string $name)
@@ -111,7 +115,7 @@ final class UseDependency
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>
@@ -138,7 +142,7 @@ CODE_SAMPLE
         /** @var array<StaticCall|MethodCall|FuncCall> $callers */
         $callers = $this->betterNodeFinder->findInstancesOfScoped([$node], [StaticCall::class, MethodCall::class, FuncCall::class]);
         // keep only callers with args
-        $callersWithArgs = array_filter($callers, fn($caller): bool => $caller->args !== []);
+        $callersWithArgs = array_filter($callers, fn ($caller): bool => $caller->args !== []);
         if ($callersWithArgs === []) {
             return null;
         }

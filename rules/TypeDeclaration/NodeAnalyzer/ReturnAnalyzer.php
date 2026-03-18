@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\NodeAnalyzer;
 
 use PhpParser\Node\Expr;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
 use Rector\TypeDeclaration\TypeInferer\SilentVoidResolver;
+
 final class ReturnAnalyzer
 {
     /**

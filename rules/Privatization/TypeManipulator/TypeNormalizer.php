@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Privatization\TypeManipulator;
 
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
@@ -27,6 +28,7 @@ use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\NodeTypeResolver\PHPStan\TypeHasher;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
+
 final class TypeNormalizer
 {
     /**

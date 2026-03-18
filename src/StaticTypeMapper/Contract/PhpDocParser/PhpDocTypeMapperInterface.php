@@ -1,12 +1,14 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\StaticTypeMapper\Contract\PhpDocParser;
 
 use PhpParser\Node;
 use PHPStan\Analyser\NameScope;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\Type\Type;
+
 /**
  * @template TTypeNode as TypeNode
  */

@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php80\NodeResolver;
 
 use PhpParser\Node\Expr;
@@ -13,6 +14,7 @@ use PhpParser\Node\Stmt\Return_;
 use PhpParser\Node\Stmt\Switch_;
 use Rector\Php80\Enum\MatchKind;
 use Rector\Php80\ValueObject\CondAndExpr;
+
 final class SwitchExprsResolver
 {
     /**

@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PhpParser\NodeVisitor;
 
 use PhpParser\Node;
@@ -9,6 +10,7 @@ use PhpParser\Node\Name;
 use PhpParser\NodeVisitorAbstract;
 use Rector\Contract\PhpParser\DecoratingNodeVisitorInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+
 final class ArgNodeVisitor extends NodeVisitorAbstract implements DecoratingNodeVisitorInterface
 {
     public function enterNode(Node $node): ?Node

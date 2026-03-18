@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\DeadCode\Rector\FuncCall;
 
 use PhpParser\Node;
@@ -9,6 +10,7 @@ use PhpParser\Node\Expr\FuncCall;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\DeadCode\Rector\FuncCall\RemoveFilterVarOnExactTypeRector\RemoveFilterVarOnExactTypeRectorTest
  */
@@ -16,17 +18,19 @@ final class RemoveFilterVarOnExactTypeRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Removes filter_var() calls with exact type', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Removes filter_var() calls with exact type', [new CodeSample(
+            <<<'CODE_SAMPLE'
 function (int $value) {
     $result = filter_var($value, FILTER_VALIDATE_INT);
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 function (int $value) {
     $result = $value;
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     public function getNodeTypes(): array
     {

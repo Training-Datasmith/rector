@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\DeadCode\Rector\ClassLike;
 
 use PhpParser\Node;
@@ -21,6 +22,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\DeadCode\Rector\ClassLike\RemoveTypedPropertyNonMockDocblockRector\RemoveTypedPropertyNonMockDocblockRectorTest
  */
@@ -46,7 +48,8 @@ final class RemoveTypedPropertyNonMockDocblockRector extends AbstractRector impl
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Remove @var annotation for PHPUnit\Framework\MockObject\MockObject combined with native object type', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove @var annotation for PHPUnit\Framework\MockObject\MockObject combined with native object type', [new CodeSample(
+            <<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 
@@ -58,7 +61,8 @@ final class SomeTest extends TestCase
     private SomeClass $someProperty;
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 
@@ -67,7 +71,7 @@ final class SomeTest extends TestCase
     private SomeClass $someProperty;
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     public function getNodeTypes(): array
     {

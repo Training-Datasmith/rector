@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php70\Rector\Variable;
 
 use PhpParser\Node;
@@ -11,6 +12,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php70\Rector\Variable\WrapVariableVariableNameInCurlyBracesRector\WrapVariableVariableNameInCurlyBracesRectorTest
  */
@@ -22,19 +24,21 @@ final class WrapVariableVariableNameInCurlyBracesRector extends AbstractRector i
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Ensure variable variables are wrapped in curly braces', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Ensure variable variables are wrapped in curly braces', [new CodeSample(
+            <<<'CODE_SAMPLE'
 function run($foo)
 {
     global $$foo->bar;
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 function run($foo)
 {
     global ${$foo->bar};
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

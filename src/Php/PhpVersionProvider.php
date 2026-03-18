@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php;
 
 use Rector\Configuration\Option;
@@ -11,6 +12,7 @@ use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
 use Rector\Util\StringUtils;
 use Rector\ValueObject\PhpVersion;
 use ReflectionClass;
+
 /**
  * @see \Rector\Tests\Php\PhpVersionProviderTest
  */

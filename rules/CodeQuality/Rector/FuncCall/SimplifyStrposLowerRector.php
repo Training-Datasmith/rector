@@ -1,16 +1,18 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodeQuality\Rector\FuncCall;
 
-use RectorPrefix202603\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use PhpParser\Node\Scalar\String_;
 use Rector\Rector\AbstractRector;
+use RectorPrefix202603\Nette\Utils\Strings;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodeQuality\Rector\FuncCall\SimplifyStrposLowerRector\SimplifyStrposLowerRectorTest
  */

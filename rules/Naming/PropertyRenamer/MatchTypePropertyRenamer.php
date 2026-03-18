@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Naming\PropertyRenamer;
 
 use PhpParser\Node\Stmt\Property;
@@ -8,6 +9,7 @@ use PhpParser\Node\VarLikeIdentifier;
 use Rector\Naming\Guard\PropertyConflictingNameGuard\MatchPropertyTypeConflictingNameGuard;
 use Rector\Naming\RenameGuard\PropertyRenameGuard;
 use Rector\Naming\ValueObject\PropertyRename;
+
 final class MatchTypePropertyRenamer
 {
     /**

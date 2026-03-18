@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\NodeAnalyzer;
 
 use PhpParser\Node;
@@ -13,6 +14,7 @@ use Rector\Enum\ClassName;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Util\StringUtils;
+
 final class JMSTypeAnalyzer
 {
     /**

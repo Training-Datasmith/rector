@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Set\SetProvider;
 
 use Rector\Set\Contract\SetInterface;
@@ -8,6 +9,7 @@ use Rector\Set\Contract\SetProviderInterface;
 use Rector\Set\Enum\SetGroup;
 use Rector\Set\ValueObject\ComposerTriggeredSet;
 use Rector\Set\ValueObject\Set;
+
 final class CoreSetProvider implements SetProviderInterface
 {
     /**

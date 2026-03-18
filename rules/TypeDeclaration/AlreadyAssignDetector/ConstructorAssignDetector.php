@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\AlreadyAssignDetector;
 
 use PhpParser\Node;
@@ -27,6 +28,7 @@ use Rector\PhpParser\Comparing\NodeComparator;
 use Rector\TypeDeclaration\Matcher\PropertyAssignMatcher;
 use Rector\TypeDeclaration\NodeAnalyzer\AutowiredClassMethodOrPropertyAnalyzer;
 use Rector\ValueObject\MethodName;
+
 final class ConstructorAssignDetector
 {
     /**

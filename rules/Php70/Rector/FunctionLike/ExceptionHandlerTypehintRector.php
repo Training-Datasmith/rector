@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php70\Rector\FunctionLike;
 
 use PhpParser\Node;
@@ -14,6 +15,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php70\Rector\FunctionLike\ExceptionHandlerTypehintRector\ExceptionHandlerTypehintRectorTest
  */
@@ -26,15 +28,17 @@ final class ExceptionHandlerTypehintRector extends AbstractRector implements Min
     private const HANDLE_INSENSITIVE_REGEX = '#handle#i';
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change typehint from `Exception` to `Throwable`', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change typehint from `Exception` to `Throwable`', [new CodeSample(
+            <<<'CODE_SAMPLE'
 function handler(Exception $exception) { ... }
 set_exception_handler('handler');
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 function handler(Throwable $exception) { ... }
 set_exception_handler('handler');
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

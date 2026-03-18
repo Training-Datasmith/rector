@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PhpParser\NodeVisitor;
 
 use PhpParser\Node;
@@ -14,6 +15,7 @@ use PHPStan\Type\CallableType;
 use Rector\Contract\PhpParser\DecoratingNodeVisitorInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Reflection\ReflectionResolver;
+
 /**
  * Decorate method call, function call or static call, that accepts closure that
  * requires multiple args (variadic) - to handle them later in specific rules.

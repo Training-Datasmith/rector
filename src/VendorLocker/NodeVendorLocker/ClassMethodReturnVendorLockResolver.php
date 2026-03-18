@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\VendorLocker\NodeVendorLocker;
 
 use PhpParser\Node\Stmt\ClassMethod;
@@ -10,6 +11,7 @@ use PHPStan\Type\MixedType;
 use Rector\NodeAnalyzer\MagicClassMethodAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Reflection\ReflectionResolver;
+
 final class ClassMethodReturnVendorLockResolver
 {
     /**

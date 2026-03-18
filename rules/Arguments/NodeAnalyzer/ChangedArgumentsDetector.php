@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Arguments\NodeAnalyzer;
 
 use PhpParser\Node;
@@ -10,6 +11,7 @@ use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+
 final class ChangedArgumentsDetector
 {
     /**

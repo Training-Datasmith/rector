@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php70\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\InterpolatedString;
@@ -22,6 +22,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php70\Rector\MethodCall\ThisCallOnStaticMethodToStaticCallRector\ThisCallOnStaticMethodToStaticCallRectorTest
  */
@@ -47,7 +48,8 @@ final class ThisCallOnStaticMethodToStaticCallRector extends AbstractRector impl
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Changes $this->call() to static method to static call', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Changes $this->call() to static method to static call', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public static function run()
@@ -60,7 +62,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public static function run()
@@ -73,7 +76,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

@@ -1,11 +1,13 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\DeadCode\TypeNodeAnalyzer;
 
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
 use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode;
+
 final class MixedArrayTypeNodeAnalyzer
 {
     public function hasMixedArrayType(BracketsAwareUnionTypeNode $bracketsAwareUnionTypeNode): bool

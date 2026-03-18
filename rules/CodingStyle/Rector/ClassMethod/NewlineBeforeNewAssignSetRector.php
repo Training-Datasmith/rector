@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodingStyle\Rector\ClassMethod;
 
 use PhpParser\Node;
@@ -19,6 +20,7 @@ use Rector\Contract\Rector\HTMLAverseRectorInterface;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodingStyle\Rector\ClassMethod\NewlineBeforeNewAssignSetRector\NewlineBeforeNewAssignSetRectorTest
  */
@@ -28,7 +30,8 @@ final class NewlineBeforeNewAssignSetRector extends AbstractRector implements HT
     private ?string $previousPreviousStmtVariableName = null;
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add extra space before new assign set', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add extra space before new assign set', [new CodeSample(
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run()
@@ -44,7 +47,8 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run()
@@ -63,7 +67,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

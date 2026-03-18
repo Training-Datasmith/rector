@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\BetterPhpDocParser\ValueObject;
 
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
@@ -11,6 +12,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ThrowsTagValueNode;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use Rector\Enum\ClassName;
+
 final class NodeTypes
 {
     /**

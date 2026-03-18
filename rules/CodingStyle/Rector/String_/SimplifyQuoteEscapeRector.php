@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodingStyle\Rector\String_;
 
 use PhpParser\Node;
@@ -10,6 +11,7 @@ use Rector\Rector\AbstractRector;
 use Rector\Util\StringUtils;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodingStyle\Rector\String_\SimplifyQuoteEscapeRector\SimplifyQuoteEscapeRectorTest
  */
@@ -29,7 +31,8 @@ final class SimplifyQuoteEscapeRector extends AbstractRector
     private bool $hasChanged = \false;
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Prefer quote that are not inside the string', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Prefer quote that are not inside the string', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -39,7 +42,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -49,7 +53,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

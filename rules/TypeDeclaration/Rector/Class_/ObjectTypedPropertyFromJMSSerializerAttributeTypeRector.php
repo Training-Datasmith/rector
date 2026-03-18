@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\Rector\Class_;
 
 use PhpParser\Node;
@@ -19,6 +20,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\Class_\ObjectTypedPropertyFromJMSSerializerAttributeTypeRector\ObjectTypedPropertyFromJMSSerializerAttributeTypeRectorTest
  */
@@ -44,7 +46,8 @@ final class ObjectTypedPropertyFromJMSSerializerAttributeTypeRector extends Abst
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add object typed property from JMS Serializer Type attribute', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add object typed property from JMS Serializer Type attribute', [new CodeSample(
+            <<<'CODE_SAMPLE'
 use JMS\Serializer\Annotation\Type;
 
 final class SomeClass
@@ -53,7 +56,8 @@ final class SomeClass
     private $product;
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 use JMS\Serializer\Annotation\Type;
 
 final class SomeClass
@@ -62,7 +66,7 @@ final class SomeClass
     private ?Product $product = null;
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\DeadCode\Rector\Closure;
 
 use PhpParser\Node;
@@ -10,6 +11,7 @@ use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\DeadCode\Rector\Closure\RemoveUnusedClosureVariableUseRector\RemoveUnusedClosureVariableUseRectorTest
  */
@@ -30,7 +32,8 @@ final class RemoveUnusedClosureVariableUseRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Remove unused variable in use() of closure', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove unused variable in use() of closure', [new CodeSample(
+            <<<'CODE_SAMPLE'
 $var = 1;
 
 $closure = function() use ($var) {
@@ -38,14 +41,15 @@ $closure = function() use ($var) {
 };
 
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 $var = 1;
 $closure = function() {
     echo 'Hello World';
 };
 
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>
@@ -68,7 +72,7 @@ CODE_SAMPLE
             if (!is_string($useVariableName)) {
                 continue;
             }
-            $isUseUsed = (bool) $this->betterNodeFinder->findFirst($node->stmts, fn(Node $subNode): bool => $this->exprUsedInNodeAnalyzer->isUsed($subNode, $useVariable->var));
+            $isUseUsed = (bool) $this->betterNodeFinder->findFirst($node->stmts, fn (Node $subNode): bool => $this->exprUsedInNodeAnalyzer->isUsed($subNode, $useVariable->var));
             if ($isUseUsed) {
                 continue;
             }

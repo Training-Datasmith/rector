@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\FamilyTree\Reflection;
 
 use PhpParser\Node\Name;
@@ -9,6 +10,7 @@ use PhpParser\Node\Stmt\Interface_;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\NodeNameResolver\NodeNameResolver;
+
 final class FamilyRelationsAnalyzer
 {
     /**
@@ -39,7 +41,7 @@ final class FamilyRelationsAnalyzer
             }
             $classReflection = $this->reflectionProvider->getClass($fullName);
             $ancestors = array_merge($classReflection->getParents(), $classReflection->getInterfaces());
-            return array_map(static fn(ClassReflection $classReflection): string => $classReflection->getName(), $ancestors);
+            return array_map(static fn (ClassReflection $classReflection): string => $classReflection->getName(), $ancestors);
         }
         if ($classOrName instanceof Interface_) {
             foreach ($classOrName->extends as $extendInterfaceName) {

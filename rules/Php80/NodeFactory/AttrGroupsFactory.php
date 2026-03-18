@@ -1,12 +1,14 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php80\NodeFactory;
 
 use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Stmt\Use_;
 use Rector\Php80\ValueObject\DoctrineTagAndAnnotationToAttribute;
 use Rector\PhpAttribute\NodeFactory\PhpAttributeGroupFactory;
+
 final class AttrGroupsFactory
 {
     /**

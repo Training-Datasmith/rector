@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\NodeTypeResolver\PHPStan\Scope;
 
 use Error;
@@ -109,6 +110,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\FileNode;
 use Rector\Util\Reflection\PrivatesAccessor;
 use RectorPrefix202603\Webmozart\Assert\Assert;
+
 /**
  * @inspired by https://github.com/silverstripe/silverstripe-upgrader/blob/532182b23e854d02e0b27e68ebc394f436de0682/src/UpgradeRule/PHP/Visitor/PHPStanScopeVisitor.php
  * - https://github.com/silverstripe/silverstripe-upgrader/pull/57/commits/e5c7cfa166ad940d9d4ff69537d9f7608e992359#diff-5e0807bb3dc03d6a8d8b6ad049abd774
@@ -485,7 +487,7 @@ final class PHPStanNodeScopeResolver
     private function processCatch(Catch_ $catch, string $filePath, MutatingScope $mutatingScope): void
     {
         $varName = $catch->var instanceof Variable ? $this->nodeNameResolver->getName($catch->var) : null;
-        $type = TypeCombinator::union(...array_map(static fn(Name $name): ObjectType => new ObjectType((string) $name), $catch->types));
+        $type = TypeCombinator::union(...array_map(static fn (Name $name): ObjectType => new ObjectType((string) $name), $catch->types));
         $catchMutatingScope = $mutatingScope->enterCatchType($type, $varName);
         $this->processNodes($catch->stmts, $filePath, $catchMutatingScope);
     }

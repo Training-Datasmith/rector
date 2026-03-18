@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php80\Rector\ClassConstFetch;
 
 use PhpParser\Node;
@@ -14,6 +15,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * ::class introduced in php 5.5
  * while $this::class introduced in php 8.0
@@ -24,7 +26,8 @@ final class ClassOnThisVariableObjectRector extends AbstractRector implements Mi
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change $this::class to static::class or self::class depends on class modifier', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change $this::class to static::class or self::class depends on class modifier', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -33,7 +36,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -42,7 +46,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

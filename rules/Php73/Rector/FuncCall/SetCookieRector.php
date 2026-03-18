@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php73\Rector\FuncCall;
 
 use PhpParser\Node;
@@ -14,6 +15,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * Convert legacy setcookie arguments to new array options
  *
@@ -28,19 +30,23 @@ final class SetCookieRector extends AbstractRector implements MinPhpVersionInter
     private const KNOWN_OPTIONS = [2 => 'expires', 3 => 'path', 4 => 'domain', 5 => 'secure', 6 => 'httponly'];
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Convert setcookie argument to PHP7.3 option array', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Convert setcookie argument to PHP7.3 option array', [new CodeSample(
+            <<<'CODE_SAMPLE'
 setcookie('name', $value, 360);
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 setcookie('name', $value, ['expires' => 360]);
 CODE_SAMPLE
-), new CodeSample(<<<'CODE_SAMPLE'
+        ), new CodeSample(
+            <<<'CODE_SAMPLE'
 setcookie('name', $name, 0, '', '', true, true);
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 setcookie('name', $name, ['expires' => 0, 'path' => '', 'domain' => '', 'secure' => true, 'httponly' => true]);
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

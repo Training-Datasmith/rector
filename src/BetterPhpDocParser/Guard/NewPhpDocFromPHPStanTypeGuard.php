@@ -1,11 +1,13 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\BetterPhpDocParser\Guard;
 
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
+
 final class NewPhpDocFromPHPStanTypeGuard
 {
     public function isLegal(Type $type): bool

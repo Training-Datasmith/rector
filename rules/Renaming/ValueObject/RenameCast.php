@@ -1,11 +1,13 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Renaming\ValueObject;
 
 use PhpParser\Node\Expr\Cast;
 use Rector\Validation\RectorAssert;
 use RectorPrefix202603\Webmozart\Assert\Assert;
+
 final class RenameCast
 {
     /**

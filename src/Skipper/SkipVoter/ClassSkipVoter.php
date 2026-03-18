@@ -1,11 +1,13 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Skipper\SkipVoter;
 
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Skipper\SkipCriteriaResolver\SkippedClassResolver;
 use Rector\Skipper\Skipper\SkipSkipper;
+
 final class ClassSkipVoter
 {
     /**

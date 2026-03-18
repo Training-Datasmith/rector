@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PhpAttribute\AnnotationToAttributeMapper;
 
 use PhpParser\Node\ArrayItem;
@@ -14,6 +15,7 @@ use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
 use Rector\PhpAttribute\Enum\DocTagNodeState;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use RectorPrefix202603\Webmozart\Assert\Assert;
+
 /**
  * @implements AnnotationToAttributeMapperInterface<mixed[]>
  */

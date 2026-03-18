@@ -1,12 +1,14 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PHPStanStaticTypeMapper\Utils;
 
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\UnionType;
 use Rector\StaticTypeMapper\Resolver\ClassNameFromObjectTypeResolver;
+
 final class TypeUnwrapper
 {
     public function unwrapFirstObjectTypeFromUnionType(Type $type): Type

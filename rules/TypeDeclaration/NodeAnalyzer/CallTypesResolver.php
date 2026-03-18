@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\NodeAnalyzer;
 
 use PhpParser\Node\Arg;
@@ -22,6 +23,7 @@ use PHPStan\Type\UnionType;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\StaticTypeMapper\Resolver\ClassNameFromObjectTypeResolver;
+
 final class CallTypesResolver
 {
     /**
@@ -111,7 +113,7 @@ final class CallTypesResolver
         $staticTypeByArgumentPosition = [];
         foreach ($staticTypesByArgumentPosition as $position => $staticTypes) {
             if ($removeMixedArray) {
-                $staticTypes = array_filter($staticTypes, fn(Type $type): bool => !$this->isArrayMixedMixedType($type));
+                $staticTypes = array_filter($staticTypes, fn (Type $type): bool => !$this->isArrayMixedMixedType($type));
             }
             $unionedType = $this->typeFactory->createMixedPassedOrUnionType($staticTypes);
             $staticTypeByArgumentPosition[$position] = $this->narrowParentObjectTreeToSingleObjectChildType($unionedType);

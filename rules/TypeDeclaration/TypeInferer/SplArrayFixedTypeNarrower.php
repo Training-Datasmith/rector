@@ -1,12 +1,14 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\TypeInferer;
 
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use Rector\StaticTypeMapper\Resolver\ClassNameFromObjectTypeResolver;
+
 final class SplArrayFixedTypeNarrower
 {
     public function narrow(Type $paramType): Type

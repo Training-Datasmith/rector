@@ -1,9 +1,11 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\BetterPhpDocParser\ValueObject;
 
 use Rector\PhpDocParser\PhpDocParser\ValueObject\PhpDocAttributeKey as NativePhpDocAttributeKey;
+
 final class PhpDocAttributeKey
 {
     /**

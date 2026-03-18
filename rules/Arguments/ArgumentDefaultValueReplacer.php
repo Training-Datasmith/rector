@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Arguments;
 
 use PhpParser\BuilderHelpers;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
@@ -19,6 +19,7 @@ use Rector\NodeAnalyzer\ArgsAnalyzer;
 use Rector\PhpParser\AstResolver;
 use Rector\PhpParser\Node\NodeFactory;
 use Rector\PhpParser\Node\Value\ValueResolver;
+
 final class ArgumentDefaultValueReplacer
 {
     /**

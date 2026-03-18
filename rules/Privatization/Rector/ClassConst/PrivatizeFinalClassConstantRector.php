@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Privatization\Rector\ClassConst;
 
 use PhpParser\Node;
@@ -13,6 +14,7 @@ use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Privatization\Rector\ClassConst\PrivatizeFinalClassConstantRector\PrivatizeFinalClassConstantRectorTest
  */
@@ -33,19 +35,21 @@ final class PrivatizeFinalClassConstantRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change protected constant to private if possible', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change protected constant to private if possible', [new CodeSample(
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     protected const SOME_CONSTANT = 'some-value';
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     private const SOME_CONSTANT = 'some-value';
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

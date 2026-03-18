@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodeQuality\Rector\If_;
 
 use PhpParser\Node;
@@ -13,6 +14,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodeQuality\Rector\If_\CompleteMissingIfElseBracketRector\CompleteMissingIfElseBracketRectorTest
  */
@@ -20,7 +22,8 @@ final class CompleteMissingIfElseBracketRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Complete missing if/else brackets', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Complete missing if/else brackets', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($value)
@@ -30,7 +33,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($value)
@@ -41,7 +45,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

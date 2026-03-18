@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Strict\NodeAnalyzer;
 
 use PhpParser\Node\Expr;
@@ -14,6 +15,7 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpParser\AstResolver;
 use Rector\StaticTypeMapper\Resolver\ClassNameFromObjectTypeResolver;
 use Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
+
 final class UninitializedPropertyAnalyzer
 {
     /**

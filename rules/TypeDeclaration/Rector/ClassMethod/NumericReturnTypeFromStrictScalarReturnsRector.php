@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
@@ -20,6 +21,7 @@ use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\NumericReturnTypeFromStrictScalarReturnsRector\NumericReturnTypeFromStrictScalarReturnsRectorTest
  */
@@ -45,7 +47,8 @@ final class NumericReturnTypeFromStrictScalarReturnsRector extends AbstractRecto
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add int/float return type based on strict scalar returns type', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add int/float return type based on strict scalar returns type', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function getNumber()
@@ -54,7 +57,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function getNumber(): int
@@ -63,7 +67,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

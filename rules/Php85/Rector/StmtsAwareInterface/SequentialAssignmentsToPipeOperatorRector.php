@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php85\Rector\StmtsAwareInterface;
 
 use PhpParser\Node;
@@ -20,6 +21,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see https://wiki.php.net/rfc/pipe-operator-v3
  * @see \Rector\Tests\Php85\Rector\StmtsAwareInterface\SequentialAssignmentsToPipeOperatorRector\SequentialAssignmentsToPipeOperatorRectorTest
@@ -36,14 +38,16 @@ final class SequentialAssignmentsToPipeOperatorRector extends AbstractRector imp
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Transform sequential assignments to pipe operator syntax', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Transform sequential assignments to pipe operator syntax', [new CodeSample(
+            <<<'CODE_SAMPLE'
 $value = "hello world";
 $result1 = function1($value);
 $result2 = function2($result1);
 
 $result = function3($result2);
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 $value = "hello world";
 
 $result = $value
@@ -51,7 +55,7 @@ $result = $value
     |> function2(...)
     |> function3(...);
 CODE_SAMPLE
-)]);
+        )]);
     }
     public function getNodeTypes(): array
     {

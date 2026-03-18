@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\Rector\FunctionLike;
 
 use PhpParser\Node;
@@ -8,7 +9,6 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Param;
-use PhpParser\Node\VariadicPlaceholder;
 use PHPStan\Reflection\Native\NativeFunctionReflection;
 use PHPStan\Type\ArrayType;
 use PHPStan\Type\MixedType;
@@ -22,6 +22,7 @@ use Rector\Reflection\ReflectionResolver;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\FunctionLike\AddClosureParamTypeForArrayMapRector\AddClosureParamTypeForArrayMapRectorTest
  */
@@ -47,17 +48,19 @@ final class AddClosureParamTypeForArrayMapRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Applies type hints to array_map closures', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Applies type hints to array_map closures', [new CodeSample(
+            <<<'CODE_SAMPLE'
 array_map(function ($value, $key): string {
     return $value . $key;
 }, $strings);
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 array_map(function (string $value, int $key): bool {
     return $value . $key;
 }, $strings);
 CODE_SAMPLE
-)]);
+        )]);
     }
     public function getNodeTypes(): array
     {
@@ -115,7 +118,7 @@ CODE_SAMPLE
                 $keys = array_merge($keys, $key->getTypes());
             }
         }
-        $filter = fn(Type $type): bool => !$type instanceof UnionType;
+        $filter = fn (Type $type): bool => !$type instanceof UnionType;
         $valueType = $this->combineTypes(array_filter($values, $filter));
         $keyType = $this->combineTypes(array_filter($keys, $filter));
         if (!$keyType instanceof Type && !$valueType instanceof Type) {

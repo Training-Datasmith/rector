@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
@@ -17,6 +18,7 @@ use Rector\TypeDeclaration\NodeAnalyzer\VariableInSprintfMaskMatcher;
 use Rector\VendorLocker\ParentClassMethodTypeOverrideGuard;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddParamStringTypeFromSprintfUseRector\AddParamStringTypeFromSprintfUseRectorTest
  */
@@ -42,7 +44,8 @@ final class AddParamStringTypeFromSprintfUseRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add string type to parameters used in sprintf calls', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add string type to parameters used in sprintf calls', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function formatMessage($name)
@@ -51,7 +54,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function formatMessage(string $name)
@@ -60,7 +64,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

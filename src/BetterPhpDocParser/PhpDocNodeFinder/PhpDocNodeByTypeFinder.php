@@ -1,12 +1,14 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\BetterPhpDocParser\PhpDocNodeFinder;
 
 use PHPStan\PhpDocParser\Ast\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\PhpDocParser\PhpDocParser\PhpDocNodeTraverser;
+
 final class PhpDocNodeByTypeFinder
 {
     /**

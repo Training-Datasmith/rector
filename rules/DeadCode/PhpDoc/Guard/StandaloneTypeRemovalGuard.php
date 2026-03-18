@@ -1,12 +1,14 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\DeadCode\PhpDoc\Guard;
 
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
+
 final class StandaloneTypeRemovalGuard
 {
     /**

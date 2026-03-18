@@ -1,12 +1,14 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodeQuality\NodeAnalyzer;
 
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Reflection\ClassReflection;
 use Rector\CodeQuality\ValueObject\DefinedPropertyWithType;
 use Rector\NodeAnalyzer\PropertyPresenceChecker;
+
 final class MissingPropertiesResolver
 {
     /**

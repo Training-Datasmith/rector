@@ -1,17 +1,16 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\NodeManipulator;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Throw_;
 use PhpParser\Node\Expr\Yield_;
 use PhpParser\Node\Expr\YieldFrom;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\Function_;
 use PhpParser\Node\Stmt\Return_;
 use PHPStan\Analyser\Scope;
 use Rector\NodeNameResolver\NodeNameResolver;
@@ -20,6 +19,7 @@ use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Reflection\ClassModifierChecker;
 use Rector\TypeDeclaration\NodeAnalyzer\NeverFuncCallAnalyzer;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard;
+
 final class AddNeverReturnType
 {
     /**
@@ -99,7 +99,7 @@ final class AddNeverReturnType
      */
     private function hasNeverNodesOrNeverFuncCalls($node): bool
     {
-        $hasNeverNodes = (bool) $this->betterNodeFinder->findFirstInFunctionLikeScoped($node, fn(Node $subNode): bool => $subNode instanceof Expression && $subNode->expr instanceof Throw_);
+        $hasNeverNodes = (bool) $this->betterNodeFinder->findFirstInFunctionLikeScoped($node, fn (Node $subNode): bool => $subNode instanceof Expression && $subNode->expr instanceof Throw_);
         if ($hasNeverNodes) {
             return \true;
         }

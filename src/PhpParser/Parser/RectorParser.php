@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PhpParser\Parser;
 
 use PhpParser\Node\Stmt;
@@ -11,6 +12,7 @@ use PHPStan\Parser\RichParser;
 use Rector\DependencyInjection\PHPStan\PHPStanContainerMemento;
 use Rector\PhpParser\ValueObject\StmtsAndTokens;
 use Rector\Util\Reflection\PrivatesAccessor;
+
 final class RectorParser
 {
     /**

@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PHPStan;
 
 use PhpParser\Node;
@@ -8,6 +9,7 @@ use PHPStan\Analyser\MutatingScope;
 use PHPStan\Analyser\Scope;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+
 final class ScopeFetcher
 {
     public static function fetch(Node $node): Scope

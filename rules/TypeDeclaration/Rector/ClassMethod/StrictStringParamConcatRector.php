@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
@@ -27,6 +28,7 @@ use Rector\VendorLocker\ParentClassMethodTypeOverrideGuard;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\StrictStringParamConcatRector\StrictStringParamConcatRectorTest
  */
@@ -47,7 +49,8 @@ final class StrictStringParamConcatRector extends AbstractRector implements MinP
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add string type based on concat use', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add string type based on concat use', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function resolve($item)
@@ -56,7 +59,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function resolve(string $item)
@@ -65,7 +69,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

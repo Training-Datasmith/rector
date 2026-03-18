@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Transform\Rector\ClassMethod;
 
 use PhpParser\Node;
@@ -15,6 +16,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @deprecated as not used in any set, and discourages from type coverage and leads to worse code. Use type declaration set instead, to actually increase type coverage.
  */
@@ -30,7 +32,7 @@ class SomeClass implements ArrayAccess
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            , <<<'CODE_SAMPLE'
 class SomeClass implements ArrayAccess
 {
     #[\ReturnTypeWillChange]
@@ -39,7 +41,7 @@ class SomeClass implements ArrayAccess
     }
 }
 CODE_SAMPLE
-, [new ClassMethodReference('ArrayAccess', 'offsetGet')])]);
+            , [new ClassMethodReference('ArrayAccess', 'offsetGet')])]);
     }
     /**
      * @return array<class-string<Node>>

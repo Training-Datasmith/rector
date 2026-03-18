@@ -1,10 +1,12 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PostRector\ValueObject;
 
 use PhpParser\Modifiers;
 use PHPStan\Type\Type;
+
 final class PropertyMetadata
 {
     /**

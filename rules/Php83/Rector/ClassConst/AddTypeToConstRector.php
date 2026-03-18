@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php83\Rector\ClassConst;
 
 use PhpParser\Node;
@@ -31,6 +32,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php83\Rector\ClassConst\AddTypeToConstRector\AddTypeToConstRectorTest
  */
@@ -61,19 +63,21 @@ final class AddTypeToConstRector extends AbstractRector implements MinPhpVersion
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add type to constants based on their value', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add type to constants based on their value', [new CodeSample(
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public const TYPE = 'some_type';
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public const string TYPE = 'some_type';
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     public function getNodeTypes(): array
     {
@@ -197,7 +201,7 @@ CODE_SAMPLE
             return [];
         }
         $currentClassReflection = $this->reflectionProvider->getClass($className);
-        return array_filter($currentClassReflection->getAncestors(), static fn(ClassReflection $classReflection): bool => $currentClassReflection !== $classReflection);
+        return array_filter($currentClassReflection->getAncestors(), static fn (ClassReflection $classReflection): bool => $currentClassReflection !== $classReflection);
     }
     private function canBeInherited(ClassConst $classConst, Class_ $class): bool
     {

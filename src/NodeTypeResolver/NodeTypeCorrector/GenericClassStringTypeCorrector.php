@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\NodeTypeResolver\NodeTypeCorrector;
 
 use PHPStan\Reflection\ReflectionProvider;
@@ -9,6 +10,7 @@ use PHPStan\Type\Generic\GenericClassStringType;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeTraverser;
+
 final class GenericClassStringTypeCorrector
 {
     /**

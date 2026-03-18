@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodingStyle\Rector\ClassMethod;
 
 use PhpParser\Node;
@@ -19,6 +20,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodingStyle\Rector\ClassMethod\FuncGetArgsToVariadicParamRector\FuncGetArgsToVariadicParamRectorTest
  */
@@ -34,18 +36,20 @@ final class FuncGetArgsToVariadicParamRector extends AbstractRector implements M
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Refactor `func_get_args()` in to a variadic param', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Refactor `func_get_args()` in to a variadic param', [new CodeSample(
+            <<<'CODE_SAMPLE'
 function run()
 {
     $args = \func_get_args();
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 function run(...$args)
 {
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

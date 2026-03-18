@@ -1,9 +1,11 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\BetterPhpDocParser\Printer;
 
 use RectorPrefix202603\Nette\Utils\Strings;
+
 final class DocBlockInliner
 {
     /**

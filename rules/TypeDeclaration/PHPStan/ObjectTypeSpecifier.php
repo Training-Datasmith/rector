@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\PHPStan;
 
-use RectorPrefix202603\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\GroupUse;
@@ -13,13 +13,9 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ClassReflection;
 use PHPStan\Reflection\ReflectionProvider;
 use PHPStan\Type\Generic\GenericObjectType;
-use PHPStan\Type\Generic\TemplateType;
 use PHPStan\Type\Generic\TemplateTypeFactory;
 use PHPStan\Type\Generic\TemplateTypeScope;
-use PHPStan\Type\MixedType;
 use PHPStan\Type\ObjectType;
-use PHPStan\Type\TypeWithClassName;
-use PHPStan\Type\UnionType;
 use Rector\Naming\Naming\UseImportsResolver;
 use Rector\StaticTypeMapper\Naming\NameScopeFactory;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
@@ -27,6 +23,8 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedGenericObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
+use RectorPrefix202603\Nette\Utils\Strings;
+
 final class ObjectTypeSpecifier
 {
     /**

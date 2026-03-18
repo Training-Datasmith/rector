@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\Rector\FunctionLike;
 
 use PhpParser\Node;
@@ -24,6 +25,7 @@ use Rector\Reflection\MethodReflectionResolver;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\FunctionLike\AddClosureParamTypeFromIterableMethodCallRector\AddClosureParamTypeFromIterableMethodCallRectorTest
  */
@@ -54,7 +56,8 @@ final class AddClosureParamTypeFromIterableMethodCallRector extends AbstractRect
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Applies type hints to closures on Iterable method calls where key/value types are documented', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Applies type hints to closures on Iterable method calls where key/value types are documented', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -68,7 +71,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -82,7 +86,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     public function getNodeTypes(): array
     {

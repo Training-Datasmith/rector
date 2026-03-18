@@ -1,10 +1,12 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Naming;
 
 use RectorPrefix202603\Doctrine\Inflector\Inflector;
 use RectorPrefix202603\Nette\Utils\Strings;
+
 final class RectorNamingInflector
 {
     /**

@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Privatization\Rector\Property;
 
 use PhpParser\Node;
@@ -16,6 +17,7 @@ use Rector\ValueObject\MethodName;
 use Rector\ValueObject\Visibility;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Privatization\Rector\Property\PrivatizeFinalClassPropertyRector\PrivatizeFinalClassPropertyRectorTest
  */
@@ -41,19 +43,21 @@ final class PrivatizeFinalClassPropertyRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change property to private if possible', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change property to private if possible', [new CodeSample(
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     protected $value;
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     private $value;
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

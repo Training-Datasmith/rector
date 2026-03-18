@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\NodeTypeResolver;
 
 use PHPStan\Type\Accessory\AccessoryArrayListType;
@@ -9,6 +10,7 @@ use PHPStan\Type\Type;
 use Rector\NodeTypeResolver\NodeTypeCorrector\AccessoryNonEmptyArrayTypeCorrector;
 use Rector\NodeTypeResolver\NodeTypeCorrector\AccessoryNonEmptyStringTypeCorrector;
 use Rector\NodeTypeResolver\NodeTypeCorrector\GenericClassStringTypeCorrector;
+
 /**
  * This service correct unnecessary intersection/union types that do not bring any value.
  * We focus on scalar types like "array", "string", "int" etc.,

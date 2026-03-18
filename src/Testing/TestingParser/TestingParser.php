@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Testing\TestingParser;
 
-use RectorPrefix202603\Nette\Utils\FileSystem;
 use PhpParser\Node;
 use Rector\Application\Provider\CurrentFileProvider;
 use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
@@ -11,6 +11,8 @@ use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\Dy
 use Rector\PhpParser\Node\FileNode;
 use Rector\PhpParser\Parser\RectorParser;
 use Rector\ValueObject\Application\File;
+use RectorPrefix202603\Nette\Utils\FileSystem;
+
 /**
  * @api
  */

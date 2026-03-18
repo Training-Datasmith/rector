@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\FamilyTree\NodeAnalyzer;
 
 use PHPStan\Reflection\ClassReflection;
@@ -8,6 +9,7 @@ use PHPStan\Reflection\ParametersAcceptorSelector;
 use PHPStan\Reflection\Php\PhpMethodReflection;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
+
 final class ClassChildAnalyzer
 {
     /**

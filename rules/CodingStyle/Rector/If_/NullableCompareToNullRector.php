@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodingStyle\Rector\If_;
 
 use PhpParser\Node;
@@ -14,6 +15,7 @@ use PHPStan\Type\UnionType;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodingStyle\Rector\If_\NullableCompareToNullRector\NullableCompareToNullRectorTest
  */
@@ -21,7 +23,8 @@ final class NullableCompareToNullRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Changes negate of empty comparison of nullable value to explicit === or !== compare', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Changes negate of empty comparison of nullable value to explicit === or !== compare', [new CodeSample(
+            <<<'CODE_SAMPLE'
 /** @var stdClass|null $value */
 if ($value) {
 }
@@ -29,7 +32,8 @@ if ($value) {
 if (!$value) {
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 /** @var stdClass|null $value */
 if ($value !== null) {
 }
@@ -37,7 +41,7 @@ if ($value !== null) {
 if ($value === null) {
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

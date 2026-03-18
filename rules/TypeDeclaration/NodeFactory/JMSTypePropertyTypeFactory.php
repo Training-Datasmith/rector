@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\NodeFactory;
 
 use PhpParser\Node;
@@ -18,6 +19,7 @@ use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\Mapper\ScalarStringToTypeMapper;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+
 final class JMSTypePropertyTypeFactory
 {
     /**

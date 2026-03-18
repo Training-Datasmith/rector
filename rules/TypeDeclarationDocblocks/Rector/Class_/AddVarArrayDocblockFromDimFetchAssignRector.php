@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclarationDocblocks\Rector\Class_;
 
 use PhpParser\Node;
@@ -18,6 +19,7 @@ use Rector\TypeDeclarationDocblocks\NodeFinder\ArrayDimFetchFinder;
 use Rector\TypeDeclarationDocblocks\TagNodeAnalyzer\UsefulArrayTagNodeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\TypeDeclarationDocblocks\Rector\Class_\AddVarArrayDocblockFromDimFetchAssignRector\AddVarArrayDocblockFromDimFetchAssignRectorTest
  */
@@ -53,7 +55,8 @@ final class AddVarArrayDocblockFromDimFetchAssignRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add @var array property docblock from dim fetches on property fetch assignment', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add @var array property docblock from dim fetches on property fetch assignment', [new CodeSample(
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     private array $items = [];
@@ -66,7 +69,8 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     /**
@@ -82,7 +86,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

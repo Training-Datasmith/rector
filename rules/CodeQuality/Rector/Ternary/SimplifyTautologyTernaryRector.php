@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodeQuality\Rector\Ternary;
 
 use PhpParser\Node;
@@ -12,6 +13,7 @@ use Rector\Php71\ValueObject\TwoNodeMatch;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodeQuality\Rector\Ternary\SimplifyTautologyTernaryRector\SimplifyTautologyTernaryRectorTest
  */
@@ -44,7 +46,7 @@ final class SimplifyTautologyTernaryRector extends AbstractRector
         if (!$node->cond instanceof NotIdentical && !$node->cond instanceof Identical) {
             return null;
         }
-        $twoNodeMatch = $this->binaryOpManipulator->matchFirstAndSecondConditionNode($node->cond, fn(Node $leftNode): bool => $this->nodeComparator->areNodesEqual($leftNode, $node->if), fn(Node $leftNode): bool => $this->nodeComparator->areNodesEqual($leftNode, $node->else));
+        $twoNodeMatch = $this->binaryOpManipulator->matchFirstAndSecondConditionNode($node->cond, fn (Node $leftNode): bool => $this->nodeComparator->areNodesEqual($leftNode, $node->if), fn (Node $leftNode): bool => $this->nodeComparator->areNodesEqual($leftNode, $node->else));
         if (!$twoNodeMatch instanceof TwoNodeMatch) {
             return null;
         }

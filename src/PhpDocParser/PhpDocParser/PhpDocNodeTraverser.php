@@ -1,12 +1,14 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PhpDocParser\PhpDocParser;
 
 use PHPStan\PhpDocParser\Ast\Node;
 use Rector\PhpDocParser\PhpDocParser\Contract\PhpDocNodeVisitorInterface;
 use Rector\PhpDocParser\PhpDocParser\Exception\InvalidTraverseException;
 use Rector\PhpDocParser\PhpDocParser\PhpDocNodeVisitor\CallablePhpDocNodeVisitor;
+
 /**
  * @api
  *
@@ -99,7 +101,7 @@ final class PhpDocNodeTraverser
         $objectPublicPropertiesToValues = get_object_vars($node);
         $subNodeNames = array_keys($objectPublicPropertiesToValues);
         foreach ($subNodeNames as $subNodeName) {
-            $subNode =& $node->{$subNodeName};
+            $subNode = & $node->{$subNodeName};
             if (\is_array($subNode)) {
                 $subNode = $this->traverseArray($subNode);
             } elseif ($subNode instanceof Node) {

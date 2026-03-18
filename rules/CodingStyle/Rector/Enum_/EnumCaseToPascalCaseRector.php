@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodingStyle\Rector\Enum_;
 
 use PhpParser\Node;
@@ -19,6 +20,7 @@ use Rector\Rector\AbstractRector;
 use Rector\Skipper\FileSystem\PathNormalizer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodingStyle\Rector\Enum_\EnumCaseToPascalCaseRector\EnumCaseToPascalCaseRectorTest
  * @see \Rector\Tests\CodingStyle\Rector\Enum_\EnumCaseToPascalCaseRector\WithAutoloadPathsTest
@@ -35,7 +37,8 @@ final class EnumCaseToPascalCaseRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Convert enum cases to PascalCase and update their usages', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Convert enum cases to PascalCase and update their usages', [new CodeSample(
+            <<<'CODE_SAMPLE'
 enum Status
 {
     case PENDING;
@@ -44,7 +47,8 @@ enum Status
     case waiting_for_approval;
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 enum Status
 {
     case Pending;
@@ -53,7 +57,7 @@ enum Status
     case WaitingForApproval;
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     public function getNodeTypes(): array
     {
@@ -162,6 +166,6 @@ CODE_SAMPLE
     private function convertToPascalCase(string $name): string
     {
         $parts = explode('_', $name);
-        return implode('', array_map(fn($part): string => ctype_upper($part) ? ucfirst(strtolower($part)) : ucfirst($part), $parts));
+        return implode('', array_map(fn ($part): string => ctype_upper($part) ? ucfirst(strtolower($part)) : ucfirst($part), $parts));
     }
 }

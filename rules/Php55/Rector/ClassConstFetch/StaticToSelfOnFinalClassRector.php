@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php55\Rector\ClassConstFetch;
 
 use PhpParser\Node;
@@ -12,6 +13,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php55\Rector\ClassConstFetch\StaticToSelfOnFinalClassRector\StaticToSelfOnFinalClassRectorTest
  */
@@ -19,7 +21,8 @@ final class StaticToSelfOnFinalClassRector extends AbstractRector implements Min
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change `static::class` to `self::class` on final class', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change `static::class` to `self::class` on final class', [new CodeSample(
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
    public function callOnMe()
@@ -28,7 +31,8 @@ final class SomeClass
    }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
    public function callOnMe()
@@ -37,7 +41,7 @@ final class SomeClass
    }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

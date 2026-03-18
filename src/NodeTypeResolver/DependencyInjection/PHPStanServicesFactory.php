@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\NodeTypeResolver\DependencyInjection;
 
 use PhpParser\Lexer;
@@ -18,8 +19,9 @@ use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\Dy
 use RectorPrefix202603\Symfony\Component\Console\Input\ArrayInput;
 use RectorPrefix202603\Symfony\Component\Console\Output\ConsoleOutput;
 use RectorPrefix202603\Symfony\Component\Console\Style\SymfonyStyle;
-use Throwable;
 use RectorPrefix202603\Webmozart\Assert\Assert;
+use Throwable;
+
 /**
  * Factory so Symfony app can use services from PHPStan container
  *

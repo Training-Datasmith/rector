@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Naming\Rector\ClassMethod;
 
 use PhpParser\Node;
@@ -22,6 +23,7 @@ use Rector\Skipper\FileSystem\PathNormalizer;
 use Rector\ValueObject\MethodName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Naming\Rector\ClassMethod\RenameParamToMatchTypeRector\RenameParamToMatchTypeRectorTest
  */
@@ -62,7 +64,8 @@ final class RenameParamToMatchTypeRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Rename param to match ClassType', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Rename param to match ClassType', [new CodeSample(
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run(Apple $pie)
@@ -71,7 +74,8 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run(Apple $apple)
@@ -80,7 +84,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>
@@ -145,7 +149,7 @@ CODE_SAMPLE
         if (!$classReflection instanceof ClassReflection) {
             return \false;
         }
-        $ancestorClassReflections = array_filter($classReflection->getAncestors(), fn(ClassReflection $ancestorClassReflection): bool => $classReflection->getName() !== $ancestorClassReflection->getName());
+        $ancestorClassReflections = array_filter($classReflection->getAncestors(), fn (ClassReflection $ancestorClassReflection): bool => $classReflection->getName() !== $ancestorClassReflection->getName());
         $methodName = $this->getName($classMethod);
         foreach ($ancestorClassReflections as $ancestorClassReflection) {
             // internal

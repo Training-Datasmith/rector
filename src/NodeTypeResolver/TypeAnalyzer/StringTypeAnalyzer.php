@@ -1,10 +1,12 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\NodeTypeResolver\TypeAnalyzer;
 
 use PhpParser\Node\Expr;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+
 final class StringTypeAnalyzer
 {
     /**

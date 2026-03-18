@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PhpParser\Node;
 
 use PhpParser\Node;
@@ -19,6 +20,7 @@ use Rector\NodeAnalyzer\ClassAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use RectorPrefix202603\Webmozart\Assert\Assert;
+
 /**
  * @see \Rector\Tests\PhpParser\Node\BetterNodeFinder\BetterNodeFinderTest
  */
@@ -142,7 +144,7 @@ final class BetterNodeFinder
     public function findFirstNonAnonymousClass(array $nodes): ?Node
     {
         // skip anonymous classes
-        return $this->findFirst($nodes, fn(Node $node): bool => $node instanceof Class_ && !$this->classAnalyzer->isAnonymousClass($node));
+        return $this->findFirst($nodes, fn (Node $node): bool => $node instanceof Class_ && !$this->classAnalyzer->isAnonymousClass($node));
     }
     /**
      * @param Node|Node[] $nodes
@@ -265,6 +267,6 @@ final class BetterNodeFinder
     private function findInstanceOfName($nodes, string $type, string $name): ?Node
     {
         Assert::isAOf($type, Node::class);
-        return $this->nodeFinder->findFirst($nodes, fn(Node $node): bool => $node instanceof $type && $this->nodeNameResolver->isName($node, $name));
+        return $this->nodeFinder->findFirst($nodes, fn (Node $node): bool => $node instanceof $type && $this->nodeNameResolver->isName($node, $name));
     }
 }

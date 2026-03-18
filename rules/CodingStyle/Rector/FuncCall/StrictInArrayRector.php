@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodingStyle\Rector\FuncCall;
 
 use PhpParser\Node;
@@ -10,6 +11,7 @@ use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodingStyle\Rector\FuncCall\StrictInArrayRector\StrictInArrayRectorTest
  */
@@ -25,7 +27,8 @@ final class StrictInArrayRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Set in_array strict to true when defined on similar type', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Set in_array strict to true when defined on similar type', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class BothStrings
 {
     public function run(string $value)
@@ -34,7 +37,8 @@ class BothStrings
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class BothStrings
 {
     public function run(string $value)
@@ -43,7 +47,7 @@ class BothStrings
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

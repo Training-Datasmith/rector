@@ -1,10 +1,12 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Git;
 
 use RectorPrefix202603\Nette\Utils\Strings;
 use RectorPrefix202603\Symfony\Component\Process\Process;
+
 final class RepositoryHelper
 {
     /**

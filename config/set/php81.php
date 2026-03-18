@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace RectorPrefix202603;
 
 use Rector\CodingStyle\Rector\ArrowFunction\ArrowFunctionDelegatingCallToFirstClassCallableRector;
@@ -20,6 +21,7 @@ use Rector\Php81\Rector\MethodCall\SpatieEnumMethodCallToEnumConstRector;
 use Rector\Php81\Rector\New_\MyCLabsConstructorCallToEnumFromRector;
 use Rector\Php81\Rector\Property\ReadOnlyPropertyRector;
 use Rector\TypeDeclaration\Rector\ClassMethod\ReturnNeverTypeRector;
+
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->rules([
         ReturnNeverTypeRector::class,

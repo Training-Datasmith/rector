@@ -1,9 +1,11 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Util;
 
 use Rector\Exception\ShouldNotHappenException;
+
 /**
  * @see \Rector\Tests\Util\FileHasherTest
  */

@@ -1,12 +1,14 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\StaticTypeMapper\Mapper;
 
 use PhpParser\Node;
 use PHPStan\Type\Type;
 use Rector\Exception\NotImplementedYetException;
 use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
+
 final class PhpParserNodeMapper
 {
     /**

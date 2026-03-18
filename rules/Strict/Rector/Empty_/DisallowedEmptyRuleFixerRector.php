@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Strict\Rector\Empty_;
 
 use PhpParser\Node;
@@ -20,6 +21,7 @@ use Rector\Strict\NodeFactory\ExactCompareFactory;
 use Rector\Strict\Rector\AbstractFalsyScalarRuleFixerRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Strict\Rector\Empty_\DisallowedEmptyRuleFixerRector\DisallowedEmptyRuleFixerRectorTest
  */
@@ -54,7 +56,7 @@ final class SomeEmptyArray
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            , <<<'CODE_SAMPLE'
 final class SomeEmptyArray
 {
     public function run(array $items)
@@ -63,7 +65,7 @@ final class SomeEmptyArray
     }
 }
 CODE_SAMPLE
-, [self::TREAT_AS_NON_EMPTY => \false])]);
+            , [self::TREAT_AS_NON_EMPTY => \false])]);
     }
     /**
      * @return array<class-string<Node>>

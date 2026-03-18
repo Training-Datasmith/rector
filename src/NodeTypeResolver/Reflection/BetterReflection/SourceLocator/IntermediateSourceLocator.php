@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocator;
 
 use PHPStan\BetterReflection\Identifier\Identifier;
@@ -10,6 +11,7 @@ use PHPStan\BetterReflection\Reflector\Reflector;
 use PHPStan\BetterReflection\SourceLocator\Type\SourceLocator;
 use PHPStan\File\CouldNotReadFileException;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
+
 final class IntermediateSourceLocator implements SourceLocator
 {
     /**

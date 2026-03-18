@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PhpAttribute\AnnotationToAttributeMapper;
 
 use PhpParser\Node;
@@ -10,6 +11,7 @@ use PhpParser\Node\Scalar\String_;
 use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
 use Rector\Validation\RectorAssert;
 use RectorPrefix202603\Webmozart\Assert\InvalidArgumentException;
+
 /**
  * @implements AnnotationToAttributeMapperInterface<string>
  */

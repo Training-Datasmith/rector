@@ -1,12 +1,14 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Util;
 
-use RectorPrefix202603\Nette\Utils\Strings;
 use PhpParser\Node;
 use Rector\CustomRules\SimpleNodeDumper;
+use RectorPrefix202603\Nette\Utils\Strings;
 use RectorPrefix202603\Symfony\Component\Console\Style\SymfonyStyle;
+
 final class NodePrinter
 {
     /**
@@ -41,8 +43,8 @@ final class NodePrinter
     private function addConsoleColors(string $contents): string
     {
         // decorate class names
-        $colorContents = Strings::replace($contents, self::CLASS_NAME_REGEX, static fn(array $match): string => '<fg=green>' . $match['class_name'] . '</>(');
+        $colorContents = Strings::replace($contents, self::CLASS_NAME_REGEX, static fn (array $match): string => '<fg=green>' . $match['class_name'] . '</>(');
         // decorate keys
-        return Strings::replace($colorContents, self::PROPERTY_KEY_REGEX, static fn(array $match): string => '<fg=yellow>' . $match['key'] . '</>:');
+        return Strings::replace($colorContents, self::PROPERTY_KEY_REGEX, static fn (array $match): string => '<fg=yellow>' . $match['key'] . '</>:');
     }
 }

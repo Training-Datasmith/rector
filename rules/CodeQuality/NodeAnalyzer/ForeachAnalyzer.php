@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodeQuality\NodeAnalyzer;
 
 use PhpParser\Node\Expr;
@@ -9,6 +10,7 @@ use PhpParser\Node\Expr\Assign;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Foreach_;
 use Rector\PhpParser\Comparing\NodeComparator;
+
 final class ForeachAnalyzer
 {
     /**

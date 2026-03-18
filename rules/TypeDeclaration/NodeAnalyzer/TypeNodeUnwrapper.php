@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\NodeAnalyzer;
 
 use PhpParser\Node;
@@ -10,6 +11,7 @@ use PhpParser\Node\Name;
 use PhpParser\Node\NullableType;
 use PhpParser\Node\UnionType;
 use Rector\PhpParser\Comparing\NodeComparator;
+
 final class TypeNodeUnwrapper
 {
     /**

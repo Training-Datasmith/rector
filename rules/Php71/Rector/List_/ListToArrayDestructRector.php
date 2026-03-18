@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php71\Rector\List_;
 
 use PhpParser\Node;
@@ -15,6 +16,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php71\Rector\List_\ListToArrayDestructRector\ListToArrayDestructRectorTest
  */
@@ -22,7 +24,8 @@ final class ListToArrayDestructRector extends AbstractRector implements MinPhpVe
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change `list()` to array destruct', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change `list()` to array destruct', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -34,7 +37,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -46,7 +50,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

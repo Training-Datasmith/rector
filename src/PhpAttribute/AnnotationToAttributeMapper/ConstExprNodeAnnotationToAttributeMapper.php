@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PhpAttribute\AnnotationToAttributeMapper;
 
 use PhpParser\BuilderHelpers;
@@ -13,6 +14,7 @@ use PHPStan\Type\Constant\ConstantBooleanType;
 use PHPStan\Type\Constant\ConstantFloatType;
 use Rector\Exception\NotImplementedYetException;
 use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
+
 /**
  * @implements AnnotationToAttributeMapperInterface<ConstExprNode>
  */

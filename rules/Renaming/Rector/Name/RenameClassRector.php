@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Renaming\Rector\Name;
 
 use PhpParser\Node;
@@ -17,9 +18,10 @@ use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Rector\Renaming\NodeManipulator\ClassRenamer;
+use RectorPrefix202603\Webmozart\Assert\Assert;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202603\Webmozart\Assert\Assert;
+
 /**
  * @see \Rector\Tests\Renaming\Rector\Name\RenameClassRector\RenameClassRectorTest
  */
@@ -57,7 +59,7 @@ function someFunction(SomeOldClass $someOldClass): SomeOldClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            , <<<'CODE_SAMPLE'
 namespace App;
 
 use SomeNewClass;
@@ -69,7 +71,7 @@ function someFunction(SomeNewClass $someOldClass): SomeNewClass
     }
 }
 CODE_SAMPLE
-, ['App\SomeOldClass' => 'App\SomeNewClass'])]);
+            , ['App\SomeOldClass' => 'App\SomeNewClass'])]);
     }
     /**
      * @return array<class-string<Node>>

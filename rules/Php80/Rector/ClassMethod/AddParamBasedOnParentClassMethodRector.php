@@ -1,15 +1,13 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php80\Rector\ClassMethod;
 
 use PhpParser\Comment;
 use PhpParser\Node;
-use PhpParser\Node\ComplexType;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -27,6 +25,7 @@ use Rector\VendorLocker\ParentClassMethodTypeOverrideGuard;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php80\Rector\ClassMethod\AddParamBasedOnParentClassMethodRector\AddParamBasedOnParentClassMethodRectorTest
  */
@@ -61,7 +60,8 @@ final class AddParamBasedOnParentClassMethodRector extends AbstractRector implem
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add missing parameter based on parent class method', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add missing parameter based on parent class method', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class A
 {
     public function execute($foo)
@@ -76,7 +76,8 @@ class B extends A
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class A
 {
     public function execute($foo)
@@ -91,7 +92,7 @@ class B extends A
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

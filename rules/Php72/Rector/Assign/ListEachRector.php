@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php72\Rector\Assign;
 
 use PhpParser\Node;
@@ -16,6 +17,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php72\Rector\Assign\ListEachRector\ListEachRectorTest
  */
@@ -35,15 +37,17 @@ final class ListEachRector extends AbstractRector implements MinPhpVersionInterf
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('each() function is deprecated, use key() and current() instead', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('each() function is deprecated, use key() and current() instead', [new CodeSample(
+            <<<'CODE_SAMPLE'
 list($key, $callback) = each($callbacks);
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 $key = key($callbacks);
 $callback = current($callbacks);
 next($callbacks);
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

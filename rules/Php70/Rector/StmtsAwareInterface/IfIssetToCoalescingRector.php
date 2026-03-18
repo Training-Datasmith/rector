@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php70\Rector\StmtsAwareInterface;
 
 use PhpParser\Node;
@@ -19,6 +20,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php70\Rector\StmtsAwareInterface\IfIssetToCoalescingRector\IfIssetToCoalescingRectorTest
  */
@@ -26,7 +28,8 @@ final class IfIssetToCoalescingRector extends AbstractRector implements MinPhpVe
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change `if` with `isset` and `return` to coalesce', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change `if` with `isset` and `return` to coalesce', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     private $items = [];
@@ -41,7 +44,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     private $items = [];
@@ -52,7 +56,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

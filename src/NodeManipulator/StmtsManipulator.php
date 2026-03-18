@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\NodeManipulator;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\ClassMethod;
@@ -16,6 +16,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\PhpParser\Comparing\NodeComparator;
 use Rector\PhpParser\Node\BetterNodeFinder;
+
 final class StmtsManipulator
 {
     /**
@@ -99,6 +100,6 @@ final class StmtsManipulator
             }
         }
         $variable = new Variable($variableName);
-        return (bool) $this->betterNodeFinder->findFirst($stmts, fn(Node $subNode): bool => $this->exprUsedInNodeAnalyzer->isUsed($subNode, $variable));
+        return (bool) $this->betterNodeFinder->findFirst($stmts, fn (Node $subNode): bool => $this->exprUsedInNodeAnalyzer->isUsed($subNode, $variable));
     }
 }

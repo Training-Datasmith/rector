@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php81\Rector\MethodCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Identical;
-use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticCall;
@@ -19,6 +19,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php81\Rector\MethodCall\MyCLabsMethodCallToEnumConstRector\MyCLabsMethodCallToEnumConstRectorTest
  */
@@ -38,13 +39,15 @@ final class MyCLabsMethodCallToEnumConstRector extends AbstractRector implements
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Refactor MyCLabs enum fetch to Enum const', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Refactor MyCLabs enum fetch to Enum const', [new CodeSample(
+            <<<'CODE_SAMPLE'
 $name = SomeEnum::VALUE()->getKey();
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 $name = SomeEnum::VALUE->name;
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

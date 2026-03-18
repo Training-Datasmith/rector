@@ -1,16 +1,17 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodingStyle\Guard;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
 use PHPStan\Reflection\MethodReflection;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Reflection\ReflectionResolver;
+
 final class StaticGuard
 {
     /**

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 if (PHP_VERSION_ID < 80100) {
     if (! defined('MHASH_XXH32')) {
         define('MHASH_XXH32', 38);

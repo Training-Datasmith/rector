@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Naming\Rector\Class_;
 
 use PhpParser\Node;
@@ -17,6 +18,7 @@ use Rector\Naming\ValueObjectFactory\PropertyRenameFactory;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Naming\Rector\Class_\RenamePropertyToMatchTypeRector\RenamePropertyToMatchTypeRectorTest
  */
@@ -48,7 +50,8 @@ final class RenamePropertyToMatchTypeRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Rename property and method param to match its type', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Rename property and method param to match its type', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -62,7 +65,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -76,7 +80,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

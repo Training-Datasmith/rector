@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
@@ -27,6 +28,7 @@ use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\TypeDeclaration\Enum\NativeFuncCallPositions;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddParamArrayDocblockBasedOnCallableNativeFuncCallRector\AddParamArrayDocblockBasedOnCallableNativeFuncCallRectorTest
  */
@@ -52,7 +54,8 @@ final class AddParamArrayDocblockBasedOnCallableNativeFuncCallRector extends Abs
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add param array docblock based on callable native function call', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add param array docblock based on callable native function call', [new CodeSample(
+            <<<'CODE_SAMPLE'
 function process(array $items): void
 {
     array_walk($items, function (stdClass $item) {
@@ -60,7 +63,8 @@ function process(array $items): void
     });
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 /**
  * @param stdClass[] $items
  */
@@ -71,7 +75,7 @@ function process(array $items): void
     });
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

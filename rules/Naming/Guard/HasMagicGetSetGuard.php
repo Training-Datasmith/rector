@@ -1,10 +1,12 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Naming\Guard;
 
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\Naming\ValueObject\PropertyRename;
+
 final class HasMagicGetSetGuard
 {
     /**

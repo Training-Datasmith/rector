@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\StaticTypeMapper\PhpDocParser;
 
-use RectorPrefix202603\Nette\Utils\Strings;
 use PhpParser\Node;
 use PHPStan\Analyser\NameScope;
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
@@ -29,6 +29,8 @@ use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType;
 use Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType;
 use Rector\TypeDeclaration\PHPStan\ObjectTypeSpecifier;
+use RectorPrefix202603\Nette\Utils\Strings;
+
 /**
  * @implements PhpDocTypeMapperInterface<IdentifierTypeNode>
  */

@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php73\Rector\BooleanOr;
 
 use PhpParser\Node;
@@ -15,6 +16,7 @@ use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Rector\VersionBonding\Contract\RelatedPolyfillInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php73\Rector\BinaryOr\IsCountableRector\IsCountableRectorTest
  */
@@ -35,13 +37,15 @@ final class IsCountableRector extends AbstractRector implements MinPhpVersionInt
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Changes is_array + Countable check to is_countable', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Changes is_array + Countable check to is_countable', [new CodeSample(
+            <<<'CODE_SAMPLE'
 is_array($foo) || $foo instanceof Countable;
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 is_countable($foo);
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

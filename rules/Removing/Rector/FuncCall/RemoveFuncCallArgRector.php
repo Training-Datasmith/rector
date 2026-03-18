@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Removing\Rector\FuncCall;
 
 use PhpParser\Node;
@@ -9,9 +10,10 @@ use PhpParser\Node\Expr\FuncCall;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Rector\AbstractRector;
 use Rector\Removing\ValueObject\RemoveFuncCallArg;
+use RectorPrefix202603\Webmozart\Assert\Assert;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202603\Webmozart\Assert\Assert;
+
 /**
  * @see \Rector\Tests\Removing\Rector\FuncCall\RemoveFuncCallArgRector\RemoveFuncCallArgRectorTest
  */
@@ -26,10 +28,10 @@ final class RemoveFuncCallArgRector extends AbstractRector implements Configurab
         return new RuleDefinition('Remove argument by position by function name', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 remove_last_arg(1, 2);
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            , <<<'CODE_SAMPLE'
 remove_last_arg(1);
 CODE_SAMPLE
-, [new RemoveFuncCallArg('remove_last_arg', 1)])]);
+            , [new RemoveFuncCallArg('remove_last_arg', 1)])]);
     }
     /**
      * @return array<class-string<Node>>

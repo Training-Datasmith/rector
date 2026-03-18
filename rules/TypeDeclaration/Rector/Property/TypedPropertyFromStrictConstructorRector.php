@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\Rector\Property;
 
 use PhpParser\Node;
@@ -26,6 +27,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\Property\TypedPropertyFromStrictConstructorRector\TypedPropertyFromStrictConstructorRectorTest
  */
@@ -86,7 +88,8 @@ final class TypedPropertyFromStrictConstructorRector extends AbstractRector impl
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add typed properties based only on strict constructor types', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add typed properties based only on strict constructor types', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeObject
 {
     private $name;
@@ -97,7 +100,8 @@ class SomeObject
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeObject
 {
     private string $name;
@@ -108,7 +112,7 @@ class SomeObject
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

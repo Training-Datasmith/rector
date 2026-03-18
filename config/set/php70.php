@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace RectorPrefix202603;
 
 use Rector\Config\RectorConfig;
@@ -23,6 +24,7 @@ use Rector\Php70\Rector\Switch_\ReduceMultipleDefaultSwitchRector;
 use Rector\Php70\Rector\Ternary\TernaryToNullCoalescingRector;
 use Rector\Php70\Rector\Ternary\TernaryToSpaceshipRector;
 use Rector\Php70\Rector\Variable\WrapVariableVariableNameInCurlyBracesRector;
+
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->rules([
         Php4ConstructorRector::class,

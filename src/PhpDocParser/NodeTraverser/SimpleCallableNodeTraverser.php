@@ -1,11 +1,13 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PhpDocParser\NodeTraverser;
 
 use PhpParser\Node;
 use PhpParser\NodeTraverser;
 use Rector\PhpDocParser\NodeVisitor\CallableNodeVisitor;
+
 /**
  * @api
  */

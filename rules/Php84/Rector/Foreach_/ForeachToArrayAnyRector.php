@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php84\Rector\Foreach_;
 
 use PhpParser\Node;
@@ -23,6 +24,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php84\Rector\Foreach_\ForeachToArrayAnyRector\ForeachToArrayAnyRectorTest
  */
@@ -48,7 +50,8 @@ final class ForeachToArrayAnyRector extends AbstractRector implements MinPhpVers
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Replace foreach with boolean assignment + break OR foreach with early return with array_any', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replace foreach with boolean assignment + break OR foreach with early return with array_any', [new CodeSample(
+            <<<'CODE_SAMPLE'
 $found = false;
 foreach ($animals as $animal) {
     if (str_starts_with($animal, 'c')) {
@@ -57,10 +60,12 @@ foreach ($animals as $animal) {
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 $found = array_any($animals, fn($animal) => str_starts_with($animal, 'c'));
 CODE_SAMPLE
-), new CodeSample(<<<'CODE_SAMPLE'
+        ), new CodeSample(
+            <<<'CODE_SAMPLE'
 foreach ($animals as $animal) {
     if (str_starts_with($animal, 'c')) {
         return true;
@@ -68,10 +73,11 @@ foreach ($animals as $animal) {
 }
 return false;
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 return array_any($animals, fn($animal) => str_starts_with($animal, 'c'));
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

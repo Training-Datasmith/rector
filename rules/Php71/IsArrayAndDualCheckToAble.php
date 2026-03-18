@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php71;
 
 use PhpParser\Node\Arg;
@@ -13,6 +14,7 @@ use Rector\NodeManipulator\BinaryOpManipulator;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Php71\ValueObject\TwoNodeMatch;
 use Rector\PhpParser\Comparing\NodeComparator;
+
 final class IsArrayAndDualCheckToAble
 {
     /**

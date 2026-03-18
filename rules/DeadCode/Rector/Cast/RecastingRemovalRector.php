@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\DeadCode\Rector\Cast;
 
 use PhpParser\Node;
@@ -31,6 +32,7 @@ use Rector\Rector\AbstractRector;
 use Rector\Reflection\ReflectionResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\DeadCode\Rector\Cast\RecastingRemovalRector\RecastingRemovalRectorTest
  */
@@ -60,21 +62,23 @@ final class RecastingRemovalRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Remove recasting of the same type', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove recasting of the same type', [new CodeSample(
+            <<<'CODE_SAMPLE'
 $string = '';
 $string = (string) $string;
 
 $array = [];
 $array = (array) $array;
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 $string = '';
 $string = $string;
 
 $array = [];
 $array = $array;
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

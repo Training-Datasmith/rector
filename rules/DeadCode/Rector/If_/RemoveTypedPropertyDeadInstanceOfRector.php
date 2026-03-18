@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\DeadCode\Rector\If_;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\StaticPropertyFetch;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Class_;
@@ -24,6 +24,7 @@ use Rector\Rector\AbstractRector;
 use Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\DeadCode\Rector\If_\RemoveTypedPropertyDeadInstanceOfRector\RemoveTypedPropertyDeadInstanceOfRectorTest
  */
@@ -49,7 +50,8 @@ final class RemoveTypedPropertyDeadInstanceOfRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Remove dead instanceof check on type hinted property', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove dead instanceof check on type hinted property', [new CodeSample(
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     private $someObject;
@@ -69,7 +71,8 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     private $someObject;
@@ -85,7 +88,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

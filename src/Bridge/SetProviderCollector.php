@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Bridge;
 
 use Rector\Doctrine\Set\SetProvider\DoctrineSetProvider;
@@ -17,6 +18,7 @@ use Rector\Symfony\Set\SetProvider\Symfony6SetProvider;
 use Rector\Symfony\Set\SetProvider\Symfony7SetProvider;
 use Rector\Symfony\Set\SetProvider\SymfonySetProvider;
 use Rector\Symfony\Set\SetProvider\TwigSetProvider;
+
 /**
  * @api
  *
@@ -73,6 +75,6 @@ final class SetProviderCollector
      */
     public function provideComposerTriggeredSets(): array
     {
-        return array_filter($this->provideSets(), fn(SetInterface $set): bool => $set instanceof ComposerTriggeredSet);
+        return array_filter($this->provideSets(), fn (SetInterface $set): bool => $set instanceof ComposerTriggeredSet);
     }
 }

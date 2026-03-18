@@ -1,10 +1,12 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PhpDocParser\PhpDocParser\PhpDocNodeVisitor;
 
 use PHPStan\PhpDocParser\Ast\Node;
 use Rector\PhpDocParser\PhpDocParser\ValueObject\PhpDocAttributeKey;
+
 /**
  * @api
  *

@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodingStyle\Rector\FuncCall;
 
 use PhpParser\Node;
@@ -11,6 +12,7 @@ use Rector\NodeTypeResolver\TypeAnalyzer\StringTypeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodingStyle\Rector\FuncCall\ConsistentImplodeRector\ConsistentImplodeRectorTest
  */
@@ -26,7 +28,8 @@ final class ConsistentImplodeRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Changes various implode forms to consistent one', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Changes various implode forms to consistent one', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run(array $items)
@@ -36,7 +39,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run(array $items)
@@ -46,7 +50,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

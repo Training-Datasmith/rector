@@ -1,11 +1,13 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\ChangesReporting\ValueObjectFactory;
 
 use PHPStan\AnalysedCodeException;
 use Rector\FileSystem\FilePathHelper;
 use Rector\ValueObject\Error\SystemError;
+
 final class ErrorFactory
 {
     /**

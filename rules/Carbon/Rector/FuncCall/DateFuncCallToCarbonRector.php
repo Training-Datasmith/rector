@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Carbon\Rector\FuncCall;
 
 use PhpParser\Node;
@@ -17,6 +18,7 @@ use PhpParser\Node\Scalar\String_;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Carbon\Rector\FuncCall\DateFuncCallToCarbonRector\DateFuncCallToCarbonRectorTest
  */
@@ -28,7 +30,8 @@ final class DateFuncCallToCarbonRector extends AbstractRector
     private const TIME_UNITS = [['weeks', 604800], ['days', 86400], ['hours', 3600], ['minutes', 60], ['seconds', 1]];
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Convert `date()` function call to `Carbon::now()->format(*)`', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Convert `date()` function call to `Carbon::now()->format(*)`', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -37,7 +40,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -46,7 +50,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

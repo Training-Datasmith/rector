@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodingStyle\Rector\ClassLike;
 
 use PhpParser\Node;
@@ -12,6 +13,7 @@ use Rector\Comments\CommentResolver;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodingStyle\Rector\ClassLike\NewlineBetweenClassLikeStmtsRector\NewlineBetweenClassLikeStmtsRectorTest
  */
@@ -27,7 +29,8 @@ final class NewlineBetweenClassLikeStmtsRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add new line space between class constants, properties and class methods to make it more readable', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add new line space between class constants, properties and class methods to make it more readable', [new CodeSample(
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public const NAME = 'name';
@@ -39,7 +42,8 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public const NAME = 'name';
@@ -53,7 +57,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

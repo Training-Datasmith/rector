@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\Rector\Closure;
 
 use PhpParser\Node;
@@ -12,6 +13,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\Closure\AddClosureNeverReturnTypeRector\AddClosureNeverReturnTypeRectorTest
  */
@@ -27,17 +29,19 @@ final class AddClosureNeverReturnTypeRector extends AbstractRector implements Mi
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add "never" return-type for closure that never return anything', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add "never" return-type for closure that never return anything', [new CodeSample(
+            <<<'CODE_SAMPLE'
 function () {
     throw new InvalidException();
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 function (): never {
     throw new InvalidException();
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

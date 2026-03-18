@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Caching\ValueObject;
 
 final class CacheFilePaths

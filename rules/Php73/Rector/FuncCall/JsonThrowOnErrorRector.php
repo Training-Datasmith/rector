@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php73\Rector\FuncCall;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\BitwiseOr;
 use PhpParser\Node\Expr\ConstFetch;
 use PhpParser\Node\Expr\FuncCall;
@@ -20,6 +20,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php73\Rector\FuncCall\JsonThrowOnErrorRector\JsonThrowOnErrorRectorTest
  */
@@ -44,15 +45,17 @@ final class JsonThrowOnErrorRector extends AbstractRector implements MinPhpVersi
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Adds JSON_THROW_ON_ERROR to json_encode() and json_decode() to throw JsonException on error', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Adds JSON_THROW_ON_ERROR to json_encode() and json_decode() to throw JsonException on error', [new CodeSample(
+            <<<'CODE_SAMPLE'
 json_encode($content);
 json_decode($json);
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 json_encode($content, JSON_THROW_ON_ERROR);
 json_decode($json, null, 512, JSON_THROW_ON_ERROR);
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>
@@ -64,7 +67,7 @@ CODE_SAMPLE
     public function refactor(Node $node): ?Node
     {
         // if found, skip it :)
-        $hasJsonErrorFuncCall = (bool) $this->betterNodeFinder->findFirst($node, fn(Node $node): bool => $this->isNames($node, ['json_last_error', 'json_last_error_msg']));
+        $hasJsonErrorFuncCall = (bool) $this->betterNodeFinder->findFirst($node, fn (Node $node): bool => $this->isNames($node, ['json_last_error', 'json_last_error_msg']));
         if ($hasJsonErrorFuncCall) {
             return null;
         }

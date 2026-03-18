@@ -1,12 +1,14 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Set;
 
 use Rector\Bridge\SetProviderCollector;
 use Rector\Composer\InstalledPackageResolver;
 use Rector\Set\Enum\SetGroup;
 use Rector\Set\ValueObject\ComposerTriggeredSet;
+
 /**
  * @see \Rector\Tests\Set\SetManager\SetManagerTest
  */

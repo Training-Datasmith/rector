@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php81\NodeFactory;
 
-use RectorPrefix202603\Nette\Utils\Strings;
 use PhpParser\BuilderFactory;
 use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Expr\Array_;
@@ -22,6 +22,8 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Node\Value\ValueResolver;
+use RectorPrefix202603\Nette\Utils\Strings;
+
 final class EnumFactory
 {
     /**

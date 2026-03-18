@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PhpAttribute\NodeFactory;
 
 use PhpParser\Node\Name;
@@ -10,6 +11,7 @@ use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\Php80\Contract\ValueObject\AnnotationToAttributeInterface;
 use Rector\PhpAttribute\UseAliasNameMatcher;
 use Rector\PhpAttribute\ValueObject\UseAliasMetadata;
+
 final class AttributeNameFactory
 {
     /**

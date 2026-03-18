@@ -1,13 +1,12 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php80\MatchAndRefactor\StrStartsWithMatchAndRefactor;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\BinaryOp\Equal;
 use PhpParser\Node\Expr\BinaryOp\Identical;
-use PhpParser\Node\Expr\BinaryOp\NotEqual;
-use PhpParser\Node\Expr\BinaryOp\NotIdentical;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Scalar\String_;
@@ -17,6 +16,7 @@ use Rector\Php80\NodeFactory\StrStartsWithFuncCallFactory;
 use Rector\Php80\ValueObject\StrStartsWith;
 use Rector\Php80\ValueObjectFactory\StrStartsWithFactory;
 use Rector\PhpParser\Comparing\NodeComparator;
+
 final class StrncmpMatchAndRefactor implements StrStartWithMatchAndRefactorInterface
 {
     /**

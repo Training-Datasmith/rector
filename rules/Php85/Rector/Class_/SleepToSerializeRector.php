@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php85\Rector\Class_;
 
 use PhpParser\Node;
@@ -19,6 +20,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see https://3v4l.org/51uu0
  * @see https://3v4l.org/ktJnk
@@ -46,7 +48,8 @@ final class SleepToSerializeRector extends AbstractRector implements MinPhpVersi
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change __sleep() to __serialize() with correct return values', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change __sleep() to __serialize() with correct return values', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class User {
     private $id;
     private $name;
@@ -56,7 +59,8 @@ class User {
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class User {
     private $id;
     private $name;
@@ -69,7 +73,7 @@ class User {
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

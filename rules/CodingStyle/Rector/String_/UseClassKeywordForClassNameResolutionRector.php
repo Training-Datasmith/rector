@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodingStyle\Rector\String_;
 
-use RectorPrefix202603\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Name\FullyQualified;
@@ -11,8 +11,10 @@ use PhpParser\Node\Scalar\String_;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
+use RectorPrefix202603\Nette\Utils\Strings;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodingStyle\Rector\String_\UseClassKeywordForClassNameResolutionRector\UseClassKeywordForClassNameResolutionRectorTest
  */
@@ -33,13 +35,15 @@ final class UseClassKeywordForClassNameResolutionRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Use `class` keyword for class name resolution in string instead of hardcoded string reference', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Use `class` keyword for class name resolution in string instead of hardcoded string reference', [new CodeSample(
+            <<<'CODE_SAMPLE'
 $value = 'App\SomeClass::someMethod()';
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 $value = \App\SomeClass::class . '::someMethod()';
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>
@@ -78,7 +82,7 @@ CODE_SAMPLE
         $quotedClassNames = array_map(\Closure::fromCallable('preg_quote'), $classNames);
         // @see https://regex101.com/r/8nGS0F/1
         $parts = Strings::split($string->value, '#(' . implode('|', $quotedClassNames) . ')#');
-        return array_filter($parts, static fn(string $className): bool => $className !== '');
+        return array_filter($parts, static fn (string $className): bool => $className !== '');
     }
     /**
      * @return string[]
@@ -121,6 +125,6 @@ CODE_SAMPLE
      */
     private function filterOurShortClasses(array $classNames): array
     {
-        return array_filter($classNames, static fn(string $className): bool => strpos($className, '\\') !== \false);
+        return array_filter($classNames, static fn (string $className): bool => strpos($className, '\\') !== \false);
     }
 }

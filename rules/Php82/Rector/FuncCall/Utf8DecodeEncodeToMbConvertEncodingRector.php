@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php82\Rector\FuncCall;
 
 use PhpParser\Node;
@@ -13,6 +14,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see https://3v4l.org/Q14UR
  * @see \Rector\Tests\Php82\Rector\FuncCall\Utf8DecodeEncodeToMbConvertEncodingRector\Utf8DecodeEncodeToMbConvertEncodingRectorTest
@@ -21,15 +23,17 @@ final class Utf8DecodeEncodeToMbConvertEncodingRector extends AbstractRector imp
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change deprecated `utf8_decode()` and `utf8_encode()` to `mb_convert_encoding()`', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change deprecated `utf8_decode()` and `utf8_encode()` to `mb_convert_encoding()`', [new CodeSample(
+            <<<'CODE_SAMPLE'
 utf8_decode($value);
 utf8_encode($value);
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 mb_convert_encoding($value, 'ISO-8859-1');
 mb_convert_encoding($value, 'UTF-8', 'ISO-8859-1');
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

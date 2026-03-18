@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\TypeInferer;
 
 use PhpParser\Node;
@@ -16,7 +17,6 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Break_;
 use PhpParser\Node\Stmt\Case_;
 use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Continue_;
 use PhpParser\Node\Stmt\Do_;
 use PhpParser\Node\Stmt\Else_;
@@ -36,6 +36,7 @@ use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Reflection\ReflectionResolver;
 use Rector\TypeDeclaration\NodeAnalyzer\NeverFuncCallAnalyzer;
+
 final class SilentVoidResolver
 {
     /**
@@ -190,7 +191,7 @@ final class SilentVoidResolver
             return \false;
         }
         $casesWithReturnOrExitCount = $this->resolveReturnOrExitCount($switch, $withNativeNeverType);
-        $cases = array_filter($switch->cases, static fn(Case_ $case): bool => $case->stmts !== []);
+        $cases = array_filter($switch->cases, static fn (Case_ $case): bool => $case->stmts !== []);
         // has same amount of first return or exit nodes as switches
         return count($cases) === $casesWithReturnOrExitCount;
     }

@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Transform\Rector\FuncCall;
 
 use PhpParser\Node;
@@ -9,9 +10,10 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Rector\AbstractRector;
+use RectorPrefix202603\Webmozart\Assert\Assert;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202603\Webmozart\Assert\Assert;
+
 /**
  * @see \Rector\Tests\Transform\Rector\FuncCall\FuncCallToConstFetchRector\FunctionCallToConstantRectorTest
  */
@@ -32,7 +34,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            , <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -41,7 +43,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, ['php_sapi_name' => 'PHP_SAPI'])]);
+            , ['php_sapi_name' => 'PHP_SAPI'])]);
     }
     /**
      * @return array<class-string<Node>>

@@ -1,19 +1,21 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Console\Command;
 
-use RectorPrefix202603\Nette\Utils\Json;
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
 use Rector\Configuration\Option;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
 use Rector\Skipper\SkipCriteriaResolver\SkippedClassResolver;
+use RectorPrefix202603\Nette\Utils\Json;
 use RectorPrefix202603\Symfony\Component\Console\Command\Command;
 use RectorPrefix202603\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix202603\Symfony\Component\Console\Input\InputOption;
 use RectorPrefix202603\Symfony\Component\Console\Output\OutputInterface;
 use RectorPrefix202603\Symfony\Component\Console\Style\SymfonyStyle;
+
 final class ListRulesCommand extends Command
 {
     /**
@@ -72,8 +74,8 @@ final class ListRulesCommand extends Command
      */
     private function resolveRectorClasses(): array
     {
-        $customRectors = array_filter($this->rectors, static fn(RectorInterface $rector): bool => !$rector instanceof PostRectorInterface);
-        $rectorClasses = array_map(static fn(RectorInterface $rector): string => get_class($rector), $customRectors);
+        $customRectors = array_filter($this->rectors, static fn (RectorInterface $rector): bool => !$rector instanceof PostRectorInterface);
+        $rectorClasses = array_map(static fn (RectorInterface $rector): string => get_class($rector), $customRectors);
         sort($rectorClasses);
         return array_unique($rectorClasses);
     }

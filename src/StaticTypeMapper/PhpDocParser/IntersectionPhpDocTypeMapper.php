@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\StaticTypeMapper\PhpDocParser;
 
 use PhpParser\Node;
@@ -12,6 +13,7 @@ use PHPStan\Type\IntersectionType;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface;
+
 /**
  * @implements PhpDocTypeMapperInterface<IntersectionTypeNode>
  */

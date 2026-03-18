@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\NodeTypeResolver\NodeTypeResolver;
 
 use PhpParser\Node;
@@ -21,6 +22,7 @@ use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use Rector\Exception\NotImplementedYetException;
 use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
+
 /**
  * @implements NodeTypeResolverInterface<Cast>
  */

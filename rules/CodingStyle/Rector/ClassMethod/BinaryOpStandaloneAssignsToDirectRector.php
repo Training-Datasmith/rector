@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodingStyle\Rector\ClassMethod;
 
 use PhpParser\Node;
@@ -20,6 +21,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodingStyle\Rector\ClassMethod\BinaryOpStandaloneAssignsToDirectRector\BinaryOpStandaloneAssignsToDirectRectorTest
  */
@@ -27,7 +29,8 @@ final class BinaryOpStandaloneAssignsToDirectRector extends AbstractRector imple
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change 2 standalone assigns to variable then binary op to direct binary op', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change 2 standalone assigns to variable then binary op to direct binary op', [new CodeSample(
+            <<<'CODE_SAMPLE'
 function run()
 {
     $value = 100;
@@ -36,13 +39,14 @@ function run()
     return 100 <=> 200;
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 function run()
 {
     return 100 <=> 200;
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

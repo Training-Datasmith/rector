@@ -1,12 +1,14 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Testing\PHPUnit;
 
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Runner\Version;
 use Rector\Config\RectorConfig;
 use Rector\DependencyInjection\LazyContainerFactory;
+
 abstract class AbstractLazyTestCase extends TestCase
 {
     protected static ?RectorConfig $rectorConfig = null;

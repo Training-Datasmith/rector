@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\Rector\FuncCall;
 
 use PhpParser\Node;
@@ -22,6 +23,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\FuncCall\AddArrayFunctionClosureParamTypeRector\AddArrayFunctionClosureParamTypeRectorTest
  */
@@ -37,15 +39,17 @@ final class AddArrayFunctionClosureParamTypeRector extends AbstractRector implem
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add array_filter()/array_map() function closure param type, based on passed iterable', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add array_filter()/array_map() function closure param type, based on passed iterable', [new CodeSample(
+            <<<'CODE_SAMPLE'
 $items = [1, 2, 3];
 $result = array_filter($items, fn ($item) => $item > 1);
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 $items = [1, 2, 3];
 $result = array_filter($items, fn (int $item) => $item > 1);
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

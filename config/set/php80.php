@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace RectorPrefix202603;
 
 use Rector\Arguments\Rector\ClassMethod\ArgumentAdderRector;
@@ -27,6 +28,7 @@ use Rector\Php80\Rector\Ternary\GetDebugTypeRector;
 use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
 use Rector\Transform\Rector\StaticCall\StaticCallToFuncCallRector;
 use Rector\Transform\ValueObject\StaticCallToFuncCall;
+
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->rules([StrContainsRector::class, StrStartsWithRector::class, StrEndsWithRector::class, StringableForToStringRector::class, ClassOnObjectRector::class, GetDebugTypeRector::class, RemoveUnusedVariableInCatchRector::class, ClassPropertyAssignToConstructorPromotionRector::class, ChangeSwitchToMatchRector::class, RemoveParentCallWithoutParentRector::class, SetStateToStaticRector::class, FinalPrivateToPrivateVisibilityRector::class, AddParamBasedOnParentClassMethodRector::class, ClassOnThisVariableObjectRector::class, ConsistentImplodeRector::class, OptionalParametersAfterRequiredRector::class]);
     $rectorConfig->ruleWithConfiguration(StaticCallToFuncCallRector::class, [new StaticCallToFuncCall('Nette\Utils\Strings', 'startsWith', 'str_starts_with'), new StaticCallToFuncCall('Nette\Utils\Strings', 'endsWith', 'str_ends_with'), new StaticCallToFuncCall('Nette\Utils\Strings', 'contains', 'str_contains')]);

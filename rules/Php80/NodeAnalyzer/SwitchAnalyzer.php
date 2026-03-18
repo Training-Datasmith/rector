@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php80\NodeAnalyzer;
 
 use PhpParser\Node;
@@ -12,6 +13,7 @@ use PhpParser\Node\Stmt\Switch_;
 use PHPStan\Type\MixedType;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
+
 final class SwitchAnalyzer
 {
     /**
@@ -74,7 +76,7 @@ final class SwitchAnalyzer
             if (!$case->cond instanceof Expr) {
                 continue;
             }
-            $stmtsWithoutBreak = array_filter($case->stmts, static fn(Node $node): bool => !$node instanceof Break_);
+            $stmtsWithoutBreak = array_filter($case->stmts, static fn (Node $node): bool => !$node instanceof Break_);
             if (count($stmtsWithoutBreak) !== 1) {
                 return \false;
             }
@@ -85,7 +87,7 @@ final class SwitchAnalyzer
     {
         foreach ($switch->cases as $case) {
             if (!$case->cond instanceof Expr) {
-                $stmtsWithoutBreak = array_filter($case->stmts, static fn(Node $node): bool => !$node instanceof Break_);
+                $stmtsWithoutBreak = array_filter($case->stmts, static fn (Node $node): bool => !$node instanceof Break_);
                 return count($stmtsWithoutBreak) === 1;
             }
         }

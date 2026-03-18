@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Renaming\Rector\String_;
 
 use PhpParser\Node;
@@ -8,9 +9,10 @@ use PhpParser\Node\Scalar\String_;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
+use RectorPrefix202603\Webmozart\Assert\Assert;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202603\Webmozart\Assert\Assert;
+
 /**
  * @see \Rector\Tests\Renaming\Rector\String_\RenameStringRector\RenameStringRectorTest
  */
@@ -39,7 +41,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            , <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -48,7 +50,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, ['ROLE_PREVIOUS_ADMIN' => 'IS_IMPERSONATOR'])]);
+            , ['ROLE_PREVIOUS_ADMIN' => 'IS_IMPERSONATOR'])]);
     }
     /**
      * @return array<class-string<Node>>

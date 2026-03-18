@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php85\Rector\Const_;
 
 use PhpParser\Node;
@@ -12,6 +13,7 @@ use Rector\ValueObject\PhpVersion;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see https://wiki.php.net/rfc/attributes-on-constants
  * @see https://wiki.php.net/rfc/deprecated_traits
@@ -30,17 +32,19 @@ final class ConstAndTraitDeprecatedAttributeRector extends AbstractRector implem
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change @deprecated annotation to #[Deprecated] attribute for constants', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change @deprecated annotation to #[Deprecated] attribute for constants', [new CodeSample(
+            <<<'CODE_SAMPLE'
 /**
  * @deprecated 1.0.0 Use SomeOtherConstant instead
  */
 const SomeConstant = 'irrelevant';
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 #[\Deprecated(message: 'Use SomeOtherConstant instead', since: '1.0.0')]
 const SomeConstant = 'irrelevant';
 CODE_SAMPLE
-)]);
+        )]);
     }
     public function getNodeTypes(): array
     {

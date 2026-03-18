@@ -1,9 +1,11 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PhpParser\Parser;
 
 use PHPStan\Parser\ParserErrorsException;
+
 final class ParserErrors
 {
     /**

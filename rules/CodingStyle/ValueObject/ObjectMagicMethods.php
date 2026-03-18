@@ -1,9 +1,11 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodingStyle\ValueObject;
 
 use Rector\ValueObject\MethodName;
+
 final class ObjectMagicMethods
 {
     /**

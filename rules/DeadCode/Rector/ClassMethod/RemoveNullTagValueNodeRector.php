@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\DeadCode\Rector\ClassMethod;
 
 use PhpParser\Node;
@@ -21,6 +22,7 @@ use Rector\PhpDocParser\PhpDocParser\PhpDocNodeTraverser;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\DeadCode\Rector\ClassMethod\RemoveNullTagValueNodeRector\RemoveNullTagValueNodeRectorTest
  */
@@ -41,7 +43,8 @@ final class RemoveNullTagValueNodeRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Remove @var/@param/@return null docblock', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove @var/@param/@return null docblock', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -53,7 +56,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function foo()
@@ -62,7 +66,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

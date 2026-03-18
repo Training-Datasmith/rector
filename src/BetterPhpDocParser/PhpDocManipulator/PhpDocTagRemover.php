@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\BetterPhpDocParser\PhpDocManipulator;
 
 use PHPStan\PhpDocParser\Ast\Node;
@@ -8,6 +9,7 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\PhpDocParser\PhpDocParser\PhpDocNodeTraverser;
+
 final class PhpDocTagRemover
 {
     public function removeByName(PhpDocInfo $phpDocInfo, string $name): bool

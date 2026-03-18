@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\TypeInferer;
 
 use PhpParser\Node;
@@ -29,6 +30,7 @@ use Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
 use Rector\TypeDeclaration\AlreadyAssignDetector\NullTypeAssignDetector;
 use Rector\TypeDeclaration\AlreadyAssignDetector\PropertyDefaultAssignDetector;
 use Rector\TypeDeclaration\Matcher\PropertyAssignMatcher;
+
 /**
  * @internal
  */

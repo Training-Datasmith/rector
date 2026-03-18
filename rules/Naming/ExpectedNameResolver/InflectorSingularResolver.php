@@ -1,11 +1,13 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Naming\ExpectedNameResolver;
 
+use Rector\Util\StringUtils;
 use RectorPrefix202603\Doctrine\Inflector\Inflector;
 use RectorPrefix202603\Nette\Utils\Strings;
-use Rector\Util\StringUtils;
+
 /**
  * @see \Rector\Tests\Naming\ExpectedNameResolver\InflectorSingularResolverTest
  */

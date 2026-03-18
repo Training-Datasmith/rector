@@ -1,12 +1,14 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PhpAttribute\AnnotationToAttributeMapper;
 
 use PhpParser\Node\Scalar\String_;
 use Rector\BetterPhpDocParser\PhpDoc\StringNode;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
+
 /**
  * @implements AnnotationToAttributeMapperInterface<StringNode>
  */

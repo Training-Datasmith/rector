@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php82\NodeManipulator;
 
 use PhpParser\Node\Name\FullyQualified;
@@ -18,6 +19,7 @@ use Rector\PHPStan\ScopeFetcher;
 use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\ValueObject\MethodName;
 use Rector\ValueObject\Visibility;
+
 final class ReadonlyClassManipulator
 {
     /**

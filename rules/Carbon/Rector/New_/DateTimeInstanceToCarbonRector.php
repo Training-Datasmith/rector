@@ -1,10 +1,10 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Carbon\Rector\New_;
 
 use PhpParser\Node;
-use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\New_;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
@@ -14,6 +14,7 @@ use Rector\Carbon\NodeFactory\CarbonCallFactory;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Carbon\Rector\New_\DateTimeInstanceToCarbonRector\DateTimeInstanceToCarbonRectorTest
  */
@@ -29,13 +30,15 @@ final class DateTimeInstanceToCarbonRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Convert `new DateTime()` to `Carbon::*()`', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Convert `new DateTime()` to `Carbon::*()`', [new CodeSample(
+            <<<'CODE_SAMPLE'
 $date = new \DateTime('today');
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 $date = \Carbon\Carbon::today();
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Transform\Rector\Class_;
 
 use PhpParser\Node;
@@ -9,9 +10,10 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Interface_;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Rector\AbstractRector;
+use RectorPrefix202603\Webmozart\Assert\Assert;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202603\Webmozart\Assert\Assert;
+
 /**
  * Covers cases like
  * - https://github.com/FriendsOfPHP/PHP-CS-Fixer/commit/a1cdb4d2dd8f45d731244eed406e1d537218cc66
@@ -32,12 +34,12 @@ class SomeClass implements SomeInterface, SomeOldInterface
 {
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            , <<<'CODE_SAMPLE'
 class SomeClass implements SomeInterface
 {
 }
 CODE_SAMPLE
-, ['SomeOldInterface' => 'SomeInterface'])]);
+            , ['SomeOldInterface' => 'SomeInterface'])]);
     }
     /**
      * @return array<class-string<Node>>

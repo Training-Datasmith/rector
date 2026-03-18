@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Arguments\Rector\FuncCall;
 
 use PhpParser\Node;
@@ -9,9 +10,10 @@ use Rector\Arguments\ArgumentDefaultValueReplacer;
 use Rector\Arguments\ValueObject\ReplaceFuncCallArgumentDefaultValue;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Rector\AbstractRector;
+use RectorPrefix202603\Webmozart\Assert\Assert;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202603\Webmozart\Assert\Assert;
+
 /**
  * @see \Rector\Tests\Arguments\Rector\FuncCall\FunctionArgumentDefaultValueReplacerRector\FunctionArgumentDefaultValueReplacerRectorTest
  */
@@ -34,10 +36,10 @@ final class FunctionArgumentDefaultValueReplacerRector extends AbstractRector im
         return new RuleDefinition('Streamline the operator arguments of `version_compare` function', [new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 version_compare(PHP_VERSION, '5.6', 'gte');
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            , <<<'CODE_SAMPLE'
 version_compare(PHP_VERSION, '5.6', 'ge');
 CODE_SAMPLE
-, [new ReplaceFuncCallArgumentDefaultValue('version_compare', 2, 'gte', 'ge')])]);
+            , [new ReplaceFuncCallArgumentDefaultValue('version_compare', 2, 'gte', 'ge')])]);
     }
     /**
      * @return array<class-string<Node>>

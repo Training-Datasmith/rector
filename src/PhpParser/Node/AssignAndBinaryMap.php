@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PhpParser\Node;
 
 use PhpParser\Node;
@@ -42,6 +43,7 @@ use PhpParser\Node\Expr\BinaryOp\SmallerOrEqual;
 use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\Cast\Bool_;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+
 final class AssignAndBinaryMap
 {
     /**

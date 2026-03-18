@@ -1,9 +1,11 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PhpAttribute\ValueObject;
 
 use PhpParser\Node\UseItem;
+
 final class UseAliasMetadata
 {
     /**

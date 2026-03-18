@@ -1,9 +1,11 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\NodeTypeResolver\TypeComparator;
 
 use PHPStan\Type\Type;
+
 /**
  * @see \Rector\Tests\NodeTypeResolver\TypeComparator\ScalarTypeComparatorTest
  */

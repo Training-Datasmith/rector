@@ -1,10 +1,12 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php72\ValueObject;
 
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\List_;
+
 final class ListAndEach
 {
     /**

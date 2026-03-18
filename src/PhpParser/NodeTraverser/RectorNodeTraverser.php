@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PhpParser\NodeTraverser;
 
 use LogicException;
@@ -17,6 +18,7 @@ use Rector\PhpParser\Node\FileNode;
 use Rector\VersionBonding\ComposerPackageConstraintFilter;
 use Rector\VersionBonding\PhpVersionedFilter;
 use RectorPrefix202603\Webmozart\Assert\Assert;
+
 /**
  *  Based on native NodeTraverser class, but heavily customized for Rector needs.
  *

@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\NodeCollector\NodeAnalyzer;
 
 use PhpParser\Node\ArrayItem;
@@ -26,6 +27,7 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Reflection\ReflectionResolver;
 use Rector\ValueObject\MethodName;
+
 final class ArrayCallableMethodMatcher
 {
     /**

@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php83\Rector\FuncCall;
 
 use PhpParser\Node;
@@ -14,6 +15,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php83\Rector\FuncCall\DynamicClassConstFetchRector\DynamicClassConstFetchRectorTest
  */
@@ -21,13 +23,15 @@ final class DynamicClassConstFetchRector extends AbstractRector implements MinPh
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('constant(Example::class . \'::\' . $constName) to dynamic class const fetch Example::{$constName}', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('constant(Example::class . \'::\' . $constName) to dynamic class const fetch Example::{$constName}', [new CodeSample(
+            <<<'CODE_SAMPLE'
 constant(Example::class . '::' . $constName);
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 Example::{$constName};
 CODE_SAMPLE
-)]);
+        )]);
     }
     public function getNodeTypes(): array
     {

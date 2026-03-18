@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\Rector\Class_;
 
 use PhpParser\Node;
@@ -20,6 +21,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\Class_\TypedPropertyFromCreateMockAssignRector\TypedPropertyFromCreateMockAssignRectorTest
  */
@@ -45,7 +47,8 @@ final class TypedPropertyFromCreateMockAssignRector extends AbstractRector imple
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add "PHPUnit\Framework\MockObject\MockObject" typed property from assigned mock to clearly separate from real objects', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add "PHPUnit\Framework\MockObject\MockObject" typed property from assigned mock to clearly separate from real objects', [new CodeSample(
+            <<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
 
 final class SomeTest extends TestCase
@@ -58,7 +61,8 @@ final class SomeTest extends TestCase
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
 use PHPUnit\Framework\MockObject\MockObject;
 
@@ -72,7 +76,7 @@ final class SomeTest extends TestCase
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     public function getNodeTypes(): array
     {

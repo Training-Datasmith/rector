@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Comments\NodeDocBlock;
 
 use PhpParser\Comment;
@@ -9,6 +10,7 @@ use PhpParser\Node;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\Printer\PhpDocInfoPrinter;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+
 final class DocBlockUpdater
 {
     /**
@@ -56,7 +58,7 @@ final class DocBlockUpdater
     }
     private function clearEmptyDoc(Node $node): void
     {
-        $comments = array_filter($node->getComments(), static fn(Comment $comment): bool => !$comment instanceof Doc || $comment->getText() !== '');
+        $comments = array_filter($node->getComments(), static fn (Comment $comment): bool => !$comment instanceof Doc || $comment->getText() !== '');
         $node->setAttribute(AttributeKey::COMMENTS, array_values($comments));
     }
     private function printPhpDocInfoToString(PhpDocInfo $phpDocInfo): string

@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodeQuality\Rector\ClassMethod;
 
 use PhpParser\Node;
@@ -26,6 +27,7 @@ use Rector\TypeDeclaration\TypeInferer\SilentVoidResolver;
 use Rector\ValueObject\MethodName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodeQuality\Rector\ClassMethod\ExplicitReturnNullRector\ExplicitReturnNullRectorTest
  */
@@ -66,7 +68,8 @@ final class ExplicitReturnNullRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add explicit return null to method/function that returns a value, but missed main return', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add explicit return null to method/function that returns a value, but missed main return', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -80,7 +83,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -96,7 +100,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>
@@ -121,7 +125,7 @@ CODE_SAMPLE
         if (!$returnType instanceof UnionType) {
             return null;
         }
-        $hasGoto = (bool) $this->betterNodeFinder->findFirstInFunctionLikeScoped($node, fn(Node $node): bool => $node instanceof Goto_);
+        $hasGoto = (bool) $this->betterNodeFinder->findFirstInFunctionLikeScoped($node, fn (Node $node): bool => $node instanceof Goto_);
         if ($hasGoto) {
             return null;
         }

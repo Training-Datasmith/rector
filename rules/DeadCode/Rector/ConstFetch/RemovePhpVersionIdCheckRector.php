@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\DeadCode\Rector\ConstFetch;
 
 use PhpParser\Node;
@@ -18,6 +19,7 @@ use Rector\Rector\AbstractRector;
 use Rector\ValueObject\PhpVersion;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\DeadCode\Rector\ConstFetch\RemovePhpVersionIdCheckRector\RemovePhpVersionIdCheckRectorTest
  */
@@ -38,7 +40,8 @@ final class RemovePhpVersionIdCheckRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Remove unneeded PHP_VERSION_ID conditional checks', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove unneeded PHP_VERSION_ID conditional checks', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -51,7 +54,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -60,7 +64,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

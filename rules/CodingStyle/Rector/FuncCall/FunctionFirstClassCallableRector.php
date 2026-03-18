@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodingStyle\Rector\FuncCall;
 
 use PhpParser\Node;
@@ -17,6 +18,7 @@ use ReflectionFunction;
 use ReflectionNamedType;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodingStyle\Rector\FuncCall\FunctionFirstClassCallableRector\FunctionFirstClassCallableRectorTest
  */
@@ -25,7 +27,8 @@ final class FunctionFirstClassCallableRector extends AbstractRector implements M
     public function getRuleDefinition(): RuleDefinition
     {
         // see RFC https://wiki.php.net/rfc/first_class_callable_syntax
-        return new RuleDefinition('Upgrade string callback functions to first class callable', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Upgrade string callback functions to first class callable', [new CodeSample(
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run(array $data)
@@ -34,7 +37,8 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run(array $data)
@@ -43,7 +47,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

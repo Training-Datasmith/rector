@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodingStyle\Rector\ClassConst;
 
 use PhpParser\Node;
@@ -11,6 +12,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodingStyle\Rector\ClassConst\RemoveFinalFromConstRector\RemoveFinalFromConstRectorTest
  */
@@ -26,19 +28,21 @@ final class RemoveFinalFromConstRector extends AbstractRector implements MinPhpV
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Remove final from constants in classes defined as final', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove final from constants in classes defined as final', [new CodeSample(
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     final public const NAME = 'value';
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public const NAME = 'value';
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

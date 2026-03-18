@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Visibility\Rector\ClassMethod;
 
 use PhpParser\Node;
@@ -12,9 +13,10 @@ use Rector\Privatization\NodeManipulator\VisibilityManipulator;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\Visibility;
 use Rector\Visibility\ValueObject\ChangeMethodVisibility;
+use RectorPrefix202603\Webmozart\Assert\Assert;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202603\Webmozart\Assert\Assert;
+
 /**
  * @see \Rector\Tests\Visibility\Rector\ClassMethod\ChangeMethodVisibilityRector\ChangeMethodVisibilityRectorTest
  */
@@ -54,7 +56,7 @@ class MyClass extends FrameworkClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            , <<<'CODE_SAMPLE'
 class FrameworkClass
 {
     protected function someMethod()
@@ -69,7 +71,7 @@ class MyClass extends FrameworkClass
     }
 }
 CODE_SAMPLE
-, [new ChangeMethodVisibility('FrameworkClass', 'someMethod', Visibility::PROTECTED)])]);
+            , [new ChangeMethodVisibility('FrameworkClass', 'someMethod', Visibility::PROTECTED)])]);
     }
     /**
      * @return array<class-string<Node>>

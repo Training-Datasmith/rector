@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
@@ -28,6 +29,7 @@ use Rector\Rector\AbstractRector;
 use Rector\TypeDeclaration\NodeAnalyzer\ReturnAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\AddReturnDocblockForScalarArrayFromAssignsRector\AddReturnDocblockForScalarArrayFromAssignsRectorTest
  */
@@ -58,7 +60,8 @@ final class AddReturnDocblockForScalarArrayFromAssignsRector extends AbstractRec
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add @return docblock for scalar array from strict array assignments', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add @return docblock for scalar array from strict array assignments', [new CodeSample(
+            <<<'CODE_SAMPLE'
 function getSomeItems()
 {
     $items = [];
@@ -67,7 +70,8 @@ function getSomeItems()
     return $items;
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 /**
  * @return string[]
  */
@@ -79,7 +83,8 @@ function getSomeItems()
     return $items;
 }
 CODE_SAMPLE
-), new CodeSample(<<<'CODE_SAMPLE'
+        ), new CodeSample(
+            <<<'CODE_SAMPLE'
 function getNumbers(): array
 {
     $numbers = [];
@@ -88,7 +93,8 @@ function getNumbers(): array
     return $numbers;
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 /**
  * @return int[]
  */
@@ -100,7 +106,7 @@ function getNumbers(): array
     return $numbers;
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

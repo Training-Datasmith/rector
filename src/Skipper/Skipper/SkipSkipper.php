@@ -1,9 +1,11 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Skipper\Skipper;
 
 use Rector\Skipper\Matcher\FileInfoMatcher;
+
 final class SkipSkipper
 {
     /**

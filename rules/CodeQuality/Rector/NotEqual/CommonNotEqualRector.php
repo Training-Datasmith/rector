@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodeQuality\Rector\NotEqual;
 
 use PhpParser\Node;
@@ -8,6 +9,7 @@ use PhpParser\Node\Expr\BinaryOp\NotEqual;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodeQuality\Rector\NotEqual\CommonNotEqualRector\CommonNotEqualRectorTest
  */
@@ -15,7 +17,8 @@ final class CommonNotEqualRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Use common != instead of less known <> with same meaning', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Use common != instead of less known <> with same meaning', [new CodeSample(
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run($one, $two)
@@ -24,7 +27,8 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run($one, $two)
@@ -33,7 +37,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

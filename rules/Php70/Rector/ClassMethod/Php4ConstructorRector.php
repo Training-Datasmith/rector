@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php70\Rector\ClassMethod;
 
 use PhpParser\Node;
@@ -25,6 +26,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php70\Rector\ClassMethod\Php4ConstructorRector\Php4ConstructorRectorTest
  */
@@ -54,7 +56,8 @@ final class Php4ConstructorRector extends AbstractRector implements MinPhpVersio
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change PHP 4 style constructor to `__construct`', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change PHP 4 style constructor to `__construct`', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function SomeClass()
@@ -62,7 +65,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function __construct()
@@ -70,7 +74,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

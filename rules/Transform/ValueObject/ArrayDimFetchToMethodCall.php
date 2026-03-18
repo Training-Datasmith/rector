@@ -1,9 +1,11 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Transform\ValueObject;
 
 use PHPStan\Type\ObjectType;
+
 final class ArrayDimFetchToMethodCall
 {
     /**

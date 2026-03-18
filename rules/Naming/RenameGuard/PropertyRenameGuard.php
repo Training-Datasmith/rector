@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Naming\RenameGuard;
 
 use PHPStan\Type\ObjectType;
@@ -8,6 +9,7 @@ use Rector\Naming\Guard\DateTimeAtNamingConventionGuard;
 use Rector\Naming\Guard\HasMagicGetSetGuard;
 use Rector\Naming\ValueObject\PropertyRename;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+
 final class PropertyRenameGuard
 {
     /**

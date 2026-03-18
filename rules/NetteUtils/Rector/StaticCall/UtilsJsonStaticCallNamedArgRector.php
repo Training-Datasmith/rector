@@ -1,16 +1,18 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\NetteUtils\Rector\StaticCall;
 
-use RectorPrefix202603\Nette\Utils\Json;
 use PhpParser\Node;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Identifier;
 use Rector\Rector\AbstractRector;
 use Rector\TypeDeclarationDocblocks\Enum\NetteClassName;
+use RectorPrefix202603\Nette\Utils\Json;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\NetteUtils\Rector\StaticCall\UtilsJsonStaticCallNamedArgRector\UtilsJsonStaticCallNamedArgRectorTest
  */
@@ -18,20 +20,22 @@ final class UtilsJsonStaticCallNamedArgRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change `' . Json::class . '::encode()` and `decode()` to named args', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change `' . Json::class . '::encode()` and `decode()` to named args', [new CodeSample(
+            <<<'CODE_SAMPLE'
 use Nette\Utils\Json;
 
 $encodedJson = Json::encode($data, true);
 $decodedJson = Json::decode($json, true);
 
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 use Nette\Utils\Json;
 
 $encodedJson = Json::encode($data, pretty: true);
 $decodedJson = Json::decode($json, forceArrays: true);
 CODE_SAMPLE
-)]);
+        )]);
     }
     public function getNodeTypes(): array
     {

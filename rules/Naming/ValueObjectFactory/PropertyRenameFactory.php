@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Naming\ValueObjectFactory;
 
 use PhpParser\Node\Stmt\Class_;
@@ -8,6 +9,7 @@ use PhpParser\Node\Stmt\Property;
 use Rector\Naming\ValueObject\PropertyRename;
 use Rector\NodeNameResolver\NodeNameResolver;
 use RectorPrefix202603\Webmozart\Assert\InvalidArgumentException;
+
 final class PropertyRenameFactory
 {
     /**

@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodeQuality\Rector\Concat;
 
 use PhpParser\Node;
@@ -11,6 +12,7 @@ use PhpParser\Node\Scalar\String_;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodeQuality\Rector\Concat\DirnameDirConcatStringToDirectStringPathRector\DirnameDirConcatStringToDirectStringPathRectorTest
  */
@@ -18,7 +20,8 @@ final class DirnameDirConcatStringToDirectStringPathRector extends AbstractRecto
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change dirname() and string concat, to __DIR__ and direct string path', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change dirname() and string concat, to __DIR__ and direct string path', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -27,7 +30,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -36,7 +40,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     public function getNodeTypes(): array
     {

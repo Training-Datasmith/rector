@@ -1,10 +1,12 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\NodeAnalyzer;
 
 use PhpParser\Node\Stmt\Declare_;
 use Rector\PhpParser\Node\FileNode;
+
 final class DeclareStrictTypeFinder
 {
     public function hasDeclareStrictTypes(FileNode $fileNode): bool

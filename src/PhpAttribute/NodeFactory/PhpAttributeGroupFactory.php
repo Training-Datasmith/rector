@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PhpAttribute\NodeFactory;
 
 use PhpParser\Node\Arg;
 use PhpParser\Node\ArrayItem;
 use PhpParser\Node\Attribute;
 use PhpParser\Node\AttributeGroup;
-use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Name\FullyQualified;
@@ -20,6 +20,7 @@ use Rector\Php80\ValueObject\AnnotationToAttribute;
 use Rector\Php81\Enum\AttributeName;
 use Rector\PhpAttribute\AnnotationToAttributeMapper;
 use Rector\PhpAttribute\AttributeArrayNameInliner;
+
 /**
  * @see \Rector\Tests\PhpAttribute\Printer\PhpAttributeGroupFactoryTest
  */

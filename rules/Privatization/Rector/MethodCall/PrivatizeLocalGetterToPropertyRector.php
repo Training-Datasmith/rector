@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Privatization\Rector\MethodCall;
 
 use PhpParser\Node;
@@ -13,6 +14,7 @@ use PhpParser\Node\Stmt\Return_;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Privatization\Rector\MethodCall\PrivatizeLocalGetterToPropertyRector\PrivatizeLocalGetterToPropertyRectorTest
  */
@@ -20,7 +22,8 @@ final class PrivatizeLocalGetterToPropertyRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Privatize getter of local property to property', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Privatize getter of local property to property', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     private $some;
@@ -36,7 +39,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     private $some;
@@ -52,7 +56,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

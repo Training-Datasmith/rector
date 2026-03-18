@@ -1,12 +1,10 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\NodeTypeAnalyzer;
 
-use PhpParser\Node\ComplexType;
 use PhpParser\Node\Expr;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\UnionType;
@@ -16,6 +14,7 @@ use Rector\BetterPhpDocParser\PhpDocManipulator\PhpDocTypeChanger;
 use Rector\Php\PhpVersionProvider;
 use Rector\PhpParser\Node\NodeFactory;
 use Rector\ValueObject\PhpVersionFeature;
+
 final class PropertyTypeDecorator
 {
     /**

@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodeQuality\Rector\Ternary;
 
 use PhpParser\Node;
@@ -13,6 +14,7 @@ use PhpParser\Node\Scalar\String_;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodeQuality\Rector\Ternary\TernaryImplodeToImplodeRector\TernaryImplodeToImplodeRectorTest
  */
@@ -20,7 +22,8 @@ final class TernaryImplodeToImplodeRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Narrow ternary with implode and empty string to direct implode, as same result', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Narrow ternary with implode and empty string to direct implode, as same result', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run(array $values)
@@ -29,7 +32,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run(array $values)
@@ -38,7 +42,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodeQuality\Rector\BooleanNot;
 
 use PhpParser\Node;
@@ -9,6 +10,7 @@ use PhpParser\Node\Expr\Cast\Bool_;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodeQuality\Rector\BooleanNot\ReplaceMultipleBooleanNotRector\ReplaceMultipleBooleanNotRectorTest
  */
@@ -16,13 +18,15 @@ final class ReplaceMultipleBooleanNotRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Replace the Double not operator (!!) by type-casting to boolean', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replace the Double not operator (!!) by type-casting to boolean', [new CodeSample(
+            <<<'CODE_SAMPLE'
 $bool = !!$var;
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 $bool = (bool) $var;
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

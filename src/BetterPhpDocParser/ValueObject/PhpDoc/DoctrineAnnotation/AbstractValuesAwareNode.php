@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation;
 
 use PHPStan\PhpDocParser\Ast\NodeAttributes;
@@ -8,15 +9,16 @@ use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\PhpDoc\StringNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
+
 abstract class AbstractValuesAwareNode implements PhpDocTagValueNode
 {
+    use NodeAttributes;
     /**
      * @var ArrayItemNode[]
      */
     public array $values = [];
     protected ?string $originalContent = null;
     protected ?string $silentKey = null;
-    use NodeAttributes;
     protected bool $hasChanged = \false;
     /**
      * @param ArrayItemNode[] $values Must be public so node traverser can go through them

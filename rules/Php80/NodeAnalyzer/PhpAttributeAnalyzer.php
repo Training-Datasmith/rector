@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php80\NodeAnalyzer;
 
 use PhpParser\Node\Arg;
@@ -9,11 +10,9 @@ use PhpParser\Node\AttributeGroup;
 use PhpParser\Node\Expr\Array_;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\String_;
-use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Property;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PhpAttribute\Enum\DocTagNodeState;
+
 final class PhpAttributeAnalyzer
 {
     /**

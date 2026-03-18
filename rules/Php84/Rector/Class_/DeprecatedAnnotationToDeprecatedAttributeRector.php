@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php84\Rector\Class_;
 
 use PhpParser\Node;
@@ -13,6 +14,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php84\Rector\Class_\DeprecatedAnnotationToDeprecatedAttributeRector\DeprecatedAnnotationToDeprecatedAttributeRectorTest
  */
@@ -28,7 +30,8 @@ final class DeprecatedAnnotationToDeprecatedAttributeRector extends AbstractRect
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change @deprecated annotation to Deprecated attribute', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change @deprecated annotation to Deprecated attribute', [new CodeSample(
+            <<<'CODE_SAMPLE'
 /**
  * @deprecated 1.0.0 Use SomeOtherFunction instead
  */
@@ -36,13 +39,14 @@ function someFunction()
 {
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 #[\Deprecated(message: 'Use SomeOtherFunction instead', since: '1.0.0')]
 function someFunction()
 {
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     public function getNodeTypes(): array
     {

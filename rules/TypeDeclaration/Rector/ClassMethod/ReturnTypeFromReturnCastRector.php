@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
@@ -13,6 +14,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\ReturnTypeFromReturnCastRector\ReturnTypeFromReturnCastRectorTest
  */
@@ -28,7 +30,8 @@ final class ReturnTypeFromReturnCastRector extends AbstractRector implements Min
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add return type to function like with return cast', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add return type to function like with return cast', [new CodeSample(
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function action($param)
@@ -42,7 +45,8 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function action($param): array
@@ -56,7 +60,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

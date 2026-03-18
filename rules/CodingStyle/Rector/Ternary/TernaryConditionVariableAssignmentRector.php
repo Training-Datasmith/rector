@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodingStyle\Rector\Ternary;
 
 use PhpParser\Node;
@@ -11,6 +12,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodingStyle\Rector\Ternary\TernaryConditionVariableAssignmentRector\TernaryConditionVariableAssignmentRectorTest
  */
@@ -18,19 +20,21 @@ final class TernaryConditionVariableAssignmentRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Assign outcome of ternary condition to variable, where applicable', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Assign outcome of ternary condition to variable, where applicable', [new CodeSample(
+            <<<'CODE_SAMPLE'
 function ternary($value)
 {
     $value ? $a = 1 : $a = 0;
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 function ternary($value)
 {
     $a = $value ? 1 : 0;
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\NodeManipulator;
 
-use RectorPrefix202603\Doctrine\ORM\Mapping\Table;
 use PhpParser\Node;
 use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\StaticPropertyFetch;
@@ -30,6 +30,8 @@ use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\NodeFinder\PropertyFetchFinder;
 use Rector\TypeDeclaration\AlreadyAssignDetector\ConstructorAssignDetector;
 use Rector\ValueObject\MethodName;
+use RectorPrefix202603\Doctrine\ORM\Mapping\Table;
+
 /**
  * For inspiration to improve this service,
  * @see examples of variable modifications in https://wiki.php.net/rfc/readonly_properties_v2#proposal
@@ -203,7 +205,7 @@ final class PropertyManipulator
         if (!$classMethod instanceof ClassMethod) {
             return \false;
         }
-        $node = $this->betterNodeFinder->findFirst((array) $classMethod->stmts, static fn(Node $subNode): bool => ($subNode instanceof PropertyFetch || $subNode instanceof StaticPropertyFetch) && $subNode === $propertyFetch);
+        $node = $this->betterNodeFinder->findFirst((array) $classMethod->stmts, static fn (Node $subNode): bool => ($subNode instanceof PropertyFetch || $subNode instanceof StaticPropertyFetch) && $subNode === $propertyFetch);
         // there is property unset in Test class, so only check on __construct
         if (!$node instanceof Node) {
             return \false;

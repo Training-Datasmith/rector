@@ -1,16 +1,17 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclarationDocblocks\NodeFinder;
 
 use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use PhpParser\Node\Stmt\Return_;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\ValueObject\MethodName;
+
 final class GetterClassMethodPropertyFinder
 {
     /**

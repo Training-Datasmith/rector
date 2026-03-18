@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\NodeAnalyzer;
 
 use PhpParser\Node;
@@ -29,6 +30,7 @@ use Rector\PhpParser\AstResolver;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Reflection\ReflectionResolver;
 use Rector\ValueObject\MethodName;
+
 final class PropertyFetchAnalyzer
 {
     /**
@@ -107,7 +109,7 @@ final class PropertyFetchAnalyzer
         if ($trait->getProperty($propertyName) instanceof Property) {
             return \true;
         }
-        return (bool) $this->betterNodeFinder->findFirst($trait, fn(Node $node): bool => $this->isLocalPropertyFetchName($node, $propertyName));
+        return (bool) $this->betterNodeFinder->findFirst($trait, fn (Node $node): bool => $this->isLocalPropertyFetchName($node, $propertyName));
     }
     public function containsWrittenPropertyFetchName(Trait_ $trait, string $propertyName): bool
     {

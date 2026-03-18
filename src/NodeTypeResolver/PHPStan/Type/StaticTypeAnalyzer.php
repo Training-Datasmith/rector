@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\NodeTypeResolver\PHPStan\Type;
 
 use PHPStan\Type\ArrayType;
@@ -11,6 +12,7 @@ use PHPStan\Type\ObjectType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\UnionType;
+
 final class StaticTypeAnalyzer
 {
     public function isAlwaysTruableType(Type $type): bool

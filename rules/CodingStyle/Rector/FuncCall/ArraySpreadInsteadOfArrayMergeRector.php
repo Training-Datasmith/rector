@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodingStyle\Rector\FuncCall;
 
 use PhpParser\Node;
@@ -17,6 +18,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodingStyle\Rector\FuncCall\ArraySpreadInsteadOfArrayMergeRector\Php74ArraySpreadInsteadOfArrayMergeRectorTest
  * @see \Rector\Tests\CodingStyle\Rector\FuncCall\ArraySpreadInsteadOfArrayMergeRector\Php81ArraySpreadInsteadOfArrayMergeRectorTest
@@ -33,7 +35,8 @@ final class ArraySpreadInsteadOfArrayMergeRector extends AbstractRector implemen
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change array_merge() to spread operator', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change array_merge() to spread operator', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($iter1, $iter2)
@@ -48,7 +51,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($iter1, $iter2)
@@ -60,7 +64,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

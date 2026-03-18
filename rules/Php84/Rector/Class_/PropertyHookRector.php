@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php84\Rector\Class_;
 
 use PhpParser\Modifiers;
@@ -18,6 +19,7 @@ use Rector\VendorLocker\ParentClassMethodTypeOverrideGuard;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php84\Rector\Class_\PropertyHookRector\PropertyHookRectorTest
  */
@@ -43,7 +45,8 @@ final class PropertyHookRector extends AbstractRector implements MinPhpVersionIn
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Replace getter/setter with property hook', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replace getter/setter with property hook', [new CodeSample(
+            <<<'CODE_SAMPLE'
 final class Product
 {
     private string $name;
@@ -59,7 +62,8 @@ final class Product
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 final class Product
 {
     public string $name
@@ -70,7 +74,7 @@ final class Product
 }
 
 CODE_SAMPLE
-)]);
+        )]);
     }
     public function getNodeTypes(): array
     {

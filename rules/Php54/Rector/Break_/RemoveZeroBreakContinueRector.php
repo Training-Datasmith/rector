@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php54\Rector\Break_;
 
 use PhpParser\Node;
@@ -16,6 +17,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php54\Rector\Break_\RemoveZeroBreakContinueRector\RemoveZeroBreakContinueRectorTest
  */
@@ -35,7 +37,8 @@ final class RemoveZeroBreakContinueRector extends AbstractRector implements MinP
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Remove 0 from break and continue', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove 0 from break and continue', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($random)
@@ -50,7 +53,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($random)
@@ -65,7 +69,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

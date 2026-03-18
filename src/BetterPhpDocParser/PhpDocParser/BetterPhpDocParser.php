@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\BetterPhpDocParser\PhpDocParser;
 
-use RectorPrefix202603\Nette\Utils\Strings;
 use Override;
 use PhpParser\Node;
 use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
@@ -26,6 +26,8 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Util\Reflection\PrivatesAccessor;
+use RectorPrefix202603\Nette\Utils\Strings;
+
 /**
  * @see \Rector\Tests\BetterPhpDocParser\PhpDocParser\TagValueNodeReprint\TagValueNodeReprintTest
  */
@@ -112,12 +114,12 @@ final class BetterPhpDocParser extends PhpDocParser
         $phpDocTagValueNode = parent::parseTagValue($tokenIterator, $tag);
         $endPosition = $tokenIterator->currentPosition();
         if ($isPrecededByHorizontalWhitespace && property_exists($phpDocTagValueNode, 'description')) {
-            $phpDocTagValueNode->description = Strings::replace((string) $phpDocTagValueNode->description, self::NEW_LINE_REGEX, static fn(array $match): string => $match['new_line'] . ' * ');
+            $phpDocTagValueNode->description = Strings::replace((string) $phpDocTagValueNode->description, self::NEW_LINE_REGEX, static fn (array $match): string => $match['new_line'] . ' * ');
         }
         $startAndEnd = new StartAndEnd($startPosition, $endPosition);
         $phpDocTagValueNode->setAttribute(PhpDocAttributeKey::START_AND_END, $startAndEnd);
         if ($phpDocTagValueNode instanceof GenericTagValueNode) {
-            $phpDocTagValueNode->value = Strings::replace($phpDocTagValueNode->value, self::MULTI_NEW_LINES_REGEX, static fn(array $match): string => (string) $match['new_line']);
+            $phpDocTagValueNode->value = Strings::replace($phpDocTagValueNode->value, self::MULTI_NEW_LINES_REGEX, static fn (array $match): string => (string) $match['new_line']);
         }
         return $phpDocTagValueNode;
     }

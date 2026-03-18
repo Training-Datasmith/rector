@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php73\Rector\FuncCall;
 
 use PhpParser\Node;
@@ -18,6 +19,7 @@ use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Rector\VersionBonding\Contract\RelatedPolyfillInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * This needs to removed 1 floor above, because only nodes in arrays can be removed why traversing,
  * see https://github.com/nikic/PHP-Parser/issues/389
@@ -53,21 +55,25 @@ final class ArrayKeyFirstLastRector extends AbstractRector implements MinPhpVers
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Make use of array_key_first() and array_key_last()', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Make use of array_key_first() and array_key_last()', [new CodeSample(
+            <<<'CODE_SAMPLE'
 reset($items);
 $firstKey = key($items);
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 $firstKey = array_key_first($items);
 CODE_SAMPLE
-), new CodeSample(<<<'CODE_SAMPLE'
+        ), new CodeSample(
+            <<<'CODE_SAMPLE'
 end($items);
 $lastKey = key($items);
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 $lastKey = array_key_last($items);
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

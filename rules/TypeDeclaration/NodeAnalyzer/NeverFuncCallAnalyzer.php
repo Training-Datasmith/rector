@@ -1,15 +1,14 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\NodeAnalyzer;
 
-use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\Function_;
 use PHPStan\Type\NeverType;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+
 final class NeverFuncCallAnalyzer
 {
     /**

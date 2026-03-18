@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer;
 
 use PhpParser\Node;
@@ -13,6 +14,7 @@ use Rector\PhpParser\AstResolver;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\TypeDeclaration\TypeInferer\AssignToPropertyTypeInferer;
 use Rector\ValueObject\Application\File;
+
 final class AllAssignNodePropertyTypeInferer
 {
     /**
@@ -42,7 +44,7 @@ final class AllAssignNodePropertyTypeInferer
     {
         if ($classReflection->getFileName() === $file->getFilePath()) {
             $className = $classReflection->getName();
-            $classLike = $this->betterNodeFinder->findFirst($file->getNewStmts(), fn(Node $node): bool => $node instanceof ClassLike && $this->nodeNameResolver->isName($node, $className));
+            $classLike = $this->betterNodeFinder->findFirst($file->getNewStmts(), fn (Node $node): bool => $node instanceof ClassLike && $this->nodeNameResolver->isName($node, $className));
         } else {
             $classLike = $this->astResolver->resolveClassFromClassReflection($classReflection);
         }

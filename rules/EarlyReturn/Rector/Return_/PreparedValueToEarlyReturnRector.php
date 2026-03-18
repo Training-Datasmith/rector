@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\EarlyReturn\Rector\Return_;
 
 use PhpParser\Node;
@@ -23,6 +24,7 @@ use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\EarlyReturn\Rector\Return_\PreparedValueToEarlyReturnRector\PreparedValueToEarlyReturnRectorTest
  */
@@ -43,7 +45,8 @@ final class PreparedValueToEarlyReturnRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Return early prepared value in ifs', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Return early prepared value in ifs', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -62,7 +65,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -79,7 +83,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>
@@ -106,7 +110,7 @@ CODE_SAMPLE
                 return null;
             }
             if (($stmt instanceof For_ || $stmt instanceof Foreach_ || $stmt instanceof While_ || $stmt instanceof Do_) && $initialAssign instanceof Assign) {
-                $isReassignInLoop = (bool) $this->betterNodeFinder->findFirst($stmt, fn(Node $node): bool => $node instanceof Assign && $this->nodeComparator->areNodesEqual($node->var, $initialAssign->var));
+                $isReassignInLoop = (bool) $this->betterNodeFinder->findFirst($stmt, fn (Node $node): bool => $node instanceof Assign && $this->nodeComparator->areNodesEqual($node->var, $initialAssign->var));
                 if ($isReassignInLoop) {
                     return null;
                 }
@@ -174,7 +178,7 @@ CODE_SAMPLE
         }
         foreach ($bareSingleAssignIfs as $bareSingleAssignIf) {
             $assign = $bareSingleAssignIf->getAssign();
-            $isVariableUsed = (bool) $this->betterNodeFinder->findFirst([$bareSingleAssignIf->getIfCondExpr(), $assign->expr], fn(Node $node): bool => $this->nodeComparator->areNodesEqual($node, $returnedExpr));
+            $isVariableUsed = (bool) $this->betterNodeFinder->findFirst([$bareSingleAssignIf->getIfCondExpr(), $assign->expr], fn (Node $node): bool => $this->nodeComparator->areNodesEqual($node, $returnedExpr));
             if ($isVariableUsed) {
                 return \false;
             }

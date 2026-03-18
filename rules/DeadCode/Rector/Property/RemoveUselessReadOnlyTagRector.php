@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\DeadCode\Rector\Property;
 
 use PhpParser\Node;
@@ -17,6 +18,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\DeadCode\Rector\Property\RemoveUselessReadOnlyTagRector\RemoveUselessReadOnlyTagRectorTest
  */
@@ -42,7 +44,8 @@ final class RemoveUselessReadOnlyTagRector extends AbstractRector implements Min
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Remove useless `@readonly` annotation on native readonly type', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove useless `@readonly` annotation on native readonly type', [new CodeSample(
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     /**
@@ -56,7 +59,8 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     private readonly string $name;
@@ -67,7 +71,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

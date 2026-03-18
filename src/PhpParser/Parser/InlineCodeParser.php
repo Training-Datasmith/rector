@@ -1,10 +1,9 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PhpParser\Parser;
 
-use RectorPrefix202603\Nette\Utils\FileSystem;
-use RectorPrefix202603\Nette\Utils\Strings;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp\Concat;
 use PhpParser\Node\Scalar\InterpolatedString;
@@ -13,6 +12,9 @@ use PhpParser\Node\Stmt;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Util\StringUtils;
+use RectorPrefix202603\Nette\Utils\FileSystem;
+use RectorPrefix202603\Nette\Utils\Strings;
+
 final class InlineCodeParser
 {
     /**
@@ -100,9 +102,9 @@ final class InlineCodeParser
                 });
             }
             if (!StringUtils::isMatch($expr->value, self::BACKREFERENCE_NO_QUOTE_REGEX)) {
-                return Strings::replace($expr->value, self::BACKREFERENCE_NO_DOUBLE_QUOTE_START_REGEX, static fn(array $match): string => '"' . $match['backreference'] . '"');
+                return Strings::replace($expr->value, self::BACKREFERENCE_NO_DOUBLE_QUOTE_START_REGEX, static fn (array $match): string => '"' . $match['backreference'] . '"');
             }
-            return Strings::replace($expr->value, self::BACKREFERENCE_NO_QUOTE_REGEX, static fn(array $match): string => '"\\' . $match['backreference'] . '"');
+            return Strings::replace($expr->value, self::BACKREFERENCE_NO_QUOTE_REGEX, static fn (array $match): string => '"\\' . $match['backreference'] . '"');
         }
         if ($expr instanceof InterpolatedString) {
             return $this->resolveEncapsedValue($expr);
@@ -151,6 +153,6 @@ final class InlineCodeParser
             $concat->right->value .= '.';
         }
         $string = $this->stringify($concat->left) . $this->stringify($concat->right);
-        return Strings::replace($string, self::VARIABLE_IN_SINGLE_QUOTED_REGEX, static fn(array $match): string => (string) $match['variable']);
+        return Strings::replace($string, self::VARIABLE_IN_SINGLE_QUOTED_REGEX, static fn (array $match): string => (string) $match['variable']);
     }
 }

@@ -1,10 +1,12 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php70\NodeAnalyzer;
 
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\ClassReflection;
+
 final class Php4ConstructorClassMethodAnalyzer
 {
     public function detect(ClassMethod $classMethod, ClassReflection $classReflection): bool

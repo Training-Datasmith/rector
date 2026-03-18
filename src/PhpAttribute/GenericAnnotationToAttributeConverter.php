@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PhpAttribute;
 
 use PhpParser\Node;
@@ -16,6 +17,7 @@ use Rector\Naming\Naming\UseImportsResolver;
 use Rector\Php80\NodeFactory\AttrGroupsFactory;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
 use Rector\Php80\ValueObject\DoctrineTagAndAnnotationToAttribute;
+
 /**
  * @api used in Rector packages
  */

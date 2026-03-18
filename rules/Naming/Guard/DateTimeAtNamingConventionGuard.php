@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Naming\Guard;
 
 use DateTimeInterface;
@@ -9,6 +10,7 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 use Rector\StaticTypeMapper\Resolver\ClassNameFromObjectTypeResolver;
 use Rector\Util\StringUtils;
+
 final class DateTimeAtNamingConventionGuard
 {
     /**

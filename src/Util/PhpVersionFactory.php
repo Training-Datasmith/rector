@@ -1,9 +1,11 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Util;
 
 use Rector\ValueObject\PhpVersion;
+
 final class PhpVersionFactory
 {
     /**

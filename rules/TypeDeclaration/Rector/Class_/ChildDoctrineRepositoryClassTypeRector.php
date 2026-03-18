@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\Rector\Class_;
 
 use PhpParser\Node;
@@ -22,6 +23,7 @@ use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\Class_\ChildDoctrineRepositoryClassTypeRector\ChildDoctrineRepositoryClassTypeRectorTest
  */
@@ -47,7 +49,8 @@ final class ChildDoctrineRepositoryClassTypeRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add return type to classes that extend Doctrine\ORM\EntityRepository based on return Doctrine method names', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add return type to classes that extend Doctrine\ORM\EntityRepository based on return Doctrine method names', [new CodeSample(
+            <<<'CODE_SAMPLE'
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -63,7 +66,8 @@ final class SomeRepository extends EntityRepository
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 use Doctrine\ORM\EntityRepository;
 
 /**
@@ -79,7 +83,7 @@ final class SomeRepository extends EntityRepository
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Renaming\Rector\MethodCall;
 
 use PhpParser\BuilderHelpers;
@@ -25,9 +26,10 @@ use Rector\Reflection\ReflectionResolver;
 use Rector\Renaming\Contract\MethodCallRenameInterface;
 use Rector\Renaming\ValueObject\MethodCallRename;
 use Rector\Renaming\ValueObject\MethodCallRenameWithArrayKey;
+use RectorPrefix202603\Webmozart\Assert\Assert;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202603\Webmozart\Assert\Assert;
+
 /**
  * @see \Rector\Tests\Renaming\Rector\MethodCall\RenameMethodRector\RenameMethodRectorTest
  */
@@ -61,11 +63,11 @@ final class RenameMethodRector extends AbstractRector implements ConfigurableRec
 $someObject = new SomeExampleClass;
 $someObject->oldMethod();
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            , <<<'CODE_SAMPLE'
 $someObject = new SomeExampleClass;
 $someObject->newMethod();
 CODE_SAMPLE
-, [new MethodCallRename('SomeExampleClass', 'oldMethod', 'newMethod')])]);
+            , [new MethodCallRename('SomeExampleClass', 'oldMethod', 'newMethod')])]);
     }
     /**
      * @return array<class-string<Node>>

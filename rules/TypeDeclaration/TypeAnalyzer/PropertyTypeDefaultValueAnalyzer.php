@@ -1,12 +1,14 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\TypeAnalyzer;
 
 use PhpParser\Node\Expr;
 use PhpParser\Node\PropertyItem;
 use PHPStan\Type\Type;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+
 final class PropertyTypeDefaultValueAnalyzer
 {
     /**

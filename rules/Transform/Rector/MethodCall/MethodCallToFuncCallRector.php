@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Transform\Rector\MethodCall;
 
 use PhpParser\Node;
@@ -11,9 +12,10 @@ use PHPStan\Type\ObjectType;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Rector\AbstractRector;
 use Rector\Transform\ValueObject\MethodCallToFuncCall;
+use RectorPrefix202603\Webmozart\Assert\Assert;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202603\Webmozart\Assert\Assert;
+
 /**
  * @note used extensively https://github.com/search?q=MethodCallToFuncCallRector%3A%3Aclass&type=code
  * @see \Rector\Tests\Transform\Rector\MethodCall\MethodCallToFuncCallRector\MethodCallToFuncCallRectorTest
@@ -35,7 +37,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            , <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function show()
@@ -44,7 +46,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, [new MethodCallToFuncCall('SomeClass', 'render', 'view')])]);
+            , [new MethodCallToFuncCall('SomeClass', 'render', 'view')])]);
     }
     /**
      * @return array<class-string<Node>>

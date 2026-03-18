@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclarationDocblocks\NodeFinder;
 
 use PhpParser\Node;
@@ -12,6 +13,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeVisitor;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
+
 final class YieldNodeFinder
 {
     /**

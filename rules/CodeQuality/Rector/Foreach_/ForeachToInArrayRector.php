@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodeQuality\Rector\Foreach_;
 
 use PhpParser\Node;
@@ -21,6 +22,7 @@ use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodeQuality\Rector\Foreach_\ForeachToInArrayRector\ForeachToInArrayRectorTest
  */
@@ -46,7 +48,8 @@ final class ForeachToInArrayRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Simplify `foreach` loops into `in_array` when possible', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Simplify `foreach` loops into `in_array` when possible', [new CodeSample(
+            <<<'CODE_SAMPLE'
 foreach ($items as $item) {
     if ($item === 'something') {
         return true;
@@ -55,10 +58,11 @@ foreach ($items as $item) {
 
 return false;
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 return in_array('something', $items, true);
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>
@@ -162,7 +166,7 @@ CODE_SAMPLE
      */
     private function matchNodes($binaryOp, Expr $expr): ?TwoNodeMatch
     {
-        return $this->binaryOpManipulator->matchFirstAndSecondConditionNode($binaryOp, Variable::class, fn(Node $node, Node $otherNode): bool => $this->nodeComparator->areNodesEqual($otherNode, $expr));
+        return $this->binaryOpManipulator->matchFirstAndSecondConditionNode($binaryOp, Variable::class, fn (Node $node, Node $otherNode): bool => $this->nodeComparator->areNodesEqual($otherNode, $expr));
     }
     private function isIfBodyABoolReturnNode(If_ $if): bool
     {

@@ -1,11 +1,13 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PhpParser\Node\CustomNode;
 
 use Override;
 use Rector\Contract\PhpParser\Node\StmtsAwareInterface;
 use Rector\PhpParser\Node\FileNode;
+
 /**
  * @deprecated Use @see \Rector\PhpParser\Node\FileNode instead
  * @api

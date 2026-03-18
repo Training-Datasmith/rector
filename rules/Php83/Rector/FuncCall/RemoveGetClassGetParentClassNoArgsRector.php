@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php83\Rector\FuncCall;
 
 use PhpParser\Node;
@@ -13,6 +14,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php83\Rector\FuncCall\RemoveGetClassGetParentClassNoArgsRector\RemoveGetClassGetParentClassNoArgsRectorTest
  */
@@ -20,21 +22,23 @@ final class RemoveGetClassGetParentClassNoArgsRector extends AbstractRector impl
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Replace calls to `get_class()` and `get_parent_class()` without arguments with `self::class` and `parent::class`', [new CodeSample(<<<'OLD_CODE_SAMPLE'
+        return new RuleDefinition('Replace calls to `get_class()` and `get_parent_class()` without arguments with `self::class` and `parent::class`', [new CodeSample(
+            <<<'OLD_CODE_SAMPLE'
 class Example extends StdClass {
     public function whoAreYou() {
         return get_class() . ' daughter of ' . get_parent_class();
     }
 }
 OLD_CODE_SAMPLE
-, <<<'NEW_CODE_SAMPLE'
+            ,
+            <<<'NEW_CODE_SAMPLE'
 class Example extends StdClass {
     public function whoAreYou() {
         return self::class . ' daughter of ' . parent::class;
     }
 }
 NEW_CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

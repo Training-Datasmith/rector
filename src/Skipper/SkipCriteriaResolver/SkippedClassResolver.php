@@ -1,12 +1,14 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Skipper\SkipCriteriaResolver;
 
 use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
+
 /**
  * @see \Rector\Tests\Skipper\Skipper\SkippedClassResolverTest
  */
@@ -22,7 +24,7 @@ final class SkippedClassResolver
     public function resolveDeprecatedSkippedClasses(): array
     {
         $skippedClassNames = array_keys($this->resolve());
-        return array_filter($skippedClassNames, fn(string $class): bool => is_a($class, DeprecatedInterface::class, \true));
+        return array_filter($skippedClassNames, fn (string $class): bool => is_a($class, DeprecatedInterface::class, \true));
     }
     /**
      * @return array<class-string, string[]|null>

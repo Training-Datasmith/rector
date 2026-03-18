@@ -1,14 +1,16 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\ChangesReporting\Output;
 
-use RectorPrefix202603\Nette\Utils\Json;
 use Rector\ChangesReporting\Contract\Output\OutputFormatterInterface;
 use Rector\Parallel\ValueObject\Bridge;
 use Rector\ValueObject\Configuration;
 use Rector\ValueObject\Error\SystemError;
 use Rector\ValueObject\ProcessResult;
+use RectorPrefix202603\Nette\Utils\Json;
+
 final class JsonOutputFormatter implements OutputFormatterInterface
 {
     /**

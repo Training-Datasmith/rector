@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PostRector\Guard;
 
 use PhpParser\Node\Stmt;
@@ -8,6 +9,7 @@ use PhpParser\Node\Stmt\InlineHTML;
 use PhpParser\Node\Stmt\Namespace_;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Node\FileNode;
+
 final class AddUseStatementGuard
 {
     /**

@@ -1,9 +1,11 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodingStyle\ClassNameImport;
 
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
+
 final class NamespaceBeforeClassNameResolver
 {
     public function resolve(FullyQualifiedObjectType $fullyQualifiedObjectType): string

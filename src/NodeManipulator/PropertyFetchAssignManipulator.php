@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\NodeManipulator;
 
 use PhpParser\Node;
@@ -15,6 +16,7 @@ use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\ValueObject\MethodName;
+
 final class PropertyFetchAssignManipulator
 {
     /**

@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php53\Rector\Ternary;
 
 use PhpParser\Node;
@@ -12,6 +13,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php53\Rector\Ternary\TernaryToElvisRector\TernaryToElvisRectorTest
  */
@@ -19,19 +21,21 @@ final class TernaryToElvisRector extends AbstractRector implements MinPhpVersion
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Use `?:` instead of `?`, where useful', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Use `?:` instead of `?`, where useful', [new CodeSample(
+            <<<'CODE_SAMPLE'
 function elvis()
 {
     $value = $a ? $a : false;
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 function elvis()
 {
     $value = $a ?: false;
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

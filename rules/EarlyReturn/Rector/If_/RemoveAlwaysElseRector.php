@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\EarlyReturn\Rector\If_;
 
 use PhpParser\Node;
@@ -15,6 +16,7 @@ use PhpParser\Node\Stmt\Return_;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\EarlyReturn\Rector\If_\RemoveAlwaysElseRector\RemoveAlwaysElseRectorTest
  */
@@ -22,7 +24,8 @@ final class RemoveAlwaysElseRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Split if statement, when if condition always break execution flow', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Split if statement, when if condition always break execution flow', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($value)
@@ -35,7 +38,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($value)
@@ -48,7 +52,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Arguments\Rector\ClassMethod;
 
 use PhpParser\Node;
@@ -13,9 +14,10 @@ use Rector\Arguments\ValueObject\ReplaceArgumentDefaultValue;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\MethodName;
+use RectorPrefix202603\Webmozart\Assert\Assert;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202603\Webmozart\Assert\Assert;
+
 /**
  * @api used in rector-symfony
  * @see \Rector\Tests\Arguments\Rector\ClassMethod\ReplaceArgumentDefaultValueRector\ReplaceArgumentDefaultValueRectorTest
@@ -40,11 +42,11 @@ final class ReplaceArgumentDefaultValueRector extends AbstractRector implements 
 $someObject = new SomeClass;
 $someObject->someMethod(SomeClass::OLD_CONSTANT);
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            , <<<'CODE_SAMPLE'
 $someObject = new SomeClass;
 $someObject->someMethod(false);
 CODE_SAMPLE
-, [new ReplaceArgumentDefaultValue('SomeClass', 'someMethod', 0, 'SomeClass::OLD_CONSTANT', \false)])]);
+            , [new ReplaceArgumentDefaultValue('SomeClass', 'someMethod', 0, 'SomeClass::OLD_CONSTANT', \false)])]);
     }
     /**
      * @return array<class-string<Node>>

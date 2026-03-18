@@ -1,9 +1,11 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Transform\ValueObject;
 
 use Rector\Validation\RectorAssert;
+
 final class ConstFetchToClassConstFetch
 {
     /**

@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclarationDocblocks\Rector\ClassMethod;
 
 use PhpParser\Node;
@@ -21,6 +22,7 @@ use Rector\TypeDeclarationDocblocks\TagNodeAnalyzer\UsefulArrayTagNodeAnalyzer;
 use Rector\TypeDeclarationDocblocks\TypeResolver\ConstantArrayTypeGeneralizer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\TypeDeclarationDocblocks\Rector\ClassMethod\AddReturnDocblockForDimFetchArrayFromAssignsRector\AddReturnDocblockForDimFetchArrayFromAssignsRectorTest
  */
@@ -56,7 +58,8 @@ final class AddReturnDocblockForDimFetchArrayFromAssignsRector extends AbstractR
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add @return docblock for methods returning array from dim fetch of assigned arrays', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add @return docblock for methods returning array from dim fetch of assigned arrays', [new CodeSample(
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function toArray(): array
@@ -75,7 +78,8 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     /**
@@ -97,7 +101,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     public function getNodeTypes(): array
     {

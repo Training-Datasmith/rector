@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php72\Rector\FuncCall;
 
 use PhpParser\Node;
@@ -13,6 +14,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php72\Rector\FuncCall\StringifyDefineRector\StringifyDefineRectorTest
  */
@@ -32,7 +34,8 @@ final class StringifyDefineRector extends AbstractRector implements MinPhpVersio
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Make first argument of define() string', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Make first argument of define() string', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run(int $a)
@@ -42,7 +45,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run(int $a)
@@ -52,7 +56,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

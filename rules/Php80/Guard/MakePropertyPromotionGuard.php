@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php80\Guard;
 
 use PhpParser\Node;
@@ -9,6 +10,7 @@ use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Php74\Guard\PropertyTypeChangeGuard;
+
 final class MakePropertyPromotionGuard
 {
     /**

@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\EarlyReturn\NodeTransformer;
 
 use PhpParser\Node\Expr;
@@ -8,6 +9,7 @@ use PhpParser\Node\Expr\BinaryOp;
 use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
 use PhpParser\Node\Expr\BooleanNot;
 use Rector\NodeManipulator\BinaryOpManipulator;
+
 final class ConditionInverter
 {
     /**

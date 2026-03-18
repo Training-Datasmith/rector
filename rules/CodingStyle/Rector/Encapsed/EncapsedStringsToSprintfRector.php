@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodingStyle\Rector\Encapsed;
 
-use RectorPrefix202603\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr;
@@ -19,8 +19,10 @@ use PHPStan\Type\Type;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
+use RectorPrefix202603\Nette\Utils\Strings;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodingStyle\Rector\Encapsed\EncapsedStringsToSprintfRector\EncapsedStringsToSprintfRectorTest
  */
@@ -55,22 +57,22 @@ echo "Unsupported format {$format} - use another";
 
 echo "Try {$allowed}";
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            , <<<'CODE_SAMPLE'
 echo sprintf('Unsupported format %s - use another', $format);
 
 echo 'Try ' . $allowed;
 CODE_SAMPLE
-, [self::ALWAYS => \false]), new ConfiguredCodeSample(<<<'CODE_SAMPLE'
+            , [self::ALWAYS => \false]), new ConfiguredCodeSample(<<<'CODE_SAMPLE'
 echo "Unsupported format {$format} - use another";
 
 echo "Try {$allowed}";
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+                , <<<'CODE_SAMPLE'
 echo sprintf('Unsupported format %s - use another', $format);
 
 echo sprintf('Try %s', $allowed);
 CODE_SAMPLE
-, [self::ALWAYS => \true])]);
+                , [self::ALWAYS => \true])]);
     }
     /**
      * @return array<class-string<Node>>

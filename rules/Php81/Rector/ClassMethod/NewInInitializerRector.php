@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php81\Rector\ClassMethod;
 
 use PhpParser\Node;
@@ -22,6 +23,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php81\Rector\ClassMethod\NewInInitializerRector\NewInInitializerRectorTest
  */
@@ -52,7 +54,8 @@ final class NewInInitializerRector extends AbstractRector implements MinPhpVersi
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Replace property declaration of new state with direct new', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replace property declaration of new state with direct new', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     private Logger $logger;
@@ -64,7 +67,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function __construct(
@@ -73,7 +77,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>
@@ -171,7 +175,7 @@ CODE_SAMPLE
         if ($classMethod->stmts === null || $classMethod->stmts === []) {
             return [];
         }
-        $params = array_filter($classMethod->params, static fn(Param $param): bool => $param->type instanceof NullableType);
+        $params = array_filter($classMethod->params, static fn (Param $param): bool => $param->type instanceof NullableType);
         if ($params === []) {
             return $params;
         }

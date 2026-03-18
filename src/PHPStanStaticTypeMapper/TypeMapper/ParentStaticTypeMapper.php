@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
 
 use PhpParser\Node\Name;
@@ -9,6 +10,7 @@ use PHPStan\Type\Type;
 use Rector\Enum\ObjectReference;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\StaticTypeMapper\ValueObject\Type\ParentStaticType;
+
 /**
  * @implements TypeMapperInterface<ParentStaticType>
  */

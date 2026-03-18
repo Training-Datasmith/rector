@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php74\NodeAnalyzer;
 
 use PhpParser\Node;
@@ -17,6 +18,7 @@ use Rector\NodeAnalyzer\CompactFuncCallAnalyzer;
 use Rector\PhpParser\Comparing\NodeComparator;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Util\ArrayChecker;
+
 final class ClosureArrowFunctionAnalyzer
 {
     /**
@@ -74,7 +76,7 @@ final class ClosureArrowFunctionAnalyzer
     }
     private function shouldSkipForUseVariableUsedByCompact(Closure $closure): bool
     {
-        $variables = array_map(fn(ClosureUse $use): Variable => $use->var, $closure->uses);
+        $variables = array_map(fn (ClosureUse $use): Variable => $use->var, $closure->uses);
         if ($variables === []) {
             return \false;
         }
@@ -132,7 +134,7 @@ final class ClosureArrowFunctionAnalyzer
                 return \false;
             }
             foreach ($referencedValues as $referencedValue) {
-                $isFoundInInnerUses = $this->arrayChecker->doesExist($subNode->uses, fn(ClosureUse $closureUse): bool => $closureUse->byRef && $this->nodeComparator->areNodesEqual($closureUse->var, $referencedValue));
+                $isFoundInInnerUses = $this->arrayChecker->doesExist($subNode->uses, fn (ClosureUse $closureUse): bool => $closureUse->byRef && $this->nodeComparator->areNodesEqual($closureUse->var, $referencedValue));
                 if ($isFoundInInnerUses) {
                     return \true;
                 }

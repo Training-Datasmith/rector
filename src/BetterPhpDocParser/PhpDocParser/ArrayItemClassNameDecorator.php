@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\BetterPhpDocParser\PhpDocParser;
 
 use PhpParser\Node as PhpNode;
@@ -11,6 +12,7 @@ use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\PhpDocParser\PhpDocParser\PhpDocNodeTraverser;
 use Rector\StaticTypeMapper\Naming\NameScopeFactory;
+
 /**
  * Decorate node with fully qualified class name for annotation:
  * e.g. @ORM\Column(type=Types::STRING, length=100, nullable=false)

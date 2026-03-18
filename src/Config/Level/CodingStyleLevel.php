@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Config\Level;
 
 use Rector\CodingStyle\Rector\Assign\SplitDoubleAssignRector;
@@ -33,6 +34,7 @@ use Rector\Contract\Rector\RectorInterface;
 use Rector\Php55\Rector\String_\StringClassNameToClassConstantRector;
 use Rector\Transform\Rector\FuncCall\FuncCallToConstFetchRector;
 use Rector\Visibility\Rector\ClassMethod\ExplicitPublicClassMethodRector;
+
 /**
  * Key 0 = level 0
  * Key 50 = level 50

@@ -5,13 +5,15 @@
  * - https://github.com/codeclimate/platform/blob/master/spec/analyzers/SPEC.md
  */
 declare (strict_types=1);
+
 namespace Rector\ChangesReporting\Output;
 
-use RectorPrefix202603\Nette\Utils\Json;
 use Rector\ChangesReporting\Contract\Output\OutputFormatterInterface;
 use Rector\Util\FileHasher;
 use Rector\ValueObject\Configuration;
 use Rector\ValueObject\ProcessResult;
+use RectorPrefix202603\Nette\Utils\Json;
+
 final class GitlabOutputFormatter implements OutputFormatterInterface
 {
     /**

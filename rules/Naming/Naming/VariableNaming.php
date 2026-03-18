@@ -1,9 +1,11 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Naming\Naming;
 
 use PHPStan\Analyser\Scope;
+
 /**
  * @api used in downgrade
  */

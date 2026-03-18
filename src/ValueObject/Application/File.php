@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\ValueObject\Application;
 
 use PhpParser\Node;
@@ -13,6 +14,7 @@ use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\PhpParser\Node\FileNode;
 use Rector\ValueObject\Reporting\FileDiff;
+
 final class File
 {
     /**

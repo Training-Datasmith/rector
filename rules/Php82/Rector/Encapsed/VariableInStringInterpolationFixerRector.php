@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php82\Rector\Encapsed;
 
 use PhpParser\Node;
@@ -13,6 +14,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php82\Rector\Encapsed\VariableInStringInterpolationFixerRector\VariableInStringInterpolationFixerRectorTest
  */
@@ -20,15 +22,17 @@ final class VariableInStringInterpolationFixerRector extends AbstractRector impl
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Replace deprecated `${var}` to `{$var}`', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replace deprecated `${var}` to `{$var}`', [new CodeSample(
+            <<<'CODE_SAMPLE'
 $c = "football";
 echo "I like playing ${c}";
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 $c = "football";
 echo "I like playing {$c}";
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php72\Rector\FuncCall;
 
 use PhpParser\Node;
@@ -25,6 +26,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php72\Rector\FuncCall\CreateFunctionToAnonymousFunctionRector\CreateFunctionToAnonymousFunctionRectorTest
  */
@@ -54,7 +56,8 @@ final class CreateFunctionToAnonymousFunctionRector extends AbstractRector imple
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Use anonymous functions instead of deprecated create_function()', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Use anonymous functions instead of deprecated create_function()', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class ClassWithCreateFunction
 {
     public function run()
@@ -63,7 +66,8 @@ class ClassWithCreateFunction
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class ClassWithCreateFunction
 {
     public function run()
@@ -74,7 +78,7 @@ class ClassWithCreateFunction
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

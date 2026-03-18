@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodeQuality\Rector\If_;
 
 use PhpParser\Node;
@@ -13,6 +14,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodeQuality\Rector\If_\ShortenElseIfRector\ShortenElseIfRectorTest
  */
@@ -20,7 +22,8 @@ final class ShortenElseIfRector extends AbstractRector implements HTMLAverseRect
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Shorten `else`/`if` to `elseif`', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Shorten `else`/`if` to `elseif`', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -35,7 +38,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -48,7 +52,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

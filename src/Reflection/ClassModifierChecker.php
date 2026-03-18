@@ -1,10 +1,12 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Reflection;
 
 use PhpParser\Node;
 use PHPStan\Reflection\ClassReflection;
+
 final class ClassModifierChecker
 {
     /**

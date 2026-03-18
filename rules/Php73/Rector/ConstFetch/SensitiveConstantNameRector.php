@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php73\Rector\ConstFetch;
 
 use PhpParser\Node;
@@ -13,6 +14,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php73\Rector\ConstFetch\SensitiveConstantNameRector\SensitiveConstantNameRectorTest
  */
@@ -37,17 +39,19 @@ final class SensitiveConstantNameRector extends AbstractRector implements MinPhp
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change case insensitive constants to sensitive ones', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change case insensitive constants to sensitive ones', [new CodeSample(
+            <<<'CODE_SAMPLE'
 define('FOO', 42, true);
 var_dump(FOO);
 var_dump(foo);
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 define('FOO', 42, true);
 var_dump(FOO);
 var_dump(FOO);
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

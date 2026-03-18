@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\NodeAnalyzer;
 
 use PhpParser\Node\Param;
@@ -9,7 +10,7 @@ use PhpParser\Node\Stmt\Property;
 use Rector\CodeQuality\ValueObject\DefinedPropertyWithType;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Php80\NodeAnalyzer\PromotedPropertyResolver;
-use Rector\PostRector\ValueObject\PropertyMetadata;
+
 /**
  * Can be local property, parent property etc.
  */

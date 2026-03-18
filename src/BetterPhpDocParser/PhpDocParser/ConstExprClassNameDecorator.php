@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\BetterPhpDocParser\PhpDocParser;
 
 use PhpParser\Node as PhpNode;
@@ -11,6 +12,7 @@ use Rector\BetterPhpDocParser\Contract\PhpDocParser\PhpDocNodeDecoratorInterface
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\PhpDocParser\PhpDocParser\PhpDocNodeTraverser;
 use Rector\StaticTypeMapper\Naming\NameScopeFactory;
+
 /**
  * Decorate node with fully qualified class name for const epxr,
  * e.g. Direction::*

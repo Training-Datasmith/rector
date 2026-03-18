@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php85\Rector\FuncCall;
 
 use PhpParser\Node;
@@ -20,6 +21,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see https://wiki.php.net/rfc/deprecations_php_8_5#deprecate_using_values_null_as_an_array_offset_and_when_calling_array_key_exists
  * @see \Rector\Tests\Php85\Rector\FuncCall\ArrayKeyExistsNullToEmptyStringRector\ArrayKeyExistsNullToEmptyStringRectorTest
@@ -46,13 +48,15 @@ final class ArrayKeyExistsNullToEmptyStringRector extends AbstractRector impleme
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Replace null key in array_key_exists with empty string', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replace null key in array_key_exists with empty string', [new CodeSample(
+            <<<'CODE_SAMPLE'
 array_key_exists(null, $array);
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 array_key_exists('', $array);
 CODE_SAMPLE
-)]);
+        )]);
     }
     public function getNodeTypes(): array
     {

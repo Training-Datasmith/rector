@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\NodeAnalyzer;
 
 use PhpParser\Node;
@@ -14,6 +15,7 @@ use PHPStan\Type\UnionType;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\VendorLocker\NodeVendorLocker\ClassMethodParamVendorLockResolver;
+
 final class ClassMethodParamTypeCompleter
 {
     /**

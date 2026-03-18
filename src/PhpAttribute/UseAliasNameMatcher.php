@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PhpAttribute;
 
 use PhpParser\Node\Identifier;
@@ -9,6 +10,7 @@ use PhpParser\Node\UseItem;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php80\Contract\ValueObject\AnnotationToAttributeInterface;
 use Rector\PhpAttribute\ValueObject\UseAliasMetadata;
+
 /**
  * @see \Rector\Tests\PhpAttribute\UseAliasNameMatcherTest
  */

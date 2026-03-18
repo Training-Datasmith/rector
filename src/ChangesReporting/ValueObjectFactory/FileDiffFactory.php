@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\ChangesReporting\ValueObjectFactory;
 
 use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
@@ -9,6 +10,7 @@ use Rector\Differ\DefaultDiffer;
 use Rector\FileSystem\FilePathHelper;
 use Rector\ValueObject\Application\File;
 use Rector\ValueObject\Reporting\FileDiff;
+
 final class FileDiffFactory
 {
     /**

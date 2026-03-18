@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php80\Rector\Ternary;
 
 use PhpParser\Node;
@@ -16,6 +17,7 @@ use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Rector\VersionBonding\Contract\RelatedPolyfillInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php80\Rector\Ternary\GetDebugTypeRector\GetDebugTypeRectorTest
  */
@@ -27,7 +29,8 @@ final class GetDebugTypeRector extends AbstractRector implements MinPhpVersionIn
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change ternary type resolve to get_debug_type()', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change ternary type resolve to get_debug_type()', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($value)
@@ -36,7 +39,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($value)
@@ -45,7 +49,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

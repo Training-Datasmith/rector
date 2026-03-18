@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php85\Rector\FuncCall;
 
 use PhpParser\Node;
@@ -14,6 +15,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see https://wiki.php.net/rfc/deprecations_php_8_5#deprecate_the_context_parameter_for_finfo_buffer
  * @see \Rector\Tests\Php85\Rector\FuncCall\RemoveFinfoBufferContextArgRector\RemoveFinfoBufferContextArgRectorTest
@@ -30,13 +32,15 @@ final class RemoveFinfoBufferContextArgRector extends AbstractRector implements 
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Remove argument by position by function name', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove argument by position by function name', [new CodeSample(
+            <<<'CODE_SAMPLE'
 finfo_buffer($finfo, $fileContents, FILEINFO_NONE, []);
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 finfo_buffer($finfo, $fileContents, FILEINFO_NONE);
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

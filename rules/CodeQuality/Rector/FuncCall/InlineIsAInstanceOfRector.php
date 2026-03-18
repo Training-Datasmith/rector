@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodeQuality\Rector\FuncCall;
 
 use PhpParser\Node;
@@ -17,6 +18,7 @@ use Rector\Rector\AbstractRector;
 use Rector\StaticTypeMapper\Resolver\ClassNameFromObjectTypeResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodeQuality\Rector\FuncCall\InlineIsAInstanceOfRector\InlineIsAInstanceOfRectorTest
  */
@@ -24,7 +26,8 @@ final class InlineIsAInstanceOfRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change `is_a()` with object and class name check to `instanceof`', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change `is_a()` with object and class name check to `instanceof`', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run(object $object)
@@ -33,7 +36,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run(object $object)
@@ -42,7 +46,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

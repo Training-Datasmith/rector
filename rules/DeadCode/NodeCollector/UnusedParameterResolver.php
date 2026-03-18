@@ -1,11 +1,13 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\DeadCode\NodeCollector;
 
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\ClassMethod;
 use Rector\NodeAnalyzer\ParamAnalyzer;
+
 final class UnusedParameterResolver
 {
     /**

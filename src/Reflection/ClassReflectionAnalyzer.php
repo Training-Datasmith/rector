@@ -1,10 +1,12 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Reflection;
 
 use PHPStan\Reflection\ClassReflection;
 use ReflectionEnum;
+
 final class ClassReflectionAnalyzer
 {
     public function resolveParentClassName(ClassReflection $classReflection): ?string

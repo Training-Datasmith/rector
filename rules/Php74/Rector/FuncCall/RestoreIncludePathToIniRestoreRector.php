@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php74\Rector\FuncCall;
 
 use PhpParser\Node;
@@ -13,6 +14,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see https://3v4l.org/Kcs98
  * @see \Rector\Tests\Php74\Rector\FuncCall\RestoreIncludePathToIniRestoreRector\RestoreIncludePathToIniRestoreRectorTest
@@ -25,13 +27,15 @@ final class RestoreIncludePathToIniRestoreRector extends AbstractRector implemen
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change restore_include_path() to ini_restore("include_path")', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change restore_include_path() to ini_restore("include_path")', [new CodeSample(
+            <<<'CODE_SAMPLE'
 restore_include_path();
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 ini_restore('include_path');
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

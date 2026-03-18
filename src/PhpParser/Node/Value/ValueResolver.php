@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PhpParser\Node\Value;
 
 use ArithmeticError;
@@ -34,6 +35,7 @@ use Rector\Reflection\ClassReflectionAnalyzer;
 use Rector\Reflection\ReflectionResolver;
 use Rector\StaticTypeMapper\Resolver\ClassNameFromObjectTypeResolver;
 use TypeError;
+
 /**
  * @see \Rector\Tests\PhpParser\Node\Value\ValueResolverTest
  * @todo make use of constant type of $scope->getType()

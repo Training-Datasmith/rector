@@ -1,9 +1,11 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Console;
 
 use RectorPrefix202603\Symfony\Component\Console\Command\Command;
+
 /**
  * @api
  */

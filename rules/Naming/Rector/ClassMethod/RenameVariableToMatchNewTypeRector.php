@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Naming\Rector\ClassMethod;
 
 use PhpParser\Node;
@@ -15,6 +16,7 @@ use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Naming\Rector\ClassMethod\RenameVariableToMatchNewTypeRector\RenameVariableToMatchNewTypeRectorTest
  */
@@ -45,7 +47,8 @@ final class RenameVariableToMatchNewTypeRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Rename variable to match new ClassType', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Rename variable to match new ClassType', [new CodeSample(
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run()
@@ -55,7 +58,8 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run()
@@ -65,7 +69,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>
@@ -120,6 +124,6 @@ CODE_SAMPLE
     {
         /** @var Assign[] $assigns */
         $assigns = $this->betterNodeFinder->findInstanceOf((array) $classMethod->stmts, Assign::class);
-        return array_filter($assigns, static fn(Assign $assign): bool => $assign->expr instanceof New_);
+        return array_filter($assigns, static fn (Assign $assign): bool => $assign->expr instanceof New_);
     }
 }

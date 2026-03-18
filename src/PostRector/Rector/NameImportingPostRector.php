@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PostRector\Rector;
 
 use Override;
@@ -13,6 +14,7 @@ use PhpParser\Node\Stmt\Use_;
 use Rector\CodingStyle\Node\NameImporter;
 use Rector\Naming\Naming\UseImportsResolver;
 use Rector\PostRector\Guard\AddUseStatementGuard;
+
 final class NameImportingPostRector extends \Rector\PostRector\Rector\AbstractPostRector
 {
     /**

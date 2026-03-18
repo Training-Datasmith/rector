@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Removing\Rector\ClassMethod;
 
 use PhpParser\Node;
@@ -8,14 +9,14 @@ use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\VariadicPlaceholder;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Rector\Removing\ValueObject\ArgumentRemover;
+use RectorPrefix202603\Webmozart\Assert\Assert;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202603\Webmozart\Assert\Assert;
+
 /**
  * @see \Rector\Tests\Removing\Rector\ClassMethod\ArgumentRemoverRector\ArgumentRemoverRectorTest
  */
@@ -40,11 +41,11 @@ final class ArgumentRemoverRector extends AbstractRector implements Configurable
 $someObject = new SomeClass;
 $someObject->someMethod(true);
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            , <<<'CODE_SAMPLE'
 $someObject = new SomeClass;
 $someObject->someMethod();
 CODE_SAMPLE
-, [new ArgumentRemover('ExampleClass', 'someMethod', 0, [\true])])]);
+            , [new ArgumentRemover('ExampleClass', 'someMethod', 0, [\true])])]);
     }
     /**
      * @return array<class-string<Node>>

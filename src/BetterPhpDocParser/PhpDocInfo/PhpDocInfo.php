@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\BetterPhpDocParser\PhpDocInfo;
 
 use PHPStan\PhpDocParser\Ast\ConstExpr\ConstFetchNode;
@@ -34,6 +35,7 @@ use Rector\BetterPhpDocParser\ValueObject\Type\ShortenedIdentifierTypeNode;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\PhpDocParser\PhpDocParser\PhpDocNodeTraverser;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+
 /**
  * @see \Rector\Tests\BetterPhpDocParser\PhpDocInfo\PhpDocInfo\PhpDocInfoTest
  */
@@ -128,7 +130,7 @@ final class PhpDocInfo
         }
         $tags = $this->phpDocNode->getTags();
         $name = $this->annotationNaming->normalizeName($name);
-        $tags = array_filter($tags, static fn(PhpDocTagNode $phpDocTagNode): bool => $phpDocTagNode->name === $name);
+        $tags = array_filter($tags, static fn (PhpDocTagNode $phpDocTagNode): bool => $phpDocTagNode->name === $name);
         return array_values($tags);
     }
     public function getParamType(string $name): Type

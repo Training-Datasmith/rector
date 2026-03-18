@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php84\Rector\FuncCall;
 
 use PhpParser\Node;
@@ -13,6 +14,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php84\Rector\FuncCall\RoundingModeEnumRector\RoundingModeEnumRectorTest
  */
@@ -20,13 +22,15 @@ final class RoundingModeEnumRector extends AbstractRector implements MinPhpVersi
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Replace rounding mode constant to RoundMode enum in `round()`', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replace rounding mode constant to RoundMode enum in `round()`', [new CodeSample(
+            <<<'CODE_SAMPLE'
 round(1.5, 0, PHP_ROUND_HALF_UP);
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 round(1.5, 0, RoundingMode::HalfAwayFromZero);
 CODE_SAMPLE
-)]);
+        )]);
     }
     public function getNodeTypes(): array
     {

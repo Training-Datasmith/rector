@@ -1,14 +1,16 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Configuration;
 
-use RectorPrefix202603\Nette\Utils\FileSystem;
 use Rector\Bootstrap\RectorConfigsResolver;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\FileSystem\InitFilePathsResolver;
 use Rector\PostRector\Contract\Rector\PostRectorInterface;
+use RectorPrefix202603\Nette\Utils\FileSystem;
 use RectorPrefix202603\Symfony\Component\Console\Style\SymfonyStyle;
+
 final class ConfigInitializer
 {
     /**
@@ -67,7 +69,7 @@ final class ConfigInitializer
      */
     private function filterActiveRectors(array $rectors): array
     {
-        return array_filter($rectors, static fn(RectorInterface $rector): bool => !$rector instanceof PostRectorInterface);
+        return array_filter($rectors, static fn (RectorInterface $rector): bool => !$rector instanceof PostRectorInterface);
     }
     private function replacePathsContents(string $rectorPhpTemplateContents, string $projectDirectory): string
     {

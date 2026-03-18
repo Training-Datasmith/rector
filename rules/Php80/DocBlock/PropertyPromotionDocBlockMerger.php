@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php80\DocBlock;
 
 use PhpParser\Comment;
@@ -17,6 +18,7 @@ use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\DeadCode\PhpDoc\TagRemover\VarTagRemover;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+
 final class PropertyPromotionDocBlockMerger
 {
     /**
@@ -93,6 +95,6 @@ final class PropertyPromotionDocBlockMerger
      */
     private function removeEmptyComments(array $mergedComments): array
     {
-        return array_filter($mergedComments, static fn(Comment $comment): bool => $comment->getText() !== '');
+        return array_filter($mergedComments, static fn (Comment $comment): bool => $comment->getText() !== '');
     }
 }

@@ -1,12 +1,14 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Util\Reflection;
 
 use Rector\Exception\Reflection\MissingPrivatePropertyException;
 use ReflectionClass;
 use ReflectionMethod;
 use ReflectionProperty;
+
 /**
  * @see \Rector\Tests\Util\Reflection\PrivatesAccessorTest
  */

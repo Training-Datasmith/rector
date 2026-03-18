@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\NodeAnalyzer;
 
 use PhpParser\Node\Arg;
@@ -10,6 +11,7 @@ use PHPStan\Reflection\ExtendedParameterReflection;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\PHPStan\ParametersAcceptorSelectorVariantsWrapper;
 use Rector\Reflection\ReflectionResolver;
+
 final class CallLikeExpectsThisBoundClosureArgsAnalyzer
 {
     /**
@@ -29,7 +31,7 @@ final class CallLikeExpectsThisBoundClosureArgsAnalyzer
             return [];
         }
         $callArgs = $callLike->getArgs();
-        $hasClosureArg = (bool) array_filter($callArgs, fn(Arg $arg): bool => $arg->value instanceof Closure);
+        $hasClosureArg = (bool) array_filter($callArgs, fn (Arg $arg): bool => $arg->value instanceof Closure);
         if (!$hasClosureArg) {
             return [];
         }

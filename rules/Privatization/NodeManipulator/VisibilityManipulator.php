@@ -1,16 +1,16 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Privatization\NodeManipulator;
 
 use PhpParser\Modifiers;
 use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassConst;
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Property;
 use Rector\ValueObject\Visibility;
 use RectorPrefix202603\Webmozart\Assert\Assert;
+
 /**
  * @see \Rector\Tests\Privatization\NodeManipulator\VisibilityManipulatorTest
  */

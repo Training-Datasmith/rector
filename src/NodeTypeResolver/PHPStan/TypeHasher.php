@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\NodeTypeResolver\PHPStan;
 
 use PHPStan\Type\ArrayType;
@@ -14,6 +15,7 @@ use PHPStan\Type\VerbosityLevel;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
 use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
+
 final class TypeHasher
 {
     public function areTypesEqual(Type $firstType, Type $secondType): bool

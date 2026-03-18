@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodingStyle\Rector\ClassMethod;
 
 use PhpParser\Node;
@@ -13,6 +14,7 @@ use Rector\Reflection\ReflectionResolver;
 use ReflectionMethod;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodingStyle\Rector\ClassMethod\MakeInheritedMethodVisibilitySameAsParentRector\MakeInheritedMethodVisibilitySameAsParentRectorTest
  */
@@ -33,7 +35,8 @@ final class MakeInheritedMethodVisibilitySameAsParentRector extends AbstractRect
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Make method visibility same as parent one', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Make method visibility same as parent one', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class ChildClass extends ParentClass
 {
     public function run()
@@ -48,7 +51,8 @@ class ParentClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class ChildClass extends ParentClass
 {
     protected function run()
@@ -63,7 +67,7 @@ class ParentClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

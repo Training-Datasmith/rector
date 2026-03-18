@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\Rector\Class_;
 
 use PhpParser\Node;
@@ -16,6 +17,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\Class_\MergeDateTimePropertyTypeDeclarationRector\MergeDateTimePropertyTypeDeclarationRectorTest
  */
@@ -36,7 +38,8 @@ final class MergeDateTimePropertyTypeDeclarationRector extends AbstractRector im
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Set DateTime to DateTimeInterface for DateTime property with DateTimeInterface docblock', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Set DateTime to DateTimeInterface for DateTime property with DateTimeInterface docblock', [new CodeSample(
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     /**
@@ -45,13 +48,14 @@ final class SomeClass
     private DateTime $dateTime;
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     private DateTimeInterface $dateTime;
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

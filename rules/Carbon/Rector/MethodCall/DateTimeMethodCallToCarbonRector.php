@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Carbon\Rector\MethodCall;
 
 use PhpParser\Node;
@@ -13,6 +14,7 @@ use Rector\Carbon\NodeFactory\CarbonCallFactory;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Carbon\Rector\MethodCall\DateTimeMethodCallToCarbonRector\DateTimeMethodCallToCarbonRectorTest
  */
@@ -28,7 +30,8 @@ final class DateTimeMethodCallToCarbonRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Convert `new DateTime()` with a method call to `Carbon::*()`', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Convert `new DateTime()` with a method call to `Carbon::*()`', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -37,7 +40,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -46,7 +50,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

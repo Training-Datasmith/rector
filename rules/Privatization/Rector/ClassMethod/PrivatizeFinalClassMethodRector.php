@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Privatization\Rector\ClassMethod;
 
 use PhpParser\Node;
@@ -18,6 +19,7 @@ use Rector\Privatization\VisibilityGuard\ClassMethodVisibilityGuard;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Privatization\Rector\ClassMethod\PrivatizeFinalClassMethodRector\PrivatizeFinalClassMethodRectorTest
  */
@@ -58,7 +60,8 @@ final class PrivatizeFinalClassMethodRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change protected class method to private if possible', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change protected class method to private if possible', [new CodeSample(
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     protected function someMethod()
@@ -66,7 +69,8 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     private function someMethod()
@@ -74,7 +78,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

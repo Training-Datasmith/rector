@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PostRector\Rector;
 
 use PhpParser\Node;
@@ -12,6 +13,7 @@ use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
 use Rector\PhpParser\Node\FileNode;
 use Rector\PostRector\Collector\UseNodesToAddCollector;
 use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
+
 final class UseAddingPostRector extends \Rector\PostRector\Rector\AbstractPostRector
 {
     /**

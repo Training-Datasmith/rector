@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\DeadCode\Rector\ClassMethod;
 
 use PhpParser\Node;
@@ -13,6 +14,7 @@ use Rector\Rector\AbstractRector;
 use Rector\ValueObject\MethodName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\DeadCode\Rector\ClassMethod\RemoveVoidDocblockFromMagicMethodRector\RemoveVoidDocblockFromMagicMethodRectorTest
  */
@@ -33,7 +35,8 @@ final class RemoveVoidDocblockFromMagicMethodRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Remove useless @return void docblock from magic methods __construct, __destruct, and __clone', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove useless @return void docblock from magic methods __construct, __destruct, and __clone', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -52,7 +55,8 @@ class SomeClass
     public function __clone() {}
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function __construct() {}
@@ -62,7 +66,7 @@ class SomeClass
     public function __clone() {}
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     public function getNodeTypes(): array
     {

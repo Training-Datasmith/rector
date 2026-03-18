@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php80\Rector\Switch_;
 
 use PhpParser\Node;
@@ -28,6 +29,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php80\Rector\Switch_\ChangeSwitchToMatchRector\ChangeSwitchToMatchRectorTest
  */
@@ -63,7 +65,8 @@ final class ChangeSwitchToMatchRector extends AbstractRector implements MinPhpVe
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change `switch()` to `match()`', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change `switch()` to `match()`', [new CodeSample(
+            <<<'CODE_SAMPLE'
 switch ($input) {
     case Lexer::T_SELECT:
         $statement = 'select';
@@ -75,14 +78,15 @@ switch ($input) {
         $statement = 'error';
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 $statement = match ($input) {
     Lexer::T_SELECT => 'select',
     Lexer::T_UPDATE => 'update',
     default => 'error',
 };
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

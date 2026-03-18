@@ -1,11 +1,13 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Naming\PhpDoc;
 
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
+
 final class VarTagValueNodeRenamer
 {
     public function renameAssignVarTagVariableName(PhpDocInfo $phpDocInfo, string $originalName, string $expectedName): void

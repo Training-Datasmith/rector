@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodeQuality\Rector\FuncCall;
 
 use PhpParser\Node;
@@ -13,6 +14,7 @@ use Rector\Exception\ShouldNotHappenException;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @deprecated as renamed to SortCallLikeNamedArgsRector
  */
@@ -20,17 +22,19 @@ final class SortNamedParamRector extends AbstractRector implements DeprecatedInt
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Sort named arguments to match their order in a function or method call or class constructors', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Sort named arguments to match their order in a function or method call or class constructors', [new CodeSample(
+            <<<'CODE_SAMPLE'
 function run($foo = null, $bar = null, $baz = null) {}
 
 run(bar: $bar, foo: $foo);
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 function run($foo = null, $bar = null, $baz = null) {}
 
 run(foo: $foo, bar: $bar);
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

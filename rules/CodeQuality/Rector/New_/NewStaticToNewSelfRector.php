@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodeQuality\Rector\New_;
 
 use PhpParser\Node;
@@ -12,6 +13,7 @@ use Rector\Enum\ObjectReference;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodeQuality\Rector\New_\NewStaticToNewSelfRector\NewStaticToNewSelfRectorTest
  */
@@ -19,7 +21,8 @@ final class NewStaticToNewSelfRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change unsafe `new static()` to `new self()`', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change unsafe `new static()` to `new self()`', [new CodeSample(
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function build()
@@ -28,7 +31,8 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function build()
@@ -37,7 +41,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php85\Rector\Expression;
 
 use PhpParser\Node;
@@ -17,6 +18,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php85\Rector\Expression\NestedFuncCallsToPipeOperatorRector\NestedFuncCallsToPipeOperatorRectorTest
  */
@@ -24,7 +26,8 @@ final class NestedFuncCallsToPipeOperatorRector extends AbstractRector implement
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Convert multiple nested function calls in single line to |> pipe operator', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Convert multiple nested function calls in single line to |> pipe operator', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($input)
@@ -33,7 +36,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($input)
@@ -45,7 +49,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     public function getNodeTypes(): array
     {

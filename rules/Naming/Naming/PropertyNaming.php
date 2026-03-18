@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Naming\Naming;
 
-use RectorPrefix202603\Nette\Utils\Strings;
 use PhpParser\Node\Name;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\ObjectType;
@@ -18,6 +18,8 @@ use Rector\Naming\ValueObject\ExpectedName;
 use Rector\StaticTypeMapper\Resolver\ClassNameFromObjectTypeResolver;
 use Rector\StaticTypeMapper\ValueObject\Type\SelfObjectType;
 use Rector\Util\StringUtils;
+use RectorPrefix202603\Nette\Utils\Strings;
+
 /**
  * @see \Rector\Tests\Naming\Naming\PropertyNamingTest
  */

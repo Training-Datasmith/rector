@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Transform\ValueObject;
 
 use PhpParser\Node\Expr\StaticCall;
@@ -8,6 +9,7 @@ use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PHPStan\Type\ObjectType;
 use Rector\Validation\RectorAssert;
+
 final class StaticCallToMethodCall
 {
     /**

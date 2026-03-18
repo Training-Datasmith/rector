@@ -1,10 +1,12 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Console\Output;
 
 use Rector\ChangesReporting\Contract\Output\OutputFormatterInterface;
 use Rector\Exception\Configuration\InvalidConfigurationException;
+
 final class OutputFormatterCollector
 {
     /**

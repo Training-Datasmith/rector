@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php83\Rector\BooleanAnd;
 
 use PhpParser\Node;
@@ -22,6 +23,7 @@ use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Rector\VersionBonding\Contract\RelatedPolyfillInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php83\Rector\BooleanAnd\JsonValidateRector\JsonValidateRectorTest
  */
@@ -50,16 +52,18 @@ final class JsonValidateRector extends AbstractRector implements MinPhpVersionIn
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Replace json_decode($json, true) !== null && json_last_error() === JSON_ERROR_NONE  with json_validate()', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replace json_decode($json, true) !== null && json_last_error() === JSON_ERROR_NONE  with json_validate()', [new CodeSample(
+            <<<'CODE_SAMPLE'
 if (json_decode($json, true) !== null && json_last_error() === JSON_ERROR_NONE) {
 }
 
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 if (json_validate($json)) {
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>
@@ -107,7 +111,7 @@ CODE_SAMPLE
         if (!$booleanAnd->left instanceof NotIdentical) {
             return null;
         }
-        $decodeMatch = $this->binaryOpManipulator->matchFirstAndSecondConditionNode($booleanAnd->left, fn(Node $node): bool => $node instanceof FuncCall && $this->isName($node->name, 'json_decode'), fn(Node $node): bool => $node instanceof ConstFetch && $this->isName($node->name, 'null'));
+        $decodeMatch = $this->binaryOpManipulator->matchFirstAndSecondConditionNode($booleanAnd->left, fn (Node $node): bool => $node instanceof FuncCall && $this->isName($node->name, 'json_decode'), fn (Node $node): bool => $node instanceof ConstFetch && $this->isName($node->name, 'null'));
         if (!$decodeMatch instanceof TwoNodeMatch) {
             return null;
         }
@@ -115,7 +119,7 @@ CODE_SAMPLE
         if (!$booleanAnd->right instanceof Identical) {
             return null;
         }
-        $errorMatch = $this->binaryOpManipulator->matchFirstAndSecondConditionNode($booleanAnd->right, fn(Node $node): bool => $node instanceof FuncCall && $this->isName($node->name, 'json_last_error'), fn(Node $node): bool => $node instanceof ConstFetch && $this->isName($node->name, 'JSON_ERROR_NONE'));
+        $errorMatch = $this->binaryOpManipulator->matchFirstAndSecondConditionNode($booleanAnd->right, fn (Node $node): bool => $node instanceof FuncCall && $this->isName($node->name, 'json_last_error'), fn (Node $node): bool => $node instanceof ConstFetch && $this->isName($node->name, 'JSON_ERROR_NONE'));
         if (!$errorMatch instanceof TwoNodeMatch) {
             return null;
         }

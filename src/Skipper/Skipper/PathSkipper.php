@@ -1,10 +1,12 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Skipper\Skipper;
 
 use Rector\Skipper\Matcher\FileInfoMatcher;
 use Rector\Skipper\SkipCriteriaResolver\SkippedPathsResolver;
+
 final class PathSkipper
 {
     /**

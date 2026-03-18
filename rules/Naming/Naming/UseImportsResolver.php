@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Naming\Naming;
 
 use PhpParser\Node\Stmt\GroupUse;
@@ -8,6 +9,7 @@ use PhpParser\Node\Stmt\Use_;
 use Rector\Application\Provider\CurrentFileProvider;
 use Rector\PhpParser\Node\FileNode;
 use Rector\ValueObject\Application\File;
+
 final class UseImportsResolver
 {
     /**

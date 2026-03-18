@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\NodeManipulator;
 
 use PhpParser\Node\Expr\Assign;
@@ -9,6 +10,7 @@ use PhpParser\Node\Stmt\Expression;
 use PHPStan\Type\Type;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PhpParser\Node\NodeFactory;
+
 final class ClassMethodAssignManipulator
 {
     /**

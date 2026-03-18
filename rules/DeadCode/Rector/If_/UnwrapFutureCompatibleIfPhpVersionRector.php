@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\DeadCode\Rector\If_;
 
 use PhpParser\Node;
@@ -15,6 +16,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\DeadCode\Rector\If_\UnwrapFutureCompatibleIfPhpVersionRector\UnwrapFutureCompatibleIfPhpVersionRectorTest
  */
@@ -35,7 +37,8 @@ final class UnwrapFutureCompatibleIfPhpVersionRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Remove php version checks if they are passed', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove php version checks if they are passed', [new CodeSample(
+            <<<'CODE_SAMPLE'
 // current PHP: 7.2
 if (version_compare(PHP_VERSION, '7.2', '<')) {
     return 'is PHP 7.1-';
@@ -43,11 +46,12 @@ if (version_compare(PHP_VERSION, '7.2', '<')) {
     return 'is PHP 7.2+';
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 // current PHP: 7.2
 return 'is PHP 7.2+';
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

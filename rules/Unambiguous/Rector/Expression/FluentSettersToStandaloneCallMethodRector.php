@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Unambiguous\Rector\Expression;
 
 use PhpParser\Node;
@@ -21,6 +22,7 @@ use Rector\Rector\AbstractRector;
 use Rector\Unambiguous\NodeAnalyzer\FluentMethodCallsCollector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @experimental since 2025-11
  *
@@ -43,7 +45,8 @@ final class FluentSettersToStandaloneCallMethodRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change fluent setter chain calls, to standalone line of setters', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change fluent setter chain calls, to standalone line of setters', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -54,7 +57,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -67,7 +71,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

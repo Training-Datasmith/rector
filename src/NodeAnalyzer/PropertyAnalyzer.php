@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\NodeAnalyzer;
 
 use PhpParser\Node\Stmt\Property;
@@ -9,6 +10,7 @@ use PHPStan\Type\UnionType;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\StaticTypeMapper\Resolver\ClassNameFromObjectTypeResolver;
 use Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType;
+
 final class PropertyAnalyzer
 {
     /**

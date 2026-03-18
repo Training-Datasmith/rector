@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php81\Rector\MethodCall;
 
 use PhpParser\Node;
@@ -13,6 +14,7 @@ use Rector\ValueObject\PhpVersion;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * As of PHP 8.1.0, calling `Reflection*::setAccessible()` has no effect.
  *
@@ -48,7 +50,8 @@ final class RemoveReflectionSetAccessibleCallsRector extends AbstractRector impl
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Remove Reflection::setAccessible() calls', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove Reflection::setAccessible() calls', [new CodeSample(
+            <<<'CODE_SAMPLE'
 $reflectionProperty = new ReflectionProperty($object, 'property');
 $reflectionProperty->setAccessible(true);
 $value = $reflectionProperty->getValue($object);
@@ -57,14 +60,15 @@ $reflectionMethod = new ReflectionMethod($object, 'method');
 $reflectionMethod->setAccessible(false);
 $reflectionMethod->invoke($object);
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 $reflectionProperty = new ReflectionProperty($object, 'property');
 $value = $reflectionProperty->getValue($object);
 
 $reflectionMethod = new ReflectionMethod($object, 'method');
 $reflectionMethod->invoke($object);
 CODE_SAMPLE
-)]);
+        )]);
     }
     public function provideMinPhpVersion(): int
     {

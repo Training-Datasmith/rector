@@ -1,26 +1,21 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php72\NodeFactory;
 
-use RectorPrefix202603\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\ClosureUse;
-use PhpParser\Node\ComplexType;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrayDimFetch;
 use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
-use PhpParser\Node\NullableType;
 use PhpParser\Node\Param;
 use PhpParser\Node\Scalar\Int_;
 use PhpParser\Node\Scalar\String_;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\Node\Stmt\Return_;
-use PhpParser\Node\UnionType;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Php\ReservedKeywordAnalyzer;
@@ -28,6 +23,8 @@ use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Parser\InlineCodeParser;
 use Rector\PhpParser\Parser\SimplePhpParser;
+use RectorPrefix202603\Nette\Utils\Strings;
+
 final class AnonymousFunctionFactory
 {
     /**
@@ -116,7 +113,7 @@ final class AnonymousFunctionFactory
         $anonymousFunction->stmts[] = new Return_($stmt);
         $anonymousFunction->params[] = new Param(new Variable('matches'));
         $variables = $expr instanceof Variable ? [] : $this->betterNodeFinder->findInstanceOf($expr, Variable::class);
-        $anonymousFunction->uses = array_map(static fn(Variable $variable): ClosureUse => new ClosureUse($variable), $variables);
+        $anonymousFunction->uses = array_map(static fn (Variable $variable): ClosureUse => new ClosureUse($variable), $variables);
         return $anonymousFunction;
     }
     /**

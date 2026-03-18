@@ -1,12 +1,13 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\BetterPhpDocParser\PhpDoc;
 
 use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\AbstractValuesAwareNode;
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
-use Stringable;
+
 final class DoctrineAnnotationTagValueNode extends AbstractValuesAwareNode
 {
     public IdentifierTypeNode $identifierTypeNode;

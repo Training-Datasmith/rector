@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PhpAttribute\NodeFactory;
 
 use PhpParser\BuilderHelpers;
@@ -10,6 +11,7 @@ use PhpParser\Node\Expr;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Scalar\String_;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+
 final class NamedArgsFactory
 {
     /**

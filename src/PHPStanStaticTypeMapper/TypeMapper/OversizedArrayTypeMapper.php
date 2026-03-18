@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
 
 use PhpParser\Node\Identifier;
@@ -9,6 +10,7 @@ use PHPStan\Type\Accessory\OversizedArrayType;
 use PHPStan\Type\Type;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
+
 /**
  * @implements TypeMapperInterface<OversizedArrayType>
  */

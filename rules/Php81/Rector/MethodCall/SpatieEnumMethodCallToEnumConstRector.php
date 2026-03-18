@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php81\Rector\MethodCall;
 
 use PhpParser\Node;
@@ -14,6 +15,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php81\Rector\MethodCall\MyCLabsMethodCallToEnumConstRector\MyCLabsMethodCallToEnumConstRectorTest
  */
@@ -29,19 +31,21 @@ final class SpatieEnumMethodCallToEnumConstRector extends AbstractRector impleme
     private const ENUM_METHODS = ['from', 'values', 'keys', 'isValid', 'search', 'toArray', 'assertValidValue'];
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Refactor Spatie enum method calls', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Refactor Spatie enum method calls', [new CodeSample(
+            <<<'CODE_SAMPLE'
 $value1 = SomeEnum::SOME_CONSTANT()->getValue();
 $value2 = SomeEnum::SOME_CONSTANT()->value;
 $name1 = SomeEnum::SOME_CONSTANT()->getName();
 $name2 = SomeEnum::SOME_CONSTANT()->name;
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 $value1 = SomeEnum::SOME_CONSTANT->value;
 $value2 = SomeEnum::SOME_CONSTANT->value;
 $name1 = SomeEnum::SOME_CONSTANT->name;
 $name2 = SomeEnum::SOME_CONSTANT->name;
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

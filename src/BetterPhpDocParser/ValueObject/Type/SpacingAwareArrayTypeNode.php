@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\BetterPhpDocParser\ValueObject\Type;
 
 use Override;
@@ -10,7 +11,7 @@ use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
 use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
 use Rector\PHPStanStaticTypeMapper\TypeMapper\ArrayTypeMapper;
-use Stringable;
+
 final class SpacingAwareArrayTypeNode extends ArrayTypeNode
 {
     #[Override]

@@ -1,11 +1,13 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PhpParser\Comparing;
 
 use PhpParser\Node;
 use Rector\Comments\CommentRemover;
 use Rector\PhpParser\Printer\BetterStandardPrinter;
+
 final class NodeComparator
 {
     /**

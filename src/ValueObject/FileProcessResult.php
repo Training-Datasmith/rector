@@ -1,11 +1,13 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\ValueObject;
 
 use Rector\ValueObject\Error\SystemError;
 use Rector\ValueObject\Reporting\FileDiff;
 use RectorPrefix202603\Webmozart\Assert\Assert;
+
 final class FileProcessResult
 {
     /**

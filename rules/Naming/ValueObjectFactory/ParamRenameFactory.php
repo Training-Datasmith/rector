@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Naming\ValueObjectFactory;
 
 use PhpParser\Node\Expr\Error;
@@ -8,6 +9,7 @@ use PhpParser\Node\FunctionLike;
 use PhpParser\Node\Param;
 use Rector\Naming\ValueObject\ParamRename;
 use Rector\NodeNameResolver\NodeNameResolver;
+
 final class ParamRenameFactory
 {
     /**

@@ -1,10 +1,12 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Configuration\Parameter;
 
 use PhpParser\Node\Stmt\Class_;
 use Rector\Configuration\Option;
+
 /**
  * Class to manage feature flags,
  * that loosen or tighten the behavior of Rector rules.

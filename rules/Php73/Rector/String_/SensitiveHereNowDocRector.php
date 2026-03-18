@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php73\Rector\String_;
 
 use PhpParser\Node;
@@ -11,6 +12,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php73\Rector\String_\SensitiveHereNowDocRector\SensitiveHereNowDocRectorTest
  */
@@ -26,17 +28,19 @@ final class SensitiveHereNowDocRector extends AbstractRector implements MinPhpVe
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Changes heredoc/nowdoc that contains closing word to safe wrapper name', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Changes heredoc/nowdoc that contains closing word to safe wrapper name', [new CodeSample(
+            <<<'CODE_SAMPLE'
 $value = <<<A
     A
 A
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 $value = <<<A_WRAP
     A
 A_WRAP
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

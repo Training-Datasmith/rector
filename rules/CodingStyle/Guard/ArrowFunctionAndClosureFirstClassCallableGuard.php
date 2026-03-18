@@ -1,13 +1,12 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodingStyle\Guard;
 
 use PhpParser\Node;
 use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\CallLike;
-use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
@@ -24,6 +23,7 @@ use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\PhpParser\AstResolver;
 use Rector\PhpParser\Comparing\NodeComparator;
 use Rector\Reflection\ReflectionResolver;
+
 final class ArrowFunctionAndClosureFirstClassCallableGuard
 {
     /**

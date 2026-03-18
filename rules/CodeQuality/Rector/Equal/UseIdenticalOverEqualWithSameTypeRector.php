@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodeQuality\Rector\Equal;
 
 use PhpParser\Node;
@@ -21,6 +22,7 @@ use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodeQuality\Rector\Equal\UseIdenticalOverEqualWithSameTypeRector\UseIdenticalOverEqualWithSameTypeRectorTest
  */
@@ -28,7 +30,8 @@ final class UseIdenticalOverEqualWithSameTypeRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Use ===/!== over ==/!=, if values have the same type', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Use ===/!== over ==/!=, if values have the same type', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run(int $firstValue, int $secondValue)
@@ -38,7 +41,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run(int $firstValue, int $secondValue)
@@ -48,7 +52,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclarationDocblocks\Rector\ClassMethod;
 
 use PhpParser\Node;
@@ -23,6 +24,7 @@ use Rector\TypeDeclarationDocblocks\NodeFinder\ReturnNodeFinder;
 use Rector\TypeDeclarationDocblocks\TagNodeAnalyzer\UsefulArrayTagNodeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\TypeDeclarationDocblocks\Rector\ClassMethod\AddReturnDocblockForJsonArrayRector\AddReturnDocblockForJsonArrayRectorTest
  */
@@ -58,7 +60,8 @@ final class AddReturnDocblockForJsonArrayRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add @return docblock for array based on return of json_decode() return array', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add @return docblock for array based on return of json_decode() return array', [new CodeSample(
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function provide(string $contents): array
@@ -67,7 +70,8 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     /**
@@ -79,7 +83,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\DeadCode;
 
 use PhpParser\Node\Arg;
@@ -17,6 +18,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Php\PhpVersionProvider;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Util\PhpVersionFactory;
+
 final class ConditionResolver
 {
     /**

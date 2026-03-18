@@ -1,16 +1,18 @@
 <?php
 
 declare (strict_types=1);
+
 namespace RectorPrefix202510;
 
-use RectorPrefix202510\Nette\Loaders\RobotLoader;
 use Rector\Bridge\SetRectorsResolver;
+use RectorPrefix202510\Nette\Loaders\RobotLoader;
 use RectorPrefix202510\Symfony\Component\Console\Input\ArrayInput;
 use RectorPrefix202510\Symfony\Component\Console\Output\ConsoleOutput;
 use RectorPrefix202510\Symfony\Component\Console\Style\SymfonyStyle;
 use RectorPrefix202510\Symfony\Component\Finder\Finder;
 use RectorPrefix202510\Symfony\Component\Finder\SplFileInfo;
 use RectorPrefix202510\Webmozart\Assert\Assert;
+
 require __DIR__ . '/../vendor/autoload.php';
 // 1. find all rector rules in here and in all vendor/rector dirs
 $rectorClassFinder = new RectorClassFinder();

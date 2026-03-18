@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php80\Rector\ClassMethod;
 
 use PhpParser\Node;
@@ -12,6 +13,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php80\Rector\ClassMethod\FinalPrivateToPrivateVisibilityRector\FinalPrivateToPrivateVisibilityRectorTest
  */
@@ -31,7 +33,8 @@ final class FinalPrivateToPrivateVisibilityRector extends AbstractRector impleme
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change method visibility from final private to only private', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change method visibility from final private to only private', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     final private function getter() {
@@ -39,7 +42,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     private function getter() {
@@ -47,7 +51,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

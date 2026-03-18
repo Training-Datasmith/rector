@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodeQuality\NodeManipulator;
 
 use PhpParser\Node\Expr;
@@ -15,6 +16,7 @@ use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\NodeTypeResolver\PHPStan\Type\StaticTypeAnalyzer;
 use Rector\PhpParser\Node\NodeFactory;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
+
 final class ExprBoolCaster
 {
     /**

@@ -1,5 +1,7 @@
 <?php
 
+declare(strict_types=1);
+
 if (PHP_VERSION_ID < 80000 && ! class_exists('ReflectionUnionType', false)) {
     class ReflectionUnionType extends ReflectionType
     {
@@ -12,89 +14,87 @@ if (PHP_VERSION_ID < 80000 && ! class_exists('ReflectionUnionType', false)) {
 }
 
 if (PHP_VERSION_ID < 80000 && ! class_exists('ReflectionAttribute', false)) {
-	class ReflectionAttribute
-	{
+    class ReflectionAttribute
+    {
+        public const IS_INSTANCEOF = 2;
 
-		public const IS_INSTANCEOF = 2;
+        public function getName(): string
+        {
+        }
 
-		public function getName(): string
-		{
-		}
+        public function getTarget(): int
+        {
+        }
 
-		public function getTarget(): int
-		{
-		}
+        public function isRepeated(): bool
+        {
+        }
 
-		public function isRepeated(): bool
-		{
-		}
+        public function getArguments(): array
+        {
+        }
 
-		public function getArguments(): array
-		{
-		}
+        public function newInstance(): object
+        {
+        }
 
-		public function newInstance(): object
-		{
-		}
+        private function __clone()
+        {
+        }
 
-		private function __clone()
-		{
-		}
-
-		private function __construct()
-		{
-		}
-	}
+        private function __construct()
+        {
+        }
+    }
 }
 
 if (PHP_VERSION_ID < 80000 && ! class_exists('Attribute', false)) {
     #[Attribute(Attribute::TARGET_CLASS)]
     class Attribute
     {
-
         /** @var int */
         public $flags;
 
         /**
          * Marks that attribute declaration is allowed only in classes.
          */
-        const TARGET_CLASS = 1;
+        public const TARGET_CLASS = 1;
 
         /**
          * Marks that attribute declaration is allowed only in functions.
          */
-        const TARGET_FUNCTION = 1 << 1;
+        public const TARGET_FUNCTION = 1 << 1;
 
         /**
          * Marks that attribute declaration is allowed only in class methods.
          */
-        const TARGET_METHOD = 1 << 2;
+        public const TARGET_METHOD = 1 << 2;
 
         /**
          * Marks that attribute declaration is allowed only in class properties.
          */
-        const TARGET_PROPERTY = 1 << 3;
+        public const TARGET_PROPERTY = 1 << 3;
 
         /**
          * Marks that attribute declaration is allowed only in class constants.
          */
-        const TARGET_CLASS_CONSTANT = 1 << 4;
+        public const TARGET_CLASS_CONSTANT = 1 << 4;
 
         /**
          * Marks that attribute declaration is allowed only in function or method parameters.
          */
-        const TARGET_PARAMETER = 1 << 5;
+        public const TARGET_PARAMETER = 1 << 5;
 
         /**
          * Marks that attribute declaration is allowed anywhere.
          */
-        const TARGET_ALL = (1 << 6) - 1;
+        public const TARGET_ALL = (1 << 6) - 1;
 
         /**
          * Notes that an attribute declaration in the same place is
          * allowed multiple times.
          */
-        const IS_REPEATABLE = 1 << 6;
+        public const IS_REPEATABLE = 1 << 6;
 
         /**
          * @param int $flags A value in the form of a bitmask indicating the places
@@ -116,14 +116,13 @@ if (PHP_VERSION_ID < 80100 && ! class_exists('ReturnTypeWillChange', false)) {
 }
 
 if (PHP_VERSION_ID < 80100 && ! class_exists('ReflectionIntersectionType', false)) {
-	class ReflectionIntersectionType extends ReflectionType
-	{
+    class ReflectionIntersectionType extends ReflectionType
+    {
+        /** @return ReflectionType[] */
+        public function getTypes()
+        {
+            return [];
+        }
 
-		/** @return ReflectionType[] */
-		public function getTypes()
-		{
-			return [];
-		}
-
-	}
+    }
 }

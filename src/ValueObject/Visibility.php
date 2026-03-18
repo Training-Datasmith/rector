@@ -1,37 +1,39 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\ValueObject;
 
 use PhpParser\Modifiers;
+
 final class Visibility
 {
     /**
      * @var int
      */
-    public const PUBLIC = Modifiers::PUBLIC;
+    public const public = Modifiers::PUBLIC;
     /**
      * @var int
      */
-    public const PROTECTED = Modifiers::PROTECTED;
+    public const protected = Modifiers::PROTECTED;
     /**
      * @var int
      */
-    public const PRIVATE = Modifiers::PRIVATE;
+    public const private = Modifiers::PRIVATE;
     /**
      * @var int
      */
-    public const STATIC = Modifiers::STATIC;
+    public const static = Modifiers::STATIC;
     /**
      * @var int
      */
-    public const ABSTRACT = Modifiers::ABSTRACT;
+    public const abstract = Modifiers::ABSTRACT;
     /**
      * @var int
      */
-    public const FINAL = Modifiers::FINAL;
+    public const final = Modifiers::FINAL;
     /**
      * @var int
      */
-    public const READONLY = Modifiers::READONLY;
+    public const readonly = Modifiers::READONLY;
 }

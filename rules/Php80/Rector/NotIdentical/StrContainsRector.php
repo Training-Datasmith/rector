@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php80\Rector\NotIdentical;
 
 use PhpParser\Node;
@@ -22,6 +23,7 @@ use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Rector\VersionBonding\Contract\RelatedPolyfillInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php80\Rector\NotIdentical\StrContainsRector\StrContainsRectorTest
  */
@@ -45,7 +47,8 @@ final class StrContainsRector extends AbstractRector implements MinPhpVersionInt
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Replace strpos() !== false and strstr()  with str_contains()', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replace strpos() !== false and strstr()  with str_contains()', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -54,7 +57,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -63,7 +67,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

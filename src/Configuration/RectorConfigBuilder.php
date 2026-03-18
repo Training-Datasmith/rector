@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Configuration;
 
 use PhpParser\NodeVisitor;
@@ -43,6 +44,7 @@ use RectorPrefix202603\Symfony\Component\Console\Output\ConsoleOutput;
 use RectorPrefix202603\Symfony\Component\Console\Style\SymfonyStyle;
 use RectorPrefix202603\Symfony\Component\Finder\Finder;
 use RectorPrefix202603\Webmozart\Assert\Assert;
+
 /**
  * @api
  */
@@ -395,8 +397,7 @@ final class RectorConfigBuilder
         // place on later as BC break when used in php 7.x without named arg
         bool $php84 = \false,
         bool $php85 = \false
-    ): self
-    {
+    ): self {
         if ($this->isWithPhpSetsUsed === \true) {
             throw new InvalidConfigurationException(sprintf('Method "%s()" can be called only once. It always includes all previous sets UP TO the defined version.%sThe best practise is to call it once with no argument. That way it will pick up PHP version from composer.json and your project will always stay up to date.', __METHOD__, \PHP_EOL));
         }
@@ -547,8 +548,7 @@ final class RectorConfigBuilder
         bool $doctrineCodeQuality = \false,
         bool $symfonyCodeQuality = \false,
         bool $symfonyConfigs = \false
-    ): self
-    {
+    ): self {
         Notifier::notifyNotSuitableMethodForPHP74(__METHOD__);
         if ($strictBooleans) {
             $message = 'The "strictBooleans" set is deprecated as mostly risky and not practical. Remove it from withPreparedSets() method and use "codeQuality" and "codingStyle" sets instead. They already contain more granular and stable rules on same note.';
@@ -582,7 +582,7 @@ final class RectorConfigBuilder
         if (SimpleParameterProvider::provideBoolParameter(\Rector\Configuration\Option::IS_RECTORCONFIG_BUILDER_RECREATED, \false) === \false) {
             // log all explicitly registered rules on root rector.php
             // we only check the non-configurable rules, as the configurable ones might override them
-            $nonConfigurableRules = array_filter($rules, fn(string $rule): bool => !is_a($rule, ConfigurableRectorInterface::class, \true));
+            $nonConfigurableRules = array_filter($rules, fn (string $rule): bool => !is_a($rule, ConfigurableRectorInterface::class, \true));
             SimpleParameterProvider::addParameter(\Rector\Configuration\Option::ROOT_STANDALONE_REGISTERED_RULES, $nonConfigurableRules);
         }
         return $this;

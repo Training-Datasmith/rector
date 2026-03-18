@@ -1,9 +1,11 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\BetterPhpDocParser\ValueObject;
 
 use Rector\Exception\ShouldNotHappenException;
+
 final class StartAndEnd
 {
     /**

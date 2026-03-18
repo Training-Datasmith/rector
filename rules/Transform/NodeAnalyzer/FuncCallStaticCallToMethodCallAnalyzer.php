@@ -1,15 +1,13 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Transform\NodeAnalyzer;
 
 use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Stmt\Class_;
 use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Function_;
 use PHPStan\Type\ObjectType;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\NodeManipulator\ClassDependencyManipulator;
@@ -18,6 +16,7 @@ use Rector\PhpParser\Node\NodeFactory;
 use Rector\PostRector\ValueObject\PropertyMetadata;
 use Rector\Transform\NodeFactory\PropertyFetchFactory;
 use Rector\Transform\NodeTypeAnalyzer\TypeProvidingExprFromClassResolver;
+
 final class FuncCallStaticCallToMethodCallAnalyzer
 {
     /**

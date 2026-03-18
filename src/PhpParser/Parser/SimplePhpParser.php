@@ -1,16 +1,18 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PhpParser\Parser;
 
-use RectorPrefix202603\Nette\Utils\FileSystem;
 use PhpParser\Node;
 use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeTraverser;
 use PhpParser\Parser;
 use PhpParser\ParserFactory;
 use Rector\PhpParser\NodeVisitor\AssignedToNodeVisitor;
+use RectorPrefix202603\Nette\Utils\FileSystem;
 use Throwable;
+
 final class SimplePhpParser
 {
     /**

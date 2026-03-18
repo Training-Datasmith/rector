@@ -1,12 +1,14 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration;
 
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\Type;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+
 final class FunctionLikeReturnTypeResolver
 {
     /**

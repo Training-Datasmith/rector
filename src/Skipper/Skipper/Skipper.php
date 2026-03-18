@@ -1,12 +1,14 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Skipper\Skipper;
 
 use PhpParser\Node;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\ProcessAnalyzer\RectifiedAnalyzer;
 use Rector\Skipper\SkipVoter\ClassSkipVoter;
+
 /**
  * @api
  * @see \Rector\Tests\Skipper\Skipper\SkipperTest

@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php72\Rector\FuncCall;
 
 use PhpParser\Node;
@@ -15,6 +16,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php72\Rector\FuncCall\ParseStrWithResultArgumentRector\ParseStrWithResultArgumentRectorTest
  */
@@ -26,15 +28,17 @@ final class ParseStrWithResultArgumentRector extends AbstractRector implements M
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Use $result argument in parse_str() function', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Use $result argument in parse_str() function', [new CodeSample(
+            <<<'CODE_SAMPLE'
 parse_str($this->query);
 $data = get_defined_vars();
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 parse_str($this->query, $result);
 $data = $result;
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

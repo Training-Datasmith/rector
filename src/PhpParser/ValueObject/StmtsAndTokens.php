@@ -1,10 +1,12 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PhpParser\ValueObject;
 
 use PhpParser\Node\Stmt;
 use PhpParser\Token;
+
 final class StmtsAndTokens
 {
     /**

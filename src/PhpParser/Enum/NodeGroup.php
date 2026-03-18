@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PhpParser\Enum;
 
 use PhpParser\Node;
@@ -28,6 +29,7 @@ use PhpParser\Node\Stmt\Trait_;
 use PhpParser\Node\Stmt\TryCatch;
 use PhpParser\Node\Stmt\While_;
 use Rector\PhpParser\Node\FileNode;
+
 final class NodeGroup
 {
     /**

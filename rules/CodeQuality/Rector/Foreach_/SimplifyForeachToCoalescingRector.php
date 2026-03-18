@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodeQuality\Rector\Foreach_;
 
 use PhpParser\Node;
@@ -21,6 +22,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodeQuality\Rector\Foreach_\SimplifyForeachToCoalescingRector\SimplifyForeachToCoalescingRectorTest
  */
@@ -28,7 +30,8 @@ final class SimplifyForeachToCoalescingRector extends AbstractRector implements 
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Changes foreach that returns set value to ??', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Changes foreach that returns set value to ??', [new CodeSample(
+            <<<'CODE_SAMPLE'
 foreach ($this->oldToNewFunctions as $oldFunction => $newFunction) {
     if ($currentFunction === $oldFunction) {
         return $newFunction;
@@ -37,10 +40,11 @@ foreach ($this->oldToNewFunctions as $oldFunction => $newFunction) {
 
 return null;
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 return $this->oldToNewFunctions[$currentFunction] ?? null;
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @innerForeachReturn array<class-string<Node>>

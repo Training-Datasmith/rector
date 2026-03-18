@@ -1,10 +1,12 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\BetterPhpDocParser\ValueObject\Parser;
 
 use PHPStan\PhpDocParser\Parser\TokenIterator;
 use Rector\Exception\ShouldNotHappenException;
+
 final class BetterTokenIterator extends TokenIterator
 {
     /**

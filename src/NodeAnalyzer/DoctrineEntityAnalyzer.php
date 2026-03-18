@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\NodeAnalyzer;
 
 use PhpParser\Node\Stmt\Class_;
@@ -8,6 +9,7 @@ use PHPStan\BetterReflection\Reflection\Adapter\ReflectionClass;
 use PHPStan\Reflection\ClassReflection;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
+
 /**
  * @api used in doctrine
  */

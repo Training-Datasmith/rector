@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\BetterPhpDocParser\Printer;
 
-use RectorPrefix202603\Nette\Utils\Strings;
 use PhpParser\Comment;
 use PhpParser\Node\Stmt\InlineHTML;
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
@@ -22,6 +22,8 @@ use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\PhpDocParser\PhpDocParser\PhpDocNodeTraverser;
 use Rector\Util\StringUtils;
+use RectorPrefix202603\Nette\Utils\Strings;
+
 /**
  * @see \Rector\Tests\BetterPhpDocParser\PhpDocInfo\PhpDocInfoPrinter\PhpDocInfoPrinterTest
  */
@@ -165,7 +167,7 @@ final class PhpDocInfoPrinter
         if (strncmp($output, '/**', strlen('/**')) === 0 && !StringUtils::isMatch($output, self::CLOSING_DOCBLOCK_REGEX)) {
             $output .= ' */';
         }
-        return Strings::replace($output, self::NEW_LINE_WITH_SPACE_REGEX, static fn(array $match): string => (string) $match['new_line']);
+        return Strings::replace($output, self::NEW_LINE_WITH_SPACE_REGEX, static fn (array $match): string => (string) $match['new_line']);
     }
     private function hasDocblockStart(string $output): bool
     {

@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Console\Command;
 
 use Rector\Application\ApplicationFileProcessor;
@@ -29,6 +30,7 @@ use RectorPrefix202603\Symfony\Component\Console\Command\Command;
 use RectorPrefix202603\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix202603\Symfony\Component\Console\Output\OutputInterface;
 use RectorPrefix202603\Symfony\Component\Console\Style\SymfonyStyle;
+
 final class ProcessCommand extends Command
 {
     /**
@@ -104,7 +106,8 @@ final class ProcessCommand extends Command
     {
         $this->setName('process');
         $this->setDescription('Upgrades or refactors source code with provided Rector rules');
-        $this->setHelp(<<<'EOF'
+        $this->setHelp(
+            <<<'EOF'
 The <info>%command.name%</info> command will run Rector main feature:
 
   <info>vendor/bin/rector</info>
@@ -121,7 +124,7 @@ It's also possible to get debug via the <comment>--debug</comment> option:
 
   <info>vendor/bin/rector src/Controller --dry-run --debug</info>
 EOF
-);
+        );
         ProcessConfigureDecorator::decorate($this);
         parent::configure();
     }

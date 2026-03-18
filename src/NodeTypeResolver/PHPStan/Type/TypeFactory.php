@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\NodeTypeResolver\PHPStan\Type;
 
 use PHPStan\Type\ArrayType;
@@ -19,6 +20,7 @@ use PHPStan\Type\TypeUtils;
 use PHPStan\Type\UnionType;
 use Rector\NodeTypeResolver\PHPStan\ObjectWithoutClassTypeWithParentTypes;
 use Rector\NodeTypeResolver\PHPStan\TypeHasher;
+
 final class TypeFactory
 {
     /**

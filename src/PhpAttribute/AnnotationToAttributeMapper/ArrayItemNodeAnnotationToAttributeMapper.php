@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PhpAttribute\AnnotationToAttributeMapper;
 
 use PhpParser\Node\ArrayItem;
@@ -15,6 +16,7 @@ use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
 use Rector\PhpAttribute\Enum\DocTagNodeState;
 use Rector\Validation\RectorAssert;
 use RectorPrefix202603\Webmozart\Assert\InvalidArgumentException;
+
 /**
  * @implements AnnotationToAttributeMapperInterface<ArrayItemNode>
  */

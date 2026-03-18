@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\StaticTypeMapper\Mapper;
 
-use RectorPrefix202603\Nette\Utils\Strings;
 use PHPStan\Type\Accessory\AccessoryArrayListType;
 use PHPStan\Type\Accessory\AccessoryNonEmptyStringType;
 use PHPStan\Type\Accessory\NonEmptyArrayType;
@@ -25,6 +25,8 @@ use PHPStan\Type\StringType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\VoidType;
+use RectorPrefix202603\Nette\Utils\Strings;
+
 final class ScalarStringToTypeMapper
 {
     /**

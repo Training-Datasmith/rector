@@ -1,11 +1,13 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\NodeDecorator;
 
 use PhpParser\Node\Stmt\ClassMethod;
 use PhpParser\Node\Stmt\Expression;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+
 final class StatementDepthAttributeDecorator
 {
     /**

@@ -1,12 +1,14 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\StaticTypeMapper\ValueObject\Type;
 
 use Override;
 use PHPStan\Type\Generic\GenericObjectType;
 use PHPStan\Type\IsSuperTypeOfResult;
 use PHPStan\Type\Type;
+
 /**
  * @api
  */

@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Naming\ExpectedNameResolver;
 
 use PhpParser\Node;
@@ -8,6 +9,7 @@ use PhpParser\Node\Param;
 use Rector\Naming\Naming\PropertyNaming;
 use Rector\Naming\ValueObject\ExpectedName;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+
 final class MatchParamTypeExpectedNameResolver
 {
     /**

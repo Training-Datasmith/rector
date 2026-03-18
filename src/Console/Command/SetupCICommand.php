@@ -1,16 +1,19 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Console\Command;
 
+use Rector\Git\RepositoryHelper;
 use RectorPrefix202603\Nette\Utils\FileSystem;
 use RectorPrefix202603\OndraM\CiDetector\CiDetector;
-use Rector\Git\RepositoryHelper;
-use function sprintf;
 use RectorPrefix202603\Symfony\Component\Console\Command\Command;
 use RectorPrefix202603\Symfony\Component\Console\Input\InputInterface;
 use RectorPrefix202603\Symfony\Component\Console\Output\OutputInterface;
 use RectorPrefix202603\Symfony\Component\Console\Style\SymfonyStyle;
+
+use function sprintf;
+
 final class SetupCICommand extends Command
 {
     /**

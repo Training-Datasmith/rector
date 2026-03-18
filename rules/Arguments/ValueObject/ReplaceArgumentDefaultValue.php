@@ -1,11 +1,13 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Arguments\ValueObject;
 
 use PHPStan\Type\ObjectType;
 use Rector\Arguments\Contract\ReplaceArgumentDefaultValueInterface;
 use Rector\Validation\RectorAssert;
+
 final class ReplaceArgumentDefaultValue implements ReplaceArgumentDefaultValueInterface
 {
     /**

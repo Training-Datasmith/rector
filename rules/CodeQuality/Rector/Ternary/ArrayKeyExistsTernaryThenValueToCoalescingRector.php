@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodeQuality\Rector\Ternary;
 
 use PhpParser\Node;
@@ -13,6 +14,7 @@ use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodeQuality\Rector\Ternary\ArrayKeyExistsTernaryThenValueToCoalescingRector\ArrayKeyExistsTernaryThenValueToCoalescingRectorTest
  */
@@ -28,7 +30,8 @@ final class ArrayKeyExistsTernaryThenValueToCoalescingRector extends AbstractRec
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change array_key_exists() ternary to coalescing', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change array_key_exists() ternary to coalescing', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($values, $keyToMatch)
@@ -37,7 +40,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($values, $keyToMatch)
@@ -46,7 +50,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

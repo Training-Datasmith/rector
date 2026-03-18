@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php72\Rector\While_;
 
 use PhpParser\Node;
@@ -15,6 +16,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php72\Rector\While_\WhileEachToForeachRector\WhileEachToForeachRectorTest
  */
@@ -34,27 +36,31 @@ final class WhileEachToForeachRector extends AbstractRector implements MinPhpVer
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Use `foreach()` instead of deprecated `each()`', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Use `foreach()` instead of deprecated `each()`', [new CodeSample(
+            <<<'CODE_SAMPLE'
 while (list($key, $callback) = each($callbacks)) {
     // ...
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 foreach ($callbacks as $key => $callback) {
     // ...
 }
 CODE_SAMPLE
-), new CodeSample(<<<'CODE_SAMPLE'
+        ), new CodeSample(
+            <<<'CODE_SAMPLE'
 while (list($key) = each($callbacks)) {
     // ...
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 foreach (array_keys($callbacks) as $key) {
     // ...
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

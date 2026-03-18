@@ -1,13 +1,12 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Naming\NamingConvention;
 
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\StaticCall;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Util\StringUtils;
+
 final class NamingConventionAnalyzer
 {
     /**

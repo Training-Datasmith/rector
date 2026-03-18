@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\NodeTypeResolver\TypeComparator;
 
 use PhpParser\Node;
@@ -23,6 +24,7 @@ use Rector\NodeTypeResolver\PHPStan\TypeHasher;
 use Rector\Reflection\ReflectionResolver;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
+
 final class TypeComparator
 {
     /**

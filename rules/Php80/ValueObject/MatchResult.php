@@ -1,9 +1,11 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php80\ValueObject;
 
 use PhpParser\Node\Expr\Match_;
+
 final class MatchResult
 {
     /**

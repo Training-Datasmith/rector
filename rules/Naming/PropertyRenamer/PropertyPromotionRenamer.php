@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Naming\PropertyRenamer;
 
 use PhpParser\Node\Expr\Error;
@@ -25,6 +26,7 @@ use Rector\Php\PhpVersionProvider;
 use Rector\Reflection\ReflectionResolver;
 use Rector\ValueObject\MethodName;
 use Rector\ValueObject\PhpVersionFeature;
+
 final class PropertyPromotionRenamer
 {
     /**

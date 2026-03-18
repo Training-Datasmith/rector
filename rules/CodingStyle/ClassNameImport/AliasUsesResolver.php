@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodingStyle\ClassNameImport;
 
 use PhpParser\Node;
@@ -10,6 +11,7 @@ use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
 use PhpParser\Node\UseItem;
 use Rector\PhpParser\Node\FileNode;
+
 final class AliasUsesResolver
 {
     /**
@@ -28,7 +30,7 @@ final class AliasUsesResolver
     {
         if (!$node instanceof Namespace_ && !$node instanceof FileNode) {
             /** @var Namespace_[]|FileNode[] $namespaces */
-            $namespaces = array_filter($stmts, static fn(Stmt $stmt): bool => $stmt instanceof Namespace_ || $stmt instanceof FileNode);
+            $namespaces = array_filter($stmts, static fn (Stmt $stmt): bool => $stmt instanceof Namespace_ || $stmt instanceof FileNode);
             if (count($namespaces) !== 1) {
                 return [];
             }

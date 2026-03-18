@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\DeadCode\Rector\If_;
 
 use PhpParser\Node;
@@ -14,6 +15,7 @@ use Rector\EarlyReturn\NodeTransformer\ConditionInverter;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\DeadCode\Rector\If_\RemoveDeadIfBlockRector\RemoveDeadIfBlockRectorTest
  */
@@ -34,7 +36,8 @@ final class RemoveDeadIfBlockRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Remove if, elseif, and else blocks that do not do anything', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove if, elseif, and else blocks that do not do anything', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($value, $differentValue)
@@ -60,7 +63,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($value, $differentValue)
@@ -77,7 +81,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>
@@ -97,7 +101,7 @@ CODE_SAMPLE
             return $this->refactor($node) ?? $node;
         }
         foreach ($node->elseifs as $elseif) {
-            $keep_elseifs = array_filter($node->elseifs, fn(ElseIf_ $elseif): bool => $elseif->stmts !== [] || $this->sideEffectNodeDetector->detect($elseif->cond));
+            $keep_elseifs = array_filter($node->elseifs, fn (ElseIf_ $elseif): bool => $elseif->stmts !== [] || $this->sideEffectNodeDetector->detect($elseif->cond));
             if (count($node->elseifs) !== count($keep_elseifs)) {
                 $node->elseifs = $keep_elseifs;
                 return $this->refactor($node) ?? $node;

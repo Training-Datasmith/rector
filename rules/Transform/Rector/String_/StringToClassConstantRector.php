@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Transform\Rector\String_;
 
 use PhpParser\Node;
@@ -9,9 +10,10 @@ use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Rector\Transform\ValueObject\StringToClassConstant;
+use RectorPrefix202603\Webmozart\Assert\Assert;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202603\Webmozart\Assert\Assert;
+
 /**
  * @see \Rector\Tests\Transform\Rector\String_\StringToClassConstantRector\StringToClassConstantRectorTest
  */
@@ -40,7 +42,7 @@ final class SomeSubscriber
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            , <<<'CODE_SAMPLE'
 final class SomeSubscriber
 {
     public static function getSubscribedEvents()
@@ -49,7 +51,7 @@ final class SomeSubscriber
     }
 }
 CODE_SAMPLE
-, [new StringToClassConstant('compiler.post_dump', 'Yet\AnotherClass', 'CONSTANT')])]);
+            , [new StringToClassConstant('compiler.post_dump', 'Yet\AnotherClass', 'CONSTANT')])]);
     }
     /**
      * @return array<class-string<Node>>

@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\NodeAnalyzer;
 
 use PhpParser\Node;
@@ -54,6 +55,7 @@ use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\UnionType;
 use Rector\Enum\ObjectReference;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+
 final class ExprAnalyzer
 {
     public function isBoolExpr(Expr $expr): bool

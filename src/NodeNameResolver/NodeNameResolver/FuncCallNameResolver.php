@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\NodeNameResolver\NodeNameResolver;
 
 use PhpParser\Node;
@@ -11,6 +12,7 @@ use PHPStan\Analyser\Scope;
 use PHPStan\Reflection\ReflectionProvider;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+
 /**
  * @implements NodeNameResolverInterface<FuncCall>
  */

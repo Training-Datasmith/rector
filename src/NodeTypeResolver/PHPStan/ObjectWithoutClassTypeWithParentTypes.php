@@ -1,11 +1,13 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\NodeTypeResolver\PHPStan;
 
 use PHPStan\Type\ObjectWithoutClassType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeWithClassName;
+
 final class ObjectWithoutClassTypeWithParentTypes extends ObjectWithoutClassType
 {
     /**

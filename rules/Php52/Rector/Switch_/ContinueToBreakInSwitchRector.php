@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php52\Rector\Switch_;
 
 use PhpParser\Node;
@@ -26,6 +27,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php52\Rector\Switch_\ContinueToBreakInSwitchRector\ContinueToBreakInSwitchRectorTest
  */
@@ -46,7 +48,8 @@ final class ContinueToBreakInSwitchRector extends AbstractRector implements MinP
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Use `break` instead of `continue` in switch statements', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Use `break` instead of `continue` in switch statements', [new CodeSample(
+            <<<'CODE_SAMPLE'
 function some_run($value)
 {
     switch ($value) {
@@ -59,7 +62,8 @@ function some_run($value)
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 function some_run($value)
 {
     switch ($value) {
@@ -72,7 +76,7 @@ function some_run($value)
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

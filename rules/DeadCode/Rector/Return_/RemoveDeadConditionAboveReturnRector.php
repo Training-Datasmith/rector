@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\DeadCode\Rector\Return_;
 
 use PhpParser\Node;
@@ -13,6 +14,7 @@ use Rector\PhpParser\Enum\NodeGroup;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\DeadCode\Rector\Return_\RemoveDeadConditionAboveReturnRector\RemoveDeadConditionAboveReturnRectorTest
  */
@@ -28,7 +30,8 @@ final class RemoveDeadConditionAboveReturnRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Remove dead condition above return', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove dead condition above return', [new CodeSample(
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function go()
@@ -41,7 +44,8 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function go()
@@ -50,7 +54,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

@@ -1,12 +1,14 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\NodeTypeResolver\Reflection\BetterReflection;
 
 use PHPStan\BetterReflection\SourceLocator\Type\AggregateSourceLocator;
 use PHPStan\BetterReflection\SourceLocator\Type\MemoizingSourceLocator;
 use PHPStan\Reflection\BetterReflection\BetterReflectionSourceLocatorFactory;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocator\IntermediateSourceLocator;
+
 /**
  * @api used on phpstan config factory
  */

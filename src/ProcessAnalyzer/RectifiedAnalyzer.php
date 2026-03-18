@@ -1,12 +1,14 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\ProcessAnalyzer;
 
 use PhpParser\Node;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\NodeAnalyzer\ScopeAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+
 /**
  * This service verify if the Node:
  *

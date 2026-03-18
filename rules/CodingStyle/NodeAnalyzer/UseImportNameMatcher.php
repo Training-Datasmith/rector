@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodingStyle\NodeAnalyzer;
 
-use RectorPrefix202603\Nette\Utils\Strings;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\GroupUse;
@@ -14,6 +14,8 @@ use Rector\Naming\Naming\UseImportsResolver;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Util\StringUtils;
+use RectorPrefix202603\Nette\Utils\Strings;
+
 final class UseImportNameMatcher
 {
     /**

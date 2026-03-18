@@ -1,11 +1,13 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Privatization\VisibilityGuard;
 
 use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\Reflection\ClassReflection;
 use Rector\NodeNameResolver\NodeNameResolver;
+
 final class ClassMethodVisibilityGuard
 {
     /**

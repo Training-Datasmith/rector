@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
 
 use PhpParser\Node;
@@ -26,6 +27,7 @@ use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
 use Rector\ValueObject\PhpVersionFeature;
 use RectorPrefix202603\Webmozart\Assert\Assert;
 use RectorPrefix202603\Webmozart\Assert\InvalidArgumentException;
+
 /**
  * @implements TypeMapperInterface<UnionType>
  */

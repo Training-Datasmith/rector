@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodingStyle\Rector\FuncCall;
 
 use PhpParser\Node;
@@ -18,6 +19,7 @@ use PhpParser\Node\Stmt\If_;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodingStyle\Rector\FuncCall\CountArrayToEmptyArrayComparisonRector\CountArrayToEmptyArrayComparisonRectorTest
  */
@@ -25,17 +27,19 @@ final class CountArrayToEmptyArrayComparisonRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change count array comparison to empty array comparison to improve performance', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change count array comparison to empty array comparison to improve performance', [new CodeSample(
+            <<<'CODE_SAMPLE'
 count($array) === 0;
 count($array) > 0;
 ! count($array);
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 $array === [];
 $array !== [];
 $array === [];
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

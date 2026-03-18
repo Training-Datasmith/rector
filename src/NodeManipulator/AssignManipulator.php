@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\NodeManipulator;
 
 use PhpParser\Node;
@@ -16,6 +17,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeNestingScope\ContextAnalyzer;
 use Rector\Php72\ValueObject\ListAndEach;
 use Rector\PhpParser\Node\BetterNodeFinder;
+
 final class AssignManipulator
 {
     /**

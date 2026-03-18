@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\Rector\BooleanAnd;
 
 use PhpParser\Node;
@@ -16,6 +17,7 @@ use Rector\Rector\AbstractRector;
 use Rector\TypeDeclaration\TypeAnalyzer\NullableTypeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\BooleanAnd\BinaryOpNullableToInstanceofRector\BinaryOpNullableToInstanceofRectorTest
  */
@@ -31,7 +33,8 @@ final class BinaryOpNullableToInstanceofRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change && and || between nullable objects to instanceof compares', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change && and || between nullable objects to instanceof compares', [new CodeSample(
+            <<<'CODE_SAMPLE'
 function someFunction(?SomeClass $someClass)
 {
     if ($someClass && $someClass->someMethod()) {
@@ -41,7 +44,8 @@ function someFunction(?SomeClass $someClass)
     return 'no';
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 function someFunction(?SomeClass $someClass)
 {
     if ($someClass instanceof SomeClass && $someClass->someMethod()) {
@@ -51,7 +55,7 @@ function someFunction(?SomeClass $someClass)
     return 'no';
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

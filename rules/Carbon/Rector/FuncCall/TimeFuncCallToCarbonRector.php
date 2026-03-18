@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Carbon\Rector\FuncCall;
 
 use PhpParser\Node;
@@ -12,6 +13,7 @@ use PhpParser\Node\Name\FullyQualified;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Carbon\Rector\FuncCall\TimeFuncCallToCarbonRector\TimeFuncCallToCarbonRectorTest
  */
@@ -19,7 +21,8 @@ final class TimeFuncCallToCarbonRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Convert `time()` function call to `Carbon::now()->getTimestamp()`', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Convert `time()` function call to `Carbon::now()->getTimestamp()`', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -28,7 +31,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -37,7 +41,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

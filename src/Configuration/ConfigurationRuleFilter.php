@@ -1,10 +1,12 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Configuration;
 
 use Rector\Contract\Rector\RectorInterface;
 use Rector\ValueObject\Configuration;
+
 /**
  * Modify available rector rules based on the configuration options
  */

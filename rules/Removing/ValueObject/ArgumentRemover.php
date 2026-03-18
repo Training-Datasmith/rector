@@ -1,10 +1,12 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Removing\ValueObject;
 
 use PHPStan\Type\ObjectType;
 use Rector\Validation\RectorAssert;
+
 final class ArgumentRemover
 {
     /**

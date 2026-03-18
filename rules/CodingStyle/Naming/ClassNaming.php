@@ -1,12 +1,14 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodingStyle\Naming;
 
-use RectorPrefix202603\Nette\Utils\Strings;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Name;
 use PhpParser\Node\Stmt\ClassLike;
+use RectorPrefix202603\Nette\Utils\Strings;
+
 final class ClassNaming
 {
     /**

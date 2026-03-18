@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\DeadCode\PhpDoc\TagRemover;
 
 use PhpParser\Node\FunctionLike;
@@ -12,6 +13,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\DeadCode\PhpDoc\DeadParamTagValueNodeAnalyzer;
 use Rector\PhpDocParser\PhpDocParser\PhpDocNodeTraverser;
+
 final class ParamTagRemover
 {
     /**

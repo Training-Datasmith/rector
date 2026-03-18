@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\NodeAnalyzer;
 
 use PhpParser\Node\Arg;
@@ -26,6 +27,7 @@ use Rector\PhpParser\Node\FileNode;
 use Rector\PHPStan\ScopeFetcher;
 use Rector\Reflection\ReflectionResolver;
 use Rector\StaticTypeMapper\StaticTypeMapper;
+
 final class StrictTypeSafetyChecker
 {
     /**

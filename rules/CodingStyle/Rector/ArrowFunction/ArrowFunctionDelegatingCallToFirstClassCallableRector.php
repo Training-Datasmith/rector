@@ -1,12 +1,12 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodingStyle\Rector\ArrowFunction;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\ArrowFunction;
-use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\MethodCall;
 use PhpParser\Node\Expr\StaticCall;
@@ -18,6 +18,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodingStyle\Rector\ArrowFunction\ArrowFunctionDelegatingCallToFirstClassCallableRector\ArrowFunctionDelegatingCallToFirstClassCallableRectorTest
  */
@@ -33,13 +34,15 @@ final class ArrowFunctionDelegatingCallToFirstClassCallableRector extends Abstra
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Convert nested arrow function call to first class callable', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Convert nested arrow function call to first class callable', [new CodeSample(
+            <<<'CODE_SAMPLE'
 fn ($parameter) => Call::to($parameter);
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 Call::to(...);
 CODE_SAMPLE
-)]);
+        )]);
     }
     public function getNodeTypes(): array
     {

@@ -1,11 +1,13 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Privatization\Guard;
 
 use PhpParser\Node\Name\FullyQualified;
 use PhpParser\Node\Stmt\Class_;
 use PHPStan\Reflection\ReflectionProvider;
+
 /**
  * Verify whether Class_'s method or property allowed to be overridden by verify class parent or implements exists
  */

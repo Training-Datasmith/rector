@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\Rector\Property;
 
 use PhpParser\Node;
@@ -14,9 +15,10 @@ use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
 use Rector\Rector\AbstractRector;
 use Rector\StaticTypeMapper\StaticTypeMapper;
 use Rector\TypeDeclaration\ValueObject\AddPropertyTypeDeclaration;
+use RectorPrefix202603\Webmozart\Assert\Assert;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202603\Webmozart\Assert\Assert;
+
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\Property\AddPropertyTypeDeclarationRector\AddPropertyTypeDeclarationRectorTest
  */
@@ -42,13 +44,13 @@ class SomeClass extends ParentClass
     public $name;
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            , <<<'CODE_SAMPLE'
 class SomeClass extends ParentClass
 {
     public string $name;
 }
 CODE_SAMPLE
-, [new AddPropertyTypeDeclaration('ParentClass', 'name', new StringType())])]);
+            , [new AddPropertyTypeDeclaration('ParentClass', 'name', new StringType())])]);
     }
     /**
      * @return array<class-string<Node>>

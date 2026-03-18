@@ -1,14 +1,14 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php81\Rector\Array_;
 
 use Override;
 use PhpParser\Node;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\StaticCall;
 use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
 use Rector\Exception\ShouldNotHappenException;
+
 /**
  * @deprecated Renamed to \Rector\Php81\Rector\Array_\ArrayToFirstClassCallableRector
  */

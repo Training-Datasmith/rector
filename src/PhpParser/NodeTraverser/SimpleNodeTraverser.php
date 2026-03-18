@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PhpParser\NodeTraverser;
 
 use PhpParser\Node;
@@ -10,6 +11,7 @@ use PhpParser\NodeTraverser;
 use PhpParser\NodeVisitor;
 use PhpParser\NodeVisitorAbstract;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+
 final class SimpleNodeTraverser
 {
     /**
@@ -19,8 +21,7 @@ final class SimpleNodeTraverser
      */
     public static function decorateWithAttributeValue($nodesOrNode, string $attributeKey, $value): void
     {
-        $callableNodeVisitor = new class($attributeKey, $value) extends NodeVisitorAbstract
-        {
+        $callableNodeVisitor = new class ($attributeKey, $value) extends NodeVisitorAbstract {
             /**
              * @readonly
              */

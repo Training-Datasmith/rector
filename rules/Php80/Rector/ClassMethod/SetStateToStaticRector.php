@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php80\Rector\ClassMethod;
 
 use PhpParser\Node;
@@ -12,6 +13,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php80\Rector\ClassMethod\SetStateToStaticRector\SetStateToStaticRectorTest
  */
@@ -31,7 +33,8 @@ final class SetStateToStaticRector extends AbstractRector implements MinPhpVersi
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add `static` visibility to `__set_state()` methods', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add `static` visibility to `__set_state()` methods', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function __set_state($properties) {
@@ -39,7 +42,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public static function __set_state($properties) {
@@ -47,7 +51,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

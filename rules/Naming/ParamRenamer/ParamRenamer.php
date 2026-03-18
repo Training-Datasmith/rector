@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Naming\ParamRenamer;
 
 use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
@@ -10,6 +11,7 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\Naming\ValueObject\ParamRename;
 use Rector\Naming\VariableRenamer;
+
 final class ParamRenamer
 {
     /**

@@ -1,10 +1,12 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Bootstrap;
 
 use Rector\RectorInstaller\GeneratedConfig;
 use ReflectionClass;
+
 final class ExtensionConfigResolver
 {
     /**

@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Privatization\Guard;
 
 use PhpParser\Node;
@@ -12,6 +13,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\Util\StringUtils;
+
 /**
  * Guards against privatizing Laravel model attributes and scopes
  */

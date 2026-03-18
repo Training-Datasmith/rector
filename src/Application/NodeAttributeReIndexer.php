@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Application;
 
 use PhpParser\Node;
@@ -20,6 +21,7 @@ use PhpParser\Node\Stmt\Switch_;
 use PhpParser\Node\Stmt\TryCatch;
 use Rector\PhpParser\Enum\NodeGroup;
 use RectorPrefix202603\Webmozart\Assert\Assert;
+
 final class NodeAttributeReIndexer
 {
     public static function reIndexNodeAttributes(Node $node): ?Node

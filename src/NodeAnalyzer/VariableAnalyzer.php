@@ -1,10 +1,12 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\NodeAnalyzer;
 
 use PhpParser\Node\Expr\Variable;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+
 final class VariableAnalyzer
 {
     public function isStaticOrGlobal(Variable $variable): bool

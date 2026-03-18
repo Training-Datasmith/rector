@@ -1,11 +1,13 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PostRector\Contract\Rector;
 
 use PhpParser\Node\Stmt;
 use PhpParser\NodeVisitor;
 use Rector\ValueObject\Application\File;
+
 /**
  * @internal
  */

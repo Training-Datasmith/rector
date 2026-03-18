@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Assert\Rector\ClassMethod;
 
 use PhpParser\Node;
@@ -28,9 +29,10 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
+use RectorPrefix202603\Webmozart\Assert\Assert;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202603\Webmozart\Assert\Assert;
+
 /**
  * @experimental Check generic array key/value types in runtime with assert. Generics for impatient people.
  *
@@ -71,7 +73,7 @@ class SomeClass
 \class_alias('SomeClass', 'SomeClass', \false);
 
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            , <<<'CODE_SAMPLE'
 <?php
 
 namespace RectorPrefix202603;
@@ -89,7 +91,7 @@ class SomeClass
 }
 \class_alias('SomeClass', 'SomeClass', \false);
 CODE_SAMPLE
-, [AssertClassName::WEBMOZART])]);
+            , [AssertClassName::WEBMOZART])]);
     }
     public function getNodeTypes(): array
     {

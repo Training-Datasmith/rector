@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodeQuality\Rector\If_;
 
 use PhpParser\Node;
@@ -21,6 +22,7 @@ use Rector\PhpParser\Printer\BetterStandardPrinter;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodeQuality\Rector\If_\SimplifyIfReturnBoolRector\SimplifyIfReturnBoolRectorTest
  */
@@ -51,17 +53,19 @@ final class SimplifyIfReturnBoolRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Shortens if return false/true to direct return', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Shortens if return false/true to direct return', [new CodeSample(
+            <<<'CODE_SAMPLE'
 if (strpos($docToken->getContent(), "\n") === false) {
     return true;
 }
 
 return false;
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 return strpos($docToken->getContent(), "\n") === false;
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

@@ -1,10 +1,12 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\NodeCollector;
 
 use PhpParser\Node\Expr;
 use PhpParser\Node\Expr\BinaryOp;
+
 /**
  * @see \Rector\Tests\NodeCollector\BinaryOpConditionsCollectorTest
  */

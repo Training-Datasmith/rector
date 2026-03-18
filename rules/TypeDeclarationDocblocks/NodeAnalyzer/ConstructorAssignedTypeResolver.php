@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclarationDocblocks\NodeAnalyzer;
 
 use PhpParser\Node\Expr\Assign;
@@ -12,6 +13,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\ValueObject\MethodName;
+
 final class ConstructorAssignedTypeResolver
 {
     /**

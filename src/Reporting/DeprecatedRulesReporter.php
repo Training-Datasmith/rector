@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Reporting;
 
 use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
@@ -11,8 +12,9 @@ use Rector\Contract\Rector\RectorInterface;
 use Rector\PhpParser\Enum\NodeGroup;
 use Rector\PhpParser\Node\CustomNode\FileWithoutNamespace;
 use Rector\PhpParser\Node\FileNode;
-use ReflectionMethod;
 use RectorPrefix202603\Symfony\Component\Console\Style\SymfonyStyle;
+use ReflectionMethod;
+
 final class DeprecatedRulesReporter
 {
     /**

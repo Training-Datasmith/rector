@@ -5,6 +5,7 @@
  * - https://github.com/junit-team/junit5/blob/main/platform-tests/src/test/resources/jenkins-junit.xsda
  */
 declare (strict_types=1);
+
 namespace Rector\ChangesReporting\Output;
 
 use DOMDocument;
@@ -13,6 +14,7 @@ use Rector\ChangesReporting\Contract\Output\OutputFormatterInterface;
 use Rector\ValueObject\Configuration;
 use Rector\ValueObject\ProcessResult;
 use RectorPrefix202603\Symfony\Component\Console\Style\SymfonyStyle;
+
 final class JUnitOutputFormatter implements OutputFormatterInterface
 {
     /**

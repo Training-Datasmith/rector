@@ -1,17 +1,15 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Naming\Naming;
 
-use PhpParser\Node\Expr\ArrowFunction;
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Function_;
 use Rector\Naming\ExpectedNameResolver\MatchParamTypeExpectedNameResolver;
 use Rector\Naming\PhpArray\ArrayFilter;
 use Rector\NodeManipulator\FunctionLikeManipulator;
 use Rector\PhpParser\Node\BetterNodeFinder;
+
 final class ConflictingNameResolver
 {
     /**

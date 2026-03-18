@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodeQuality\Rector\Class_;
 
 use PhpParser\Node;
@@ -24,6 +25,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodeQuality\Rector\Class_\DynamicDocBlockPropertyToNativePropertyRector\DynamicDocBlockPropertyToNativePropertyRectorTest
  */
@@ -69,7 +71,8 @@ final class DynamicDocBlockPropertyToNativePropertyRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Turn dynamic docblock properties on class with no parents to explicit ones', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Turn dynamic docblock properties on class with no parents to explicit ones', [new CodeSample(
+            <<<'CODE_SAMPLE'
 /**
  * @property SomeDependency $someDependency
  */
@@ -82,7 +85,8 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     private SomeDependency $someDependency;
@@ -93,7 +97,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

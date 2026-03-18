@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Renaming\Rector\ClassMethod;
 
 use PhpParser\Node;
@@ -16,9 +17,10 @@ use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockTagReplacer;
 use Rector\Rector\AbstractRector;
 use Rector\Renaming\Contract\RenameAnnotationInterface;
 use Rector\Renaming\ValueObject\RenameAnnotationByType;
+use RectorPrefix202603\Webmozart\Assert\Assert;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202603\Webmozart\Assert\Assert;
+
 /**
  * @see \Rector\Tests\Renaming\Rector\ClassMethod\RenameAnnotationRector\RenameAnnotationRectorTest
  */
@@ -61,7 +63,7 @@ final class SomeTest extends TestCase
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            , <<<'CODE_SAMPLE'
 use PHPUnit\Framework\TestCase;
 
 final class SomeTest extends TestCase
@@ -74,7 +76,7 @@ final class SomeTest extends TestCase
     }
 }
 CODE_SAMPLE
-, [new RenameAnnotationByType('PHPUnit\Framework\TestCase', 'test', 'scenario')])]);
+            , [new RenameAnnotationByType('PHPUnit\Framework\TestCase', 'test', 'scenario')])]);
     }
     /**
      * @return array<class-string<Node>>

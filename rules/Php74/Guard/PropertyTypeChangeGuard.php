@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php74\Guard;
 
 use PhpParser\Node\Stmt\Property;
@@ -9,6 +10,7 @@ use Rector\NodeAnalyzer\PropertyAnalyzer;
 use Rector\NodeManipulator\PropertyManipulator;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Privatization\Guard\ParentPropertyLookupGuard;
+
 final class PropertyTypeChangeGuard
 {
     /**

@@ -1,11 +1,11 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodingStyle\Rector\FunctionLike;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrowFunction;
-use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\Closure;
 use Rector\CodingStyle\Rector\ArrowFunction\ArrowFunctionDelegatingCallToFirstClassCallableRector;
 use Rector\CodingStyle\Rector\Closure\ClosureDelegatingCallToFirstClassCallableRector;
@@ -16,6 +16,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @deprecated This rule was split into
  * @see ClosureDelegatingCallToFirstClassCallableRector and
@@ -25,15 +26,17 @@ final class FunctionLikeToFirstClassCallableRector extends AbstractRector implem
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Converts arrow function and closures to first class callable', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Converts arrow function and closures to first class callable', [new CodeSample(
+            <<<'CODE_SAMPLE'
 function ($parameter) {
     return Call::to($parameter);
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 Call::to(...);
 CODE_SAMPLE
-)]);
+        )]);
     }
     public function getNodeTypes(): array
     {

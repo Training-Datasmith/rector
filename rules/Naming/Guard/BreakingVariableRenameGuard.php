@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Naming\Guard;
 
 use DateTimeInterface;
@@ -10,8 +11,6 @@ use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\Error;
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Function_;
 use PHPStan\Analyser\Scope;
 use PHPStan\Type\ObjectType;
 use Rector\Naming\Naming\ConflictingNameResolver;
@@ -23,6 +22,7 @@ use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PHPStanStaticTypeMapper\Utils\TypeUnwrapper;
 use Rector\StaticTypeMapper\Resolver\ClassNameFromObjectTypeResolver;
 use Rector\Util\StringUtils;
+
 /**
  * This class check if a variable name change breaks existing code in class method
  */

@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Console\Style;
 
 use Rector\Util\Reflection\PrivatesAccessor;
@@ -8,6 +9,7 @@ use RectorPrefix202603\Symfony\Component\Console\Application;
 use RectorPrefix202603\Symfony\Component\Console\Input\ArgvInput;
 use RectorPrefix202603\Symfony\Component\Console\Output\ConsoleOutput;
 use RectorPrefix202603\Symfony\Component\Console\Output\OutputInterface;
+
 final class SymfonyStyleFactory
 {
     /**

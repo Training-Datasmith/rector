@@ -1,15 +1,17 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Autoloading;
 
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Exception\ShouldNotHappenException;
+use RectorPrefix202603\Webmozart\Assert\Assert;
 use RecursiveDirectoryIterator;
 use RecursiveIteratorIterator;
 use SplFileInfo;
-use RectorPrefix202603\Webmozart\Assert\Assert;
+
 /**
  * @see \Rector\Tests\Autoloading\BootstrapFilesIncluderTest
  */

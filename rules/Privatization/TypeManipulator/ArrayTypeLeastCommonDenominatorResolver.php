@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Privatization\TypeManipulator;
 
 use PHPStan\Type\ArrayType;
@@ -10,6 +11,7 @@ use PHPStan\Type\NeverType;
 use PHPStan\Type\Type;
 use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\VerbosityLevel;
+
 /**
  * Made with GPT-5
  * @see https://chatgpt.com/share/68d2c183-7708-800a-848b-c63822c4625a
@@ -34,14 +36,14 @@ final class ArrayTypeLeastCommonDenominatorResolver
             }
         }
         // If all are ConstantArrayType and have the *same* ordered key list -> preserve shape.
-        $allConstantArrayTypes = array_reduce($types, fn($c, $t): bool => $c && $t instanceof ConstantArrayType, \true);
+        $allConstantArrayTypes = array_reduce($types, fn ($c, $t): bool => $c && $t instanceof ConstantArrayType, \true);
         if ($allConstantArrayTypes) {
             /** @var ConstantArrayType[] $consts */
             $consts = $types;
             // Compare key sets (by stringified key types)
-            $firstKeys = array_map(fn(Type $type): string => $type->describe(VerbosityLevel::typeOnly()), $consts[0]->getKeyTypes());
+            $firstKeys = array_map(fn (Type $type): string => $type->describe(VerbosityLevel::typeOnly()), $consts[0]->getKeyTypes());
             foreach ($consts as $c) {
-                $keys = array_map(fn(Type $type): string => $type->describe(VerbosityLevel::typeOnly()), $c->getKeyTypes());
+                $keys = array_map(fn (Type $type): string => $type->describe(VerbosityLevel::typeOnly()), $c->getKeyTypes());
                 if ($keys !== $firstKeys) {
                     $allConstantArrayTypes = \false;
                     break;
@@ -79,7 +81,7 @@ final class ArrayTypeLeastCommonDenominatorResolver
             // incompatible key types
         }
         // Recurse on item types; if mixed is returned, that’s our stop depth.
-        $itemTypes = array_map(fn(ArrayType $arrayType): Type => $arrayType->getItemType(), $types);
+        $itemTypes = array_map(fn (ArrayType $arrayType): Type => $arrayType->getItemType(), $types);
         $itemType = $this->sharedArrayStructure(...$itemTypes);
         return new ArrayType($keyType, $itemType);
     }

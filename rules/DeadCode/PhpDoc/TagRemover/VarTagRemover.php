@@ -1,13 +1,11 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\DeadCode\PhpDoc\TagRemover;
 
 use PhpParser\Node;
 use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\ClassConst;
-use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\Property;
 use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
 use PHPStan\Type\Generic\TemplateObjectWithoutClassType;
 use PHPStan\Type\Type;
@@ -18,6 +16,7 @@ use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\DeadCode\PhpDoc\DeadVarTagValueNodeAnalyzer;
 use Rector\NodeTypeResolver\TypeComparator\TypeComparator;
 use Rector\PHPStanStaticTypeMapper\DoctrineTypeAnalyzer;
+
 final class VarTagRemover
 {
     /**

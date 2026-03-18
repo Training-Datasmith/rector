@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php84\Rector\MethodCall;
 
 use PhpParser\Node;
@@ -11,6 +12,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php84\Rector\MethodCall\NewMethodCallWithoutParenthesesRector\NewMethodCallWithoutParenthesesRectorTest
  */
@@ -25,13 +27,15 @@ final class NewMethodCallWithoutParenthesesRector extends AbstractRector impleme
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Remove parentheses on new method call with parentheses', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove parentheses on new method call with parentheses', [new CodeSample(
+            <<<'CODE_SAMPLE'
 (new Request())->withMethod('GET')->withUri('/hello-world');
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 new Request()->withMethod('GET')->withUri('/hello-world');
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @param MethodCall $node

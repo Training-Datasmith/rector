@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodeQuality\Rector\Ternary;
 
 use PhpParser\Node;
@@ -12,6 +13,7 @@ use PhpParser\Node\Expr\Ternary;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodeQuality\Rector\Ternary\TernaryEmptyArrayArrayDimFetchToCoalesceRector\TernaryEmptyArrayArrayDimFetchToCoalesceRectorTest
  */
@@ -19,7 +21,8 @@ final class TernaryEmptyArrayArrayDimFetchToCoalesceRector extends AbstractRecto
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change ternary empty on array property with array dim fetch to coalesce operator', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change ternary empty on array property with array dim fetch to coalesce operator', [new CodeSample(
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     private array $items = [];
@@ -30,7 +33,8 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     private array $items = [];
@@ -41,7 +45,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

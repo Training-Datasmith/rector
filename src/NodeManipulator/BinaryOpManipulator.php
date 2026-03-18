@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\NodeManipulator;
 
 use PhpParser\Node;
@@ -12,6 +13,7 @@ use PhpParser\Node\Expr\BooleanNot;
 use Rector\Exception\ShouldNotHappenException;
 use Rector\Php71\ValueObject\TwoNodeMatch;
 use Rector\PhpParser\Node\AssignAndBinaryMap;
+
 final class BinaryOpManipulator
 {
     /**
@@ -116,7 +118,7 @@ final class BinaryOpManipulator
         if (is_callable($condition)) {
             return $condition;
         }
-        return static fn(Node $node): bool => $node instanceof $condition;
+        return static fn (Node $node): bool => $node instanceof $condition;
     }
     /**
      * @return class-string<BinaryOp>|null

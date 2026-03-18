@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Strict\NodeFactory;
 
 use PhpParser\Node\Arg;
@@ -25,6 +26,7 @@ use PHPStan\Type\TypeCombinator;
 use PHPStan\Type\UnionType;
 use Rector\PhpParser\Node\NodeFactory;
 use Rector\StaticTypeMapper\Resolver\ClassNameFromObjectTypeResolver;
+
 final class ExactCompareFactory
 {
     /**

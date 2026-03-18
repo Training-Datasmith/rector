@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
 
 use PhpParser\Node;
@@ -11,6 +12,7 @@ use PHPStan\Type\Type;
 use Rector\Php\PhpVersionProvider;
 use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
 use Rector\ValueObject\PhpVersionFeature;
+
 /**
  * @implements TypeMapperInterface<ConstantArrayType>
  */

@@ -1,12 +1,14 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodeQuality\TypeResolver;
 
 use PhpParser\Node\Expr\Assign;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+
 final class AssignVariableTypeResolver
 {
     /**

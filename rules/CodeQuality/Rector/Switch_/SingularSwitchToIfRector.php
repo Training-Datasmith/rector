@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodeQuality\Rector\Switch_;
 
 use PhpParser\Node;
@@ -14,6 +15,7 @@ use Rector\Rector\AbstractRector;
 use Rector\Renaming\NodeManipulator\SwitchManipulator;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodeQuality\Rector\Switch_\SingularSwitchToIfRector\SingularSwitchToIfRectorTest
  */
@@ -29,7 +31,8 @@ final class SingularSwitchToIfRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change `switch` with only 1 check to `if`', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change `switch` with only 1 check to `if`', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeObject
 {
     public function run($value)
@@ -44,7 +47,8 @@ class SomeObject
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeObject
 {
     public function run($value)
@@ -58,7 +62,7 @@ class SomeObject
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>
@@ -80,7 +84,7 @@ CODE_SAMPLE
         // only default → basically unwrap
         if (!$onlyCase->cond instanceof Expr) {
             // remove default clause because it cause syntax error
-            return array_filter($onlyCase->stmts, static fn(Stmt $stmt): bool => !$stmt instanceof Break_);
+            return array_filter($onlyCase->stmts, static fn (Stmt $stmt): bool => !$stmt instanceof Break_);
         }
         $if = new If_(new Identical($node->cond, $onlyCase->cond));
         $if->stmts = $this->switchManipulator->removeBreakNodes($onlyCase->stmts);

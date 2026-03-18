@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\DeadCode\Rector\Assign;
 
 use PhpParser\Node;
@@ -16,6 +17,7 @@ use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\DeadCode\Rector\Assign\RemoveDoubleAssignRector\RemoveDoubleAssignRectorTest
  */
@@ -40,7 +42,7 @@ final class RemoveDoubleAssignRector extends AbstractRector
 $value = 1;
 $value = 1;
 CODE_SAMPLE
-, '$value = 1;')]);
+            , '$value = 1;')]);
     }
     /**
      * @return array<class-string<Node>>
@@ -112,6 +114,6 @@ CODE_SAMPLE
     }
     private function isSelfReferencing(Assign $assign): bool
     {
-        return (bool) $this->betterNodeFinder->findFirst($assign->expr, fn(Node $subNode): bool => $this->nodeComparator->areNodesEqual($assign->var, $subNode));
+        return (bool) $this->betterNodeFinder->findFirst($assign->expr, fn (Node $subNode): bool => $this->nodeComparator->areNodesEqual($assign->var, $subNode));
     }
 }

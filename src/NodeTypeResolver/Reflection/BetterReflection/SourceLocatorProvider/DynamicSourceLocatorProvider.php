@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider;
 
 use PHPStan\BetterReflection\SourceLocator\Type\AggregateSourceLocator;
@@ -9,6 +10,7 @@ use PHPStan\Reflection\BetterReflection\SourceLocator\OptimizedDirectorySourceLo
 use PHPStan\Reflection\BetterReflection\SourceLocator\OptimizedSingleFileSourceLocatorRepository;
 use Rector\Contract\DependencyInjection\ResettableInterface;
 use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
+
 /**
  * @api phpstan external
  */

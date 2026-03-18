@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Removing\Rector\FuncCall;
 
 use PhpParser\Node;
@@ -9,9 +10,10 @@ use PhpParser\Node\Stmt\Expression;
 use PhpParser\NodeVisitor;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Rector\AbstractRector;
+use RectorPrefix202603\Webmozart\Assert\Assert;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202603\Webmozart\Assert\Assert;
+
 /**
  * @see \Rector\Tests\Removing\Rector\FuncCall\RemoveFuncCallRector\RemoveFuncCallRectorTest
  */
@@ -27,10 +29,10 @@ final class RemoveFuncCallRector extends AbstractRector implements ConfigurableR
 $x = 'something';
 var_dump($x);
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            , <<<'CODE_SAMPLE'
 $x = 'something';
 CODE_SAMPLE
-, ['var_dump'])]);
+            , ['var_dump'])]);
     }
     /**
      * @return array<class-string<Node>>

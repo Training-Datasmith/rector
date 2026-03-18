@@ -1,11 +1,13 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Configuration\Parameter;
 
 use Rector\Configuration\Option;
 use Rector\Exception\ShouldNotHappenException;
 use RectorPrefix202603\Webmozart\Assert\Assert;
+
 /**
  * @api
  */

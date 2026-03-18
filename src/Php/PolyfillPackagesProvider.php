@@ -1,13 +1,15 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php;
 
-use RectorPrefix202603\Nette\Utils\FileSystem;
-use RectorPrefix202603\Nette\Utils\Json;
 use Rector\Configuration\Option;
 use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\ValueObject\PolyfillPackage;
+use RectorPrefix202603\Nette\Utils\FileSystem;
+use RectorPrefix202603\Nette\Utils\Json;
+
 final class PolyfillPackagesProvider
 {
     /**
@@ -43,6 +45,6 @@ final class PolyfillPackagesProvider
      */
     private function filterPolyfillPackages(array $require): array
     {
-        return array_filter(array_keys($require), static fn(string $packageName): bool => strncmp($packageName, 'symfony/polyfill-', strlen('symfony/polyfill-')) === 0);
+        return array_filter(array_keys($require), static fn (string $packageName): bool => strncmp($packageName, 'symfony/polyfill-', strlen('symfony/polyfill-')) === 0);
     }
 }

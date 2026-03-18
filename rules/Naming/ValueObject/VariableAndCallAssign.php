@@ -1,16 +1,12 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Naming\ValueObject;
 
 use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\StaticCall;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Function_;
+
 final class VariableAndCallAssign
 {
     /**

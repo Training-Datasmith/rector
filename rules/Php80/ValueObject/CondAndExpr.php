@@ -1,11 +1,13 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php80\ValueObject;
 
 use PhpParser\Comment;
 use PhpParser\Node\Expr;
 use Rector\Php80\Enum\MatchKind;
+
 final class CondAndExpr
 {
     /**

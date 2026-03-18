@@ -1,12 +1,14 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php80\ValueObject;
 
 use PhpParser\Node\Expr\Variable;
 use PhpParser\Node\Param;
 use PhpParser\Node\Stmt\Property;
 use Rector\Exception\ShouldNotHappenException;
+
 final class PropertyPromotionCandidate
 {
     /**

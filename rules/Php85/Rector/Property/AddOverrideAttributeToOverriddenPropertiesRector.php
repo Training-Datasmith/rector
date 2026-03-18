@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php85\Rector\Property;
 
 use PhpParser\Node;
@@ -18,6 +19,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see https://wiki.php.net/rfc/override_properties
  *
@@ -50,7 +52,8 @@ final class AddOverrideAttributeToOverriddenPropertiesRector extends AbstractRec
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add override attribute to overridden properties', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add override attribute to overridden properties', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class ParentClass
 {
     public string $name;
@@ -61,7 +64,8 @@ final class ChildClass extends ParentClass
     public string $name;
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class ParentClass
 {
     public string $name;
@@ -73,7 +77,7 @@ final class ChildClass extends ParentClass
     public string $name;
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

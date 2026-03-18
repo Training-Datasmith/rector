@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\Rector\ArrowFunction;
 
 use PhpParser\Node;
@@ -14,6 +15,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\ArrowFunction\AddArrowFunctionReturnTypeRector\AddArrowFunctionReturnTypeRectorTest
  */
@@ -29,13 +31,15 @@ final class AddArrowFunctionReturnTypeRector extends AbstractRector implements M
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add known return type to arrow function', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add known return type to arrow function', [new CodeSample(
+            <<<'CODE_SAMPLE'
 fn () => [];
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 fn (): array => [];
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

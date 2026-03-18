@@ -1,15 +1,17 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\ValueObject\Reporting;
 
-use RectorPrefix202603\Nette\Utils\Strings;
 use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
 use Rector\Contract\Rector\RectorInterface;
 use Rector\Parallel\ValueObject\BridgeItem;
 use Rector\Util\RectorClassesSorter;
+use RectorPrefix202603\Nette\Utils\Strings;
 use RectorPrefix202603\Symplify\EasyParallel\Contract\SerializableInterface;
 use RectorPrefix202603\Webmozart\Assert\Assert;
+
 /**
  * @see \Rector\Tests\ValueObject\Reporting\FileDiffTest
  */

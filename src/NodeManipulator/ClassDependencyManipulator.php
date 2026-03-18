@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\NodeManipulator;
 
 use PhpParser\Node\Arg;
@@ -27,6 +28,7 @@ use Rector\Reflection\ReflectionResolver;
 use Rector\TypeDeclaration\NodeAnalyzer\AutowiredClassMethodOrPropertyAnalyzer;
 use Rector\ValueObject\MethodName;
 use Rector\ValueObject\PhpVersionFeature;
+
 /**
  * @see \Rector\Tests\NodeManipulator\ClassDependencyManipulatorTest
  */
@@ -173,7 +175,7 @@ final class ClassDependencyManipulator
         if (!$classReflection instanceof ClassReflection) {
             return null;
         }
-        $ancestors = array_filter($classReflection->getAncestors(), static fn(ClassReflection $ancestor): bool => $ancestor->getName() !== $classReflection->getName());
+        $ancestors = array_filter($classReflection->getAncestors(), static fn (ClassReflection $ancestor): bool => $ancestor->getName() !== $classReflection->getName());
         foreach ($ancestors as $ancestor) {
             if (!$ancestor->hasNativeMethod(MethodName::CONSTRUCT)) {
                 continue;

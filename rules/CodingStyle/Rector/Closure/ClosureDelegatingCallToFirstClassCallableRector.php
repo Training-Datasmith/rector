@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodingStyle\Rector\Closure;
 
 use PhpParser\Node;
@@ -18,6 +19,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodingStyle\Rector\Closure\ClosureDelegatingCallToFirstClassCallableRector\ClosureDelegatingCallToFirstClassCallableRectorTest
  */
@@ -33,15 +35,17 @@ final class ClosureDelegatingCallToFirstClassCallableRector extends AbstractRect
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Convert closure with sole nested call to first class callable', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Convert closure with sole nested call to first class callable', [new CodeSample(
+            <<<'CODE_SAMPLE'
 function ($parameter) {
     return AnotherClass::someMethod($parameter);
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 AnotherClass::someMethod(...);
 CODE_SAMPLE
-)]);
+        )]);
     }
     public function getNodeTypes(): array
     {

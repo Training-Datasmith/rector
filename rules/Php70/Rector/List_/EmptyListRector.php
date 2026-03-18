@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php70\Rector\List_;
 
 use PhpParser\Node;
@@ -12,6 +13,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php70\Rector\List_\EmptyListRector\EmptyListRectorTest
  */
@@ -19,13 +21,15 @@ final class EmptyListRector extends AbstractRector implements MinPhpVersionInter
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('list() cannot be empty', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('list() cannot be empty', [new CodeSample(
+            <<<'CODE_SAMPLE'
 'list() = $values;'
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 'list($unusedGenerated) = $values;'
 CODE_SAMPLE
-)]);
+        )]);
     }
     public function provideMinPhpVersion(): int
     {

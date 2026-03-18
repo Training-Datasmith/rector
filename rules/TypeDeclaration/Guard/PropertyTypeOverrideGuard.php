@@ -1,12 +1,14 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\Guard;
 
 use PhpParser\Node\Stmt\Property;
 use PHPStan\Reflection\ClassReflection;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Php74\Guard\MakePropertyTypedGuard;
+
 final class PropertyTypeOverrideGuard
 {
     /**

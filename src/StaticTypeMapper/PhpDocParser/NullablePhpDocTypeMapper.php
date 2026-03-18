@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\StaticTypeMapper\PhpDocParser;
 
 use PhpParser\Node;
@@ -13,6 +14,7 @@ use PHPStan\Type\NullType;
 use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface;
+
 /**
  * @implements PhpDocTypeMapperInterface<NullableTypeNode>
  */

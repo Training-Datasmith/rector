@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php83\Rector\ClassMethod;
 
 use PhpParser\Node;
@@ -30,6 +31,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see https://wiki.php.net/rfc/marking_overriden_methods
  *
@@ -100,7 +102,7 @@ final class ChildClass extends ParentClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            , <<<'CODE_SAMPLE'
 class ParentClass
 {
     public function foo()
@@ -118,7 +120,7 @@ final class ChildClass extends ParentClass
     }
 }
 CODE_SAMPLE
-, [self::ALLOW_OVERRIDE_EMPTY_METHOD => \false])]);
+            , [self::ALLOW_OVERRIDE_EMPTY_METHOD => \false])]);
     }
     /**
      * @return array<class-string<Node>>

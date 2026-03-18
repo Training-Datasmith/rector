@@ -1,22 +1,21 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\NodeAnalyzer;
 
-use RectorPrefix202603\Nette\Utils\Strings;
 use PhpParser\Node\Arg;
 use PhpParser\Node\Expr\ArrowFunction;
-use PhpParser\Node\Expr\Closure;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Function_;
 use PHPStan\Type\MixedType;
 use PHPStan\Type\UnionType;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\PhpParser\Node\Value\ValueResolver;
+use RectorPrefix202603\Nette\Utils\Strings;
+
 final class VariableInSprintfMaskMatcher
 {
     /**
@@ -53,7 +52,7 @@ final class VariableInSprintfMaskMatcher
             $stmts = (array) $functionLike->stmts;
         }
         $funcCalls = $this->betterNodeFinder->findInstancesOfScoped($stmts, FuncCall::class);
-        $funcCalls = array_values(array_filter($funcCalls, fn(FuncCall $funcCall): bool => $this->nodeNameResolver->isName($funcCall->name, 'sprintf')));
+        $funcCalls = array_values(array_filter($funcCalls, fn (FuncCall $funcCall): bool => $this->nodeNameResolver->isName($funcCall->name, 'sprintf')));
         if (count($funcCalls) !== 1) {
             return \false;
         }

@@ -1,11 +1,12 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\NodeTypeResolver\TypeComparator;
 
-use PHPStan\Type\ArrayType;
 use PHPStan\Type\Constant\ConstantArrayType;
 use PHPStan\Type\MixedType;
+
 /**
  * @see \Rector\Tests\NodeTypeResolver\TypeComparator\ArrayTypeComparatorTest
  */

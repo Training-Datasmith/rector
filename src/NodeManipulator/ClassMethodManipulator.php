@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\NodeManipulator;
 
 use PhpParser\Node\Stmt\Class_;
@@ -9,6 +10,7 @@ use PHPStan\Reflection\ClassReflection;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Reflection\ReflectionResolver;
 use Rector\ValueObject\MethodName;
+
 final class ClassMethodManipulator
 {
     /**

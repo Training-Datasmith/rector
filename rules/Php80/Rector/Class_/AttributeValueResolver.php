@@ -1,14 +1,16 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php80\Rector\Class_;
 
-use RectorPrefix202603\Nette\Utils\Strings;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
 use Rector\Php80\ValueObject\AttributeValueAndDocComment;
 use Rector\Util\NewLineSplitter;
+use RectorPrefix202603\Nette\Utils\Strings;
+
 final class AttributeValueResolver
 {
     /**

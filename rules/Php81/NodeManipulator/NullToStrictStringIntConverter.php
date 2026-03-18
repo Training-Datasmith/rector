@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php81\NodeManipulator;
 
 use PhpParser\Node\Arg;
@@ -27,6 +28,7 @@ use Rector\NodeAnalyzer\PropertyFetchAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpParser\Node\Value\ValueResolver;
+
 final class NullToStrictStringIntConverter
 {
     /**

@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Config\Level;
 
 use Rector\CodeQuality\Rector\Assign\CombinedAssignRector;
@@ -83,6 +84,7 @@ use Rector\Php52\Rector\Property\VarToPublicPropertyRector;
 use Rector\Php71\Rector\FuncCall\RemoveExtraParametersRector;
 use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
 use Rector\Strict\Rector\Empty_\DisallowedEmptyRuleFixerRector;
+
 /**
  * Key 0 = level 0
  * Key 50 = level 50

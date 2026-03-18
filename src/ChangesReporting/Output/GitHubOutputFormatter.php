@@ -9,11 +9,13 @@
  * @see https://github.com/orgs/community/discussions/129899
  */
 declare (strict_types=1);
+
 namespace Rector\ChangesReporting\Output;
 
 use Rector\ChangesReporting\Contract\Output\OutputFormatterInterface;
 use Rector\ValueObject\Configuration;
 use Rector\ValueObject\ProcessResult;
+
 /**
  * @phpstan-type AnnotationProperties array{title?: string|null, file?: string|null, col?: int|null, endColumn?: int|null, line?: int|null, endLine?: int|null}
  * @see \Rector\Tests\ChangesReporting\Output\GitHubOutputFormatterTest
@@ -90,8 +92,8 @@ final class GitHubOutputFormatter implements OutputFormatterInterface
         // This is a workaround for buggy endLine. See https://github.com/orgs/community/discussions/129899
         // TODO: Should be removed once github will have fixed it issue.
         unset($annotationProperties['endLine']);
-        $nonNullProperties = array_filter($annotationProperties, static fn($value): bool => $value !== null);
-        $sanitizedProperties = array_map(fn(string $key, $value): string => sprintf('%s=%s', $key, $this->sanitizeAnnotationProperty($value)), array_keys($nonNullProperties), $nonNullProperties);
+        $nonNullProperties = array_filter($annotationProperties, static fn ($value): bool => $value !== null);
+        $sanitizedProperties = array_map(fn (string $key, $value): string => sprintf('%s=%s', $key, $this->sanitizeAnnotationProperty($value)), array_keys($nonNullProperties), $nonNullProperties);
         return implode(',', $sanitizedProperties);
     }
     /**

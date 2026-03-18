@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Unambiguous\Rector\Class_;
 
 use PhpParser\Node;
@@ -10,6 +11,7 @@ use Rector\Rector\AbstractRector;
 use Rector\TypeDeclaration\NodeAnalyzer\ClassMethodAndPropertyAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @experimental since 2025-11
  *
@@ -27,7 +29,8 @@ final class RemoveReturnThisFromSetterClassMethodRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Remove return $this from setter method, to make explicit setter without return value. Goal is to make code unambiguous with one way to set value', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove return $this from setter method, to make explicit setter without return value. Goal is to make code unambiguous with one way to set value', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     private $name;
@@ -39,7 +42,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     private $name;
@@ -50,7 +54,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Class_>>

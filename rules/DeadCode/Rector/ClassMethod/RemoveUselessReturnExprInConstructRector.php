@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\DeadCode\Rector\ClassMethod;
 
 use PhpParser\Node;
@@ -17,6 +18,7 @@ use Rector\Rector\AbstractRector;
 use Rector\ValueObject\MethodName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\DeadCode\Rector\ClassMethod\RemoveUselessReturnExprInConstructRector\RemoveUselessReturnExprInConstructRectorTest
  */
@@ -32,7 +34,8 @@ final class RemoveUselessReturnExprInConstructRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Remove useless return Expr in __construct()', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove useless return Expr in __construct()', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function __construct()
@@ -50,7 +53,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function __construct()
@@ -69,7 +73,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

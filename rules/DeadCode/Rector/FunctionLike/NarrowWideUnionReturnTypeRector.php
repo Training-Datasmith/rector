@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\DeadCode\Rector\FunctionLike;
 
 use PhpParser\Node;
@@ -34,6 +35,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\DeadCode\Rector\FunctionLike\NarrowWideUnionReturnTypeRector\NarrowWideUnionReturnTypeRectorTest
  */
@@ -79,7 +81,8 @@ final class NarrowWideUnionReturnTypeRector extends AbstractRector implements Mi
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Narrow overly wide union return type declaration if possible', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Narrow overly wide union return type declaration if possible', [new CodeSample(
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function foo(): string|int|\DateTime
@@ -92,7 +95,8 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function foo(): string|int
@@ -105,7 +109,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     public function provideMinPhpVersion(): int
     {

@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php85\Rector\ShellExec;
 
 use PhpParser\Node;
@@ -14,6 +15,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see https://wiki.php.net/rfc/deprecations_php_8_5#deprecate_backticks_as_an_alias_for_shell_exec
  * @see \Rector\Tests\Php85\Rector\ShellExec\ShellExecFunctionCallOverBackticksRector\ShellExecFunctionCallOverBackticksRectorTest
@@ -22,15 +24,17 @@ final class ShellExecFunctionCallOverBackticksRector extends AbstractRector impl
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Replace backticks based with shell_exec() function calls', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replace backticks based with shell_exec() function calls', [new CodeSample(
+            <<<'CODE_SAMPLE'
 $output = `ls -al`;
 echo "<pre>$output</pre>";
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 $output = shell_exec('ls -al');
 echo "<pre>$output</pre>";
 CODE_SAMPLE
-)]);
+        )]);
     }
     public function getNodeTypes(): array
     {

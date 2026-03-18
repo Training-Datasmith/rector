@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\DeadCode\Rector\For_;
 
 use PhpParser\Node;
@@ -14,6 +15,7 @@ use Rector\DeadCode\SideEffect\SideEffectNodeDetector;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\DeadCode\Rector\For_\RemoveDeadLoopRector\RemoveDeadLoopRectorTest
  */
@@ -29,7 +31,8 @@ final class RemoveDeadLoopRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Remove loop with no body', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove loop with no body', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($values)
@@ -39,7 +42,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run($values)
@@ -47,7 +51,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

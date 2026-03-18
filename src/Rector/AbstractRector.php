@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Rector;
 
 use PhpParser\Node;
@@ -32,6 +33,7 @@ use Rector\PhpParser\Comparing\NodeComparator;
 use Rector\PhpParser\Node\NodeFactory;
 use Rector\Skipper\Skipper\Skipper;
 use Rector\ValueObject\Application\File;
+
 abstract class AbstractRector extends NodeVisitorAbstract implements RectorInterface
 {
     /**

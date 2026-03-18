@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\BetterPhpDocParser\Comment;
 
 use PhpParser\Node;
@@ -9,6 +10,7 @@ use PhpParser\Node\Stmt\Nop;
 use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\Comparing\NodeComparator;
+
 final class CommentsMerger
 {
     /**

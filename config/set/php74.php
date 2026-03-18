@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace RectorPrefix202603;
 
 use PhpParser\Node\Expr\Cast\Double;
@@ -20,6 +21,7 @@ use Rector\Php74\Rector\Ternary\ParenthesizeNestedTernaryRector;
 use Rector\Renaming\Rector\Cast\RenameCastRector;
 use Rector\Renaming\Rector\FuncCall\RenameFunctionRector;
 use Rector\Renaming\ValueObject\RenameCast;
+
 return static function (RectorConfig $rectorConfig): void {
     $rectorConfig->ruleWithConfiguration(RenameFunctionRector::class, [
         #the_real_type

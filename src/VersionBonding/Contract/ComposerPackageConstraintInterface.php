@@ -1,9 +1,11 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\VersionBonding\Contract;
 
 use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
+
 /**
  * Can be implemented by @see \Rector\Contract\Rector\RectorInterface
  *

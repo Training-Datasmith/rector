@@ -1,9 +1,11 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\NodeTypeResolver\ValueObject;
 
 use PHPStan\Type\Type;
+
 final class OldToNewType
 {
     /**

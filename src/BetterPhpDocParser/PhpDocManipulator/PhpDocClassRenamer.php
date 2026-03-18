@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\BetterPhpDocParser\PhpDocManipulator;
 
-use RectorPrefix202603\Nette\Utils\Strings;
 use PhpParser\Node;
 use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
 use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
@@ -14,6 +14,8 @@ use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNod
 use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
 use Rector\Enum\ClassName;
 use Rector\Renaming\Collector\RenamedNameCollector;
+use RectorPrefix202603\Nette\Utils\Strings;
+
 final class PhpDocClassRenamer
 {
     /**

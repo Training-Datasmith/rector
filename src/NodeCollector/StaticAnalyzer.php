@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\NodeCollector;
 
 use PhpParser\Node\Stmt\Class_;
@@ -8,6 +9,7 @@ use PhpParser\Node\Stmt\ClassMethod;
 use PHPStan\PhpDoc\ResolvedPhpDocBlock;
 use PHPStan\Reflection\ClassReflection;
 use Rector\Util\StringUtils;
+
 final class StaticAnalyzer
 {
     public function isStaticMethod(ClassReflection $classReflection, string $methodName, ?Class_ $class = null): bool

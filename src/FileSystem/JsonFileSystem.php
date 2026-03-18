@@ -1,10 +1,12 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\FileSystem;
 
 use RectorPrefix202603\Nette\Utils\FileSystem;
 use RectorPrefix202603\Nette\Utils\Json;
+
 final class JsonFileSystem
 {
     /**

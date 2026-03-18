@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodeQuality\Rector\Isset_;
 
 use PhpParser\Node;
@@ -28,6 +29,7 @@ use Rector\StaticTypeMapper\Resolver\ClassNameFromObjectTypeResolver;
 use Rector\ValueObject\MethodName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodeQuality\Rector\Isset_\IssetOnPropertyObjectToPropertyExistsRector\IssetOnPropertyObjectToPropertyExistsRectorTest
  */
@@ -53,7 +55,8 @@ final class IssetOnPropertyObjectToPropertyExistsRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change isset on property object to `property_exists()` and not null check', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change isset on property object to `property_exists()` and not null check', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     private $x;
@@ -64,7 +67,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     private $x;
@@ -75,7 +79,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

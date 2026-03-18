@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PostRector\Application;
 
 use PhpParser\Node\Stmt;
@@ -18,6 +19,7 @@ use Rector\PostRector\Rector\UseAddingPostRector;
 use Rector\Renaming\Rector\Name\RenameClassRector;
 use Rector\Skipper\Skipper\Skipper;
 use Rector\ValueObject\Application\File;
+
 final class PostFileProcessor implements ResettableInterface
 {
     /**

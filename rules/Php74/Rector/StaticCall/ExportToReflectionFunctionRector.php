@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php74\Rector\StaticCall;
 
 use PhpParser\Node;
@@ -16,6 +17,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php74\Rector\StaticCall\ExportToReflectionFunctionRector\ExportToReflectionFunctionRectorTest
  */
@@ -35,15 +37,17 @@ final class ExportToReflectionFunctionRector extends AbstractRector implements M
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change export() to ReflectionFunction alternatives', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change export() to ReflectionFunction alternatives', [new CodeSample(
+            <<<'CODE_SAMPLE'
 $reflectionFunction = ReflectionFunction::export('foo');
 $reflectionFunctionAsString = ReflectionFunction::export('foo', true);
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 $reflectionFunction = new ReflectionFunction('foo');
 $reflectionFunctionAsString = (string) new ReflectionFunction('foo');
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

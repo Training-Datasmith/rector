@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php74\Rector\FuncCall;
 
 use PhpParser\Node;
@@ -12,6 +13,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php74\Rector\FuncCall\HebrevcToNl2brHebrevRector\HebrevcToNl2brHebrevRectorTest
  */
@@ -23,13 +25,15 @@ final class HebrevcToNl2brHebrevRector extends AbstractRector implements MinPhpV
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change hebrevc($str) to nl2br(hebrev($str))', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change hebrevc($str) to nl2br(hebrev($str))', [new CodeSample(
+            <<<'CODE_SAMPLE'
 hebrevc($str);
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 nl2br(hebrev($str));
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

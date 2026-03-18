@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\DeadCode\NodeAnalyzer;
 
 use PhpParser\Node;
@@ -9,6 +10,7 @@ use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Expr\Include_;
 use PhpParser\Node\Expr\Variable;
 use Rector\NodeAnalyzer\CompactFuncCallAnalyzer;
+
 final class ExprUsedInNodeAnalyzer
 {
     /**

@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodeQuality\Rector\BooleanNot;
 
 use PhpParser\Node;
@@ -11,6 +12,7 @@ use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * Replace negated boolean literals with their simplified equivalents
  *
@@ -28,7 +30,8 @@ final class ReplaceConstantBooleanNotRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Replace negated boolean literals (!false, !true) with their simplified equivalents (true, false)', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replace negated boolean literals (!false, !true) with their simplified equivalents (true, false)', [new CodeSample(
+            <<<'CODE_SAMPLE'
 if (!false) {
     return 'always true';
 }
@@ -37,7 +40,8 @@ if (!true) {
     return 'never reached';
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 if (true) {
     return 'always true';
 }
@@ -46,7 +50,7 @@ if (false) {
     return 'never reached';
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

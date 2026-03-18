@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodeQuality\Rector\If_;
 
 use PhpParser\Node;
@@ -14,6 +15,7 @@ use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodeQuality\Rector\If_\SimplifyIfNotNullReturnRector\SimplifyIfNotNullReturnRectorTest
  */
@@ -34,7 +36,8 @@ final class SimplifyIfNotNullReturnRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Changes redundant null check to instant return', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Changes redundant null check to instant return', [new CodeSample(
+            <<<'CODE_SAMPLE'
 $newNode = 'something';
 if ($newNode !== null) {
     return $newNode;
@@ -42,11 +45,12 @@ if ($newNode !== null) {
 
 return null;
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 $newNode = 'something';
 return $newNode;
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

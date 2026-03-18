@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php81\NodeAnalyzer;
 
 use PhpParser\Node\Expr;
@@ -11,6 +12,7 @@ use PhpParser\Node\Expr\PropertyFetch;
 use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\Expression;
 use Rector\NodeNameResolver\NodeNameResolver;
+
 final class CoalescePropertyAssignMatcher
 {
     /**

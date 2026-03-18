@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Arguments\Rector\MethodCall;
 
 use PhpParser\Node;
@@ -12,9 +13,10 @@ use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\NodeAnalyzer\ArgsAnalyzer;
 use Rector\PhpParser\AstResolver;
 use Rector\Rector\AbstractRector;
+use RectorPrefix202603\Webmozart\Assert\Assert;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202603\Webmozart\Assert\Assert;
+
 /**
  * @note used extensively https://github.com/search?q=RemoveMethodCallParamRector%3A%3Aclass+language%3APHP&type=code&l=PHP
  * @see \Rector\Tests\Arguments\Rector\MethodCall\RemoveMethodCallParamRector\RemoveMethodCallParamRectorTest
@@ -49,7 +51,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            , <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function run(Caller $caller)
@@ -58,7 +60,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, [new RemoveMethodCallParam('Caller', 'process', 1)])]);
+            , [new RemoveMethodCallParam('Caller', 'process', 1)])]);
     }
     /**
      * @return array<class-string<Node>>

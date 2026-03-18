@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodeQuality\Rector\Empty_;
 
 use PhpParser\Node;
@@ -28,6 +29,7 @@ use Rector\Reflection\ReflectionResolver;
 use Rector\TypeDeclaration\TypeInferer\PropertyTypeInferer\AllAssignNodePropertyTypeInferer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodeQuality\Rector\Empty_\SimplifyEmptyCheckOnEmptyArrayRector\SimplifyEmptyCheckOnEmptyArrayRectorTest
  */
@@ -63,19 +65,21 @@ final class SimplifyEmptyCheckOnEmptyArrayRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Simplify empty() functions calls on empty arrays', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Simplify empty() functions calls on empty arrays', [new CodeSample(
+            <<<'CODE_SAMPLE'
 $values = [];
 
 if (empty($values)) {
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 $values = [];
 
 if ([] === $values) {
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

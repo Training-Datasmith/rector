@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PostRector\Rector;
 
 use Override;
@@ -12,6 +13,7 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\Comments\NodeDocBlock\DocBlockUpdater;
 use Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer\DocBlockNameImporter;
 use Rector\PostRector\Guard\AddUseStatementGuard;
+
 final class DocblockNameImportingPostRector extends \Rector\PostRector\Rector\AbstractPostRector
 {
     /**

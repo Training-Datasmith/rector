@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PhpParser\NodeVisitor;
 
 use PhpParser\Node;
@@ -13,6 +14,7 @@ use Rector\DeadCode\ConditionResolver;
 use Rector\DeadCode\ValueObject\VersionCompareCondition;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpParser\NodeTraverser\SimpleNodeTraverser;
+
 final class PhpVersionConditionNodeVisitor extends NodeVisitorAbstract implements DecoratingNodeVisitorInterface
 {
     /**

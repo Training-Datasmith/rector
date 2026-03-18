@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Transform\Rector\StaticCall;
 
 use PhpParser\Node;
@@ -10,9 +11,10 @@ use PhpParser\Node\Name\FullyQualified;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Rector\AbstractRector;
 use Rector\Transform\ValueObject\StaticCallToNew;
+use RectorPrefix202603\Webmozart\Assert\Assert;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202603\Webmozart\Assert\Assert;
+
 /**
  * @see \Rector\Tests\Transform\Rector\StaticCall\StaticCallToNewRector\StaticCallToNewRectorTest
  */
@@ -33,7 +35,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            , <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -42,7 +44,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, [new StaticCallToNew('JsonResponse', 'create')])]);
+            , [new StaticCallToNew('JsonResponse', 'create')])]);
     }
     /**
      * @return array<class-string<Node>>

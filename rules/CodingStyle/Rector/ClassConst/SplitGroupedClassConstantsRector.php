@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodingStyle\Rector\ClassConst;
 
 use PhpParser\Node;
@@ -9,6 +10,7 @@ use PhpParser\Node\Stmt\ClassConst;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodingStyle\Rector\ClassConst\SplitGroupedClassConstantsRector\SplitGroupedClassConstantsRectorTest
  */
@@ -16,20 +18,22 @@ final class SplitGroupedClassConstantsRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Separate class constant to own lines', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Separate class constant to own lines', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     const HI = true, HELLO = 'true';
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     const HI = true;
     const HELLO = 'true';
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

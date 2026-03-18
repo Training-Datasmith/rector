@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php74\Rector\Property;
 
 use PhpParser\Node;
@@ -14,6 +15,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php74\Rector\Property\RestoreDefaultNullToNullableTypePropertyRector\RestoreDefaultNullToNullableTypePropertyRectorTest
  */
@@ -34,19 +36,21 @@ final class RestoreDefaultNullToNullableTypePropertyRector extends AbstractRecto
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add null default to properties with PHP 7.4 property nullable type', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add null default to properties with PHP 7.4 property nullable type', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public ?string $name;
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public ?string $name = null;
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

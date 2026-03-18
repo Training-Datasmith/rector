@@ -1,13 +1,15 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php\PhpVersionResolver;
 
-use RectorPrefix202603\Composer\Semver\VersionParser;
 use Rector\Exception\Configuration\InvalidConfigurationException;
 use Rector\FileSystem\JsonFileSystem;
 use Rector\Util\PhpVersionFactory;
 use Rector\ValueObject\PhpVersion;
+use RectorPrefix202603\Composer\Semver\VersionParser;
+
 /**
  * @see \Rector\Tests\Php\PhpVersionResolver\ComposerJsonPhpVersionResolver\ComposerJsonPhpVersionResolverTest
  */

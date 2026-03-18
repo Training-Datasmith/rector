@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Naming\Rector\Foreach_;
 
 use PhpParser\Node;
@@ -19,6 +20,7 @@ use Rector\Naming\VariableRenamer;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchMethodCallReturnTypeRector\RenameForeachValueVariableToMatchMethodCallReturnTypeRectorTest
  */
@@ -58,7 +60,8 @@ final class RenameForeachValueVariableToMatchMethodCallReturnTypeRector extends 
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Renames value variable name in foreach loop to match method type', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Renames value variable name in foreach loop to match method type', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -70,7 +73,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -82,7 +86,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

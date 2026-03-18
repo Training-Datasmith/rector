@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php70\Rector\If_;
 
 use PhpParser\Node;
@@ -22,6 +23,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php70\Rector\If_\IfToSpaceshipRector\IfToSpaceshipRectorTest
  */
@@ -42,7 +44,8 @@ final class IfToSpaceshipRector extends AbstractRector implements MinPhpVersionI
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Changes if/else to spaceship <=> where useful', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Changes if/else to spaceship <=> where useful', [new CodeSample(
+            <<<'CODE_SAMPLE'
 usort($languages, function ($first, $second) {
 if ($first[0] === $second[0]) {
     return 0;
@@ -51,12 +54,13 @@ if ($first[0] === $second[0]) {
 return ($first[0] < $second[0]) ? 1 : -1;
 });
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 usort($languages, function ($first, $second) {
 return $second[0] <=> $first[0];
 });
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

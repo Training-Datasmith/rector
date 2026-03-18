@@ -1,10 +1,12 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Configuration;
 
 use Rector\Configuration\Parameter\SimpleParameterProvider;
 use Rector\Skipper\FileSystem\PathNormalizer;
+
 final class VendorMissAnalyseGuard
 {
     /**

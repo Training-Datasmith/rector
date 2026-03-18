@@ -1,12 +1,11 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\DeadCode\NodeAnalyzer;
 
 use PhpParser\Node;
 use PhpParser\Node\Expr\ArrayDimFetch;
-use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
-use PhpParser\Node\Expr\BinaryOp\BooleanOr;
 use PhpParser\Node\Expr\CallLike;
 use PhpParser\Node\Expr\Instanceof_;
 use PhpParser\Node\Expr\PropertyFetch;
@@ -18,6 +17,7 @@ use Rector\NodeAnalyzer\ExprAnalyzer;
 use Rector\NodeTypeResolver\NodeTypeResolver;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Reflection\ReflectionResolver;
+
 final class SafeLeftTypeBooleanAndOrAnalyzer
 {
     /**
@@ -48,11 +48,11 @@ final class SafeLeftTypeBooleanAndOrAnalyzer
      */
     public function isSafe($booleanAnd): bool
     {
-        $hasNonTypedFromParam = (bool) $this->betterNodeFinder->findFirst($booleanAnd->left, fn(Node $node): bool => $node instanceof Variable && $this->exprAnalyzer->isNonTypedFromParam($node));
+        $hasNonTypedFromParam = (bool) $this->betterNodeFinder->findFirst($booleanAnd->left, fn (Node $node): bool => $node instanceof Variable && $this->exprAnalyzer->isNonTypedFromParam($node));
         if ($hasNonTypedFromParam) {
             return \false;
         }
-        $hasPropertyFetchOrArrayDimFetch = (bool) $this->betterNodeFinder->findFirst($booleanAnd->left, static fn(Node $node): bool => $node instanceof PropertyFetch || $node instanceof StaticPropertyFetch || $node instanceof ArrayDimFetch);
+        $hasPropertyFetchOrArrayDimFetch = (bool) $this->betterNodeFinder->findFirst($booleanAnd->left, static fn (Node $node): bool => $node instanceof PropertyFetch || $node instanceof StaticPropertyFetch || $node instanceof ArrayDimFetch);
         // get type from Property and ArrayDimFetch is unreliable
         if ($hasPropertyFetchOrArrayDimFetch) {
             return \false;

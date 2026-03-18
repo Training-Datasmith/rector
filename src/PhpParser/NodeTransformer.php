@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PhpParser;
 
 use PhpParser\BuilderHelpers;
@@ -17,6 +18,7 @@ use Rector\Exception\ShouldNotHappenException;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\Util\StringUtils;
 use Rector\ValueObject\SprintfStringAndArgs;
+
 /**
  * @api used in phpunit
  */

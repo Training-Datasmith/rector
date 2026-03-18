@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PostRector\Rector;
 
 use Override;
@@ -12,6 +13,7 @@ use Rector\Configuration\RenamedClassesDataCollector;
 use Rector\PhpParser\Node\FileNode;
 use Rector\PostRector\Guard\AddUseStatementGuard;
 use Rector\Renaming\Collector\RenamedNameCollector;
+
 final class ClassRenamingPostRector extends \Rector\PostRector\Rector\AbstractPostRector
 {
     /**

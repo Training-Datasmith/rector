@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodeQuality\Rector\ClassConstFetch;
 
 use PhpParser\Node;
@@ -13,6 +14,7 @@ use PHPStan\Type\ObjectType;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodeQuality\Rector\ClassConstFetch\VariableConstFetchToClassConstFetchRector\VariableConstFetchToClassConstFetchRectorTest
  */
@@ -28,7 +30,8 @@ final class VariableConstFetchToClassConstFetchRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change variable class constant fetch to direct class constant fetch when class or constant target is final', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change variable class constant fetch to direct class constant fetch when class or constant target is final', [new CodeSample(
+            <<<'CODE_SAMPLE'
 final class AnotherClass
 {
 }
@@ -41,7 +44,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 final class AnotherClass
 {
 }
@@ -54,7 +58,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

@@ -4,7 +4,6 @@ declare(strict_types=1);
 
 namespace PHPUnit\Framework;
 
-use PHPUnit\Event\NoPreviousThrowableException;
 use PHPUnit\Framework\MockObject\MockObject;
 
 if (! class_exists('PHPUnit\Framework\TestCase')) {

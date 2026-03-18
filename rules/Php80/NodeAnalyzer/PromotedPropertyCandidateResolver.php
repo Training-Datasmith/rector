@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php80\NodeAnalyzer;
 
 use PhpParser\Node;
@@ -20,6 +21,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\Php80\ValueObject\PropertyPromotionCandidate;
 use Rector\PhpParser\Comparing\NodeComparator;
 use Rector\PhpParser\Node\BetterNodeFinder;
+
 final class PromotedPropertyCandidateResolver
 {
     /**

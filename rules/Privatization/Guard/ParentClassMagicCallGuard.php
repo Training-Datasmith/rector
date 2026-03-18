@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Privatization\Guard;
 
 use PhpParser\Node\Expr;
@@ -12,6 +13,7 @@ use PhpParser\PrettyPrinterAbstract;
 use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PhpParser\AstResolver;
 use Rector\PhpParser\Node\BetterNodeFinder;
+
 final class ParentClassMagicCallGuard
 {
     /**

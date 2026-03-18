@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
@@ -26,6 +27,7 @@ use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\BoolReturnTypeFromBooleanStrictReturnsRector\BoolReturnTypeFromBooleanStrictReturnsRectorTest
  */
@@ -66,7 +68,8 @@ final class BoolReturnTypeFromBooleanStrictReturnsRector extends AbstractRector 
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add bool return type based on strict bool returns type operations', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add bool return type based on strict bool returns type operations', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function resolve($first, $second)
@@ -75,7 +78,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function resolve($first, $second): bool
@@ -84,7 +88,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @funcCall array<class-string<Node>>

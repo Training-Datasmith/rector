@@ -1,13 +1,13 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodeQuality\NodeManipulator;
 
 use PhpParser\Node\Arg;
 use PhpParser\Node\Identifier;
-use PHPStan\Reflection\FunctionReflection;
-use PHPStan\Reflection\MethodReflection;
 use PHPStan\Reflection\ParametersAcceptorSelector;
+
 final class NamedArgsSorter
 {
     /**

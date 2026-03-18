@@ -1,9 +1,9 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PostRector\Rector;
 
-use RectorPrefix202603\Nette\Utils\Strings;
 use PhpParser\Comment;
 use PhpParser\Comment\Doc;
 use PhpParser\Node;
@@ -20,6 +20,8 @@ use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfoFactory;
 use Rector\NodeTypeResolver\Node\AttributeKey;
 use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
 use Rector\PhpParser\Node\FileNode;
+use RectorPrefix202603\Nette\Utils\Strings;
+
 final class UnusedImportRemovingPostRector extends \Rector\PostRector\Rector\AbstractPostRector
 {
     /**
@@ -123,7 +125,7 @@ final class UnusedImportRemovingPostRector extends \Rector\PostRector\Rector\Abs
             if ($comments === []) {
                 return null;
             }
-            $docs = array_filter($comments, static fn(Comment $comment): bool => $comment instanceof Doc);
+            $docs = array_filter($comments, static fn (Comment $comment): bool => $comment instanceof Doc);
             if ($docs === []) {
                 return null;
             }

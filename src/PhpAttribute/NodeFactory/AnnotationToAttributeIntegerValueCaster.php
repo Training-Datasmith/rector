@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PhpAttribute\NodeFactory;
 
 use PhpParser\Node\Arg;
@@ -16,6 +17,7 @@ use PHPStan\Type\Type;
 use PHPStan\Type\UnionType;
 use Rector\Php80\ValueObject\AnnotationToAttribute;
 use RectorPrefix202603\Webmozart\Assert\Assert;
+
 final class AnnotationToAttributeIntegerValueCaster
 {
     /**

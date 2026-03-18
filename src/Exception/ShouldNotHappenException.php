@@ -1,10 +1,12 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Exception;
 
 use Exception;
 use Throwable;
+
 final class ShouldNotHappenException extends Exception
 {
     /**

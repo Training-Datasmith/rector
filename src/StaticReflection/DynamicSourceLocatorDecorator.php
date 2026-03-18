@@ -1,11 +1,13 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\StaticReflection;
 
 use Rector\FileSystem\FileAndDirectoryFilter;
 use Rector\FileSystem\FilesystemTweaker;
 use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
+
 /**
  * @see https://phpstan.org/blog/zero-config-analysis-with-static-reflection
  * @see https://github.com/rectorphp/rector/issues/3490

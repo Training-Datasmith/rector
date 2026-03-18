@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodeQuality\Rector\Identical;
 
 use PhpParser\Node;
@@ -18,6 +19,7 @@ use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
 use Rector\TypeDeclaration\TypeAnalyzer\NullableTypeAnalyzer;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodeQuality\Rector\Identical\FlipTypeControlToUseExclusiveTypeRector\FlipTypeControlToUseExclusiveTypeRectorTest
  */
@@ -38,7 +40,8 @@ final class FlipTypeControlToUseExclusiveTypeRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Flip type control from null compare to use exclusive instanceof object', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Flip type control from null compare to use exclusive instanceof object', [new CodeSample(
+            <<<'CODE_SAMPLE'
 function process(?DateTime $dateTime)
 {
     if ($dateTime === null) {
@@ -46,7 +49,8 @@ function process(?DateTime $dateTime)
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 function process(?DateTime $dateTime)
 {
     if (! $dateTime instanceof DateTime) {
@@ -54,7 +58,7 @@ function process(?DateTime $dateTime)
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

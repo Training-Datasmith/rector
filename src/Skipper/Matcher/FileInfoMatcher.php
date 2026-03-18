@@ -1,12 +1,14 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Skipper\Matcher;
 
 use Rector\Skipper\FileSystem\FnMatchPathNormalizer;
 use Rector\Skipper\FileSystem\PathNormalizer;
 use Rector\Skipper\Fnmatcher;
 use Rector\Skipper\RealpathMatcher;
+
 final class FileInfoMatcher
 {
     /**

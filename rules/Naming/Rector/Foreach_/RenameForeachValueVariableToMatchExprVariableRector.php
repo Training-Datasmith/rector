@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Naming\Rector\Foreach_;
 
 use PhpParser\Node;
@@ -15,6 +16,7 @@ use Rector\PHPStan\ScopeFetcher;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Naming\Rector\Foreach_\RenameForeachValueVariableToMatchExprVariableRector\RenameForeachValueVariableToMatchExprVariableRectorTest
  */
@@ -45,7 +47,8 @@ final class RenameForeachValueVariableToMatchExprVariableRector extends Abstract
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Rename value variable name in foreach loop to match expression variable', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Rename value variable name in foreach loop to match expression variable', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -57,7 +60,8 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run()
@@ -69,7 +73,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

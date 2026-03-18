@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php85\Rector\ArrayDimFetch;
 
 use PhpParser\Node;
@@ -15,6 +16,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see https://php.watch/versions/8.5/array_first-array_last
  * @see \Rector\Tests\Php85\Rector\ArrayDimFetch\ArrayFirstLastRector\ArrayFirstLastRectorTest
@@ -31,19 +33,21 @@ final class ArrayFirstLastRector extends AbstractRector implements MinPhpVersion
     private const ARRAY_KEY_LAST = 'array_key_last';
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Make use of array_first() and array_last()', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Make use of array_first() and array_last()', [new CodeSample(
+            <<<'CODE_SAMPLE'
 echo $array[array_key_first($array)];
 echo $array[array_key_last($array)];
 echo array_values($array)[0];
 echo array_values($array)[count($array) - 1];
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 echo array_first($array);
 echo array_last($array);
 echo array_first($array);
 echo array_last($array);
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

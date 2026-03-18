@@ -1,12 +1,13 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\BetterPhpDocParser\ValueObject\PhpDoc;
 
 use Override;
 use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
 use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use Stringable;
+
 final class SpacingAwareTemplateTagValueNode extends TemplateTagValueNode
 {
     /**

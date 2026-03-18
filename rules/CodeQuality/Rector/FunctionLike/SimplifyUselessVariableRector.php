@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodeQuality\Rector\FunctionLike;
 
 use PhpParser\Comment\Doc;
@@ -23,6 +24,7 @@ use Rector\PhpParser\Node\AssignAndBinaryMap;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodeQuality\Rector\FunctionLike\SimplifyUselessVariableRector\SimplifyUselessVariableRectorTest
  */
@@ -73,13 +75,13 @@ function () {
     return $a;
 };
 CODE_SAMPLE
-,
+            ,
             <<<'CODE_SAMPLE'
 function () {
     return true;
 };
 CODE_SAMPLE
-,
+            ,
             // default
             [self::ONLY_DIRECT_ASSIGN => \true]
         ), new ConfiguredCodeSample(<<<'CODE_SAMPLE'
@@ -90,14 +92,14 @@ function () {
     return $a;
 };
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            , <<<'CODE_SAMPLE'
 function () {
     $a = 'Hello, ';
 
     return $a . 'World!';
 };
 CODE_SAMPLE
-, [self::ONLY_DIRECT_ASSIGN => \false])]);
+            , [self::ONLY_DIRECT_ASSIGN => \false])]);
     }
     /**
      * @return array<class-string<Node>>

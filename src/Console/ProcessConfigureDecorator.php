@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Console;
 
 use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
@@ -8,6 +9,7 @@ use Rector\Configuration\Option;
 use RectorPrefix202603\Symfony\Component\Console\Command\Command;
 use RectorPrefix202603\Symfony\Component\Console\Input\InputArgument;
 use RectorPrefix202603\Symfony\Component\Console\Input\InputOption;
+
 final class ProcessConfigureDecorator
 {
     public static function decorate(Command $command): void

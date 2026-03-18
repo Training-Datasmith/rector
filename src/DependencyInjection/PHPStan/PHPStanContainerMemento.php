@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\DependencyInjection\PHPStan;
 
 use PHPStan\DependencyInjection\MemoizingContainer;
@@ -9,6 +10,7 @@ use PHPStan\Parser\AnonymousClassVisitor;
 use PHPStan\Parser\ArrayMapArgVisitor;
 use PHPStan\Parser\RichParser;
 use Rector\Util\Reflection\PrivatesAccessor;
+
 /**
  * Helper service to modify PHPStan container
  * To avoid issues caused by node replacement, like @see https://github.com/rectorphp/rector/issues/9492

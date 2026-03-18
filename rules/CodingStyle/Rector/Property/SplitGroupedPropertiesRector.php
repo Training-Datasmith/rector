@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodingStyle\Rector\Property;
 
 use PhpParser\Node;
@@ -9,6 +10,7 @@ use PhpParser\Node\Stmt\Property;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodingStyle\Rector\Property\SplitGroupedPropertiesRector\SplitGroupedPropertiesRectorTest
  */
@@ -16,7 +18,8 @@ final class SplitGroupedPropertiesRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Separate grouped properties to own lines', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Separate grouped properties to own lines', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -25,7 +28,8 @@ class SomeClass
     public $isIt, $isIsThough;
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
     /**
@@ -39,7 +43,7 @@ class SomeClass
     public $isIsThough;
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

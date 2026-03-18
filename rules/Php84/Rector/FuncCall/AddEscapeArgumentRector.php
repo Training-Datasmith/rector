@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php84\Rector\FuncCall;
 
 use PhpParser\Node;
@@ -15,6 +16,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php84\Rector\FuncCall\AddEscapeArgumentRector\AddEscapeArgumentRectorTest
  */
@@ -22,13 +24,15 @@ final class AddEscapeArgumentRector extends AbstractRector implements MinPhpVers
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add escape argument on CSV function calls', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add escape argument on CSV function calls', [new CodeSample(
+            <<<'CODE_SAMPLE'
 str_getcsv($string, separator: ',', enclosure: '"');
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 str_getcsv($string, separator: ',', enclosure: '"', escape: '\\');
 CODE_SAMPLE
-)]);
+        )]);
     }
     public function getNodeTypes(): array
     {

@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php70\NodeAnalyzer;
 
 use PhpParser\Node\Expr;
@@ -11,6 +12,7 @@ use Rector\Php70\Enum\BattleshipCompareOrder;
 use Rector\Php70\ValueObject\ComparedExprs;
 use Rector\PhpParser\Comparing\NodeComparator;
 use Rector\PhpParser\Node\Value\ValueResolver;
+
 final class BattleshipTernaryAnalyzer
 {
     /**

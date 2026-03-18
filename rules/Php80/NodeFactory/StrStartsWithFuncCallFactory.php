@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php80\NodeFactory;
 
 use PhpParser\Node\Arg;
@@ -8,6 +9,7 @@ use PhpParser\Node\Expr\BooleanNot;
 use PhpParser\Node\Expr\FuncCall;
 use PhpParser\Node\Name;
 use Rector\Php80\ValueObject\StrStartsWith;
+
 final class StrStartsWithFuncCallFactory
 {
     /**

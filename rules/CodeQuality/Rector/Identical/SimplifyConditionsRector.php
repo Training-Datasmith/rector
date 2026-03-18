@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodeQuality\Rector\Identical;
 
 use PhpParser\Node;
@@ -17,6 +18,7 @@ use Rector\PhpParser\Node\Value\ValueResolver;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodeQuality\Rector\Identical\SimplifyConditionsRector\SimplifyConditionsRectorTest
  */
@@ -73,7 +75,7 @@ final class SimplifyConditionsRector extends AbstractRector
     }
     private function processIdenticalAndNotIdentical(Identical $identical): ?Node
     {
-        $twoNodeMatch = $this->binaryOpManipulator->matchFirstAndSecondConditionNode($identical, static fn(Node $node): bool => $node instanceof Identical || $node instanceof NotIdentical, fn(Node $node): bool => $node instanceof Expr && $this->valueResolver->isTrueOrFalse($node));
+        $twoNodeMatch = $this->binaryOpManipulator->matchFirstAndSecondConditionNode($identical, static fn (Node $node): bool => $node instanceof Identical || $node instanceof NotIdentical, fn (Node $node): bool => $node instanceof Expr && $this->valueResolver->isTrueOrFalse($node));
         if (!$twoNodeMatch instanceof TwoNodeMatch) {
             return $twoNodeMatch;
         }

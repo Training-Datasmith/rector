@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Transform\Rector\ClassMethod;
 
 use PhpParser\Node;
@@ -13,9 +14,10 @@ use PhpParser\Node\Stmt\Return_;
 use Rector\Contract\Rector\ConfigurableRectorInterface;
 use Rector\Rector\AbstractRector;
 use Rector\Transform\ValueObject\WrapReturn;
+use RectorPrefix202603\Webmozart\Assert\Assert;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202603\Webmozart\Assert\Assert;
+
 /**
  * @see \Rector\Tests\Transform\Rector\ClassMethod\WrapReturnRector\WrapReturnRectorTest
  */
@@ -36,7 +38,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            , <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function getItem()
@@ -45,7 +47,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, [new WrapReturn('SomeClass', 'getItem', \true)])]);
+            , [new WrapReturn('SomeClass', 'getItem', \true)])]);
     }
     /**
      * @return array<class-string<Node>>

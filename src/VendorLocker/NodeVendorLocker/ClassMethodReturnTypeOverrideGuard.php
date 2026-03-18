@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\VendorLocker\NodeVendorLocker;
 
 use PhpParser\Node\Stmt\ClassMethod;
@@ -14,6 +15,7 @@ use Rector\NodeAnalyzer\MagicClassMethodAnalyzer;
 use Rector\NodeTypeResolver\PHPStan\ParametersAcceptorSelectorVariantsWrapper;
 use Rector\Reflection\ReflectionResolver;
 use Rector\VendorLocker\ParentClassMethodTypeOverrideGuard;
+
 final class ClassMethodReturnTypeOverrideGuard
 {
     /**

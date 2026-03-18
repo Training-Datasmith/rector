@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\DeadCode\Rector\Stmt;
 
 use PhpParser\Node;
@@ -14,6 +15,7 @@ use Rector\PhpParser\Enum\NodeGroup;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\DeadCode\Rector\Stmt\RemoveConditionExactReturnRector\RemoveConditionExactReturnRectorTest
  */
@@ -29,7 +31,8 @@ final class RemoveConditionExactReturnRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Remove if with condition and return with same expr, followed by compared expr return', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove if with condition and return with same expr, followed by compared expr return', [new CodeSample(
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function __construct(array $items)
@@ -42,7 +45,8 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function __construct(array $items)
@@ -51,7 +55,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

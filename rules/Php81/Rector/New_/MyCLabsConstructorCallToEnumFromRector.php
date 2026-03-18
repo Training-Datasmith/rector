@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php81\Rector\New_;
 
 use PhpParser\Node;
@@ -17,6 +18,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php81\Rector\New_\MyCLabsConstructorCallToEnumFromRector\MyCLabsConstructorCallToEnumFromRectorTest
  */
@@ -58,13 +60,15 @@ final class MyCLabsConstructorCallToEnumFromRector extends AbstractRector implem
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Refactor MyCLabs Enum using constructor for instantiation', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Refactor MyCLabs Enum using constructor for instantiation', [new CodeSample(
+            <<<'CODE_SAMPLE'
 $enum = new Enum($args);
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 $enum = Enum::from($args);
 CODE_SAMPLE
-)]);
+        )]);
     }
     private function refactorConstructorCallToStaticFromCall(New_ $new): ?StaticCall
     {

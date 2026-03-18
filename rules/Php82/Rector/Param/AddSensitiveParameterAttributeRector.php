@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php82\Rector\Param;
 
 use PhpParser\Node;
@@ -13,9 +14,10 @@ use Rector\Php80\NodeAnalyzer\PhpAttributeAnalyzer;
 use Rector\Rector\AbstractRector;
 use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
+use RectorPrefix202603\Webmozart\Assert\Assert;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
-use RectorPrefix202603\Webmozart\Assert\Assert;
+
 /**
  * @see \Rector\Tests\Php82\Rector\Param\AddSensitiveParameterAttributeRector\AddSensitiveParameterAttributeRectorTest
  */
@@ -73,7 +75,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            , <<<'CODE_SAMPLE'
 class SomeClass
 {
     public function run(#[\SensitiveParameter] string $password)
@@ -81,7 +83,7 @@ class SomeClass
     }
 }
 CODE_SAMPLE
-, [self::SENSITIVE_PARAMETERS => ['password']])]);
+            , [self::SENSITIVE_PARAMETERS => ['password']])]);
     }
     public function provideMinPhpVersion(): int
     {

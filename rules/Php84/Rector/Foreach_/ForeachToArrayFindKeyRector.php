@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php84\Rector\Foreach_;
 
 use PhpParser\Node;
@@ -22,6 +23,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php84\Rector\Foreach_\ForeachToArrayFindKeyRector\ForeachToArrayFindKeyRectorTest
  */
@@ -47,7 +49,8 @@ final class ForeachToArrayFindKeyRector extends AbstractRector implements MinPhp
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Replace foreach with assignment and break with array_find_key', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Replace foreach with assignment and break with array_find_key', [new CodeSample(
+            <<<'CODE_SAMPLE'
 $animals = ['dog', 'cat', 'cow', 'duck', 'goose'];
 
 $found = null;
@@ -58,12 +61,13 @@ foreach ($animals as $idx => $animal) {
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 $animals = ['dog', 'cat', 'cow', 'duck', 'goose'];
 
 $found = array_find_key($animals, fn($animal) => str_starts_with($animal, 'c'));
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

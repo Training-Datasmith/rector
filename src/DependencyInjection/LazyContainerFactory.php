@@ -1,11 +1,9 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\DependencyInjection;
 
-use RectorPrefix202603\Doctrine\Inflector\Inflector;
-use RectorPrefix202603\Doctrine\Inflector\Rules\English\InflectorFactory;
-use RectorPrefix202603\Illuminate\Container\Container;
 use PhpParser\Lexer;
 use PHPStan\Analyser\NodeScopeResolver;
 use PHPStan\Analyser\ScopeFactory;
@@ -190,10 +188,14 @@ use Rector\StaticTypeMapper\PhpParser\NameNodeMapper;
 use Rector\StaticTypeMapper\PhpParser\NullableTypeNodeMapper;
 use Rector\StaticTypeMapper\PhpParser\StringNodeMapper;
 use Rector\StaticTypeMapper\PhpParser\UnionTypeNodeMapper;
+use RectorPrefix202603\Doctrine\Inflector\Inflector;
+use RectorPrefix202603\Doctrine\Inflector\Rules\English\InflectorFactory;
+use RectorPrefix202603\Illuminate\Container\Container;
 use RectorPrefix202603\Symfony\Component\Console\Application;
 use RectorPrefix202603\Symfony\Component\Console\Command\Command;
 use RectorPrefix202603\Symfony\Component\Console\Style\SymfonyStyle;
 use RectorPrefix202603\Webmozart\Assert\Assert;
+
 final class LazyContainerFactory
 {
     /**
@@ -368,7 +370,7 @@ final class LazyContainerFactory
         $this->createPHPStanServices($rectorConfig);
         $rectorConfig->when(PhpDocNodeMapper::class)->needs('$phpDocNodeVisitors')->giveTagged(BasePhpDocNodeVisitorInterface::class);
         // phpdoc-parser
-        $rectorConfig->singleton(ParserConfig::class, static fn(Container $container): ParserConfig => new ParserConfig(['lines' => \true, 'indexes' => \true, 'comments' => \true]));
+        $rectorConfig->singleton(ParserConfig::class, static fn (Container $container): ParserConfig => new ParserConfig(['lines' => \true, 'indexes' => \true, 'comments' => \true]));
         return $rectorConfig;
     }
     /**

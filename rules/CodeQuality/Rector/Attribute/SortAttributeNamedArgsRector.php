@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodeQuality\Rector\Attribute;
 
 use PhpParser\Node;
@@ -12,6 +13,7 @@ use Rector\Rector\AbstractRector;
 use Rector\Reflection\ReflectionResolver;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodeQuality\Rector\Attribute\SortAttributeNamedArgsRector\SortAttributeNamedArgsRectorTest
  */
@@ -37,7 +39,8 @@ final class SortAttributeNamedArgsRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Sort named arguments in PHP 8 attributes to match their declaration order', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Sort named arguments in PHP 8 attributes to match their declaration order', [new CodeSample(
+            <<<'CODE_SAMPLE'
 #[SomeAttribute(bar: $bar, foo: $foo)]
 class SomeClass
 {
@@ -51,7 +54,8 @@ class SomeAttribute
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 #[SomeAttribute(foo: $foo, bar: $bar)]
 class SomeClass
 {
@@ -65,7 +69,7 @@ class SomeAttribute
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     public function getNodeTypes(): array
     {

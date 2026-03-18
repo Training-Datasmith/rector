@@ -1,17 +1,19 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodingStyle\Rector\Stmt;
 
-use RectorPrefix202603\Nette\Utils\Strings;
 use PhpParser\Node;
 use PhpParser\Node\Identifier;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
 use Rector\PhpParser\Node\FileNode;
 use Rector\Rector\AbstractRector;
+use RectorPrefix202603\Nette\Utils\Strings;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodingStyle\Rector\Stmt\RemoveUselessAliasInUseStatementRector\RemoveUselessAliasInUseStatementRectorTest
  */
@@ -19,13 +21,15 @@ final class RemoveUselessAliasInUseStatementRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Remove useless alias in use statement as same name with last use statement name', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove useless alias in use statement as same name with last use statement name', [new CodeSample(
+            <<<'CODE_SAMPLE'
 use App\Bar as Bar;
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 use App\Bar;
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

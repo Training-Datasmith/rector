@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PhpParser\NodeVisitor;
 
 use PhpParser\Node;
@@ -12,6 +13,7 @@ use PhpParser\NodeVisitorAbstract;
 use Rector\Contract\PhpParser\DecoratingNodeVisitorInterface;
 use Rector\NodeAnalyzer\CallLikeExpectsThisBoundClosureArgsAnalyzer;
 use Rector\NodeTypeResolver\Node\AttributeKey;
+
 final class CallLikeThisBoundClosureArgsNodeVisitor extends NodeVisitorAbstract implements DecoratingNodeVisitorInterface
 {
     /**

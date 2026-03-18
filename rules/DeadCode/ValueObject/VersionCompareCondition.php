@@ -1,9 +1,11 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\DeadCode\ValueObject;
 
 use Rector\DeadCode\Contract\ConditionInterface;
+
 final class VersionCompareCondition implements ConditionInterface
 {
     /**

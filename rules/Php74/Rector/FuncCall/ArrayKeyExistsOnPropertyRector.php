@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php74\Rector\FuncCall;
 
 use PhpParser\Node;
@@ -13,6 +14,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php74\Rector\FuncCall\ArrayKeyExistsOnPropertyRector\ArrayKeyExistsOnPropertyRectorTest
  */
@@ -24,7 +26,8 @@ final class ArrayKeyExistsOnPropertyRector extends AbstractRector implements Min
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change array_key_exists() on property to property_exists()', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change array_key_exists() on property to property_exists()', [new CodeSample(
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
      public $value;
@@ -33,7 +36,8 @@ $someClass = new SomeClass;
 
 array_key_exists('value', $someClass);
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 class SomeClass
 {
      public $value;
@@ -42,7 +46,7 @@ $someClass = new SomeClass;
 
 property_exists($someClass, 'value');
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

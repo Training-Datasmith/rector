@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Privatization\Guard;
 
 use PhpParser\Node;
@@ -17,6 +18,7 @@ use Rector\NodeNameResolver\NodeNameResolver;
 use Rector\PhpParser\AstResolver;
 use Rector\PhpParser\Node\BetterNodeFinder;
 use Rector\Reflection\ClassReflectionAnalyzer;
+
 final class ParentPropertyLookupGuard
 {
     /**

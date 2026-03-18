@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\Rector\ClassMethod;
 
 use PhpParser\Node;
@@ -21,6 +22,7 @@ use Rector\VendorLocker\NodeVendorLocker\ClassMethodReturnTypeOverrideGuard;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\TypeDeclaration\Rector\ClassMethod\StringReturnTypeFromStrictStringReturnsRector\StringReturnTypeFromStrictStringReturnsRectorTest
  */
@@ -46,7 +48,8 @@ final class StringReturnTypeFromStrictStringReturnsRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Add string return type based on returned strict string values', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Add string return type based on returned strict string values', [new CodeSample(
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function foo($condition, $value)
@@ -59,7 +62,8 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     public function foo($condition, $value): string;
@@ -72,7 +76,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\Rector\StmtsAwareInterface;
 
 use PhpParser\Node;
@@ -11,6 +12,7 @@ use Rector\PhpParser\Enum\NodeGroup;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\ConfiguredCodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @deprecated As keeps changing files randomly on every run. Not deterministic. Use more reliable @see \Rector\TypeDeclaration\Rector\StmtsAwareInterface\DeclareStrictTypesRector instead on specific paths.
  */
@@ -27,14 +29,14 @@ function someFunction()
 {
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            , <<<'CODE_SAMPLE'
 declare(strict_types=1);
 
 function someFunction()
 {
 }
 CODE_SAMPLE
-, [self::LIMIT => 10])]);
+            , [self::LIMIT => 10])]);
     }
     /**
      * @return array<class-string<Node>>

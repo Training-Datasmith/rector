@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\Php74\Rector\ArrayDimFetch;
 
 use PhpParser\Node;
@@ -12,6 +13,7 @@ use Rector\ValueObject\PhpVersionFeature;
 use Rector\VersionBonding\Contract\MinPhpVersionInterface;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\Php74\Rector\ArrayDimFetch\CurlyToSquareBracketArrayStringRector\CurlyToSquareBracketArrayStringRectorTest
  */
@@ -23,21 +25,23 @@ final class CurlyToSquareBracketArrayStringRector extends AbstractRector impleme
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Change curly based array and string to square bracket', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Change curly based array and string to square bracket', [new CodeSample(
+            <<<'CODE_SAMPLE'
 $string = 'test';
 echo $string{0};
 
 $array = ['test'];
 echo $array{0};
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 $string = 'test';
 echo $string[0];
 
 $array = ['test'];
 echo $array[0];
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

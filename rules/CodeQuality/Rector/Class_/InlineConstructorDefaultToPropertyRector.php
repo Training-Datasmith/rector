@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodeQuality\Rector\Class_;
 
 use PhpParser\Node;
@@ -20,6 +21,7 @@ use Rector\Rector\AbstractRector;
 use Rector\ValueObject\MethodName;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodeQuality\Rector\Class_\InlineConstructorDefaultToPropertyRector\InlineConstructorDefaultToPropertyRectorTest
  */
@@ -45,7 +47,8 @@ final class InlineConstructorDefaultToPropertyRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Move property default from constructor to property default', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Move property default from constructor to property default', [new CodeSample(
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     private $name;
@@ -56,7 +59,8 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 final class SomeClass
 {
     private $name = 'John';
@@ -66,7 +70,7 @@ final class SomeClass
     }
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>
@@ -135,7 +139,7 @@ CODE_SAMPLE
     }
     private function isFoundInAnyPropertyHooks(Class_ $class, string $propertyName): bool
     {
-        $propertyHooks = array_reduce($class->getProperties(), static fn(array $hooks, Property $property): array => array_merge($hooks, $property->hooks), []);
+        $propertyHooks = array_reduce($class->getProperties(), static fn (array $hooks, Property $property): array => array_merge($hooks, $property->hooks), []);
         return (bool) $this->betterNodeFinder->findFirst($propertyHooks, function (Node $subNode) use ($class, $propertyName): bool {
             if (!$subNode instanceof PropertyFetch) {
                 return \false;

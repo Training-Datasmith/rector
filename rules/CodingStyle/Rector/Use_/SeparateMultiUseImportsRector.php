@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\CodingStyle\Rector\Use_;
 
 use PhpParser\Node;
@@ -14,6 +15,7 @@ use Rector\PhpParser\Node\FileNode;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\CodingStyle\Rector\Use_\SeparateMultiUseImportsRector\SeparateMultiUseImportsRectorTest
  */
@@ -21,7 +23,8 @@ final class SeparateMultiUseImportsRector extends AbstractRector
 {
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Split multi use imports and trait statements to standalone lines', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Split multi use imports and trait statements to standalone lines', [new CodeSample(
+            <<<'CODE_SAMPLE'
 use A, B;
 
 class SomeClass
@@ -29,7 +32,8 @@ class SomeClass
     use SomeTrait, AnotherTrait;
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 use A;
 use B;
 
@@ -39,7 +43,7 @@ class SomeClass
     use AnotherTrait;
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>

@@ -1,12 +1,14 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\TypeDeclaration\TypeAnalyzer;
 
 use PhpParser\Node\Expr;
 use PHPStan\Type\ObjectType;
 use PHPStan\Type\TypeCombinator;
 use Rector\NodeTypeResolver\NodeTypeResolver;
+
 final class NullableTypeAnalyzer
 {
     /**

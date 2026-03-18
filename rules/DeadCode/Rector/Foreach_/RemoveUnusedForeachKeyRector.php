@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\DeadCode\Rector\Foreach_;
 
 use PhpParser\Node;
@@ -17,6 +18,7 @@ use Rector\PhpParser\Enum\NodeGroup;
 use Rector\Rector\AbstractRector;
 use Symplify\RuleDocGenerator\ValueObject\CodeSample\CodeSample;
 use Symplify\RuleDocGenerator\ValueObject\RuleDefinition;
+
 /**
  * @see \Rector\Tests\DeadCode\Rector\Foreach_\RemoveUnusedForeachKeyRector\RemoveUnusedForeachKeyRectorTest
  */
@@ -52,19 +54,21 @@ final class RemoveUnusedForeachKeyRector extends AbstractRector
     }
     public function getRuleDefinition(): RuleDefinition
     {
-        return new RuleDefinition('Remove unused key in foreach', [new CodeSample(<<<'CODE_SAMPLE'
+        return new RuleDefinition('Remove unused key in foreach', [new CodeSample(
+            <<<'CODE_SAMPLE'
 $items = [];
 foreach ($items as $key => $value) {
     $result = $value;
 }
 CODE_SAMPLE
-, <<<'CODE_SAMPLE'
+            ,
+            <<<'CODE_SAMPLE'
 $items = [];
 foreach ($items as $value) {
     $result = $value;
 }
 CODE_SAMPLE
-)]);
+        )]);
     }
     /**
      * @return array<class-string<Node>>
@@ -90,7 +94,7 @@ CODE_SAMPLE
                 continue;
             }
             $keyVar = $stmt->keyVar;
-            $isNodeUsed = (bool) $this->nodeFinder->findFirst($stmt->stmts, fn(Node $node): bool => $this->exprUsedInNodeAnalyzer->isUsed($node, $keyVar));
+            $isNodeUsed = (bool) $this->nodeFinder->findFirst($stmt->stmts, fn (Node $node): bool => $this->exprUsedInNodeAnalyzer->isUsed($node, $keyVar));
             if ($isNodeUsed) {
                 continue;
             }

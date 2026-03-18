@@ -1,17 +1,18 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\BetterPhpDocParser\PhpDoc;
 
 use PhpParser\Node\Scalar\String_;
 use PHPStan\PhpDocParser\Ast\NodeAttributes;
 use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
 use Rector\NodeTypeResolver\Node\AttributeKey;
-use Stringable;
+
 final class StringNode implements PhpDocTagValueNode
 {
-    public string $value;
     use NodeAttributes;
+    public string $value;
     public function __construct(string $value)
     {
         $this->value = $value;

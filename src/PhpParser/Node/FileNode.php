@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\PhpParser\Node;
 
 use PhpParser\Node;
@@ -8,6 +9,7 @@ use PhpParser\Node\Stmt;
 use PhpParser\Node\Stmt\GroupUse;
 use PhpParser\Node\Stmt\Namespace_;
 use PhpParser\Node\Stmt\Use_;
+
 /**
  * Inspired by https://github.com/phpstan/phpstan-src/commit/ed81c3ad0b9877e6122c79b4afda9d10f3994092
  */
@@ -54,7 +56,7 @@ class FileNode extends Stmt
     public function getNamespace(): ?Namespace_
     {
         /** @var Namespace_[] $namespaces */
-        $namespaces = array_filter($this->stmts, static fn(Stmt $stmt): bool => $stmt instanceof Namespace_);
+        $namespaces = array_filter($this->stmts, static fn (Stmt $stmt): bool => $stmt instanceof Namespace_);
         if (count($namespaces) === 1) {
             return current($namespaces);
         }
@@ -69,7 +71,7 @@ class FileNode extends Stmt
         if (!$rootNode instanceof Namespace_) {
             $rootNode = $this;
         }
-        return array_filter($rootNode->stmts, static fn(Stmt $stmt): bool => $stmt instanceof Use_ || $stmt instanceof GroupUse);
+        return array_filter($rootNode->stmts, static fn (Stmt $stmt): bool => $stmt instanceof Use_ || $stmt instanceof GroupUse);
     }
     /**
      * @return Use_[]
@@ -80,6 +82,6 @@ class FileNode extends Stmt
         if (!$rootNode instanceof Namespace_) {
             $rootNode = $this;
         }
-        return array_filter($rootNode->stmts, static fn(Stmt $stmt): bool => $stmt instanceof Use_);
+        return array_filter($rootNode->stmts, static fn (Stmt $stmt): bool => $stmt instanceof Use_);
     }
 }

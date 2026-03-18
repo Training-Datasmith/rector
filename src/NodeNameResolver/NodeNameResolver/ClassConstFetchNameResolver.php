@@ -1,6 +1,7 @@
 <?php
 
 declare (strict_types=1);
+
 namespace Rector\NodeNameResolver\NodeNameResolver;
 
 use PhpParser\Node;
@@ -9,6 +10,7 @@ use PhpParser\Node\Expr\ClassConstFetch;
 use PhpParser\Node\Identifier;
 use PHPStan\Analyser\Scope;
 use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
+
 /**
  * @implements NodeNameResolverInterface<ClassConstFetch>
  */
