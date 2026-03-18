@@ -15,7 +15,7 @@ final class SkippedClassResolver
     /**
      * @var null|array<class-string, string[]|null>
      */
-    private $skippedClassesToFiles = null;
+    private ?array $skippedClassesToFiles = null;
     /**
      * @return array<class-string<DeprecatedInterface>>
      */

@@ -77,7 +77,7 @@ final class FilesFinder
         } else {
             $fileWithSuffixFilter = fn(): bool => \true;
         }
-        $filteredFilePaths = array_filter($filteredFilePaths, $fileWithSuffixFilter === null ? fn($value, $key): bool => !empty($value) : $fileWithSuffixFilter, $fileWithSuffixFilter === null ? \ARRAY_FILTER_USE_BOTH : 0);
+        $filteredFilePaths = array_filter($filteredFilePaths, $fileWithSuffixFilter ?? fn($value, $key): bool => !empty($value), $fileWithSuffixFilter === null ? \ARRAY_FILTER_USE_BOTH : 0);
         // add file without extension after file extension filter
         $filteredFilePaths = array_merge($filteredFilePaths, SimpleParameterProvider::provideArrayParameter(Option::FILES_WITHOUT_EXTENSION));
         $filteredFilePaths = array_filter($filteredFilePaths, function (string $file): bool {

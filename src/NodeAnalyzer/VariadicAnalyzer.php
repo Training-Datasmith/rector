@@ -22,7 +22,7 @@ final class VariadicAnalyzer
     /**
      * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $call
      */
-    public function hasVariadicParameters($call): bool
+    public function hasVariadicParameters(\PhpParser\Node\Expr\CallLike $call): bool
     {
         $functionLikeReflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($call);
         if ($functionLikeReflection === null) {

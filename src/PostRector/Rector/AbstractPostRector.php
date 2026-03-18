@@ -12,10 +12,7 @@ use Rector\ValueObject\Application\File;
 use RectorPrefix202603\Webmozart\Assert\Assert;
 abstract class AbstractPostRector extends NodeVisitorAbstract implements PostRectorInterface
 {
-    /**
-     * @var \Rector\ValueObject\Application\File|null
-     */
-    private $file = null;
+    private ?\Rector\ValueObject\Application\File $file = null;
     /**
      * @param Stmt[] $stmts
      */

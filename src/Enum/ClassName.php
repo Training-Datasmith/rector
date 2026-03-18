@@ -8,7 +8,7 @@ final class ClassName
     /**
      * @var string
      */
-    public const TEST_CASE_CLASS = 'PHPUnit\Framework\TestCase';
+    public const TEST_CASE_CLASS = \PHPUnit\Framework\TestCase::class;
     /**
      * @var string
      */

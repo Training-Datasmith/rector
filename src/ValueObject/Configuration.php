@@ -42,23 +42,20 @@ final class Configuration
     private bool $showDiffs = \true;
     /**
      * @readonly
-     * @var string|null
      */
-    private $parallelPort = null;
+    private ?string $parallelPort;
     /**
      * @readonly
-     * @var string|null
      */
-    private $parallelIdentifier = null;
+    private ?string $parallelIdentifier;
     /**
      * @readonly
      */
     private bool $isParallel = \false;
     /**
      * @readonly
-     * @var string|null
      */
-    private $memoryLimit = null;
+    private ?string $memoryLimit;
     /**
      * @readonly
      */

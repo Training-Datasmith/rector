@@ -13,10 +13,7 @@ use RectorPrefix202603\Symfony\Component\Console\Style\SymfonyStyle;
 final class RectorStyle extends SymfonyStyle
 {
     private ?ProgressBar $progressBar = null;
-    /**
-     * @var bool|null
-     */
-    private $isCiDetected = null;
+    private ?bool $isCiDetected = null;
     public function __construct(InputInterface $input, OutputInterface $output)
     {
         parent::__construct($input, $output);

@@ -254,7 +254,7 @@ final class ReflectionResolver
     /**
      * @return \PHPStan\Reflection\FunctionReflection|\PHPStan\Reflection\MethodReflection|null
      */
-    private function resolveFunctionReflectionFromFuncCall(FuncCall $funcCall)
+    private function resolveFunctionReflectionFromFuncCall(FuncCall $funcCall): ?\PHPStan\Reflection\FunctionReflection
     {
         if (!$funcCall->name instanceof Name) {
             return null;

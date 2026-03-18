@@ -21,10 +21,7 @@ final class PhpVersionProvider
      * @var string
      */
     private const VALID_PHP_VERSION_REGEX = '#^\d{5,6}$#';
-    /**
-     * @var int|null
-     */
-    private $phpVersionFeatures = null;
+    private ?int $phpVersionFeatures = null;
     /**
      * @return PhpVersion::*
      */
@@ -59,7 +56,7 @@ final class PhpVersionProvider
     /**
      * @param mixed $phpVersionFeatures
      */
-    private function validatePhpVersionFeaturesParameter($phpVersionFeatures): void
+    private function validatePhpVersionFeaturesParameter(int $phpVersionFeatures): void
     {
         if ($phpVersionFeatures === null) {
             return;
@@ -82,7 +79,7 @@ final class PhpVersionProvider
      * @return never
      * @param mixed $phpVersionFeatures
      */
-    private function throwInvalidTypeException($phpVersionFeatures)
+    private function throwInvalidTypeException($phpVersionFeatures): void
     {
         $errorMessage = sprintf('Parameter "%s::%s" must be int, "%s" given.%sUse constant from "%s" to provide it, e.g. "%s::%s"', Option::class, 'PHP_VERSION_FEATURES', (string) $phpVersionFeatures, \PHP_EOL, PhpVersion::class, PhpVersion::class, 'PHP_80');
         throw new InvalidConfigurationException($errorMessage);

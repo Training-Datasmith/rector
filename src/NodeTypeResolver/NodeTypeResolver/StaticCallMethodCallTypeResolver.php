@@ -76,7 +76,7 @@ final class StaticCallMethodCallTypeResolver implements NodeTypeResolverInterfac
     /**
      * @param \PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $node
      */
-    private function resolveClassMethodReturnType(ClassReflection $classReflection, $node, string $methodName, Scope $scope): Type
+    private function resolveClassMethodReturnType(ClassReflection $classReflection, \PhpParser\Node $node, string $methodName, Scope $scope): Type
     {
         foreach ($classReflection->getAncestors() as $ancestorClassReflection) {
             if (!$ancestorClassReflection->hasMethod($methodName)) {

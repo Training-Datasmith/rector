@@ -15,7 +15,7 @@ final class ArrayItemNode implements PhpDocTagValueNode
     /**
      * @var mixed
      */
-    public $key = null;
+    public $key;
     use NodeAttributes;
     /**
      * @param mixed $value

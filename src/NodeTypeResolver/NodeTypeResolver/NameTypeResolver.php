@@ -44,10 +44,7 @@ final class NameTypeResolver implements NodeTypeResolverInterface
         $fullyQualifiedName = $this->resolveFullyQualifiedName($node);
         return new ObjectType($fullyQualifiedName);
     }
-    /**
-     * @param \PhpParser\Node\Name|\PhpParser\Node\Name\FullyQualified $node
-     */
-    private function resolveClassReflection($node): ?ClassReflection
+    private function resolveClassReflection(\PhpParser\Node\Name $node): ?ClassReflection
     {
         $scope = $node->getAttribute(AttributeKey::SCOPE);
         if (!$scope instanceof Scope) {

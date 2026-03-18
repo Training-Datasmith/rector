@@ -13,7 +13,7 @@ final class PolyfillPackagesProvider
     /**
      * @var null|array<int, PolyfillPackage::*>
      */
-    private $cachedPolyfillPackages = null;
+    private ?array $cachedPolyfillPackages = null;
     /**
      * @return array<int, PolyfillPackage::*>
      */

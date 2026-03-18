@@ -17,19 +17,16 @@ final class SystemError implements SerializableInterface
     private string $message;
     /**
      * @readonly
-     * @var string|null
      */
-    private $relativeFilePath = null;
+    private ?string $relativeFilePath;
     /**
      * @readonly
-     * @var int|null
      */
-    private $line = null;
+    private ?int $line;
     /**
      * @readonly
-     * @var string|null
      */
-    private $rectorClass = null;
+    private ?string $rectorClass;
     public function __construct(string $message, ?string $relativeFilePath = null, ?int $line = null, ?string $rectorClass = null)
     {
         $this->message = $message;

@@ -40,7 +40,7 @@ final class ClassStringTypeMapper implements TypeMapperInterface
                 return $traverse($type);
             }
             $typeClass = get_class($type);
-            if ($typeClass === 'PHPStan\Type\ObjectType') {
+            if ($typeClass === \PHPStan\Type\ObjectType::class) {
                 return new ObjectType('\\' . $type->getClassName());
             }
             return $traverse($type);

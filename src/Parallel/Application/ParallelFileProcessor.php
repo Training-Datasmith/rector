@@ -52,7 +52,7 @@ final class ParallelFileProcessor
     /**
      * @var \Symplify\EasyParallel\ValueObject\ProcessPool|null
      */
-    private $processPool = null;
+    private ?\RectorPrefix202603\Symplify\EasyParallel\ValueObject\ProcessPool $processPool = null;
     public function __construct(WorkerCommandLineFactory $workerCommandLineFactory)
     {
         $this->workerCommandLineFactory = $workerCommandLineFactory;

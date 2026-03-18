@@ -19,7 +19,7 @@ final class SkippedPathsResolver
     /**
      * @var null|string[]
      */
-    private $skippedPaths = null;
+    private ?array $skippedPaths = null;
     public function __construct(FilePathHelper $filePathHelper)
     {
         $this->filePathHelper = $filePathHelper;

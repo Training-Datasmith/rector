@@ -76,7 +76,7 @@ final class SimpleNodeDumper
     /**
      * @param mixed $flags
      */
-    private static function dumpFlags($flags): string
+    private static function dumpFlags(string $flags): string
     {
         $strs = [];
         if (($flags & Modifiers::PUBLIC) !== 0) {
@@ -103,7 +103,7 @@ final class SimpleNodeDumper
         if ($strs !== []) {
             return implode(' | ', $strs) . ' (' . $flags . ')';
         }
-        return (string) $flags;
+        return $flags;
     }
     /**
      * @param int|float|string $type

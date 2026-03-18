@@ -176,7 +176,7 @@ final class PropertyFetchFinder
      * @return PropertyFetch[]|StaticPropertyFetch[]
      * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Trait_ $class
      */
-    private function findPropertyFetchesInClassLike($class, array $stmts, string $propertyName, bool $hasTrait, Scope $scope): array
+    private function findPropertyFetchesInClassLike(\PhpParser\Node\Stmt\Class_ $class, array $stmts, string $propertyName, bool $hasTrait, Scope $scope): array
     {
         /** @var PropertyFetch[]|StaticPropertyFetch[] $propertyFetches */
         $propertyFetches = $this->betterNodeFinder->find($stmts, function (Node $subNode) use ($class, $hasTrait, $propertyName, $scope): bool {

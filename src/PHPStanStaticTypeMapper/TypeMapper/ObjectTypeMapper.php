@@ -43,7 +43,7 @@ final class ObjectTypeMapper implements TypeMapperInterface
             }
             $typeClass = get_class($type);
             // early native ObjectType check
-            if ($typeClass === 'PHPStan\Type\ObjectType') {
+            if ($typeClass === \PHPStan\Type\ObjectType::class) {
                 return new ObjectType('\\' . $type->getClassName());
             }
             if ($type instanceof FullyQualifiedObjectType) {

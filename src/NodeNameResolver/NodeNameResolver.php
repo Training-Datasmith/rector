@@ -192,7 +192,7 @@ final class NodeNameResolver
     /**
      * @param \PhpParser\Node\Expr|\PhpParser\Node\Identifier $node
      */
-    private function isCallOrIdentifier($node): bool
+    private function isCallOrIdentifier(\PhpParser\Node $node): bool
     {
         if ($node instanceof Expr) {
             return $this->callAnalyzer->isObjectCall($node);
