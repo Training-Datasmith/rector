@@ -1,16 +1,14 @@
 <?php
 
 declare (strict_types=1);
-
 namespace Rector\Validation;
 
-use Rector\Util\StringUtils;
-use RectorPrefix202603\Webmozart\Assert\InvalidArgumentException;
-
+use Rector\Util\String_Utils;
+use Rector_Prefix202603\Webmozart\Assert\InvalidArgumentException;
 /**
  * @see \Rector\Tests\Validation\RectorAssertTest
  */
-final class RectorAssert
+final class Rector_Assert
 {
     /**
      * @see https://stackoverflow.com/a/12011255/1348344
@@ -43,35 +41,35 @@ final class RectorAssert
      * @var string
      */
     private const FUNCTION_NAME_REGEX = '#^(' . self::NAKED_NAMESPACE_REGEX . '\\\\)?([a-zA-Z_\x80-\xff][a-zA-Z0-9_\x80-\xff]*)$#';
-    public static function constantName(string $name): void
+    public static function constant_name(string $name): void
     {
-        self::elementName($name, self::METHOD_OR_CONSTANT_NAME_REGEX, 'constant');
+        self::element_name($name, self::METHOD_OR_CONSTANT_NAME_REGEX, 'constant');
     }
-    public static function className(string $name): void
+    public static function class_name(string $name): void
     {
-        self::elementName($name, self::CLASS_NAME_REGEX, 'class');
+        self::element_name($name, self::CLASS_NAME_REGEX, 'class');
     }
-    public static function propertyName(string $name): void
+    public static function property_name(string $name): void
     {
-        self::elementName($name, self::PROPERTY_NAME_REGEX, 'property');
+        self::element_name($name, self::PROPERTY_NAME_REGEX, 'property');
     }
-    public static function methodName(string $name): void
+    public static function method_name(string $name): void
     {
-        self::elementName($name, self::METHOD_OR_CONSTANT_NAME_REGEX, 'method');
+        self::element_name($name, self::METHOD_OR_CONSTANT_NAME_REGEX, 'method');
     }
-    public static function functionName(string $name): void
+    public static function function_name(string $name): void
     {
-        self::elementName($name, self::FUNCTION_NAME_REGEX, 'function');
+        self::element_name($name, self::FUNCTION_NAME_REGEX, 'function');
     }
     /**
      * @api
      */
-    public static function elementName(string $name, string $regex, string $elementType): void
+    public static function element_name(string $name, string $regex, string $element_type): void
     {
-        if (StringUtils::isMatch($name, $regex)) {
+        if (String_Utils::is_match($name, $regex)) {
             return;
         }
-        $errorMessage = sprintf('"%s" is not a valid %s name', $name, $elementType);
-        throw new InvalidArgumentException($errorMessage);
+        $error_message = sprintf('"%s" is not a valid %s name', $name, $element_type);
+        throw new InvalidArgumentException($error_message);
     }
 }

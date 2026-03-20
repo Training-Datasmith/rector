@@ -1,14 +1,13 @@
 <?php
 
 declare (strict_types=1);
-
-namespace Rector\Parallel\ValueObject;
+namespace Rector\Parallel\Value_Object;
 
 /**
  * @api
  * Helpers constant for passing constant names around
  */
-final class BridgeItem
+final class Bridge_Item
 {
     /**
      * @var string

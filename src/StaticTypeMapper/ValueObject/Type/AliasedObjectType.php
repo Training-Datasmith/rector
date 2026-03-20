@@ -1,67 +1,65 @@
 <?php
 
 declare (strict_types=1);
-
-namespace Rector\StaticTypeMapper\ValueObject\Type;
+namespace Rector\Static_Type_Mapper\Value_Object\Type;
 
 use Override;
-use PhpParser\Node\Name;
-use PhpParser\Node\Stmt\Use_;
-use PhpParser\Node\UseItem;
-use PHPStan\Type\ObjectType;
-use PHPStan\Type\Type;
-use Rector\StaticTypeMapper\Resolver\ClassNameFromObjectTypeResolver;
-
+use Php_Parser\Node\Name;
+use Php_Parser\Node\Stmt\Use_;
+use Php_Parser\Node\Use_Item;
+use Php_Stan\Type\Object_Type;
+use Php_Stan\Type\Type;
+use Rector\Static_Type_Mapper\Resolver\Class_Name_From_Object_Type_Resolver;
 /**
  * @api
  */
-final class AliasedObjectType extends ObjectType
+final class Aliased_Object_Type extends Object_Type
 {
     /**
      * @readonly
      */
-    private string $fullyQualifiedClass;
-    public function __construct(string $alias, string $fullyQualifiedClass)
+    private string $fully_qualified_class;
+    public function __construct(string $alias, string $fully_qualified_class)
     {
-        $this->fullyQualifiedClass = $fullyQualifiedClass;
+        $this->fully_qualified_class = $fully_qualified_class;
         parent::__construct($alias);
     }
-    public function getFullyQualifiedName(): string
+    public function get_fully_qualified_name(): string
     {
-        return $this->fullyQualifiedClass;
+        return $this->fully_qualified_class;
     }
     /**
      * @param Use_::TYPE_* $useType
      */
-    public function getUseNode(int $useType): Use_
+    public function get_use_node(int $use_type): Use_
     {
-        $name = new Name($this->fullyQualifiedClass);
-        $useItem = new UseItem($name, $this->getClassName());
-        $use = new Use_([$useItem]);
-        $use->type = $useType;
+        $name = new Name($this->fully_qualified_class);
+        $use_item = new Use_Item($name, $this->get_class_name());
+        $use = new Use_([$use_item]);
+        $use->type = $use_type;
         return $use;
     }
-    public function getShortName(): string
+    public function get_short_name(): string
     {
-        return $this->getClassName();
+        return $this->get_class_name();
     }
     /**
      * @param $this|\Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType $comparedObjectType
      */
-    public function areShortNamesEqual($comparedObjectType): bool
+    public function are_short_names_equal($compared_object_type): bool
     {
-        return $this->getShortName() === $comparedObjectType->getShortName();
+        return $this->get_short_name() === $compared_object_type->get_short_name();
     }
     #[Override]
     public function equals(Type $type): bool
     {
-        $className = ClassNameFromObjectTypeResolver::resolve($type);
+        $class_name = Class_Name_From_Object_Type_Resolver::resolve($type);
         // compare with FQN classes
-        if ($className !== null) {
-            if ($type instanceof self && $this->fullyQualifiedClass === $type->getFullyQualifiedName()) {
+        if ($class_name !== null) {
+            if ($type instanceof self && $this->fully_qualified_class === $type->get_fully_qualified_name()) {
                 return \true;
             }
-            if ($this->fullyQualifiedClass === $className) {
+            if ($this->fully_qualified_class === $class_name) {
                 return \true;
             }
         }

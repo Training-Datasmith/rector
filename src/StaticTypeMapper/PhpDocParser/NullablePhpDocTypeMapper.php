@@ -1,55 +1,53 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Static_Type_Mapper\Php_Doc_Parser;
 
-namespace Rector\StaticTypeMapper\PhpDocParser;
-
-use PhpParser\Node;
-use PHPStan\Analyser\NameScope;
-use PHPStan\PhpDoc\TypeNodeResolver;
-use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\NullableTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use PHPStan\Type\NullType;
-use PHPStan\Type\Type;
-use PHPStan\Type\UnionType;
-use Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface;
-
+use Php_Parser\Node;
+use Php_Stan\Analyser\Name_Scope;
+use Php_Stan\Php_Doc\Type_Node_Resolver;
+use Php_Stan\Php_Doc_Parser\Ast\Type\Identifier_Type_Node;
+use Php_Stan\Php_Doc_Parser\Ast\Type\Nullable_Type_Node;
+use Php_Stan\Php_Doc_Parser\Ast\Type\Type_Node;
+use Php_Stan\Type\Null_Type;
+use Php_Stan\Type\Type;
+use Php_Stan\Type\Union_Type;
+use Rector\Static_Type_Mapper\Contract\Php_Doc_Parser\Php_Doc_Type_Mapper_Interface;
 /**
  * @implements PhpDocTypeMapperInterface<NullableTypeNode>
  */
-final class NullablePhpDocTypeMapper implements PhpDocTypeMapperInterface
+final class Nullable_Php_Doc_Type_Mapper implements Php_Doc_Type_Mapper_Interface
 {
     /**
      * @readonly
      */
-    private \Rector\StaticTypeMapper\PhpDocParser\IdentifierPhpDocTypeMapper $identifierPhpDocTypeMapper;
+    private \Rector\Static_Type_Mapper\Php_Doc_Parser\Identifier_Php_Doc_Type_Mapper $identifier_php_doc_type_mapper;
     /**
      * @readonly
      */
-    private TypeNodeResolver $typeNodeResolver;
-    public function __construct(\Rector\StaticTypeMapper\PhpDocParser\IdentifierPhpDocTypeMapper $identifierPhpDocTypeMapper, TypeNodeResolver $typeNodeResolver)
+    private Type_Node_Resolver $type_node_resolver;
+    public function __construct(\Rector\Static_Type_Mapper\Php_Doc_Parser\Identifier_Php_Doc_Type_Mapper $identifier_php_doc_type_mapper, Type_Node_Resolver $type_node_resolver)
     {
-        $this->identifierPhpDocTypeMapper = $identifierPhpDocTypeMapper;
-        $this->typeNodeResolver = $typeNodeResolver;
+        $this->identifier_php_doc_type_mapper = $identifier_php_doc_type_mapper;
+        $this->type_node_resolver = $type_node_resolver;
     }
-    public function getNodeType(): string
+    public function get_node_type(): string
     {
-        return NullableTypeNode::class;
+        return Nullable_Type_Node::class;
     }
     /**
      * @param NullableTypeNode $typeNode
      */
-    public function mapToPHPStanType(TypeNode $typeNode, Node $node, NameScope $nameScope): Type
+    public function map_to_php_stan_type(Type_Node $type_node, Node $node, Name_Scope $name_scope): Type
     {
-        if ($typeNode->type instanceof IdentifierTypeNode) {
-            $type = $this->identifierPhpDocTypeMapper->mapToPHPStanType($typeNode->type, $node, $nameScope);
-            if ($type instanceof UnionType) {
-                return new UnionType(array_merge([new NullType()], $type->getTypes()));
+        if ($type_node->type instanceof Identifier_Type_Node) {
+            $type = $this->identifier_php_doc_type_mapper->map_to_php_stan_type($type_node->type, $node, $name_scope);
+            if ($type instanceof Union_Type) {
+                return new Union_Type(array_merge([new Null_Type()], $type->get_types()));
             }
-            return new UnionType([new NullType(), $type]);
+            return new Union_Type([new Null_Type(), $type]);
         }
         // fallback to PHPStan resolver
-        return $this->typeNodeResolver->resolve($typeNode, $nameScope);
+        return $this->type_node_resolver->resolve($type_node, $name_scope);
     }
 }

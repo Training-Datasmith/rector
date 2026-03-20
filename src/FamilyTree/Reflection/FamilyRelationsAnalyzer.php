@@ -1,65 +1,63 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Family_Tree\Reflection;
 
-namespace Rector\FamilyTree\Reflection;
-
-use PhpParser\Node\Name;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\Interface_;
-use PHPStan\Reflection\ClassReflection;
-use PHPStan\Reflection\ReflectionProvider;
-use Rector\NodeNameResolver\NodeNameResolver;
-
-final class FamilyRelationsAnalyzer
+use Php_Parser\Node\Name;
+use Php_Parser\Node\Stmt\Class_;
+use Php_Parser\Node\Stmt\Interface_;
+use Php_Stan\Reflection\Class_Reflection;
+use Php_Stan\Reflection\Reflection_Provider;
+use Rector\Node_Name_Resolver\Node_Name_Resolver;
+final class Family_Relations_Analyzer
 {
     /**
      * @readonly
      */
-    private ReflectionProvider $reflectionProvider;
+    private Reflection_Provider $reflection_provider;
     /**
      * @readonly
      */
-    private NodeNameResolver $nodeNameResolver;
-    public function __construct(ReflectionProvider $reflectionProvider, NodeNameResolver $nodeNameResolver)
+    private Node_Name_Resolver $node_name_resolver;
+    public function __construct(Reflection_Provider $reflection_provider, Node_Name_Resolver $node_name_resolver)
     {
-        $this->reflectionProvider = $reflectionProvider;
-        $this->nodeNameResolver = $nodeNameResolver;
+        $this->reflection_provider = $reflection_provider;
+        $this->node_name_resolver = $node_name_resolver;
     }
     /**
      * @api
      * @return string[]
      * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Name $classOrName
      */
-    public function getClassLikeAncestorNames($classOrName): array
+    public function get_class_like_ancestor_names($class_or_name): array
     {
-        $ancestorNames = [];
-        if ($classOrName instanceof Name) {
-            $fullName = $this->nodeNameResolver->getName($classOrName);
-            if (!$this->reflectionProvider->hasClass($fullName)) {
+        $ancestor_names = [];
+        if ($class_or_name instanceof Name) {
+            $full_name = $this->node_name_resolver->get_name($class_or_name);
+            if (!$this->reflection_provider->has_class($full_name)) {
                 return [];
             }
-            $classReflection = $this->reflectionProvider->getClass($fullName);
-            $ancestors = array_merge($classReflection->getParents(), $classReflection->getInterfaces());
-            return array_map(static fn (ClassReflection $classReflection): string => $classReflection->getName(), $ancestors);
+            $class_reflection = $this->reflection_provider->get_class($full_name);
+            $ancestors = array_merge($class_reflection->get_parents(), $class_reflection->get_interfaces());
+            return array_map(static fn(Class_Reflection $class_reflection): string => $class_reflection->get_name(), $ancestors);
         }
-        if ($classOrName instanceof Interface_) {
-            foreach ($classOrName->extends as $extendInterfaceName) {
-                $ancestorNames[] = $this->nodeNameResolver->getName($extendInterfaceName);
-                $ancestorNames = array_merge($ancestorNames, $this->getClassLikeAncestorNames($extendInterfaceName));
+        if ($class_or_name instanceof Interface_) {
+            foreach ($class_or_name->extends as $extend_interface_name) {
+                $ancestor_names[] = $this->node_name_resolver->get_name($extend_interface_name);
+                $ancestor_names = array_merge($ancestor_names, $this->get_class_like_ancestor_names($extend_interface_name));
             }
         }
-        if ($classOrName instanceof Class_) {
-            if ($classOrName->extends instanceof Name) {
-                $ancestorNames[] = $this->nodeNameResolver->getName($classOrName->extends);
-                $ancestorNames = array_merge($ancestorNames, $this->getClassLikeAncestorNames($classOrName->extends));
+        if ($class_or_name instanceof Class_) {
+            if ($class_or_name->extends instanceof Name) {
+                $ancestor_names[] = $this->node_name_resolver->get_name($class_or_name->extends);
+                $ancestor_names = array_merge($ancestor_names, $this->get_class_like_ancestor_names($class_or_name->extends));
             }
-            foreach ($classOrName->implements as $implement) {
-                $ancestorNames[] = $this->nodeNameResolver->getName($implement);
-                $ancestorNames = array_merge($ancestorNames, $this->getClassLikeAncestorNames($implement));
+            foreach ($class_or_name->implements as $implement) {
+                $ancestor_names[] = $this->node_name_resolver->get_name($implement);
+                $ancestor_names = array_merge($ancestor_names, $this->get_class_like_ancestor_names($implement));
             }
         }
         /** @var string[] $ancestorNames */
-        return $ancestorNames;
+        return $ancestor_names;
     }
 }

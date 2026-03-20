@@ -1,38 +1,36 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Node_Manipulator;
 
-namespace Rector\NodeManipulator;
-
-use PhpParser\Node\Stmt\Class_;
-use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\Type\ObjectType;
-use Rector\NodeNameResolver\NodeNameResolver;
-
-final class ClassManipulator
+use Php_Parser\Node\Stmt\Class_;
+use Php_Stan\Reflection\Reflection_Provider;
+use Php_Stan\Type\Object_Type;
+use Rector\Node_Name_Resolver\Node_Name_Resolver;
+final class Class_Manipulator
 {
     /**
      * @readonly
      */
-    private NodeNameResolver $nodeNameResolver;
+    private Node_Name_Resolver $node_name_resolver;
     /**
      * @readonly
      */
-    private ReflectionProvider $reflectionProvider;
-    public function __construct(NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider)
+    private Reflection_Provider $reflection_provider;
+    public function __construct(Node_Name_Resolver $node_name_resolver, Reflection_Provider $reflection_provider)
     {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->reflectionProvider = $reflectionProvider;
+        $this->node_name_resolver = $node_name_resolver;
+        $this->reflection_provider = $reflection_provider;
     }
-    public function hasParentMethodOrInterface(ObjectType $objectType, string $oldMethod): bool
+    public function has_parent_method_or_interface(Object_Type $object_type, string $old_method): bool
     {
-        if (!$this->reflectionProvider->hasClass($objectType->getClassName())) {
+        if (!$this->reflection_provider->has_class($object_type->get_class_name())) {
             return \false;
         }
-        $classReflection = $this->reflectionProvider->getClass($objectType->getClassName());
-        $ancestorClassReflections = array_merge($classReflection->getParents(), $classReflection->getInterfaces());
-        foreach ($ancestorClassReflections as $ancestorClassReflection) {
-            if (!$ancestorClassReflection->hasMethod($oldMethod)) {
+        $class_reflection = $this->reflection_provider->get_class($object_type->get_class_name());
+        $ancestor_class_reflections = array_merge($class_reflection->get_parents(), $class_reflection->get_interfaces());
+        foreach ($ancestor_class_reflections as $ancestor_class_reflection) {
+            if (!$ancestor_class_reflection->has_method($old_method)) {
                 continue;
             }
             return \true;
@@ -42,11 +40,11 @@ final class ClassManipulator
     /**
      * @api phpunit
      */
-    public function hasTrait(Class_ $class, string $desiredTrait): bool
+    public function has_trait(Class_ $class, string $desired_trait): bool
     {
-        foreach ($class->getTraitUses() as $traitUse) {
-            foreach ($traitUse->traits as $traitName) {
-                if (!$this->nodeNameResolver->isName($traitName, $desiredTrait)) {
+        foreach ($class->get_trait_uses() as $trait_use) {
+            foreach ($trait_use->traits as $trait_name) {
+                if (!$this->node_name_resolver->is_name($trait_name, $desired_trait)) {
                     continue;
                 }
                 return \true;

@@ -1,146 +1,144 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Better_Php_Doc_Parser\Php_Doc_Parser\Static_Doctrine_Annotation_Parser;
 
-namespace Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser;
-
-use PhpParser\Node;
-use PhpParser\Node\Scalar\String_;
-use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprIntegerNode;
-use PHPStan\PhpDocParser\Lexer\Lexer;
-use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
-use Rector\BetterPhpDocParser\PhpDoc\StringNode;
-use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
-
+use Php_Parser\Node;
+use Php_Parser\Node\Scalar\String_;
+use Php_Stan\Php_Doc_Parser\Ast\Const_Expr\Const_Expr_Integer_Node;
+use Php_Stan\Php_Doc_Parser\Lexer\Lexer;
+use Rector\Better_Php_Doc_Parser\Php_Doc\Array_Item_Node;
+use Rector\Better_Php_Doc_Parser\Php_Doc\String_Node;
+use Rector\Better_Php_Doc_Parser\Value_Object\Parser\Better_Token_Iterator;
 /**
  * @see \Rector\Tests\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser\ArrayParserTest
  */
-final class ArrayParser
+final class Array_Parser
 {
     /**
      * @readonly
      */
-    private \Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser\PlainValueParser $plainValueParser;
-    public function __construct(\Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser\PlainValueParser $plainValueParser)
+    private \Rector\Better_Php_Doc_Parser\Php_Doc_Parser\Static_Doctrine_Annotation_Parser\Plain_Value_Parser $plain_value_parser;
+    public function __construct(\Rector\Better_Php_Doc_Parser\Php_Doc_Parser\Static_Doctrine_Annotation_Parser\Plain_Value_Parser $plain_value_parser)
     {
-        $this->plainValueParser = $plainValueParser;
+        $this->plain_value_parser = $plain_value_parser;
     }
     /**
      * Mimics https://github.com/doctrine/annotations/blob/c66f06b7c83e9a2a7523351a9d5a4b55f885e574/lib/Doctrine/Common/Annotations/DocParser.php#L1305-L1352
      *
      * @return ArrayItemNode[]
      */
-    public function parseCurlyArray(BetterTokenIterator $tokenIterator, Node $currentPhpNode): array
+    public function parse_curly_array(Better_Token_Iterator $token_iterator, Node $current_php_node): array
     {
         $values = [];
         // nothing
-        if ($tokenIterator->isCurrentTokenType(Lexer::TOKEN_CLOSE_CURLY_BRACKET)) {
+        if ($token_iterator->is_current_token_type(Lexer::TOKEN_CLOSE_CURLY_BRACKET)) {
             return [];
         }
-        $tokenIterator->consumeTokenType(Lexer::TOKEN_OPEN_CURLY_BRACKET);
+        $token_iterator->consume_token_type(Lexer::TOKEN_OPEN_CURLY_BRACKET);
         // If the array is empty, stop parsing and return.
-        if ($tokenIterator->isCurrentTokenType(Lexer::TOKEN_CLOSE_CURLY_BRACKET)) {
-            $tokenIterator->consumeTokenType(Lexer::TOKEN_CLOSE_CURLY_BRACKET);
+        if ($token_iterator->is_current_token_type(Lexer::TOKEN_CLOSE_CURLY_BRACKET)) {
+            $token_iterator->consume_token_type(Lexer::TOKEN_CLOSE_CURLY_BRACKET);
             return [];
         }
         // first item
-        $values[] = $this->resolveArrayItem($tokenIterator, $currentPhpNode);
+        $values[] = $this->resolve_array_item($token_iterator, $current_php_node);
         // 2nd+ item
-        while ($tokenIterator->isCurrentTokenType(Lexer::TOKEN_COMMA)) {
+        while ($token_iterator->is_current_token_type(Lexer::TOKEN_COMMA)) {
             // optional trailing comma
-            $tokenIterator->consumeTokenType(Lexer::TOKEN_COMMA);
-            $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_PHPDOC_EOL);
-            if ($tokenIterator->isCurrentTokenType(Lexer::TOKEN_CLOSE_CURLY_BRACKET)) {
+            $token_iterator->consume_token_type(Lexer::TOKEN_COMMA);
+            $token_iterator->try_consume_token_type(Lexer::TOKEN_PHPDOC_EOL);
+            if ($token_iterator->is_current_token_type(Lexer::TOKEN_CLOSE_CURLY_BRACKET)) {
                 break;
             }
-            $values[] = $this->resolveArrayItem($tokenIterator, $currentPhpNode);
-            if ($tokenIterator->isNextTokenType(Lexer::TOKEN_CLOSE_CURLY_BRACKET)) {
+            $values[] = $this->resolve_array_item($token_iterator, $current_php_node);
+            if ($token_iterator->is_next_token_type(Lexer::TOKEN_CLOSE_CURLY_BRACKET)) {
                 break;
             }
             // skip newlines
-            $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_PHPDOC_EOL);
+            $token_iterator->try_consume_token_type(Lexer::TOKEN_PHPDOC_EOL);
         }
-        $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_PHPDOC_EOL);
+        $token_iterator->try_consume_token_type(Lexer::TOKEN_PHPDOC_EOL);
         // special case for nested doctrine annotations
-        if (!$tokenIterator->isCurrentTokenType(Lexer::TOKEN_CLOSE_PARENTHESES)) {
-            $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_CLOSE_CURLY_BRACKET);
+        if (!$token_iterator->is_current_token_type(Lexer::TOKEN_CLOSE_PARENTHESES)) {
+            $token_iterator->try_consume_token_type(Lexer::TOKEN_CLOSE_CURLY_BRACKET);
         }
-        return $this->createArrayFromValues($values);
+        return $this->create_array_from_values($values);
     }
     /**
      * @param mixed[] $values
      * @return ArrayItemNode[]
      */
-    public function createArrayFromValues(array $values): array
+    public function create_array_from_values(array $values): array
     {
-        $arrayItemNodes = [];
-        $naturalKey = 0;
+        $array_item_nodes = [];
+        $natural_key = 0;
         foreach ($values as $key => $value) {
             if (is_array($value)) {
-                [$nestedKey, $nestedValue] = $value;
-                if ($nestedKey instanceof ConstExprIntegerNode) {
-                    $nestedKey = $nestedKey->value;
+                [$nested_key, $nested_value] = $value;
+                if ($nested_key instanceof Const_Expr_Integer_Node) {
+                    $nested_key = $nested_key->value;
                 }
                 // curly candidate?
-                $arrayItemNodes[] = $this->createArrayItemFromKeyAndValue($nestedKey, $nestedValue);
+                $array_item_nodes[] = $this->create_array_item_from_key_and_value($nested_key, $nested_value);
             } else {
-                $arrayItemNodes[] = $this->createArrayItemFromKeyAndValue($key !== $naturalKey ? $key : null, $value);
+                $array_item_nodes[] = $this->create_array_item_from_key_and_value($key !== $natural_key ? $key : null, $value);
             }
-            ++$naturalKey;
+            ++$natural_key;
         }
-        return $arrayItemNodes;
+        return $array_item_nodes;
     }
     /**
      * Mimics https://github.com/doctrine/annotations/blob/c66f06b7c83e9a2a7523351a9d5a4b55f885e574/lib/Doctrine/Common/Annotations/DocParser.php#L1354-L1385
      * @return array<null|mixed, mixed>
      */
-    private function resolveArrayItem(BetterTokenIterator $tokenIterator, Node $currentPhpNode): array
+    private function resolve_array_item(Better_Token_Iterator $token_iterator, Node $current_php_node): array
     {
         // skip newlines
-        $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_PHPDOC_EOL);
+        $token_iterator->try_consume_token_type(Lexer::TOKEN_PHPDOC_EOL);
         $key = null;
         // join "ClassName::CONSTANT_REFERENCE" to identifier
-        if ($tokenIterator->isNextTokenTypes([Lexer::TOKEN_DOUBLE_COLON])) {
-            $key = $tokenIterator->currentTokenValue();
+        if ($token_iterator->is_next_token_types([Lexer::TOKEN_DOUBLE_COLON])) {
+            $key = $token_iterator->current_token_value();
             // "::"
-            $tokenIterator->next();
-            $key .= $tokenIterator->currentTokenValue();
-            $tokenIterator->consumeTokenType(Lexer::TOKEN_DOUBLE_COLON);
-            $key .= $tokenIterator->currentTokenValue();
-            $tokenIterator->next();
+            $token_iterator->next();
+            $key .= $token_iterator->current_token_value();
+            $token_iterator->consume_token_type(Lexer::TOKEN_DOUBLE_COLON);
+            $key .= $token_iterator->current_token_value();
+            $token_iterator->next();
         }
-        $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_PHPDOC_EOL);
-        if ($tokenIterator->isCurrentTokenType(Lexer::TOKEN_CLOSE_CURLY_BRACKET, Lexer::TOKEN_COMMA)) {
+        $token_iterator->try_consume_token_type(Lexer::TOKEN_PHPDOC_EOL);
+        if ($token_iterator->is_current_token_type(Lexer::TOKEN_CLOSE_CURLY_BRACKET, Lexer::TOKEN_COMMA)) {
             // it's a value, not a key
             return [null, $key];
         }
-        if ($tokenIterator->isCurrentTokenType(Lexer::TOKEN_EQUAL, Lexer::TOKEN_COLON) || $tokenIterator->isNextTokenTypes([Lexer::TOKEN_EQUAL, Lexer::TOKEN_COLON])) {
-            $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_EQUAL);
-            $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_COLON);
+        if ($token_iterator->is_current_token_type(Lexer::TOKEN_EQUAL, Lexer::TOKEN_COLON) || $token_iterator->is_next_token_types([Lexer::TOKEN_EQUAL, Lexer::TOKEN_COLON])) {
+            $token_iterator->try_consume_token_type(Lexer::TOKEN_EQUAL);
+            $token_iterator->try_consume_token_type(Lexer::TOKEN_COLON);
             if ($key === null) {
-                if ($tokenIterator->isNextTokenType(Lexer::TOKEN_IDENTIFIER)) {
-                    $key = $this->plainValueParser->parseValue($tokenIterator, $currentPhpNode);
+                if ($token_iterator->is_next_token_type(Lexer::TOKEN_IDENTIFIER)) {
+                    $key = $this->plain_value_parser->parse_value($token_iterator, $current_php_node);
                 } else {
-                    $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_COMMA);
-                    $key = $this->plainValueParser->parseValue($tokenIterator, $currentPhpNode);
+                    $token_iterator->try_consume_token_type(Lexer::TOKEN_COMMA);
+                    $key = $this->plain_value_parser->parse_value($token_iterator, $current_php_node);
                 }
             }
-            $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_EQUAL);
-            $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_COLON);
-            return [$key, $this->plainValueParser->parseValue($tokenIterator, $currentPhpNode)];
+            $token_iterator->try_consume_token_type(Lexer::TOKEN_EQUAL);
+            $token_iterator->try_consume_token_type(Lexer::TOKEN_COLON);
+            return [$key, $this->plain_value_parser->parse_value($token_iterator, $current_php_node)];
         }
-        return [$key, $this->plainValueParser->parseValue($tokenIterator, $currentPhpNode)];
+        return [$key, $this->plain_value_parser->parse_value($token_iterator, $current_php_node)];
     }
     /**
      * @return String_::KIND_SINGLE_QUOTED|String_::KIND_DOUBLE_QUOTED|null
      * @param mixed $val
      */
-    private function resolveQuoteKind($val): ?int
+    private function resolve_quote_kind($val): ?int
     {
-        if ($this->isQuotedWith($val, '"')) {
+        if ($this->is_quoted_with($val, '"')) {
             return String_::KIND_DOUBLE_QUOTED;
         }
-        if ($this->isQuotedWith($val, "'")) {
+        if ($this->is_quoted_with($val, "'")) {
             return String_::KIND_SINGLE_QUOTED;
         }
         return null;
@@ -149,15 +147,15 @@ final class ArrayParser
      * @param mixed $rawKey
      * @param mixed $rawValue
      */
-    private function createArrayItemFromKeyAndValue($rawKey, $rawValue): ArrayItemNode
+    private function create_array_item_from_key_and_value($raw_key, $raw_value): Array_Item_Node
     {
-        $valueQuoteKind = $this->resolveQuoteKind($rawValue);
-        if (is_string($rawValue) && $valueQuoteKind === String_::KIND_DOUBLE_QUOTED) {
+        $value_quote_kind = $this->resolve_quote_kind($raw_value);
+        if (is_string($raw_value) && $value_quote_kind === String_::KIND_DOUBLE_QUOTED) {
             // give raw value
-            $value = new StringNode((string) substr($rawValue, 1, strlen($rawValue) - 2));
-        } elseif ($valueQuoteKind === null && is_string($rawValue)) {
-            $lowerRawValue = strtolower($rawValue);
-            switch ($lowerRawValue) {
+            $value = new String_Node((string) substr($raw_value, 1, strlen($raw_value) - 2));
+        } elseif ($value_quote_kind === null && is_string($raw_value)) {
+            $lower_raw_value = strtolower($raw_value);
+            switch ($lower_raw_value) {
                 case 'null':
                     $value = null;
                     break;
@@ -168,31 +166,31 @@ final class ArrayParser
                     $value = \false;
                     break;
                 default:
-                    $value = $rawValue;
+                    $value = $raw_value;
                     break;
             }
         } else {
-            $value = $rawValue;
+            $value = $raw_value;
         }
-        $keyQuoteKind = $this->resolveQuoteKind($rawKey);
-        if (is_string($rawKey) && $keyQuoteKind === String_::KIND_DOUBLE_QUOTED) {
+        $key_quote_kind = $this->resolve_quote_kind($raw_key);
+        if (is_string($raw_key) && $key_quote_kind === String_::KIND_DOUBLE_QUOTED) {
             // give raw value
-            $key = new StringNode((string) substr($rawKey, 1, strlen($rawKey) - 2));
+            $key = new String_Node((string) substr($raw_key, 1, strlen($raw_key) - 2));
         } else {
-            $key = $rawKey;
+            $key = $raw_key;
         }
-        if (is_string($value) && $valueQuoteKind === String_::KIND_SINGLE_QUOTED) {
+        if (is_string($value) && $value_quote_kind === String_::KIND_SINGLE_QUOTED) {
             $value = trim($value, "'");
         }
         if ($key !== null) {
-            return new ArrayItemNode($value, $key);
+            return new Array_Item_Node($value, $key);
         }
-        return new ArrayItemNode($value);
+        return new Array_Item_Node($value);
     }
     /**
      * @param mixed $value
      */
-    private function isQuotedWith($value, string $quotes): bool
+    private function is_quoted_with($value, string $quotes): bool
     {
         if (!is_string($value)) {
             return \false;

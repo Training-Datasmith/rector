@@ -1,59 +1,57 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Static_Type_Mapper\Php_Parser;
 
-namespace Rector\StaticTypeMapper\PhpParser;
-
-use PhpParser\Node;
-use PhpParser\Node\Name;
-use PhpParser\Node\Name\FullyQualified;
-use PHPStan\Type\IntersectionType;
-use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
-
+use Php_Parser\Node;
+use Php_Parser\Node\Name;
+use Php_Parser\Node\Name\Fully_Qualified;
+use Php_Stan\Type\Intersection_Type;
+use Rector\Static_Type_Mapper\Contract\Php_Parser\Php_Parser_Node_Mapper_Interface;
 /**
  * @implements PhpParserNodeMapperInterface<Node\IntersectionType>
  */
-final class IntersectionTypeNodeMapper implements PhpParserNodeMapperInterface
+final class Intersection_Type_Node_Mapper implements Php_Parser_Node_Mapper_Interface
 {
     /**
      * @readonly
      */
-    private \Rector\StaticTypeMapper\PhpParser\FullyQualifiedNodeMapper $fullyQualifiedNodeMapper;
+    private \Rector\Static_Type_Mapper\Php_Parser\Fully_Qualified_Node_Mapper $fully_qualified_node_mapper;
     /**
      * @readonly
      */
-    private \Rector\StaticTypeMapper\PhpParser\NameNodeMapper $nameNodeMapper;
+    private \Rector\Static_Type_Mapper\Php_Parser\Name_Node_Mapper $name_node_mapper;
     /**
      * @readonly
      */
-    private \Rector\StaticTypeMapper\PhpParser\IdentifierNodeMapper $identifierNodeMapper;
-    public function __construct(\Rector\StaticTypeMapper\PhpParser\FullyQualifiedNodeMapper $fullyQualifiedNodeMapper, \Rector\StaticTypeMapper\PhpParser\NameNodeMapper $nameNodeMapper, \Rector\StaticTypeMapper\PhpParser\IdentifierNodeMapper $identifierNodeMapper)
+    private \Rector\Static_Type_Mapper\Php_Parser\Identifier_Node_Mapper $identifier_node_mapper;
+    public function __construct(\Rector\Static_Type_Mapper\Php_Parser\Fully_Qualified_Node_Mapper $fully_qualified_node_mapper, \Rector\Static_Type_Mapper\Php_Parser\Name_Node_Mapper $name_node_mapper, \Rector\Static_Type_Mapper\Php_Parser\Identifier_Node_Mapper $identifier_node_mapper)
     {
-        $this->fullyQualifiedNodeMapper = $fullyQualifiedNodeMapper;
-        $this->nameNodeMapper = $nameNodeMapper;
-        $this->identifierNodeMapper = $identifierNodeMapper;
+        $this->fully_qualified_node_mapper = $fully_qualified_node_mapper;
+        $this->name_node_mapper = $name_node_mapper;
+        $this->identifier_node_mapper = $identifier_node_mapper;
     }
-    public function getNodeType(): string
+    public function get_node_type(): string
     {
-        return Node\IntersectionType::class;
+        return Node\Intersection_Type::class;
     }
     /**
      * @param Node\IntersectionType $node
      */
-    public function mapToPHPStan(Node $node): IntersectionType
+    public function map_to_php_stan(Node $node): Intersection_Type
     {
         $types = [];
-        foreach ($node->types as $intersectionedType) {
-            if ($intersectionedType instanceof FullyQualified) {
-                $types[] = $this->fullyQualifiedNodeMapper->mapToPHPStan($intersectionedType);
+        foreach ($node->types as $intersectioned_type) {
+            if ($intersectioned_type instanceof Fully_Qualified) {
+                $types[] = $this->fully_qualified_node_mapper->map_to_php_stan($intersectioned_type);
                 continue;
             }
-            if ($intersectionedType instanceof Name) {
-                $types[] = $this->nameNodeMapper->mapToPHPStan($intersectionedType);
+            if ($intersectioned_type instanceof Name) {
+                $types[] = $this->name_node_mapper->map_to_php_stan($intersectioned_type);
                 continue;
             }
-            $types[] = $this->identifierNodeMapper->mapToPHPStan($intersectionedType);
+            $types[] = $this->identifier_node_mapper->map_to_php_stan($intersectioned_type);
         }
-        return new IntersectionType($types);
+        return new Intersection_Type($types);
     }
 }

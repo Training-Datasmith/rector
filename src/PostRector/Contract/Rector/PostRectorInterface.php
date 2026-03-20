@@ -1,21 +1,19 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Post_Rector\Contract\Rector;
 
-namespace Rector\PostRector\Contract\Rector;
-
-use PhpParser\Node\Stmt;
-use PhpParser\NodeVisitor;
-use Rector\ValueObject\Application\File;
-
+use Php_Parser\Node\Stmt;
+use Php_Parser\Node_Visitor;
+use Rector\Value_Object\Application\File;
 /**
  * @internal
  */
-interface PostRectorInterface extends NodeVisitor
+interface Post_Rector_Interface extends Node_Visitor
 {
     /**
      * @param Stmt[] $stmts
      */
-    public function shouldTraverse(array $stmts): bool;
-    public function setFile(File $file): void;
+    public function should_traverse(array $stmts): bool;
+    public function set_file(File $file): void;
 }

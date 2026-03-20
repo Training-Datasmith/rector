@@ -1,14 +1,12 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Php_Doc_Parser\Php_Doc_Parser;
 
-namespace Rector\PhpDocParser\PhpDocParser;
-
-use PHPStan\PhpDocParser\Ast\Node;
-use Rector\PhpDocParser\PhpDocParser\Contract\PhpDocNodeVisitorInterface;
-use Rector\PhpDocParser\PhpDocParser\Exception\InvalidTraverseException;
-use Rector\PhpDocParser\PhpDocParser\PhpDocNodeVisitor\CallablePhpDocNodeVisitor;
-
+use Php_Stan\Php_Doc_Parser\Ast\Node;
+use Rector\Php_Doc_Parser\Php_Doc_Parser\Contract\Php_Doc_Node_Visitor_Interface;
+use Rector\Php_Doc_Parser\Php_Doc_Parser\Exception\Invalid_Traverse_Exception;
+use Rector\Php_Doc_Parser\Php_Doc_Parser\Php_Doc_Node_Visitor\Callable_Php_Doc_Node_Visitor;
 /**
  * @api
  *
@@ -17,7 +15,7 @@ use Rector\PhpDocParser\PhpDocParser\PhpDocNodeVisitor\CallablePhpDocNodeVisitor
  *
  * @see \Rector\Tests\PhpDocParser\PhpDocParser\SimplePhpDocNodeTraverser\PhpDocNodeTraverserTest
  */
-final class PhpDocNodeTraverser
+final class Php_Doc_Node_Traverser
 {
     /**
      * If NodeVisitor::enterNode() returns DONT_TRAVERSE_CHILDREN, child nodes of the current node will not be traversed
@@ -63,32 +61,32 @@ final class PhpDocNodeTraverser
     /**
      * @var bool Whether traversal should be stopped
      */
-    private bool $stopTraversal = \false;
+    private bool $stop_traversal = \false;
     /**
      * @var PhpDocNodeVisitorInterface[]
      */
-    private array $phpDocNodeVisitors = [];
-    public function addPhpDocNodeVisitor(PhpDocNodeVisitorInterface $phpDocNodeVisitor): void
+    private array $php_doc_node_visitors = [];
+    public function add_php_doc_node_visitor(Php_Doc_Node_Visitor_Interface $php_doc_node_visitor): void
     {
-        $this->phpDocNodeVisitors[] = $phpDocNodeVisitor;
+        $this->php_doc_node_visitors[] = $php_doc_node_visitor;
     }
     public function traverse(Node $node): void
     {
-        foreach ($this->phpDocNodeVisitors as $phpDocNodeVisitor) {
-            $phpDocNodeVisitor->beforeTraverse($node);
+        foreach ($this->php_doc_node_visitors as $php_doc_node_visitor) {
+            $php_doc_node_visitor->before_traverse($node);
         }
-        $node = $this->traverseNode($node);
-        foreach ($this->phpDocNodeVisitors as $phpDocNodeVisitor) {
-            $phpDocNodeVisitor->afterTraverse($node);
+        $node = $this->traverse_node($node);
+        foreach ($this->php_doc_node_visitors as $php_doc_node_visitor) {
+            $php_doc_node_visitor->after_traverse($node);
         }
     }
     /**
      * @param callable(Node $node): (int|null|Node) $callable
      */
-    public function traverseWithCallable(Node $node, string $docContent, callable $callable): void
+    public function traverse_with_callable(Node $node, string $doc_content, callable $callable): void
     {
-        $callablePhpDocNodeVisitor = new CallablePhpDocNodeVisitor($callable, $docContent);
-        $this->addPhpDocNodeVisitor($callablePhpDocNodeVisitor);
+        $callable_php_doc_node_visitor = new Callable_Php_Doc_Node_Visitor($callable, $doc_content);
+        $this->add_php_doc_node_visitor($callable_php_doc_node_visitor);
         $this->traverse($node);
     }
     /**
@@ -96,47 +94,47 @@ final class PhpDocNodeTraverser
      * @param TNode $node
      * @return TNode
      */
-    private function traverseNode(Node $node): Node
+    private function traverse_node(Node $node): Node
     {
-        $objectPublicPropertiesToValues = get_object_vars($node);
-        $subNodeNames = array_keys($objectPublicPropertiesToValues);
-        foreach ($subNodeNames as $subNodeName) {
-            $subNode = & $node->{$subNodeName};
-            if (\is_array($subNode)) {
-                $subNode = $this->traverseArray($subNode);
-            } elseif ($subNode instanceof Node) {
-                $breakVisitorIndex = null;
-                $traverseChildren = \true;
-                foreach ($this->phpDocNodeVisitors as $visitorIndex => $phpDocNodeVisitor) {
-                    $return = $phpDocNodeVisitor->enterNode($subNode);
+        $object_public_properties_to_values = get_object_vars($node);
+        $sub_node_names = array_keys($object_public_properties_to_values);
+        foreach ($sub_node_names as $sub_node_name) {
+            $sub_node =& $node->{$sub_node_name};
+            if (\is_array($sub_node)) {
+                $sub_node = $this->traverse_array($sub_node);
+            } elseif ($sub_node instanceof Node) {
+                $break_visitor_index = null;
+                $traverse_children = \true;
+                foreach ($this->php_doc_node_visitors as $visitor_index => $php_doc_node_visitor) {
+                    $return = $php_doc_node_visitor->enter_node($sub_node);
                     if ($return !== null) {
                         if ($return instanceof Node) {
-                            $subNode = $return;
+                            $sub_node = $return;
                         } elseif ($return === self::DONT_TRAVERSE_CHILDREN) {
-                            $traverseChildren = \false;
+                            $traverse_children = \false;
                         } elseif ($return === self::DONT_TRAVERSE_CURRENT_AND_CHILDREN) {
-                            $traverseChildren = \false;
-                            $breakVisitorIndex = $visitorIndex;
+                            $traverse_children = \false;
+                            $break_visitor_index = $visitor_index;
                             break;
                         } elseif ($return === self::STOP_TRAVERSAL) {
-                            $this->stopTraversal = \true;
+                            $this->stop_traversal = \true;
                         } elseif ($return === self::NODE_REMOVE) {
-                            unset($subNode);
+                            unset($sub_node);
                             continue 2;
                         } else {
-                            throw new InvalidTraverseException('enterNode() returned invalid value of type ' . gettype($return));
+                            throw new Invalid_Traverse_Exception('enterNode() returned invalid value of type ' . gettype($return));
                         }
                     }
                 }
-                if ($traverseChildren) {
-                    $subNode = $this->traverseNode($subNode);
-                    if ($this->stopTraversal) {
+                if ($traverse_children) {
+                    $sub_node = $this->traverse_node($sub_node);
+                    if ($this->stop_traversal) {
                         break;
                     }
                 }
-                foreach ($this->phpDocNodeVisitors as $visitorIndex => $phpDocNodeVisitor) {
-                    $phpDocNodeVisitor->leaveNode($subNode);
-                    if ($breakVisitorIndex === $visitorIndex) {
+                foreach ($this->php_doc_node_visitors as $visitor_index => $php_doc_node_visitor) {
+                    $php_doc_node_visitor->leave_node($sub_node);
+                    if ($break_visitor_index === $visitor_index) {
                         break;
                     }
                 }
@@ -148,63 +146,63 @@ final class PhpDocNodeTraverser
      * @param array<Node|mixed> $nodes
      * @return array<Node|mixed>
      */
-    private function traverseArray(array $nodes): array
+    private function traverse_array(array $nodes): array
     {
         foreach ($nodes as $key => &$node) {
             // can be string or something else
             if (!$node instanceof Node) {
                 continue;
             }
-            $traverseChildren = \true;
-            $breakVisitorIndex = null;
-            foreach ($this->phpDocNodeVisitors as $visitorIndex => $phpDocNodeVisitor) {
-                $return = $phpDocNodeVisitor->enterNode($node);
+            $traverse_children = \true;
+            $break_visitor_index = null;
+            foreach ($this->php_doc_node_visitors as $visitor_index => $php_doc_node_visitor) {
+                $return = $php_doc_node_visitor->enter_node($node);
                 if ($return !== null) {
                     if ($return instanceof Node) {
                         $node = $return;
                     } elseif ($return === self::DONT_TRAVERSE_CHILDREN) {
-                        $traverseChildren = \false;
+                        $traverse_children = \false;
                     } elseif ($return === self::DONT_TRAVERSE_CURRENT_AND_CHILDREN) {
-                        $traverseChildren = \false;
-                        $breakVisitorIndex = $visitorIndex;
+                        $traverse_children = \false;
+                        $break_visitor_index = $visitor_index;
                         break;
                     } elseif ($return === self::STOP_TRAVERSAL) {
-                        $this->stopTraversal = \true;
+                        $this->stop_traversal = \true;
                     } elseif ($return === self::NODE_REMOVE) {
                         // remove node
                         unset($nodes[$key]);
                         continue 2;
                     } else {
-                        throw new InvalidTraverseException('enterNode() returned invalid value of type ' . gettype($return));
+                        throw new Invalid_Traverse_Exception('enterNode() returned invalid value of type ' . gettype($return));
                     }
                 }
             }
             // should traverse node children's properties?
-            if ($traverseChildren) {
-                $node = $this->traverseNode($node);
-                if ($this->stopTraversal) {
+            if ($traverse_children) {
+                $node = $this->traverse_node($node);
+                if ($this->stop_traversal) {
                     break;
                 }
             }
-            foreach ($this->phpDocNodeVisitors as $visitorIndex => $phpDocNodeVisitor) {
-                $return = $phpDocNodeVisitor->leaveNode($node);
+            foreach ($this->php_doc_node_visitors as $visitor_index => $php_doc_node_visitor) {
+                $return = $php_doc_node_visitor->leave_node($node);
                 if ($return !== null) {
                     if ($return instanceof Node) {
                         $node = $return;
                     } elseif (\is_array($return)) {
-                        $doNodes[] = [$key, $return];
+                        $do_nodes[] = [$key, $return];
                         break;
                     } elseif ($return === self::NODE_REMOVE) {
-                        $doNodes[] = [$key, []];
+                        $do_nodes[] = [$key, []];
                         break;
                     } elseif ($return === self::STOP_TRAVERSAL) {
-                        $this->stopTraversal = \true;
+                        $this->stop_traversal = \true;
                         break 2;
                     } else {
-                        throw new InvalidTraverseException('leaveNode() returned invalid value of type ' . gettype($return));
+                        throw new Invalid_Traverse_Exception('leaveNode() returned invalid value of type ' . gettype($return));
                     }
                 }
-                if ($breakVisitorIndex === $visitorIndex) {
+                if ($break_visitor_index === $visitor_index) {
                     break;
                 }
             }

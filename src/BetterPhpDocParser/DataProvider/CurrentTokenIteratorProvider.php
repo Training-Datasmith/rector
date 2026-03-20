@@ -1,24 +1,22 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Better_Php_Doc_Parser\Data_Provider;
 
-namespace Rector\BetterPhpDocParser\DataProvider;
-
-use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
-use Rector\Exception\ShouldNotHappenException;
-
-final class CurrentTokenIteratorProvider
+use Rector\Better_Php_Doc_Parser\Value_Object\Parser\Better_Token_Iterator;
+use Rector\Exception\Should_Not_Happen_Exception;
+final class Current_Token_Iterator_Provider
 {
-    private ?BetterTokenIterator $betterTokenIterator = null;
-    public function setBetterTokenIterator(BetterTokenIterator $betterTokenIterator): void
+    private ?Better_Token_Iterator $better_token_iterator = null;
+    public function set_better_token_iterator(Better_Token_Iterator $better_token_iterator): void
     {
-        $this->betterTokenIterator = $betterTokenIterator;
+        $this->better_token_iterator = $better_token_iterator;
     }
-    public function provide(): BetterTokenIterator
+    public function provide(): Better_Token_Iterator
     {
-        if (!$this->betterTokenIterator instanceof BetterTokenIterator) {
-            throw new ShouldNotHappenException();
+        if (!$this->better_token_iterator instanceof Better_Token_Iterator) {
+            throw new Should_Not_Happen_Exception();
         }
-        return $this->betterTokenIterator;
+        return $this->better_token_iterator;
     }
 }

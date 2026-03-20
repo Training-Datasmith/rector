@@ -1,34 +1,32 @@
 <?php
 
 declare (strict_types=1);
-
 namespace Rector\Caching\Config;
 
-use Rector\Application\VersionResolver;
-use Rector\Configuration\Parameter\SimpleParameterProvider;
-use Rector\Exception\ShouldNotHappenException;
-
+use Rector\Application\Version_Resolver;
+use Rector\Configuration\Parameter\Simple_Parameter_Provider;
+use Rector\Exception\Should_Not_Happen_Exception;
 /**
  * Inspired by https://github.com/symplify/easy-coding-standard/blob/e598ab54686e416788f28fcfe007fd08e0f371d9/packages/changed-files-detector/src/FileHashComputer.php
  */
-final class FileHashComputer
+final class File_Hash_Computer
 {
-    public function compute(string $filePath): string
+    public function compute(string $file_path): string
     {
-        $this->ensureIsPhp($filePath);
-        $parametersHash = SimpleParameterProvider::hash();
-        return sha1($filePath . $parametersHash . VersionResolver::PACKAGE_VERSION);
+        $this->ensure_is_php($file_path);
+        $parameters_hash = Simple_Parameter_Provider::hash();
+        return sha1($file_path . $parameters_hash . Version_Resolver::PACKAGE_VERSION);
     }
-    private function ensureIsPhp(string $filePath): void
+    private function ensure_is_php(string $file_path): void
     {
-        $fileExtension = pathinfo($filePath, \PATHINFO_EXTENSION);
-        if ($fileExtension === 'php') {
+        $file_extension = pathinfo($file_path, \PATHINFO_EXTENSION);
+        if ($file_extension === 'php') {
             return;
         }
-        throw new ShouldNotHappenException(sprintf(
+        throw new Should_Not_Happen_Exception(sprintf(
             // getRealPath() cannot be used, as it breaks in phar
             'Provide only PHP file, ready for Dependency Injection. "%s" given',
-            $filePath
+            $file_path
         ));
     }
 }

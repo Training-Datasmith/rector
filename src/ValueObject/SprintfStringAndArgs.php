@@ -1,13 +1,11 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Value_Object;
 
-namespace Rector\ValueObject;
-
-use PhpParser\Node\Expr;
-use PhpParser\Node\Scalar\String_;
-
-final class SprintfStringAndArgs
+use Php_Parser\Node\Expr;
+use Php_Parser\Node\Scalar\String_;
+final class Sprintf_String_And_Args
 {
     /**
      * @readonly
@@ -17,23 +15,23 @@ final class SprintfStringAndArgs
      * @var Expr[]
      * @readonly
      */
-    private array $arrayItems;
+    private array $array_items;
     /**
      * @param Expr[] $arrayItems
      */
-    public function __construct(String_ $string, array $arrayItems)
+    public function __construct(String_ $string, array $array_items)
     {
         $this->string = $string;
-        $this->arrayItems = $arrayItems;
+        $this->array_items = $array_items;
     }
     /**
      * @return Expr[]
      */
-    public function getArrayItems(): array
+    public function get_array_items(): array
     {
-        return $this->arrayItems;
+        return $this->array_items;
     }
-    public function getStringValue(): string
+    public function get_string_value(): string
     {
         return $this->string->value;
     }

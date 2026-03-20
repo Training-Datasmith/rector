@@ -1,17 +1,15 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Php_Doc_Parser\Node_Traverser;
 
-namespace Rector\PhpDocParser\NodeTraverser;
-
-use PhpParser\Node;
-use PhpParser\NodeTraverser;
-use Rector\PhpDocParser\NodeVisitor\CallableNodeVisitor;
-
+use Php_Parser\Node;
+use Php_Parser\Node_Traverser;
+use Rector\Php_Doc_Parser\Node_Visitor\Callable_Node_Visitor;
 /**
  * @api
  */
-final class SimpleCallableNodeTraverser
+final class Simple_Callable_Node_Traverser
 {
     /**
      * @param Node|Node[]|null $node
@@ -21,20 +19,20 @@ final class SimpleCallableNodeTraverser
      */
     public static function traverse($node, callable $callable): void
     {
-        self::traverseNodesWithCallable($node, $callable);
+        self::traverse_nodes_with_callable($node, $callable);
     }
     /**
      * @param callable(Node $node): (int|Node|null|Node[]) $callable
      * @param Node|Node[]|null $node
      */
-    public static function traverseNodesWithCallable($node, callable $callable): void
+    public static function traverse_nodes_with_callable($node, callable $callable): void
     {
         if ($node === null || $node === []) {
             return;
         }
-        $callableNodeVisitor = new CallableNodeVisitor($callable);
-        $nodeTraverser = new NodeTraverser($callableNodeVisitor);
+        $callable_node_visitor = new Callable_Node_Visitor($callable);
+        $node_traverser = new Node_Traverser($callable_node_visitor);
         $nodes = $node instanceof Node ? [$node] : $node;
-        $nodeTraverser->traverse($nodes);
+        $node_traverser->traverse($nodes);
     }
 }

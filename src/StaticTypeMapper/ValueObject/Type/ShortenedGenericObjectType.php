@@ -1,40 +1,38 @@
 <?php
 
 declare (strict_types=1);
-
-namespace Rector\StaticTypeMapper\ValueObject\Type;
+namespace Rector\Static_Type_Mapper\Value_Object\Type;
 
 use Override;
-use PHPStan\Type\Generic\GenericObjectType;
-use PHPStan\Type\IsSuperTypeOfResult;
-use PHPStan\Type\Type;
-
+use Php_Stan\Type\Generic\Generic_Object_Type;
+use Php_Stan\Type\Is_Super_Type_Of_Result;
+use Php_Stan\Type\Type;
 /**
  * @api
  */
-final class ShortenedGenericObjectType extends GenericObjectType
+final class Shortened_Generic_Object_Type extends Generic_Object_Type
 {
     /**
      * @var class-string
      * @readonly
      */
-    private string $fullyQualifiedName;
+    private string $fully_qualified_name;
     /**
      * @param class-string $fullyQualifiedName
      */
-    public function __construct(string $shortName, array $types, string $fullyQualifiedName)
+    public function __construct(string $short_name, array $types, string $fully_qualified_name)
     {
-        $this->fullyQualifiedName = $fullyQualifiedName;
-        parent::__construct($shortName, $types);
+        $this->fully_qualified_name = $fully_qualified_name;
+        parent::__construct($short_name, $types);
     }
     #[Override]
-    public function isSuperTypeOf(Type $type): IsSuperTypeOfResult
+    public function is_super_type_of(Type $type): Is_Super_Type_Of_Result
     {
-        $genericObjectType = new GenericObjectType($this->fullyQualifiedName, $this->getTypes());
-        return $genericObjectType->isSuperTypeOf($type);
+        $generic_object_type = new Generic_Object_Type($this->fully_qualified_name, $this->get_types());
+        return $generic_object_type->is_super_type_of($type);
     }
-    public function getShortName(): string
+    public function get_short_name(): string
     {
-        return $this->getClassName();
+        return $this->get_class_name();
     }
 }

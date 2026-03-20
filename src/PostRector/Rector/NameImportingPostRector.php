@@ -1,70 +1,68 @@
 <?php
 
 declare (strict_types=1);
-
-namespace Rector\PostRector\Rector;
+namespace Rector\Post_Rector\Rector;
 
 use Override;
-use PhpParser\Node;
-use PhpParser\Node\Name;
-use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\GroupUse;
-use PhpParser\Node\Stmt\Use_;
-use Rector\CodingStyle\Node\NameImporter;
-use Rector\Naming\Naming\UseImportsResolver;
-use Rector\PostRector\Guard\AddUseStatementGuard;
-
-final class NameImportingPostRector extends \Rector\PostRector\Rector\AbstractPostRector
+use Php_Parser\Node;
+use Php_Parser\Node\Name;
+use Php_Parser\Node\Name\Fully_Qualified;
+use Php_Parser\Node\Stmt;
+use Php_Parser\Node\Stmt\Group_Use;
+use Php_Parser\Node\Stmt\Use_;
+use Rector\Coding_Style\Node\Name_Importer;
+use Rector\Naming\Naming\Use_Imports_Resolver;
+use Rector\Post_Rector\Guard\Add_Use_Statement_Guard;
+final class Name_Importing_Post_Rector extends \Rector\Post_Rector\Rector\Abstract_Post_Rector
 {
     /**
      * @readonly
      */
-    private NameImporter $nameImporter;
+    private Name_Importer $name_importer;
     /**
      * @readonly
      */
-    private UseImportsResolver $useImportsResolver;
+    private Use_Imports_Resolver $use_imports_resolver;
     /**
      * @readonly
      */
-    private AddUseStatementGuard $addUseStatementGuard;
+    private Add_Use_Statement_Guard $add_use_statement_guard;
     /**
      * @var array<Use_|GroupUse>
      */
-    private array $currentUses = [];
-    public function __construct(NameImporter $nameImporter, UseImportsResolver $useImportsResolver, AddUseStatementGuard $addUseStatementGuard)
+    private array $current_uses = [];
+    public function __construct(Name_Importer $name_importer, Use_Imports_Resolver $use_imports_resolver, Add_Use_Statement_Guard $add_use_statement_guard)
     {
-        $this->nameImporter = $nameImporter;
-        $this->useImportsResolver = $useImportsResolver;
-        $this->addUseStatementGuard = $addUseStatementGuard;
+        $this->name_importer = $name_importer;
+        $this->use_imports_resolver = $use_imports_resolver;
+        $this->add_use_statement_guard = $add_use_statement_guard;
     }
     /**
      * @return Stmt[]
      */
-    public function beforeTraverse(array $nodes): array
+    public function before_traverse(array $nodes): array
     {
-        $this->currentUses = $this->useImportsResolver->resolve();
+        $this->current_uses = $this->use_imports_resolver->resolve();
         return $nodes;
     }
-    public function enterNode(Node $node): ?\PhpParser\Node\Name
+    public function enter_node(Node $node): ?\Php_Parser\Node\Name
     {
-        if (!$node instanceof FullyQualified) {
+        if (!$node instanceof Fully_Qualified) {
             return null;
         }
-        $name = $this->nameImporter->importName($node, $this->getFile(), $this->currentUses);
+        $name = $this->name_importer->import_name($node, $this->get_file(), $this->current_uses);
         if (!$name instanceof Name) {
             return null;
         }
-        $this->addRectorClassWithLine($node);
+        $this->add_rector_class_with_line($node);
         return $name;
     }
     /**
      * @param Stmt[] $stmts
      */
     #[Override]
-    public function shouldTraverse(array $stmts): bool
+    public function should_traverse(array $stmts): bool
     {
-        return $this->addUseStatementGuard->shouldTraverse($stmts, $this->getFile()->getFilePath());
+        return $this->add_use_statement_guard->should_traverse($stmts, $this->get_file()->get_file_path());
     }
 }

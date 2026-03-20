@@ -1,63 +1,61 @@
 <?php
 
 declare (strict_types=1);
-
 namespace Rector\Reporting;
 
 use Rector\Configuration\Option;
-use Rector\Configuration\Parameter\SimpleParameterProvider;
-use Rector\Configuration\VendorMissAnalyseGuard;
-use Rector\PostRector\Contract\Rector\PostRectorInterface;
-use RectorPrefix202603\Symfony\Component\Console\Style\SymfonyStyle;
-
-final class MissConfigurationReporter
+use Rector\Configuration\Parameter\Simple_Parameter_Provider;
+use Rector\Configuration\Vendor_Miss_Analyse_Guard;
+use Rector\Post_Rector\Contract\Rector\Post_Rector_Interface;
+use Rector_Prefix202603\Symfony\Component\Console\Style\Symfony_Style;
+final class Miss_Configuration_Reporter
 {
     /**
      * @readonly
      */
-    private SymfonyStyle $symfonyStyle;
+    private Symfony_Style $symfony_style;
     /**
      * @readonly
      */
-    private VendorMissAnalyseGuard $vendorMissAnalyseGuard;
-    public function __construct(SymfonyStyle $symfonyStyle, VendorMissAnalyseGuard $vendorMissAnalyseGuard)
+    private Vendor_Miss_Analyse_Guard $vendor_miss_analyse_guard;
+    public function __construct(Symfony_Style $symfony_style, Vendor_Miss_Analyse_Guard $vendor_miss_analyse_guard)
     {
-        $this->symfonyStyle = $symfonyStyle;
-        $this->vendorMissAnalyseGuard = $vendorMissAnalyseGuard;
+        $this->symfony_style = $symfony_style;
+        $this->vendor_miss_analyse_guard = $vendor_miss_analyse_guard;
     }
-    public function reportSkippedNeverRegisteredRules(): void
+    public function report_skipped_never_registered_rules(): void
     {
-        $registeredRules = SimpleParameterProvider::provideArrayParameter(Option::REGISTERED_RECTOR_RULES);
-        $skippedRules = SimpleParameterProvider::provideArrayParameter(Option::SKIPPED_RECTOR_RULES);
-        $neverRegisteredSkippedRules = array_unique(array_diff($skippedRules, $registeredRules));
+        $registered_rules = Simple_Parameter_Provider::provide_array_parameter(Option::REGISTERED_RECTOR_RULES);
+        $skipped_rules = Simple_Parameter_Provider::provide_array_parameter(Option::SKIPPED_RECTOR_RULES);
+        $never_registered_skipped_rules = array_unique(array_diff($skipped_rules, $registered_rules));
         // remove special PostRectorInterface rules, they are registered in a different way
-        $neverRegisteredSkippedRules = array_filter($neverRegisteredSkippedRules, fn ($skippedRule): bool => !is_a($skippedRule, PostRectorInterface::class, \true));
-        if ($neverRegisteredSkippedRules === []) {
+        $never_registered_skipped_rules = array_filter($never_registered_skipped_rules, fn($skipped_rule): bool => !is_a($skipped_rule, Post_Rector_Interface::class, \true));
+        if ($never_registered_skipped_rules === []) {
             return;
         }
-        $this->symfonyStyle->warning(sprintf('%s never registered. You can remove %s from "->withSkip()"', count($neverRegisteredSkippedRules) > 1 ? 'These skipped rules are' : 'This skipped rule is', count($neverRegisteredSkippedRules) > 1 ? 'them' : 'it'));
-        $this->symfonyStyle->listing($neverRegisteredSkippedRules);
+        $this->symfony_style->warning(sprintf('%s never registered. You can remove %s from "->withSkip()"', count($never_registered_skipped_rules) > 1 ? 'These skipped rules are' : 'This skipped rule is', count($never_registered_skipped_rules) > 1 ? 'them' : 'it'));
+        $this->symfony_style->listing($never_registered_skipped_rules);
     }
     /**
      * @param string[] $filePaths
      */
-    public function reportVendorInPaths(array $filePaths): void
+    public function report_vendor_in_paths(array $file_paths): void
     {
-        if (!$this->vendorMissAnalyseGuard->isVendorAnalyzed($filePaths)) {
+        if (!$this->vendor_miss_analyse_guard->is_vendor_analyzed($file_paths)) {
             return;
         }
-        $this->symfonyStyle->warning(sprintf('Rector has detected a "/vendor" directory in your configured paths. If this is Composer\'s vendor directory, this is not necessary as it will be autoloaded. Scanning the Composer /vendor directory will cause Rector to run much slower and possibly with errors.%sRemove "/vendor" from Rector paths and run again.', "\n\n"));
+        $this->symfony_style->warning(sprintf('Rector has detected a "/vendor" directory in your configured paths. If this is Composer\'s vendor directory, this is not necessary as it will be autoloaded. Scanning the Composer /vendor directory will cause Rector to run much slower and possibly with errors.%sRemove "/vendor" from Rector paths and run again.', "\n\n"));
         sleep(3);
     }
-    public function reportStartWithShortOpenTag(): void
+    public function report_start_with_short_open_tag(): void
     {
-        $files = SimpleParameterProvider::provideArrayParameter(Option::SKIPPED_START_WITH_SHORT_OPEN_TAG_FILES);
+        $files = Simple_Parameter_Provider::provide_array_parameter(Option::SKIPPED_START_WITH_SHORT_OPEN_TAG_FILES);
         if ($files === []) {
             return;
         }
         $suffix = count($files) > 1 ? 's were' : ' was';
-        $fileList = implode("\n", $files);
-        $this->symfonyStyle->warning(sprintf('The following file%s skipped as starting with short open tag. Migrate to long open PHP tag first: %s%s', $suffix, "\n\n", $fileList));
+        $file_list = implode("\n", $files);
+        $this->symfony_style->warning(sprintf('The following file%s skipped as starting with short open tag. Migrate to long open PHP tag first: %s%s', $suffix, "\n\n", $file_list));
         sleep(3);
     }
 }

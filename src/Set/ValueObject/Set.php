@@ -1,46 +1,44 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Set\Value_Object;
 
-namespace Rector\Set\ValueObject;
-
-use Rector\Set\Contract\SetInterface;
-use RectorPrefix202603\Webmozart\Assert\Assert;
-
+use Rector\Set\Contract\Set_Interface;
+use Rector_Prefix202603\Webmozart\Assert\Assert;
 /**
  * @api used by extensions
  */
-final class Set implements SetInterface
+final class Set implements Set_Interface
 {
     /**
      * @readonly
      */
-    private string $groupName;
+    private string $group_name;
     /**
      * @readonly
      */
-    private string $setName;
+    private string $set_name;
     /**
      * @readonly
      */
-    private string $setFilePath;
-    public function __construct(string $groupName, string $setName, string $setFilePath)
+    private string $set_file_path;
+    public function __construct(string $group_name, string $set_name, string $set_file_path)
     {
-        $this->groupName = $groupName;
-        $this->setName = $setName;
-        $this->setFilePath = $setFilePath;
-        Assert::fileExists($setFilePath);
+        $this->group_name = $group_name;
+        $this->set_name = $set_name;
+        $this->set_file_path = $set_file_path;
+        Assert::file_exists($set_file_path);
     }
-    public function getGroupName(): string
+    public function get_group_name(): string
     {
-        return $this->groupName;
+        return $this->group_name;
     }
-    public function getName(): string
+    public function get_name(): string
     {
-        return $this->setName;
+        return $this->set_name;
     }
-    public function getSetFilePath(): string
+    public function get_set_file_path(): string
     {
-        return $this->setFilePath;
+        return $this->set_file_path;
     }
 }

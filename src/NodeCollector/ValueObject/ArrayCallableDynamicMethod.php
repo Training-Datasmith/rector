@@ -1,10 +1,9 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Node_Collector\Value_Object;
 
-namespace Rector\NodeCollector\ValueObject;
-
-final class ArrayCallableDynamicMethod
+final class Array_Callable_Dynamic_Method
 {
     // marker type
 }

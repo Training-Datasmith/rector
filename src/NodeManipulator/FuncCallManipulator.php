@@ -1,36 +1,34 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Node_Manipulator;
 
-namespace Rector\NodeManipulator;
-
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\FuncCall;
-use Rector\PhpParser\Node\Value\ValueResolver;
-
-final class FuncCallManipulator
+use Php_Parser\Node\Arg;
+use Php_Parser\Node\Expr\Func_Call;
+use Rector\Php_Parser\Node\Value\Value_Resolver;
+final class Func_Call_Manipulator
 {
     /**
      * @readonly
      */
-    private ValueResolver $valueResolver;
-    public function __construct(ValueResolver $valueResolver)
+    private Value_Resolver $value_resolver;
+    public function __construct(Value_Resolver $value_resolver)
     {
-        $this->valueResolver = $valueResolver;
+        $this->value_resolver = $value_resolver;
     }
     /**
      * @param FuncCall[] $compactFuncCalls
      * @return string[]
      */
-    public function extractArgumentsFromCompactFuncCalls(array $compactFuncCalls): array
+    public function extract_arguments_from_compact_func_calls(array $compact_func_calls): array
     {
         $arguments = [];
-        foreach ($compactFuncCalls as $compactFuncCall) {
-            foreach ($compactFuncCall->args as $arg) {
+        foreach ($compact_func_calls as $compact_func_call) {
+            foreach ($compact_func_call->args as $arg) {
                 if (!$arg instanceof Arg) {
                     continue;
                 }
-                $value = $this->valueResolver->getValue($arg->value);
+                $value = $this->value_resolver->get_value($arg->value);
                 if ($value === null) {
                     continue;
                 }

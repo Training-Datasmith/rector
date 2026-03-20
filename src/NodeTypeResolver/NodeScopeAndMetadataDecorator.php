@@ -1,37 +1,35 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Node_Type_Resolver;
 
-namespace Rector\NodeTypeResolver;
-
-use PhpParser\Node\Stmt;
-use PhpParser\NodeTraverser;
-use PhpParser\NodeVisitor\CloningVisitor;
-use Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver;
-
-final class NodeScopeAndMetadataDecorator
+use Php_Parser\Node\Stmt;
+use Php_Parser\Node_Traverser;
+use Php_Parser\Node_Visitor\Cloning_Visitor;
+use Rector\Node_Type_Resolver\Php_Stan\Scope\Php_Stan_Node_Scope_Resolver;
+final class Node_Scope_And_Metadata_Decorator
 {
     /**
      * @readonly
      */
-    private PHPStanNodeScopeResolver $phpStanNodeScopeResolver;
+    private Php_Stan_Node_Scope_Resolver $php_stan_node_scope_resolver;
     /**
      * @readonly
      */
-    private NodeTraverser $nodeTraverser;
-    public function __construct(CloningVisitor $cloningVisitor, PHPStanNodeScopeResolver $phpStanNodeScopeResolver)
+    private Node_Traverser $node_traverser;
+    public function __construct(Cloning_Visitor $cloning_visitor, Php_Stan_Node_Scope_Resolver $php_stan_node_scope_resolver)
     {
-        $this->phpStanNodeScopeResolver = $phpStanNodeScopeResolver;
+        $this->php_stan_node_scope_resolver = $php_stan_node_scope_resolver;
         // needed for format preserving printing
-        $this->nodeTraverser = new NodeTraverser($cloningVisitor);
+        $this->node_traverser = new Node_Traverser($cloning_visitor);
     }
     /**
      * @param Stmt[] $stmts
      * @return Stmt[]
      */
-    public function decorateNodesFromFile(string $filePath, array $stmts): array
+    public function decorate_nodes_from_file(string $file_path, array $stmts): array
     {
-        $stmts = $this->phpStanNodeScopeResolver->processNodes($stmts, $filePath);
-        return $this->nodeTraverser->traverse($stmts);
+        $stmts = $this->php_stan_node_scope_resolver->process_nodes($stmts, $file_path);
+        return $this->node_traverser->traverse($stmts);
     }
 }

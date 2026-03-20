@@ -1,13 +1,12 @@
 <?php
 
 declare (strict_types=1);
-
 namespace Rector\Caching\Enum;
 
 /**
  * @enum
  */
-final class CacheKey
+final class Cache_Key
 {
     /**
      * @var string

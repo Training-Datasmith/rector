@@ -1,14 +1,12 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Changes_Reporting\Contract\Output;
 
-namespace Rector\ChangesReporting\Contract\Output;
-
-use Rector\ValueObject\Configuration;
-use Rector\ValueObject\ProcessResult;
-
-interface OutputFormatterInterface
+use Rector\Value_Object\Configuration;
+use Rector\Value_Object\Process_Result;
+interface Output_Formatter_Interface
 {
-    public function getName(): string;
-    public function report(ProcessResult $processResult, Configuration $configuration): void;
+    public function get_name(): string;
+    public function report(Process_Result $process_result, Configuration $configuration): void;
 }

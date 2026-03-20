@@ -1,61 +1,59 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Php_Stan_Static_Type_Mapper\Type_Mapper;
 
-namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
-
-use PhpParser\Node\Name;
-use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use PHPStan\Type\StaticType;
-use PHPStan\Type\Type;
-use Rector\Enum\ObjectReference;
-use Rector\Php\PhpVersionProvider;
-use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
-use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
-use Rector\StaticTypeMapper\ValueObject\Type\SelfStaticType;
-use Rector\StaticTypeMapper\ValueObject\Type\SimpleStaticType;
-use Rector\ValueObject\PhpVersionFeature;
-
+use Php_Parser\Node\Name;
+use Php_Stan\Php_Doc_Parser\Ast\Type\Type_Node;
+use Php_Stan\Type\Static_Type;
+use Php_Stan\Type\Type;
+use Rector\Enum\Object_Reference;
+use Rector\Php\Php_Version_Provider;
+use Rector\Php_Stan_Static_Type_Mapper\Contract\Type_Mapper_Interface;
+use Rector\Php_Stan_Static_Type_Mapper\Enum\Type_Kind;
+use Rector\Static_Type_Mapper\Value_Object\Type\Self_Static_Type;
+use Rector\Static_Type_Mapper\Value_Object\Type\Simple_Static_Type;
+use Rector\Value_Object\Php_Version_Feature;
 /**
  * @see \Rector\Tests\NodeTypeResolver\StaticTypeMapper\StaticTypeMapperTest
  *
  * @implements TypeMapperInterface<StaticType>
  */
-final class StaticTypeMapper implements TypeMapperInterface
+final class Static_Type_Mapper implements Type_Mapper_Interface
 {
     /**
      * @readonly
      */
-    private PhpVersionProvider $phpVersionProvider;
-    public function __construct(PhpVersionProvider $phpVersionProvider)
+    private Php_Version_Provider $php_version_provider;
+    public function __construct(Php_Version_Provider $php_version_provider)
     {
-        $this->phpVersionProvider = $phpVersionProvider;
+        $this->php_version_provider = $php_version_provider;
     }
-    public function getNodeClass(): string
+    public function get_node_class(): string
     {
-        return StaticType::class;
+        return Static_Type::class;
     }
     /**
      * @param StaticType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
+    public function map_to_php_stan_php_doc_type_node(Type $type): Type_Node
     {
-        return $type->toPhpDocNode();
+        return $type->to_php_doc_node();
     }
     /**
      * @param SimpleStaticType|StaticType $type
      */
-    public function mapToPhpParserNode(Type $type, string $typeKind): Name
+    public function map_to_php_parser_node(Type $type, string $type_kind): Name
     {
-        if ($type instanceof SelfStaticType) {
-            return new Name(ObjectReference::SELF);
+        if ($type instanceof Self_Static_Type) {
+            return new Name(Object_Reference::SELF);
         }
-        if ($typeKind !== TypeKind::RETURN) {
-            return new Name(ObjectReference::SELF);
+        if ($type_kind !== Type_Kind::RETURN) {
+            return new Name(Object_Reference::SELF);
         }
-        if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::STATIC_RETURN_TYPE)) {
-            return new Name(ObjectReference::SELF);
+        if (!$this->php_version_provider->is_at_least_php_version(Php_Version_Feature::STATIC_RETURN_TYPE)) {
+            return new Name(Object_Reference::SELF);
         }
-        return new Name(ObjectReference::STATIC);
+        return new Name(Object_Reference::STATIC);
     }
 }

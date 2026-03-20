@@ -1,13 +1,11 @@
 <?php
 
 declare (strict_types=1);
-
 namespace Rector\Bootstrap;
 
-use Rector\RectorInstaller\GeneratedConfig;
+use Rector\Rector_Installer\Generated_Config;
 use ReflectionClass;
-
-final class ExtensionConfigResolver
+final class Extension_Config_Resolver
 {
     /**
      * @api
@@ -15,45 +13,45 @@ final class ExtensionConfigResolver
      */
     public function provide(): array
     {
-        $configFilePaths = [];
-        if (!class_exists(\Rector\RectorInstaller\GeneratedConfig::class)) {
-            return $configFilePaths;
+        $config_file_paths = [];
+        if (!class_exists(\Rector\Rector_Installer\Generated_Config::class)) {
+            return $config_file_paths;
         }
-        $generatedConfigReflectionClass = new ReflectionClass(\Rector\RectorInstaller\GeneratedConfig::class);
-        if ($generatedConfigReflectionClass->getFileName() === \false) {
-            return $configFilePaths;
+        $generated_config_reflection_class = new ReflectionClass(\Rector\Rector_Installer\Generated_Config::class);
+        if ($generated_config_reflection_class->get_file_name() === \false) {
+            return $config_file_paths;
         }
-        $generatedConfigDirectory = dirname($generatedConfigReflectionClass->getFileName());
-        foreach (GeneratedConfig::EXTENSIONS as $extensionConfig) {
+        $generated_config_directory = dirname($generated_config_reflection_class->get_file_name());
+        foreach (Generated_Config::EXTENSIONS as $extension_config) {
             /** @var string[] $includedFiles */
-            $includedFiles = $extensionConfig['extra']['includes'] ?? [];
-            foreach ($includedFiles as $includedFile) {
-                $includedFilePath = $this->resolveIncludeFilePath($extensionConfig, $generatedConfigDirectory, $includedFile);
-                if ($includedFilePath === null) {
+            $included_files = $extension_config['extra']['includes'] ?? [];
+            foreach ($included_files as $included_file) {
+                $included_file_path = $this->resolve_include_file_path($extension_config, $generated_config_directory, $included_file);
+                if ($included_file_path === null) {
                     /** @var string $installPath */
-                    $installPath = $extensionConfig['install_path'];
-                    $includedFilePath = sprintf('%s/%s', $installPath, $includedFile);
+                    $install_path = $extension_config['install_path'];
+                    $included_file_path = sprintf('%s/%s', $install_path, $included_file);
                 }
-                $configFilePaths[] = $includedFilePath;
+                $config_file_paths[] = $included_file_path;
             }
         }
-        return $configFilePaths;
+        return $config_file_paths;
     }
     /**
      * @param array<string, mixed> $extensionConfig
      */
-    private function resolveIncludeFilePath(array $extensionConfig, string $generatedConfigDirectory, string $includedFile): ?string
+    private function resolve_include_file_path(array $extension_config, string $generated_config_directory, string $included_file): ?string
     {
-        if (!isset($extensionConfig['relative_install_path'])) {
+        if (!isset($extension_config['relative_install_path'])) {
             return null;
         }
-        $includedFilePath = sprintf('%s/%s/%s', $generatedConfigDirectory, (string) $extensionConfig['relative_install_path'], $includedFile);
-        if (!file_exists($includedFilePath)) {
+        $included_file_path = sprintf('%s/%s/%s', $generated_config_directory, (string) $extension_config['relative_install_path'], $included_file);
+        if (!file_exists($included_file_path)) {
             return null;
         }
-        if (!is_readable($includedFilePath)) {
+        if (!is_readable($included_file_path)) {
             return null;
         }
-        return $includedFilePath;
+        return $included_file_path;
     }
 }

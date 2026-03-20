@@ -1,30 +1,28 @@
 <?php
 
 declare (strict_types=1);
-
 namespace Rector\Skipper\Skipper;
 
-use Rector\Skipper\Matcher\FileInfoMatcher;
-use Rector\Skipper\SkipCriteriaResolver\SkippedPathsResolver;
-
-final class PathSkipper
+use Rector\Skipper\Matcher\File_Info_Matcher;
+use Rector\Skipper\Skip_Criteria_Resolver\Skipped_Paths_Resolver;
+final class Path_Skipper
 {
     /**
      * @readonly
      */
-    private FileInfoMatcher $fileInfoMatcher;
+    private File_Info_Matcher $file_info_matcher;
     /**
      * @readonly
      */
-    private SkippedPathsResolver $skippedPathsResolver;
-    public function __construct(FileInfoMatcher $fileInfoMatcher, SkippedPathsResolver $skippedPathsResolver)
+    private Skipped_Paths_Resolver $skipped_paths_resolver;
+    public function __construct(File_Info_Matcher $file_info_matcher, Skipped_Paths_Resolver $skipped_paths_resolver)
     {
-        $this->fileInfoMatcher = $fileInfoMatcher;
-        $this->skippedPathsResolver = $skippedPathsResolver;
+        $this->file_info_matcher = $file_info_matcher;
+        $this->skipped_paths_resolver = $skipped_paths_resolver;
     }
-    public function shouldSkip(string $filePath): bool
+    public function should_skip(string $file_path): bool
     {
-        $skippedPaths = $this->skippedPathsResolver->resolve();
-        return $this->fileInfoMatcher->doesFileInfoMatchPatterns($filePath, $skippedPaths);
+        $skipped_paths = $this->skipped_paths_resolver->resolve();
+        return $this->file_info_matcher->does_file_info_match_patterns($file_path, $skipped_paths);
     }
 }

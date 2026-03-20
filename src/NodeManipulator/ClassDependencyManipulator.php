@@ -1,290 +1,288 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Node_Manipulator;
 
-namespace Rector\NodeManipulator;
-
-use PhpParser\Node\Arg;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Name;
-use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\Property;
-use PHPStan\Reflection\ClassReflection;
-use PHPStan\Type\Type;
-use Rector\Enum\ObjectReference;
-use Rector\NodeAnalyzer\PropertyPresenceChecker;
-use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\Php\PhpVersionProvider;
-use Rector\PhpParser\AstResolver;
-use Rector\PhpParser\Node\NodeFactory;
-use Rector\PostRector\ValueObject\PropertyMetadata;
-use Rector\Reflection\ReflectionResolver;
-use Rector\TypeDeclaration\NodeAnalyzer\AutowiredClassMethodOrPropertyAnalyzer;
-use Rector\ValueObject\MethodName;
-use Rector\ValueObject\PhpVersionFeature;
-
+use Php_Parser\Node\Arg;
+use Php_Parser\Node\Expr\Assign;
+use Php_Parser\Node\Expr\Static_Call;
+use Php_Parser\Node\Expr\Variable;
+use Php_Parser\Node\Name;
+use Php_Parser\Node\Stmt;
+use Php_Parser\Node\Stmt\Class_;
+use Php_Parser\Node\Stmt\Class_Like;
+use Php_Parser\Node\Stmt\Class_Method;
+use Php_Parser\Node\Stmt\Expression;
+use Php_Parser\Node\Stmt\Property;
+use Php_Stan\Reflection\Class_Reflection;
+use Php_Stan\Type\Type;
+use Rector\Enum\Object_Reference;
+use Rector\Node_Analyzer\Property_Presence_Checker;
+use Rector\Node_Name_Resolver\Node_Name_Resolver;
+use Rector\Php\Php_Version_Provider;
+use Rector\Php_Parser\Ast_Resolver;
+use Rector\Php_Parser\Node\Node_Factory;
+use Rector\Post_Rector\Value_Object\Property_Metadata;
+use Rector\Reflection\Reflection_Resolver;
+use Rector\Type_Declaration\Node_Analyzer\Autowired_Class_Method_Or_Property_Analyzer;
+use Rector\Value_Object\Method_Name;
+use Rector\Value_Object\Php_Version_Feature;
 /**
  * @see \Rector\Tests\NodeManipulator\ClassDependencyManipulatorTest
  */
-final class ClassDependencyManipulator
+final class Class_Dependency_Manipulator
 {
     /**
      * @readonly
      */
-    private \Rector\NodeManipulator\ClassInsertManipulator $classInsertManipulator;
+    private \Rector\Node_Manipulator\Class_Insert_Manipulator $class_insert_manipulator;
     /**
      * @readonly
      */
-    private \Rector\NodeManipulator\ClassMethodAssignManipulator $classMethodAssignManipulator;
+    private \Rector\Node_Manipulator\Class_Method_Assign_Manipulator $class_method_assign_manipulator;
     /**
      * @readonly
      */
-    private NodeFactory $nodeFactory;
+    private Node_Factory $node_factory;
     /**
      * @readonly
      */
-    private \Rector\NodeManipulator\StmtsManipulator $stmtsManipulator;
+    private \Rector\Node_Manipulator\Stmts_Manipulator $stmts_manipulator;
     /**
      * @readonly
      */
-    private PhpVersionProvider $phpVersionProvider;
+    private Php_Version_Provider $php_version_provider;
     /**
      * @readonly
      */
-    private PropertyPresenceChecker $propertyPresenceChecker;
+    private Property_Presence_Checker $property_presence_checker;
     /**
      * @readonly
      */
-    private NodeNameResolver $nodeNameResolver;
+    private Node_Name_Resolver $node_name_resolver;
     /**
      * @readonly
      */
-    private AutowiredClassMethodOrPropertyAnalyzer $autowiredClassMethodOrPropertyAnalyzer;
+    private Autowired_Class_Method_Or_Property_Analyzer $autowired_class_method_or_property_analyzer;
     /**
      * @readonly
      */
-    private ReflectionResolver $reflectionResolver;
+    private Reflection_Resolver $reflection_resolver;
     /**
      * @readonly
      */
-    private AstResolver $astResolver;
-    public function __construct(\Rector\NodeManipulator\ClassInsertManipulator $classInsertManipulator, \Rector\NodeManipulator\ClassMethodAssignManipulator $classMethodAssignManipulator, NodeFactory $nodeFactory, \Rector\NodeManipulator\StmtsManipulator $stmtsManipulator, PhpVersionProvider $phpVersionProvider, PropertyPresenceChecker $propertyPresenceChecker, NodeNameResolver $nodeNameResolver, AutowiredClassMethodOrPropertyAnalyzer $autowiredClassMethodOrPropertyAnalyzer, ReflectionResolver $reflectionResolver, AstResolver $astResolver)
+    private Ast_Resolver $ast_resolver;
+    public function __construct(\Rector\Node_Manipulator\Class_Insert_Manipulator $class_insert_manipulator, \Rector\Node_Manipulator\Class_Method_Assign_Manipulator $class_method_assign_manipulator, Node_Factory $node_factory, \Rector\Node_Manipulator\Stmts_Manipulator $stmts_manipulator, Php_Version_Provider $php_version_provider, Property_Presence_Checker $property_presence_checker, Node_Name_Resolver $node_name_resolver, Autowired_Class_Method_Or_Property_Analyzer $autowired_class_method_or_property_analyzer, Reflection_Resolver $reflection_resolver, Ast_Resolver $ast_resolver)
     {
-        $this->classInsertManipulator = $classInsertManipulator;
-        $this->classMethodAssignManipulator = $classMethodAssignManipulator;
-        $this->nodeFactory = $nodeFactory;
-        $this->stmtsManipulator = $stmtsManipulator;
-        $this->phpVersionProvider = $phpVersionProvider;
-        $this->propertyPresenceChecker = $propertyPresenceChecker;
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->autowiredClassMethodOrPropertyAnalyzer = $autowiredClassMethodOrPropertyAnalyzer;
-        $this->reflectionResolver = $reflectionResolver;
-        $this->astResolver = $astResolver;
+        $this->class_insert_manipulator = $class_insert_manipulator;
+        $this->class_method_assign_manipulator = $class_method_assign_manipulator;
+        $this->node_factory = $node_factory;
+        $this->stmts_manipulator = $stmts_manipulator;
+        $this->php_version_provider = $php_version_provider;
+        $this->property_presence_checker = $property_presence_checker;
+        $this->node_name_resolver = $node_name_resolver;
+        $this->autowired_class_method_or_property_analyzer = $autowired_class_method_or_property_analyzer;
+        $this->reflection_resolver = $reflection_resolver;
+        $this->ast_resolver = $ast_resolver;
     }
-    public function addConstructorDependency(Class_ $class, PropertyMetadata $propertyMetadata): void
+    public function add_constructor_dependency(Class_ $class, Property_Metadata $property_metadata): void
     {
         // already has property as dependency? skip it
-        if ($this->hasClassPropertyAndDependency($class, $propertyMetadata)) {
+        if ($this->has_class_property_and_dependency($class, $property_metadata)) {
             return;
         }
         // special case for Symfony @required
-        $autowireClassMethod = $this->autowiredClassMethodOrPropertyAnalyzer->matchAutowiredMethodInClass($class);
-        if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::PROPERTY_PROMOTION) || $autowireClassMethod instanceof ClassMethod) {
-            $this->classInsertManipulator->addPropertyToClass($class, $propertyMetadata->getName(), $propertyMetadata->getType());
+        $autowire_class_method = $this->autowired_class_method_or_property_analyzer->match_autowired_method_in_class($class);
+        if (!$this->php_version_provider->is_at_least_php_version(Php_Version_Feature::PROPERTY_PROMOTION) || $autowire_class_method instanceof Class_Method) {
+            $this->class_insert_manipulator->add_property_to_class($class, $property_metadata->get_name(), $property_metadata->get_type());
         }
         // in case of existing autowire method, re-use it
-        if ($autowireClassMethod instanceof ClassMethod) {
-            $assign = $this->nodeFactory->createPropertyAssignment($propertyMetadata->getName());
-            $this->classMethodAssignManipulator->addParameterAndAssignToMethod($autowireClassMethod, $propertyMetadata->getName(), $propertyMetadata->getType(), $assign);
+        if ($autowire_class_method instanceof Class_Method) {
+            $assign = $this->node_factory->create_property_assignment($property_metadata->get_name());
+            $this->class_method_assign_manipulator->add_parameter_and_assign_to_method($autowire_class_method, $property_metadata->get_name(), $property_metadata->get_type(), $assign);
             return;
         }
-        $constructClassMethod = $this->resolveConstruct($class);
+        $construct_class_method = $this->resolve_construct($class);
         // add PHP 8.0 promoted property
-        if ($this->shouldAddPromotedProperty($class, $propertyMetadata)) {
-            $this->addPromotedProperty($class, $propertyMetadata, $constructClassMethod);
+        if ($this->should_add_promoted_property($class, $property_metadata)) {
+            $this->add_promoted_property($class, $property_metadata, $construct_class_method);
             return;
         }
-        $assign = $this->nodeFactory->createPropertyAssignment($propertyMetadata->getName());
-        $this->addConstructorDependencyWithCustomAssign($class, $propertyMetadata->getName(), $propertyMetadata->getType(), $assign);
+        $assign = $this->node_factory->create_property_assignment($property_metadata->get_name());
+        $this->add_constructor_dependency_with_custom_assign($class, $property_metadata->get_name(), $property_metadata->get_type(), $assign);
     }
     /**
      * @api doctrine
      */
-    public function addConstructorDependencyWithCustomAssign(Class_ $class, string $name, ?Type $type, Assign $assign): void
+    public function add_constructor_dependency_with_custom_assign(Class_ $class, string $name, ?Type $type, Assign $assign): void
     {
         /** @var ClassMethod|null $constructClassMethod */
-        $constructClassMethod = $this->resolveConstruct($class);
-        if ($constructClassMethod instanceof ClassMethod) {
-            if (!$class->getMethod(MethodName::CONSTRUCT) instanceof ClassMethod) {
-                $parentArgs = [];
-                foreach ($constructClassMethod->params as $originalParam) {
-                    $parentArgs[] = new Arg(new Variable((string) $this->nodeNameResolver->getName($originalParam->var)));
+        $construct_class_method = $this->resolve_construct($class);
+        if ($construct_class_method instanceof Class_Method) {
+            if (!$class->get_method(Method_Name::CONSTRUCT) instanceof Class_Method) {
+                $parent_args = [];
+                foreach ($construct_class_method->params as $original_param) {
+                    $parent_args[] = new Arg(new Variable((string) $this->node_name_resolver->get_name($original_param->var)));
                 }
-                $constructClassMethod->stmts = [new Expression(new StaticCall(new Name(ObjectReference::PARENT), MethodName::CONSTRUCT, $parentArgs))];
-                $this->classInsertManipulator->addAsFirstMethod($class, $constructClassMethod);
-                $this->classMethodAssignManipulator->addParameterAndAssignToMethod($constructClassMethod, $name, $type, $assign);
+                $construct_class_method->stmts = [new Expression(new Static_Call(new Name(Object_Reference::PARENT), Method_Name::CONSTRUCT, $parent_args))];
+                $this->class_insert_manipulator->add_as_first_method($class, $construct_class_method);
+                $this->class_method_assign_manipulator->add_parameter_and_assign_to_method($construct_class_method, $name, $type, $assign);
             } else {
-                $this->classMethodAssignManipulator->addParameterAndAssignToMethod($constructClassMethod, $name, $type, $assign);
+                $this->class_method_assign_manipulator->add_parameter_and_assign_to_method($construct_class_method, $name, $type, $assign);
             }
             return;
         }
-        $constructClassMethod = $this->nodeFactory->createPublicMethod(MethodName::CONSTRUCT);
-        $this->classMethodAssignManipulator->addParameterAndAssignToMethod($constructClassMethod, $name, $type, $assign);
-        $this->classInsertManipulator->addAsFirstMethod($class, $constructClassMethod);
+        $construct_class_method = $this->node_factory->create_public_method(Method_Name::CONSTRUCT);
+        $this->class_method_assign_manipulator->add_parameter_and_assign_to_method($construct_class_method, $name, $type, $assign);
+        $this->class_insert_manipulator->add_as_first_method($class, $construct_class_method);
     }
     /**
      * @api doctrine
      * @param Stmt[] $stmts
      */
-    public function addStmtsToConstructorIfNotThereYet(Class_ $class, array $stmts): void
+    public function add_stmts_to_constructor_if_not_there_yet(Class_ $class, array $stmts): void
     {
-        $classMethod = $class->getMethod(MethodName::CONSTRUCT);
-        if (!$classMethod instanceof ClassMethod) {
-            $classMethod = $this->nodeFactory->createPublicMethod(MethodName::CONSTRUCT);
+        $class_method = $class->get_method(Method_Name::CONSTRUCT);
+        if (!$class_method instanceof Class_Method) {
+            $class_method = $this->node_factory->create_public_method(Method_Name::CONSTRUCT);
             // keep parent constructor call
-            if ($this->hasClassParentClassMethod($class, MethodName::CONSTRUCT)) {
-                $classMethod->stmts[] = $this->createParentClassMethodCall(MethodName::CONSTRUCT);
+            if ($this->has_class_parent_class_method($class, Method_Name::CONSTRUCT)) {
+                $class_method->stmts[] = $this->create_parent_class_method_call(Method_Name::CONSTRUCT);
             }
-            $classMethod->stmts = array_merge((array) $classMethod->stmts, $stmts);
-            $class->stmts = array_merge($class->stmts, [$classMethod]);
+            $class_method->stmts = array_merge((array) $class_method->stmts, $stmts);
+            $class->stmts = array_merge($class->stmts, [$class_method]);
             return;
         }
-        $stmts = $this->stmtsManipulator->filterOutExistingStmts($classMethod, $stmts);
+        $stmts = $this->stmts_manipulator->filter_out_existing_stmts($class_method, $stmts);
         // all stmts are already there → skip
         if ($stmts === []) {
             return;
         }
-        $classMethod->stmts = array_merge($stmts, (array) $classMethod->stmts);
+        $class_method->stmts = array_merge($stmts, (array) $class_method->stmts);
     }
-    private function resolveConstruct(Class_ $class): ?ClassMethod
+    private function resolve_construct(Class_ $class): ?Class_Method
     {
         /** @var ClassMethod|null $constructorMethod */
-        $constructorMethod = $class->getMethod(MethodName::CONSTRUCT);
+        $constructor_method = $class->get_method(Method_Name::CONSTRUCT);
         // exists in current class
-        if ($constructorMethod instanceof ClassMethod) {
-            return $constructorMethod;
+        if ($constructor_method instanceof Class_Method) {
+            return $constructor_method;
         }
         // lookup parent, found first found (nearest parent constructor to follow)
-        $classReflection = $this->reflectionResolver->resolveClassReflection($class);
-        if (!$classReflection instanceof ClassReflection) {
+        $class_reflection = $this->reflection_resolver->resolve_class_reflection($class);
+        if (!$class_reflection instanceof Class_Reflection) {
             return null;
         }
-        $ancestors = array_filter($classReflection->getAncestors(), static fn (ClassReflection $ancestor): bool => $ancestor->getName() !== $classReflection->getName());
+        $ancestors = array_filter($class_reflection->get_ancestors(), static fn(Class_Reflection $ancestor): bool => $ancestor->get_name() !== $class_reflection->get_name());
         foreach ($ancestors as $ancestor) {
-            if (!$ancestor->hasNativeMethod(MethodName::CONSTRUCT)) {
+            if (!$ancestor->has_native_method(Method_Name::CONSTRUCT)) {
                 continue;
             }
-            $parentClass = $this->astResolver->resolveClassFromClassReflection($ancestor);
-            if (!$parentClass instanceof ClassLike) {
+            $parent_class = $this->ast_resolver->resolve_class_from_class_reflection($ancestor);
+            if (!$parent_class instanceof Class_Like) {
                 continue;
             }
-            $parentConstructorMethod = $parentClass->getMethod(MethodName::CONSTRUCT);
-            if (!$parentConstructorMethod instanceof ClassMethod) {
+            $parent_constructor_method = $parent_class->get_method(Method_Name::CONSTRUCT);
+            if (!$parent_constructor_method instanceof Class_Method) {
                 continue;
             }
-            if ($parentConstructorMethod->isPrivate()) {
+            if ($parent_constructor_method->is_private()) {
                 // stop, nearest __construct() uses private visibility
                 // which parent::__construct() will cause error
                 break;
             }
-            $constructorMethod = clone $parentConstructorMethod;
+            $constructor_method = clone $parent_constructor_method;
             // reprint parent method node to avoid invalid tokens
-            $this->nodeFactory->createReprintedNode($constructorMethod);
-            return $constructorMethod;
+            $this->node_factory->create_reprinted_node($constructor_method);
+            return $constructor_method;
         }
         return null;
     }
-    private function addPromotedProperty(Class_ $class, PropertyMetadata $propertyMetadata, ?ClassMethod $constructClassMethod): void
+    private function add_promoted_property(Class_ $class, Property_Metadata $property_metadata, ?Class_Method $construct_class_method): void
     {
-        $param = $this->nodeFactory->createPromotedPropertyParam($propertyMetadata);
-        if ($constructClassMethod instanceof ClassMethod) {
+        $param = $this->node_factory->create_promoted_property_param($property_metadata);
+        if ($construct_class_method instanceof Class_Method) {
             // parameter is already added
-            if ($this->hasMethodParameter($constructClassMethod, $propertyMetadata->getName())) {
+            if ($this->has_method_parameter($construct_class_method, $property_metadata->get_name())) {
                 return;
             }
             // found construct, but only on parent, add to current class
-            if (!$class->getMethod(MethodName::CONSTRUCT) instanceof ClassMethod) {
-                $parentArgs = [];
-                foreach ($constructClassMethod->params as $originalParam) {
-                    $parentArgs[] = new Arg(new Variable((string) $this->nodeNameResolver->getName($originalParam->var)));
+            if (!$class->get_method(Method_Name::CONSTRUCT) instanceof Class_Method) {
+                $parent_args = [];
+                foreach ($construct_class_method->params as $original_param) {
+                    $parent_args[] = new Arg(new Variable((string) $this->node_name_resolver->get_name($original_param->var)));
                 }
-                $constructClassMethod->params[] = $param;
-                $constructClassMethod->stmts = [new Expression(new StaticCall(new Name(ObjectReference::PARENT), MethodName::CONSTRUCT, $parentArgs))];
-                $this->classInsertManipulator->addAsFirstMethod($class, $constructClassMethod);
+                $construct_class_method->params[] = $param;
+                $construct_class_method->stmts = [new Expression(new Static_Call(new Name(Object_Reference::PARENT), Method_Name::CONSTRUCT, $parent_args))];
+                $this->class_insert_manipulator->add_as_first_method($class, $construct_class_method);
             } else {
-                $constructClassMethod->params[] = $param;
+                $construct_class_method->params[] = $param;
             }
         } else {
-            $constructClassMethod = $this->nodeFactory->createPublicMethod(MethodName::CONSTRUCT);
-            $constructClassMethod->params[] = $param;
-            $this->classInsertManipulator->addAsFirstMethod($class, $constructClassMethod);
+            $construct_class_method = $this->node_factory->create_public_method(Method_Name::CONSTRUCT);
+            $construct_class_method->params[] = $param;
+            $this->class_insert_manipulator->add_as_first_method($class, $construct_class_method);
         }
     }
-    private function hasClassParentClassMethod(Class_ $class, string $methodName): bool
+    private function has_class_parent_class_method(Class_ $class, string $method_name): bool
     {
-        $classReflection = $this->reflectionResolver->resolveClassReflection($class);
-        if (!$classReflection instanceof ClassReflection) {
+        $class_reflection = $this->reflection_resolver->resolve_class_reflection($class);
+        if (!$class_reflection instanceof Class_Reflection) {
             return \false;
         }
-        foreach ($classReflection->getParents() as $parentClassReflection) {
-            if ($parentClassReflection->hasMethod($methodName)) {
+        foreach ($class_reflection->get_parents() as $parent_class_reflection) {
+            if ($parent_class_reflection->has_method($method_name)) {
                 return \true;
             }
         }
         return \false;
     }
-    private function createParentClassMethodCall(string $methodName): Expression
+    private function create_parent_class_method_call(string $method_name): Expression
     {
-        $staticCall = new StaticCall(new Name(ObjectReference::PARENT), $methodName);
-        return new Expression($staticCall);
+        $static_call = new Static_Call(new Name(Object_Reference::PARENT), $method_name);
+        return new Expression($static_call);
     }
-    private function isParamInConstructor(Class_ $class, string $propertyName): bool
+    private function is_param_in_constructor(Class_ $class, string $property_name): bool
     {
-        $constructClassMethod = $class->getMethod(MethodName::CONSTRUCT);
-        if (!$constructClassMethod instanceof ClassMethod) {
+        $construct_class_method = $class->get_method(Method_Name::CONSTRUCT);
+        if (!$construct_class_method instanceof Class_Method) {
             return \false;
         }
-        foreach ($constructClassMethod->params as $param) {
-            if ($this->nodeNameResolver->isName($param, $propertyName)) {
+        foreach ($construct_class_method->params as $param) {
+            if ($this->node_name_resolver->is_name($param, $property_name)) {
                 return \true;
             }
         }
         return \false;
     }
-    private function hasClassPropertyAndDependency(Class_ $class, PropertyMetadata $propertyMetadata): bool
+    private function has_class_property_and_dependency(Class_ $class, Property_Metadata $property_metadata): bool
     {
-        $property = $this->propertyPresenceChecker->getClassContextProperty($class, $propertyMetadata);
+        $property = $this->property_presence_checker->get_class_context_property($class, $property_metadata);
         if ($property === null) {
             return \false;
         }
-        if (!$this->autowiredClassMethodOrPropertyAnalyzer->detect($property)) {
-            return $this->isParamInConstructor($class, $propertyMetadata->getName());
+        if (!$this->autowired_class_method_or_property_analyzer->detect($property)) {
+            return $this->is_param_in_constructor($class, $property_metadata->get_name());
         }
         // is inject/autowired property?
         return $property instanceof Property;
     }
-    private function hasMethodParameter(ClassMethod $classMethod, string $name): bool
+    private function has_method_parameter(Class_Method $class_method, string $name): bool
     {
-        foreach ($classMethod->params as $param) {
-            if ($this->nodeNameResolver->isName($param->var, $name)) {
+        foreach ($class_method->params as $param) {
+            if ($this->node_name_resolver->is_name($param->var, $name)) {
                 return \true;
             }
         }
         return \false;
     }
-    private function shouldAddPromotedProperty(Class_ $class, PropertyMetadata $propertyMetadata): bool
+    private function should_add_promoted_property(Class_ $class, Property_Metadata $property_metadata): bool
     {
-        if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::PROPERTY_PROMOTION)) {
+        if (!$this->php_version_provider->is_at_least_php_version(Php_Version_Feature::PROPERTY_PROMOTION)) {
             return \false;
         }
         // only if the property does not exist yet
-        $existingProperty = $class->getProperty($propertyMetadata->getName());
-        return !$existingProperty instanceof Property;
+        $existing_property = $class->get_property($property_metadata->get_name());
+        return !$existing_property instanceof Property;
     }
 }

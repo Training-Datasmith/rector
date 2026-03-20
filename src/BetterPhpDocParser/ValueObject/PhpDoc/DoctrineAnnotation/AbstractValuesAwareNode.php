@@ -1,83 +1,81 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Better_Php_Doc_Parser\Value_Object\Php_Doc\Doctrine_Annotation;
 
-namespace Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation;
-
-use PHPStan\PhpDocParser\Ast\NodeAttributes;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
-use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
-use Rector\BetterPhpDocParser\PhpDoc\StringNode;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
-
-abstract class AbstractValuesAwareNode implements PhpDocTagValueNode
+use Php_Stan\Php_Doc_Parser\Ast\Node_Attributes;
+use Php_Stan\Php_Doc_Parser\Ast\Php_Doc\Php_Doc_Tag_Value_Node;
+use Rector\Better_Php_Doc_Parser\Php_Doc\Array_Item_Node;
+use Rector\Better_Php_Doc_Parser\Php_Doc\String_Node;
+use Rector\Better_Php_Doc_Parser\Value_Object\Php_Doc_Attribute_Key;
+abstract class Abstract_Values_Aware_Node implements Php_Doc_Tag_Value_Node
 {
-    use NodeAttributes;
+    use Node_Attributes;
     /**
      * @var ArrayItemNode[]
      */
     public array $values = [];
-    protected ?string $originalContent = null;
-    protected ?string $silentKey = null;
-    protected bool $hasChanged = \false;
+    protected ?string $original_content = null;
+    protected ?string $silent_key = null;
+    protected bool $has_changed = \false;
     /**
      * @param ArrayItemNode[] $values Must be public so node traverser can go through them
      */
-    public function __construct(array $values = [], ?string $originalContent = null, ?string $silentKey = null)
+    public function __construct(array $values = [], ?string $original_content = null, ?string $silent_key = null)
     {
         $this->values = $values;
-        $this->originalContent = $originalContent;
-        $this->silentKey = $silentKey;
+        $this->original_content = $original_content;
+        $this->silent_key = $silent_key;
     }
     /**
      * @api
      */
-    public function removeValue(string $desiredKey): void
+    public function remove_value(string $desired_key): void
     {
         foreach ($this->values as $key => $value) {
-            if (!$this->isValueKeyEquals($value, $desiredKey)) {
+            if (!$this->is_value_key_equals($value, $desired_key)) {
                 continue;
             }
             unset($this->values[$key]);
             // invoke reprint
-            $this->setAttribute(PhpDocAttributeKey::ORIG_NODE, null);
+            $this->set_attribute(Php_Doc_Attribute_Key::ORIG_NODE, null);
         }
     }
     /**
      * @return ArrayItemNode[]
      */
-    public function getValues(): array
+    public function get_values(): array
     {
         return $this->values;
     }
     /**
      * @return ArrayItemNode[]
      */
-    public function getValuesWithSilentKey(): array
+    public function get_values_with_silent_key(): array
     {
-        if ($this->silentKey === null) {
+        if ($this->silent_key === null) {
             return $this->values;
         }
         // to keep original values untouched, unless not changed
-        $silentKeyAwareValues = $this->values;
-        foreach ($silentKeyAwareValues as $silentKeyAwareValue) {
-            if ($silentKeyAwareValue->key === null) {
-                $silentKeyAwareValue->key = $this->silentKey;
+        $silent_key_aware_values = $this->values;
+        foreach ($silent_key_aware_values as $silent_key_aware_value) {
+            if ($silent_key_aware_value->key === null) {
+                $silent_key_aware_value->key = $this->silent_key;
                 break;
             }
         }
-        return $silentKeyAwareValues;
+        return $silent_key_aware_values;
     }
-    public function getValue(string $desiredKey): ?ArrayItemNode
+    public function get_value(string $desired_key): ?Array_Item_Node
     {
         foreach ($this->values as $value) {
-            if ($this->isValueKeyEquals($value, $desiredKey)) {
+            if ($this->is_value_key_equals($value, $desired_key)) {
                 return $value;
             }
         }
         return null;
     }
-    public function getSilentValue(): ?ArrayItemNode
+    public function get_silent_value(): ?Array_Item_Node
     {
         foreach ($this->values as $value) {
             if ($value->key === null) {
@@ -86,44 +84,44 @@ abstract class AbstractValuesAwareNode implements PhpDocTagValueNode
         }
         return null;
     }
-    public function markAsChanged(): void
+    public function mark_as_changed(): void
     {
-        $this->hasChanged = \true;
+        $this->has_changed = \true;
     }
-    public function getOriginalContent(): ?string
+    public function get_original_content(): ?string
     {
-        return $this->originalContent;
+        return $this->original_content;
     }
     /**
      * @param mixed[] $values
      */
-    protected function printValuesContent(array $values): string
+    protected function print_values_content(array $values): string
     {
-        $itemContents = '';
-        $lastItemKey = array_key_last($values);
+        $item_contents = '';
+        $last_item_key = array_key_last($values);
         foreach ($values as $key => $value) {
             if (is_int($key)) {
-                $itemContents .= $this->stringifyValue($value);
+                $item_contents .= $this->stringify_value($value);
             } else {
-                $itemContents .= $key . '=' . $this->stringifyValue($value);
+                $item_contents .= $key . '=' . $this->stringify_value($value);
             }
-            if ($lastItemKey !== $key) {
-                $itemContents .= ', ';
+            if ($last_item_key !== $key) {
+                $item_contents .= ', ';
             }
         }
-        return $itemContents;
+        return $item_contents;
     }
-    private function isValueKeyEquals(ArrayItemNode $arrayItemNode, string $desiredKey): bool
+    private function is_value_key_equals(Array_Item_Node $array_item_node, string $desired_key): bool
     {
-        if ($arrayItemNode->key instanceof StringNode) {
-            return $arrayItemNode->key->value === $desiredKey;
+        if ($array_item_node->key instanceof String_Node) {
+            return $array_item_node->key->value === $desired_key;
         }
-        return $arrayItemNode->key === $desiredKey;
+        return $array_item_node->key === $desired_key;
     }
     /**
      * @param mixed $value
      */
-    private function stringifyValue($value): string
+    private function stringify_value($value): string
     {
         // @todo resolve original casing
         if ($value === \false) {
@@ -139,7 +137,7 @@ abstract class AbstractValuesAwareNode implements PhpDocTagValueNode
             return (string) $value;
         }
         if (is_array($value)) {
-            return $this->printValuesContent($value);
+            return $this->print_values_content($value);
         }
         return (string) $value;
     }

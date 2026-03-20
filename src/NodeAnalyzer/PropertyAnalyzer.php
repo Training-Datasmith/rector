@@ -1,58 +1,56 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Node_Analyzer;
 
-namespace Rector\NodeAnalyzer;
-
-use PhpParser\Node\Stmt\Property;
-use PHPStan\Type\Type;
-use PHPStan\Type\UnionType;
-use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\StaticTypeMapper\Resolver\ClassNameFromObjectTypeResolver;
-use Rector\StaticTypeMapper\ValueObject\Type\NonExistingObjectType;
-
-final class PropertyAnalyzer
+use Php_Parser\Node\Stmt\Property;
+use Php_Stan\Type\Type;
+use Php_Stan\Type\Union_Type;
+use Rector\Node_Type_Resolver\Node_Type_Resolver;
+use Rector\Static_Type_Mapper\Resolver\Class_Name_From_Object_Type_Resolver;
+use Rector\Static_Type_Mapper\Value_Object\Type\Non_Existing_Object_Type;
+final class Property_Analyzer
 {
     /**
      * @readonly
      */
-    private NodeTypeResolver $nodeTypeResolver;
-    public function __construct(NodeTypeResolver $nodeTypeResolver)
+    private Node_Type_Resolver $node_type_resolver;
+    public function __construct(Node_Type_Resolver $node_type_resolver)
     {
-        $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->node_type_resolver = $node_type_resolver;
     }
-    public function hasForbiddenType(Property $property): bool
+    public function has_forbidden_type(Property $property): bool
     {
-        $propertyType = $this->nodeTypeResolver->getType($property);
-        if ($propertyType->isNull()->yes()) {
+        $property_type = $this->node_type_resolver->get_type($property);
+        if ($property_type->is_null()->yes()) {
             return \true;
         }
-        if ($this->isForbiddenType($propertyType)) {
+        if ($this->is_forbidden_type($property_type)) {
             return \true;
         }
-        if (!$propertyType instanceof UnionType) {
+        if (!$property_type instanceof Union_Type) {
             return \false;
         }
-        $types = $propertyType->getTypes();
+        $types = $property_type->get_types();
         foreach ($types as $type) {
-            if ($this->isForbiddenType($type)) {
+            if ($this->is_forbidden_type($type)) {
                 return \true;
             }
         }
         return \false;
     }
-    public function isForbiddenType(Type $type): bool
+    public function is_forbidden_type(Type $type): bool
     {
-        if ($type instanceof NonExistingObjectType) {
+        if ($type instanceof Non_Existing_Object_Type) {
             return \true;
         }
-        return $this->isCallableType($type);
+        return $this->is_callable_type($type);
     }
-    private function isCallableType(Type $type): bool
+    private function is_callable_type(Type $type): bool
     {
-        if (ClassNameFromObjectTypeResolver::resolve($type) === 'Closure') {
+        if (Class_Name_From_Object_Type_Resolver::resolve($type) === 'Closure') {
             return \false;
         }
-        return $type->isCallable()->yes();
+        return $type->is_callable()->yes();
     }
 }

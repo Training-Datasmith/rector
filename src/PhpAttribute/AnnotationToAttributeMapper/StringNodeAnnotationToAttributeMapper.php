@@ -1,31 +1,29 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Php_Attribute\Annotation_To_Attribute_Mapper;
 
-namespace Rector\PhpAttribute\AnnotationToAttributeMapper;
-
-use PhpParser\Node\Scalar\String_;
-use Rector\BetterPhpDocParser\PhpDoc\StringNode;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
-
+use Php_Parser\Node\Scalar\String_;
+use Rector\Better_Php_Doc_Parser\Php_Doc\String_Node;
+use Rector\Node_Type_Resolver\Node\Attribute_Key;
+use Rector\Php_Attribute\Contract\Annotation_To_Attribute_Mapper_Interface;
 /**
  * @implements AnnotationToAttributeMapperInterface<StringNode>
  */
-final class StringNodeAnnotationToAttributeMapper implements AnnotationToAttributeMapperInterface
+final class String_Node_Annotation_To_Attribute_Mapper implements Annotation_To_Attribute_Mapper_Interface
 {
     /**
      * @param mixed $value
      */
-    public function isCandidate($value): bool
+    public function is_candidate($value): bool
     {
-        return $value instanceof StringNode;
+        return $value instanceof String_Node;
     }
     /**
      * @param StringNode $value
      */
     public function map($value): String_
     {
-        return new String_($value->value, [AttributeKey::KIND => $value->getAttribute(AttributeKey::KIND)]);
+        return new String_($value->value, [Attribute_Key::KIND => $value->get_attribute(Attribute_Key::KIND)]);
     }
 }

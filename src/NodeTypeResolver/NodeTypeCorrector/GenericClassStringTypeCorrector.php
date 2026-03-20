@@ -1,42 +1,40 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Node_Type_Resolver\Node_Type_Corrector;
 
-namespace Rector\NodeTypeResolver\NodeTypeCorrector;
-
-use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\Type\Constant\ConstantStringType;
-use PHPStan\Type\Generic\GenericClassStringType;
-use PHPStan\Type\ObjectType;
-use PHPStan\Type\Type;
-use PHPStan\Type\TypeTraverser;
-
-final class GenericClassStringTypeCorrector
+use Php_Stan\Reflection\Reflection_Provider;
+use Php_Stan\Type\Constant\Constant_String_Type;
+use Php_Stan\Type\Generic\Generic_Class_String_Type;
+use Php_Stan\Type\Object_Type;
+use Php_Stan\Type\Type;
+use Php_Stan\Type\Type_Traverser;
+final class Generic_Class_String_Type_Corrector
 {
     /**
      * @readonly
      */
-    private ReflectionProvider $reflectionProvider;
-    public function __construct(ReflectionProvider $reflectionProvider)
+    private Reflection_Provider $reflection_provider;
+    public function __construct(Reflection_Provider $reflection_provider)
     {
-        $this->reflectionProvider = $reflectionProvider;
+        $this->reflection_provider = $reflection_provider;
     }
-    public function correct(Type $mainType): Type
+    public function correct(Type $main_type): Type
     {
         // inspired from https://github.com/phpstan/phpstan-src/blob/94e3443b2d21404a821e05b901dd4b57fcbd4e7f/src/Type/Generic/TemplateTypeHelper.php#L18
-        return TypeTraverser::map($mainType, function (Type $traversedType, callable $traverseCallback): Type {
-            if (!$traversedType instanceof ConstantStringType) {
-                return $traverseCallback($traversedType);
+        return Type_Traverser::map($main_type, function (Type $traversed_type, callable $traverse_callback): Type {
+            if (!$traversed_type instanceof Constant_String_Type) {
+                return $traverse_callback($traversed_type);
             }
-            $value = $traversedType->getValue();
-            if (!$this->reflectionProvider->hasClass($value)) {
-                return $traverseCallback($traversedType);
+            $value = $traversed_type->get_value();
+            if (!$this->reflection_provider->has_class($value)) {
+                return $traverse_callback($traversed_type);
             }
-            $classReflection = $this->reflectionProvider->getClass($value);
-            if ($classReflection->getName() !== $value) {
-                return $traverseCallback($traversedType);
+            $class_reflection = $this->reflection_provider->get_class($value);
+            if ($class_reflection->get_name() !== $value) {
+                return $traverse_callback($traversed_type);
             }
-            return new GenericClassStringType(new ObjectType($value));
+            return new Generic_Class_String_Type(new Object_Type($value));
         });
     }
 }

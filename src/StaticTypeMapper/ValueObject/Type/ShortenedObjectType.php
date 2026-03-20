@@ -1,47 +1,45 @@
 <?php
 
 declare (strict_types=1);
-
-namespace Rector\StaticTypeMapper\ValueObject\Type;
+namespace Rector\Static_Type_Mapper\Value_Object\Type;
 
 use Override;
-use PHPStan\Type\IsSuperTypeOfResult;
-use PHPStan\Type\ObjectType;
-use PHPStan\Type\Type;
-
+use Php_Stan\Type\Is_Super_Type_Of_Result;
+use Php_Stan\Type\Object_Type;
+use Php_Stan\Type\Type;
 /**
  * @api
  */
-final class ShortenedObjectType extends ObjectType
+final class Shortened_Object_Type extends Object_Type
 {
     /**
      * @var class-string
      * @readonly
      */
-    private string $fullyQualifiedName;
+    private string $fully_qualified_name;
     /**
      * @param class-string $fullyQualifiedName
      */
-    public function __construct(string $shortName, string $fullyQualifiedName)
+    public function __construct(string $short_name, string $fully_qualified_name)
     {
-        $this->fullyQualifiedName = $fullyQualifiedName;
-        parent::__construct($shortName);
+        $this->fully_qualified_name = $fully_qualified_name;
+        parent::__construct($short_name);
     }
     #[Override]
-    public function isSuperTypeOf(Type $type): IsSuperTypeOfResult
+    public function is_super_type_of(Type $type): Is_Super_Type_Of_Result
     {
-        $fullyQualifiedObjectType = new ObjectType($this->fullyQualifiedName);
-        return $fullyQualifiedObjectType->isSuperTypeOf($type);
+        $fully_qualified_object_type = new Object_Type($this->fully_qualified_name);
+        return $fully_qualified_object_type->is_super_type_of($type);
     }
-    public function getShortName(): string
+    public function get_short_name(): string
     {
-        return $this->getClassName();
+        return $this->get_class_name();
     }
     /**
      * @return class-string
      */
-    public function getFullyQualifiedName(): string
+    public function get_fully_qualified_name(): string
     {
-        return $this->fullyQualifiedName;
+        return $this->fully_qualified_name;
     }
 }

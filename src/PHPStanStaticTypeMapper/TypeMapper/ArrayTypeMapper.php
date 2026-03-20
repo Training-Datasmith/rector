@@ -1,195 +1,193 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Php_Stan_Static_Type_Mapper\Type_Mapper;
 
-namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
-
-use PhpParser\Node\Identifier;
-use PHPStan\PhpDocParser\Ast\Type\GenericTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use PHPStan\Type\ArrayType;
-use PHPStan\Type\ClassStringType;
-use PHPStan\Type\Constant\ConstantArrayType;
-use PHPStan\Type\Constant\ConstantIntegerType;
-use PHPStan\Type\Generic\GenericClassStringType;
-use PHPStan\Type\IntegerType;
-use PHPStan\Type\MixedType;
-use PHPStan\Type\NeverType;
-use PHPStan\Type\Type;
-use PHPStan\Type\UnionType;
-use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareUnionTypeNode;
-use Rector\BetterPhpDocParser\ValueObject\Type\SpacingAwareArrayTypeNode;
-use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
-use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
-use Rector\TypeDeclaration\NodeTypeAnalyzer\DetailedTypeAnalyzer;
-use Rector\TypeDeclaration\TypeAnalyzer\GenericClassStringTypeNormalizer;
-
+use Php_Parser\Node\Identifier;
+use Php_Stan\Php_Doc_Parser\Ast\Type\Generic_Type_Node;
+use Php_Stan\Php_Doc_Parser\Ast\Type\Identifier_Type_Node;
+use Php_Stan\Php_Doc_Parser\Ast\Type\Type_Node;
+use Php_Stan\Type\Array_Type;
+use Php_Stan\Type\Class_String_Type;
+use Php_Stan\Type\Constant\Constant_Array_Type;
+use Php_Stan\Type\Constant\Constant_Integer_Type;
+use Php_Stan\Type\Generic\Generic_Class_String_Type;
+use Php_Stan\Type\Integer_Type;
+use Php_Stan\Type\Mixed_Type;
+use Php_Stan\Type\Never_Type;
+use Php_Stan\Type\Type;
+use Php_Stan\Type\Union_Type;
+use Rector\Better_Php_Doc_Parser\Value_Object\Type\Brackets_Aware_Union_Type_Node;
+use Rector\Better_Php_Doc_Parser\Value_Object\Type\Spacing_Aware_Array_Type_Node;
+use Rector\Php_Stan_Static_Type_Mapper\Contract\Type_Mapper_Interface;
+use Rector\Php_Stan_Static_Type_Mapper\Php_Stan_Static_Type_Mapper;
+use Rector\Type_Declaration\Node_Type_Analyzer\Detailed_Type_Analyzer;
+use Rector\Type_Declaration\Type_Analyzer\Generic_Class_String_Type_Normalizer;
 /**
  * @see \Rector\Tests\PHPStanStaticTypeMapper\TypeMapper\ArrayTypeMapperTest
  *
  * @implements TypeMapperInterface<ArrayType>
  */
-final class ArrayTypeMapper implements TypeMapperInterface
+final class Array_Type_Mapper implements Type_Mapper_Interface
 {
     /**
      * @readonly
      */
-    private GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer;
+    private Generic_Class_String_Type_Normalizer $generic_class_string_type_normalizer;
     /**
      * @readonly
      */
-    private DetailedTypeAnalyzer $detailedTypeAnalyzer;
+    private Detailed_Type_Analyzer $detailed_type_analyzer;
     /**
      * @var string
      */
     public const HAS_GENERIC_TYPE_PARENT = 'has_generic_type_parent';
-    private PHPStanStaticTypeMapper $phpStanStaticTypeMapper;
-    public function __construct(GenericClassStringTypeNormalizer $genericClassStringTypeNormalizer, DetailedTypeAnalyzer $detailedTypeAnalyzer)
+    private Php_Stan_Static_Type_Mapper $php_stan_static_type_mapper;
+    public function __construct(Generic_Class_String_Type_Normalizer $generic_class_string_type_normalizer, Detailed_Type_Analyzer $detailed_type_analyzer)
     {
-        $this->genericClassStringTypeNormalizer = $genericClassStringTypeNormalizer;
-        $this->detailedTypeAnalyzer = $detailedTypeAnalyzer;
+        $this->generic_class_string_type_normalizer = $generic_class_string_type_normalizer;
+        $this->detailed_type_analyzer = $detailed_type_analyzer;
     }
     // To avoid circular dependency
-    public function autowire(PHPStanStaticTypeMapper $phpStanStaticTypeMapper): void
+    public function autowire(Php_Stan_Static_Type_Mapper $php_stan_static_type_mapper): void
     {
-        $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
+        $this->php_stan_static_type_mapper = $php_stan_static_type_mapper;
     }
-    public function getNodeClass(): string
+    public function get_node_class(): string
     {
-        return ArrayType::class;
+        return Array_Type::class;
     }
     /**
      * @param ArrayType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
+    public function map_to_php_stan_php_doc_type_node(Type $type): Type_Node
     {
         // this cannot be handled by PHPStan $type->toPhpDocNode() as requires space removal around "|" in union type
         // then e.g. "int" instead of explicit number, and nice arrays
-        $itemType = $type->getIterableValueType();
-        $isGenericArray = $this->isGenericArrayCandidate($type);
-        if ($itemType instanceof UnionType && !$type instanceof ConstantArrayType && !$isGenericArray) {
-            return $this->createArrayTypeNodeFromUnionType($itemType);
+        $item_type = $type->get_iterable_value_type();
+        $is_generic_array = $this->is_generic_array_candidate($type);
+        if ($item_type instanceof Union_Type && !$type instanceof Constant_Array_Type && !$is_generic_array) {
+            return $this->create_array_type_node_from_union_type($item_type);
         }
-        if ($itemType instanceof ArrayType && $this->isGenericArrayCandidate($itemType)) {
-            return $this->createGenericArrayType($type, \true);
+        if ($item_type instanceof Array_Type && $this->is_generic_array_candidate($item_type)) {
+            return $this->create_generic_array_type($type, \true);
         }
-        if ($isGenericArray) {
-            return $this->createGenericArrayType($type, \true);
+        if ($is_generic_array) {
+            return $this->create_generic_array_type($type, \true);
         }
         // keep "int" key in arary<int, mixed>
-        if ($type->getKeyType() instanceof IntegerType) {
-            $keyTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($type->getKeyType());
-            if (!$type->isList()->maybe()) {
-                $nestedTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($type->getItemType());
-                return new GenericTypeNode(new IdentifierTypeNode('array'), [$keyTypeNode, $nestedTypeNode]);
+        if ($type->get_key_type() instanceof Integer_Type) {
+            $key_type_node = $this->php_stan_static_type_mapper->map_to_php_stan_php_doc_type_node($type->get_key_type());
+            if (!$type->is_list()->maybe()) {
+                $nested_type_node = $this->php_stan_static_type_mapper->map_to_php_stan_php_doc_type_node($type->get_item_type());
+                return new Generic_Type_Node(new Identifier_Type_Node('array'), [$key_type_node, $nested_type_node]);
             }
         }
-        $itemTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($itemType);
-        return new SpacingAwareArrayTypeNode($itemTypeNode);
+        $item_type_node = $this->php_stan_static_type_mapper->map_to_php_stan_php_doc_type_node($item_type);
+        return new Spacing_Aware_Array_Type_Node($item_type_node);
     }
     /**
      * @param ArrayType $type
      */
-    public function mapToPhpParserNode(Type $type, string $typeKind): Identifier
+    public function map_to_php_parser_node(Type $type, string $type_kind): Identifier
     {
         return new Identifier('array');
     }
-    private function createArrayTypeNodeFromUnionType(UnionType $unionType): SpacingAwareArrayTypeNode
+    private function create_array_type_node_from_union_type(Union_Type $union_type): Spacing_Aware_Array_Type_Node
     {
-        $unionedArrayType = [];
-        foreach ($unionType->getTypes() as $unionedType) {
-            $typeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($unionedType);
-            $unionedArrayType[(string) $typeNode] = $typeNode;
+        $unioned_array_type = [];
+        foreach ($union_type->get_types() as $unioned_type) {
+            $type_node = $this->php_stan_static_type_mapper->map_to_php_stan_php_doc_type_node($unioned_type);
+            $unioned_array_type[(string) $type_node] = $type_node;
         }
-        if (count($unionedArrayType) > 1) {
-            return new SpacingAwareArrayTypeNode(new BracketsAwareUnionTypeNode($unionedArrayType));
+        if (count($unioned_array_type) > 1) {
+            return new Spacing_Aware_Array_Type_Node(new Brackets_Aware_Union_Type_Node($unioned_array_type));
         }
         /** @var TypeNode $arrayType */
-        $arrayType = array_shift($unionedArrayType);
-        return new SpacingAwareArrayTypeNode($arrayType);
+        $array_type = array_shift($unioned_array_type);
+        return new Spacing_Aware_Array_Type_Node($array_type);
     }
-    private function isGenericArrayCandidate(ArrayType $arrayType): bool
+    private function is_generic_array_candidate(Array_Type $array_type): bool
     {
-        if ($arrayType->getKeyType() instanceof MixedType) {
+        if ($array_type->get_key_type() instanceof Mixed_Type) {
             return \false;
         }
-        if ($this->isClassStringArrayType($arrayType)) {
+        if ($this->is_class_string_array_type($array_type)) {
             return \true;
         }
         // skip simple arrays, like "string[]", from converting to obvious "array<int, string>"
-        if ($this->isIntegerKeyAndNonNestedArray($arrayType)) {
+        if ($this->is_integer_key_and_non_nested_array($array_type)) {
             return \false;
         }
-        if ($arrayType->getKeyType() instanceof NeverType) {
+        if ($array_type->get_key_type() instanceof Never_Type) {
             return \false;
         }
         // make sure the integer key type is not natural/implicit array int keys
-        $keysArrayType = $arrayType->getKeysArray();
-        if (!$keysArrayType instanceof ConstantArrayType) {
+        $keys_array_type = $array_type->get_keys_array();
+        if (!$keys_array_type instanceof Constant_Array_Type) {
             return \true;
         }
-        foreach ($keysArrayType->getValueTypes() as $key => $keyType) {
-            if (!$keyType instanceof ConstantIntegerType) {
+        foreach ($keys_array_type->get_value_types() as $key => $key_type) {
+            if (!$key_type instanceof Constant_Integer_Type) {
                 return \true;
             }
-            if ($key !== $keyType->getValue()) {
+            if ($key !== $key_type->get_value()) {
                 return \true;
             }
         }
         return \false;
     }
-    private function createGenericArrayType(ArrayType $arrayType, bool $withKey = \false): GenericTypeNode
+    private function create_generic_array_type(Array_Type $array_type, bool $with_key = \false): Generic_Type_Node
     {
-        $itemType = $arrayType->getIterableValueType();
-        $itemTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($itemType);
-        $identifierTypeNode = new IdentifierTypeNode('array');
+        $item_type = $array_type->get_iterable_value_type();
+        $item_type_node = $this->php_stan_static_type_mapper->map_to_php_stan_php_doc_type_node($item_type);
+        $identifier_type_node = new Identifier_Type_Node('array');
         // is class-string[] list only
-        if ($this->isClassStringArrayType($arrayType)) {
-            $withKey = \false;
+        if ($this->is_class_string_array_type($array_type)) {
+            $with_key = \false;
         }
-        if ($withKey) {
-            $keyTypeNode = $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($arrayType->getKeyType());
-            if ($itemTypeNode instanceof BracketsAwareUnionTypeNode && $this->isPairClassTooDetailed($itemType)) {
-                $genericTypes = [$keyTypeNode, $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode(new ClassStringType())];
+        if ($with_key) {
+            $key_type_node = $this->php_stan_static_type_mapper->map_to_php_stan_php_doc_type_node($array_type->get_key_type());
+            if ($item_type_node instanceof Brackets_Aware_Union_Type_Node && $this->is_pair_class_too_detailed($item_type)) {
+                $generic_types = [$key_type_node, $this->php_stan_static_type_mapper->map_to_php_stan_php_doc_type_node(new Class_String_Type())];
             } else {
-                $genericTypes = [$keyTypeNode, $itemTypeNode];
+                $generic_types = [$key_type_node, $item_type_node];
             }
         } else {
-            $genericTypes = [$itemTypeNode];
+            $generic_types = [$item_type_node];
         }
         // @see https://github.com/phpstan/phpdoc-parser/blob/98a088b17966bdf6ee25c8a4b634df313d8aa531/tests/PHPStan/Parser/PhpDocParserTest.php#L2692-L2696
-        foreach ($genericTypes as $genericType) {
+        foreach ($generic_types as $generic_type) {
             /** @var TypeNode $genericType */
-            $genericType->setAttribute(self::HAS_GENERIC_TYPE_PARENT, $withKey);
+            $generic_type->set_attribute(self::HAS_GENERIC_TYPE_PARENT, $with_key);
         }
-        $identifierTypeNode->setAttribute(self::HAS_GENERIC_TYPE_PARENT, $withKey);
-        return new GenericTypeNode($identifierTypeNode, $genericTypes);
+        $identifier_type_node->set_attribute(self::HAS_GENERIC_TYPE_PARENT, $with_key);
+        return new Generic_Type_Node($identifier_type_node, $generic_types);
     }
-    private function isPairClassTooDetailed(Type $itemType): bool
+    private function is_pair_class_too_detailed(Type $item_type): bool
     {
-        if (!$itemType instanceof UnionType) {
+        if (!$item_type instanceof Union_Type) {
             return \false;
         }
-        if (!$this->genericClassStringTypeNormalizer->isAllGenericClassStringType($itemType)) {
+        if (!$this->generic_class_string_type_normalizer->is_all_generic_class_string_type($item_type)) {
             return \false;
         }
-        return $this->detailedTypeAnalyzer->isTooDetailed($itemType);
+        return $this->detailed_type_analyzer->is_too_detailed($item_type);
     }
-    private function isIntegerKeyAndNonNestedArray(ArrayType $arrayType): bool
+    private function is_integer_key_and_non_nested_array(Array_Type $array_type): bool
     {
-        if (!$arrayType->getKeyType()->isInteger()->yes()) {
+        if (!$array_type->get_key_type()->is_integer()->yes()) {
             return \false;
         }
-        return !$arrayType->getIterableValueType()->isArray()->yes();
+        return !$array_type->get_iterable_value_type()->is_array()->yes();
     }
-    private function isClassStringArrayType(ArrayType $arrayType): bool
+    private function is_class_string_array_type(Array_Type $array_type): bool
     {
-        if ($arrayType->getKeyType() instanceof MixedType) {
-            return $arrayType->getIterableValueType() instanceof GenericClassStringType;
+        if ($array_type->get_key_type() instanceof Mixed_Type) {
+            return $array_type->get_iterable_value_type() instanceof Generic_Class_String_Type;
         }
-        if ($arrayType->getKeyType() instanceof ConstantIntegerType) {
-            return $arrayType->getIterableValueType() instanceof GenericClassStringType;
+        if ($array_type->get_key_type() instanceof Constant_Integer_Type) {
+            return $array_type->get_iterable_value_type() instanceof Generic_Class_String_Type;
         }
         return \false;
     }

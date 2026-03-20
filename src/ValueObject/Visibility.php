@@ -1,11 +1,9 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Value_Object;
 
-namespace Rector\ValueObject;
-
-use PhpParser\Modifiers;
-
+use Php_Parser\Modifiers;
 final class Visibility
 {
     /**

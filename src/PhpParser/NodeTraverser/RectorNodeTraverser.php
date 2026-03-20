@@ -1,24 +1,22 @@
 <?php
 
 declare (strict_types=1);
-
-namespace Rector\PhpParser\NodeTraverser;
+namespace Rector\Php_Parser\Node_Traverser;
 
 use LogicException;
-use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Stmt;
-use PhpParser\NodeTraverserInterface;
-use PhpParser\NodeVisitor;
-use Rector\Configuration\ConfigurationRuleFilter;
-use Rector\Contract\Rector\RectorInterface;
-use Rector\Exception\ShouldNotHappenException;
-use Rector\PhpParser\Node\CustomNode\FileWithoutNamespace;
-use Rector\PhpParser\Node\FileNode;
-use Rector\VersionBonding\ComposerPackageConstraintFilter;
-use Rector\VersionBonding\PhpVersionedFilter;
-use RectorPrefix202603\Webmozart\Assert\Assert;
-
+use Php_Parser\Node;
+use Php_Parser\Node\Expr;
+use Php_Parser\Node\Stmt;
+use Php_Parser\Node_Traverser_Interface;
+use Php_Parser\Node_Visitor;
+use Rector\Configuration\Configuration_Rule_Filter;
+use Rector\Contract\Rector\Rector_Interface;
+use Rector\Exception\Should_Not_Happen_Exception;
+use Rector\Php_Parser\Node\Custom_Node\File_Without_Namespace;
+use Rector\Php_Parser\Node\File_Node;
+use Rector\Version_Bonding\Composer_Package_Constraint_Filter;
+use Rector\Version_Bonding\Php_Versioned_Filter;
+use Rector_Prefix202603\Webmozart\Assert\Assert;
 /**
  *  Based on native NodeTraverser class, but heavily customized for Rector needs.
  *
@@ -30,7 +28,7 @@ use RectorPrefix202603\Webmozart\Assert\Assert;
  * @see \Rector\Tests\PhpParser\NodeTraverser\RectorNodeTraverserTest
  * @internal No BC promise on this class, it might change any time.
  */
-final class RectorNodeTraverser implements NodeTraverserInterface
+final class Rector_Node_Traverser implements Node_Traverser_Interface
 {
     /**
      * @var RectorInterface[]
@@ -39,42 +37,42 @@ final class RectorNodeTraverser implements NodeTraverserInterface
     /**
      * @readonly
      */
-    private PhpVersionedFilter $phpVersionedFilter;
+    private Php_Versioned_Filter $php_versioned_filter;
     /**
      * @readonly
      */
-    private ComposerPackageConstraintFilter $composerPackageConstraintFilter;
+    private Composer_Package_Constraint_Filter $composer_package_constraint_filter;
     /**
      * @readonly
      */
-    private ConfigurationRuleFilter $configurationRuleFilter;
+    private Configuration_Rule_Filter $configuration_rule_filter;
     /**
      * @var RectorInterface[]
      */
     private array $visitors = [];
-    private bool $stopTraversal;
-    private bool $areNodeVisitorsPrepared = \false;
+    private bool $stop_traversal;
+    private bool $are_node_visitors_prepared = \false;
     /**
      * @var array<class-string<Node>, RectorInterface[]>
      */
-    private array $visitorsPerNodeClass = [];
+    private array $visitors_per_node_class = [];
     /**
      * @param RectorInterface[] $rectors
      */
-    public function __construct(array $rectors, PhpVersionedFilter $phpVersionedFilter, ComposerPackageConstraintFilter $composerPackageConstraintFilter, ConfigurationRuleFilter $configurationRuleFilter)
+    public function __construct(array $rectors, Php_Versioned_Filter $php_versioned_filter, Composer_Package_Constraint_Filter $composer_package_constraint_filter, Configuration_Rule_Filter $configuration_rule_filter)
     {
         $this->rectors = $rectors;
-        $this->phpVersionedFilter = $phpVersionedFilter;
-        $this->composerPackageConstraintFilter = $composerPackageConstraintFilter;
-        $this->configurationRuleFilter = $configurationRuleFilter;
+        $this->php_versioned_filter = $php_versioned_filter;
+        $this->composer_package_constraint_filter = $composer_package_constraint_filter;
+        $this->configuration_rule_filter = $configuration_rule_filter;
     }
-    public function addVisitor(NodeVisitor $visitor): void
+    public function add_visitor(Node_Visitor $visitor): void
     {
-        throw new ShouldNotHappenException('The immutable node traverser does not support adding visitors.');
+        throw new Should_Not_Happen_Exception('The immutable node traverser does not support adding visitors.');
     }
-    public function removeVisitor(NodeVisitor $visitor): void
+    public function remove_visitor(Node_Visitor $visitor): void
     {
-        throw new ShouldNotHappenException('The immutable node traverser does not support removing visitors.');
+        throw new Should_Not_Happen_Exception('The immutable node traverser does not support removing visitors.');
     }
     /**
      * @param Node[] $nodes
@@ -82,17 +80,17 @@ final class RectorNodeTraverser implements NodeTraverserInterface
      */
     public function traverse(array $nodes): array
     {
-        $this->prepareNodeVisitors();
-        $this->stopTraversal = \false;
+        $this->prepare_node_visitors();
+        $this->stop_traversal = \false;
         foreach ($this->visitors as $visitor) {
-            if (null !== $return = $visitor->beforeTraverse($nodes)) {
+            if (null !== $return = $visitor->before_traverse($nodes)) {
                 $nodes = $return;
             }
         }
-        $nodes = $this->traverseArray($nodes);
+        $nodes = $this->traverse_array($nodes);
         for ($i = \count($this->visitors) - 1; $i >= 0; --$i) {
             $visitor = $this->visitors[$i];
-            if (null !== $return = $visitor->afterTraverse($nodes)) {
+            if (null !== $return = $visitor->after_traverse($nodes)) {
                 $nodes = $return;
             }
         }
@@ -104,79 +102,79 @@ final class RectorNodeTraverser implements NodeTraverserInterface
      *
      * @internal Used only in Rector core, not supported outside. Might change any time.
      */
-    public function refreshPhpRectors(array $rectors): void
+    public function refresh_php_rectors(array $rectors): void
     {
-        Assert::allIsInstanceOf($rectors, RectorInterface::class);
+        Assert::all_is_instance_of($rectors, Rector_Interface::class);
         $this->rectors = $rectors;
         $this->visitors = [];
-        $this->visitorsPerNodeClass = [];
-        $this->areNodeVisitorsPrepared = \false;
-        $this->prepareNodeVisitors();
+        $this->visitors_per_node_class = [];
+        $this->are_node_visitors_prepared = \false;
+        $this->prepare_node_visitors();
     }
     /**
      * @return RectorInterface[]
      *
      * @api used in tests
      */
-    public function getVisitorsForNode(Node $node): array
+    public function get_visitors_for_node(Node $node): array
     {
-        $nodeClass = get_class($node);
-        if (!isset($this->visitorsPerNodeClass[$nodeClass])) {
-            $this->visitorsPerNodeClass[$nodeClass] = [];
+        $node_class = get_class($node);
+        if (!isset($this->visitors_per_node_class[$node_class])) {
+            $this->visitors_per_node_class[$node_class] = [];
             /** @var RectorInterface $visitor */
             foreach ($this->visitors as $visitor) {
-                foreach ($visitor->getNodeTypes() as $nodeType) {
+                foreach ($visitor->get_node_types() as $node_type) {
                     // BC layer matching
-                    if ($nodeType === FileWithoutNamespace::class && $nodeClass === FileNode::class) {
-                        $this->visitorsPerNodeClass[$nodeClass][] = $visitor;
+                    if ($node_type === File_Without_Namespace::class && $node_class === File_Node::class) {
+                        $this->visitors_per_node_class[$node_class][] = $visitor;
                         continue;
                     }
-                    if (is_a($nodeClass, $nodeType, \true)) {
-                        $this->visitorsPerNodeClass[$nodeClass][] = $visitor;
+                    if (is_a($node_class, $node_type, \true)) {
+                        $this->visitors_per_node_class[$node_class][] = $visitor;
                         continue 2;
                     }
                 }
             }
         }
-        return $this->visitorsPerNodeClass[$nodeClass];
+        return $this->visitors_per_node_class[$node_class];
     }
-    private function traverseNode(Node $node): void
+    private function traverse_node(Node $node): void
     {
-        foreach ($node->getSubNodeNames() as $name) {
-            $subNode = $node->{$name};
-            if (\is_array($subNode)) {
-                $node->{$name} = $this->traverseArray($subNode);
-                if ($this->stopTraversal) {
+        foreach ($node->get_sub_node_names() as $name) {
+            $sub_node = $node->{$name};
+            if (\is_array($sub_node)) {
+                $node->{$name} = $this->traverse_array($sub_node);
+                if ($this->stop_traversal) {
                     break;
                 }
                 continue;
             }
-            if (!$subNode instanceof Node) {
+            if (!$sub_node instanceof Node) {
                 continue;
             }
-            $traverseChildren = \true;
-            $currentNodeVisitors = $this->getVisitorsForNode($subNode);
-            foreach ($currentNodeVisitors as $currentNodeVisitor) {
-                $return = $currentNodeVisitor->enterNode($subNode);
+            $traverse_children = \true;
+            $current_node_visitors = $this->get_visitors_for_node($sub_node);
+            foreach ($current_node_visitors as $current_node_visitor) {
+                $return = $current_node_visitor->enter_node($sub_node);
                 if ($return !== null) {
                     if ($return instanceof Node) {
-                        $originalSubNodeClass = get_class($subNode);
-                        $this->ensureReplacementReasonable($subNode, $return);
-                        $subNode = $return;
+                        $original_sub_node_class = get_class($sub_node);
+                        $this->ensure_replacement_reasonable($sub_node, $return);
+                        $sub_node = $return;
                         $node->{$name} = $return;
-                        if ($originalSubNodeClass !== get_class($subNode)) {
+                        if ($original_sub_node_class !== get_class($sub_node)) {
                             // stop traversing as node type changed and visitors won't work
                             continue 2;
                         }
-                    } elseif ($return === NodeVisitor::DONT_TRAVERSE_CHILDREN) {
-                        $traverseChildren = \false;
-                    } elseif ($return === NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN) {
-                        $traverseChildren = \false;
+                    } elseif ($return === Node_Visitor::DONT_TRAVERSE_CHILDREN) {
+                        $traverse_children = \false;
+                    } elseif ($return === Node_Visitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN) {
+                        $traverse_children = \false;
                         break;
-                    } elseif ($return === NodeVisitor::STOP_TRAVERSAL) {
-                        $this->stopTraversal = \true;
+                    } elseif ($return === Node_Visitor::STOP_TRAVERSAL) {
+                        $this->stop_traversal = \true;
                         break 2;
-                    } elseif ($return === NodeVisitor::REPLACE_WITH_NULL) {
+                    } elseif ($return === Node_Visitor::REPLACE_WITH_NULL) {
                         $node->{$name} = null;
                         continue 2;
                     } else {
@@ -184,9 +182,9 @@ final class RectorNodeTraverser implements NodeTraverserInterface
                     }
                 }
             }
-            if ($traverseChildren) {
-                $this->traverseNode($subNode);
-                if ($this->stopTraversal) {
+            if ($traverse_children) {
+                $this->traverse_node($sub_node);
+                if ($this->stop_traversal) {
                     break;
                 }
             }
@@ -196,9 +194,9 @@ final class RectorNodeTraverser implements NodeTraverserInterface
      * @param Node[] $nodes
      * @return Node[]
      */
-    private function traverseArray(array $nodes): array
+    private function traverse_array(array $nodes): array
     {
-        $doNodes = [];
+        $do_nodes = [];
         foreach ($nodes as $i => $node) {
             if (!$node instanceof Node) {
                 if (\is_array($node)) {
@@ -206,64 +204,64 @@ final class RectorNodeTraverser implements NodeTraverserInterface
                 }
                 continue;
             }
-            $traverseChildren = \true;
-            $currentNodeVisitors = $this->getVisitorsForNode($node);
-            foreach ($currentNodeVisitors as $currentNodeVisitor) {
-                $return = $currentNodeVisitor->enterNode($node);
+            $traverse_children = \true;
+            $current_node_visitors = $this->get_visitors_for_node($node);
+            foreach ($current_node_visitors as $current_node_visitor) {
+                $return = $current_node_visitor->enter_node($node);
                 if ($return !== null) {
                     if ($return instanceof Node) {
-                        $originalNodeNodeClass = get_class($node);
-                        $this->ensureReplacementReasonable($node, $return);
+                        $original_node_node_class = get_class($node);
+                        $this->ensure_replacement_reasonable($node, $return);
                         $nodes[$i] = $node = $return;
-                        if ($originalNodeNodeClass !== get_class($return)) {
+                        if ($original_node_node_class !== get_class($return)) {
                             // stop traversing as node type changed and visitors won't work
                             continue 2;
                         }
                     } elseif (\is_array($return)) {
-                        $doNodes[] = [$i, $return];
+                        $do_nodes[] = [$i, $return];
                         continue 2;
-                    } elseif ($return === NodeVisitor::REMOVE_NODE) {
-                        $doNodes[] = [$i, []];
+                    } elseif ($return === Node_Visitor::REMOVE_NODE) {
+                        $do_nodes[] = [$i, []];
                         continue 2;
-                    } elseif ($return === NodeVisitor::DONT_TRAVERSE_CHILDREN) {
-                        $traverseChildren = \false;
-                    } elseif ($return === NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN) {
-                        $traverseChildren = \false;
+                    } elseif ($return === Node_Visitor::DONT_TRAVERSE_CHILDREN) {
+                        $traverse_children = \false;
+                    } elseif ($return === Node_Visitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN) {
+                        $traverse_children = \false;
                         break;
-                    } elseif ($return === NodeVisitor::STOP_TRAVERSAL) {
-                        $this->stopTraversal = \true;
+                    } elseif ($return === Node_Visitor::STOP_TRAVERSAL) {
+                        $this->stop_traversal = \true;
                         break 2;
-                    } elseif ($return === NodeVisitor::REPLACE_WITH_NULL) {
+                    } elseif ($return === Node_Visitor::REPLACE_WITH_NULL) {
                         throw new LogicException('REPLACE_WITH_NULL can not be used if the parent structure is an array');
                     } else {
                         throw new LogicException('enterNode() returned invalid value of type ' . gettype($return));
                     }
                 }
             }
-            if ($traverseChildren) {
-                $this->traverseNode($node);
-                if ($this->stopTraversal) {
+            if ($traverse_children) {
+                $this->traverse_node($node);
+                if ($this->stop_traversal) {
                     break;
                 }
             }
         }
-        if ($doNodes !== []) {
-            while ([$i, $replace] = array_pop($doNodes)) {
+        if ($do_nodes !== []) {
+            while ([$i, $replace] = array_pop($do_nodes)) {
                 array_splice($nodes, $i, 1, $replace);
             }
         }
         return $nodes;
     }
-    private function ensureReplacementReasonable(Node $old, Node $new): void
+    private function ensure_replacement_reasonable(Node $old, Node $new): void
     {
         if ($old instanceof Stmt) {
             if ($new instanceof Expr) {
-                throw new LogicException(sprintf('Trying to replace statement (%s) ', $old->getType()) . sprintf('with expression (%s). Are you missing a ', $new->getType()) . 'Stmt_Expression wrapper?');
+                throw new LogicException(sprintf('Trying to replace statement (%s) ', $old->get_type()) . sprintf('with expression (%s). Are you missing a ', $new->get_type()) . 'Stmt_Expression wrapper?');
             }
             return;
         }
         if ($new instanceof Stmt) {
-            throw new LogicException(sprintf('Trying to replace expression (%s) ', $old->getType()) . sprintf('with statement (%s)', $new->getType()));
+            throw new LogicException(sprintf('Trying to replace expression (%s) ', $old->get_type()) . sprintf('with statement (%s)', $new->get_type()));
         }
     }
     /**
@@ -271,17 +269,17 @@ final class RectorNodeTraverser implements NodeTraverserInterface
      *
      * This should be removed after https://github.com/rectorphp/rector/issues/5584 is resolved
      */
-    private function prepareNodeVisitors(): void
+    private function prepare_node_visitors(): void
     {
-        if ($this->areNodeVisitorsPrepared) {
+        if ($this->are_node_visitors_prepared) {
             return;
         }
         // filter out by PHP version
-        $this->visitors = $this->phpVersionedFilter->filter($this->rectors);
+        $this->visitors = $this->php_versioned_filter->filter($this->rectors);
         // filter out by composer package constraint
-        $this->visitors = $this->composerPackageConstraintFilter->filter($this->visitors);
+        $this->visitors = $this->composer_package_constraint_filter->filter($this->visitors);
         // filter by configuration
-        $this->visitors = $this->configurationRuleFilter->filter($this->visitors);
-        $this->areNodeVisitorsPrepared = \true;
+        $this->visitors = $this->configuration_rule_filter->filter($this->visitors);
+        $this->are_node_visitors_prepared = \true;
     }
 }

@@ -1,40 +1,38 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Php_Stan_Static_Type_Mapper;
 
-namespace Rector\PHPStanStaticTypeMapper;
-
-use PHPStan\Type\ObjectType;
-use PHPStan\Type\Type;
-use PHPStan\Type\UnionType;
-
-final class DoctrineTypeAnalyzer
+use Php_Stan\Type\Object_Type;
+use Php_Stan\Type\Type;
+use Php_Stan\Type\Union_Type;
+final class Doctrine_Type_Analyzer
 {
-    public function isDoctrineCollectionWithIterableUnionType(Type $type): bool
+    public function is_doctrine_collection_with_iterable_union_type(Type $type): bool
     {
-        if (!$type instanceof UnionType) {
+        if (!$type instanceof Union_Type) {
             return \false;
         }
-        $isArrayType = \false;
-        $hasDoctrineCollectionType = \false;
-        foreach ($type->getTypes() as $unionedType) {
-            if ($this->isInstanceOfCollectionType($unionedType)) {
-                $hasDoctrineCollectionType = \true;
+        $is_array_type = \false;
+        $has_doctrine_collection_type = \false;
+        foreach ($type->get_types() as $unioned_type) {
+            if ($this->is_instance_of_collection_type($unioned_type)) {
+                $has_doctrine_collection_type = \true;
             }
-            if ($unionedType->isArray()->yes()) {
-                $isArrayType = \true;
+            if ($unioned_type->is_array()->yes()) {
+                $is_array_type = \true;
             }
         }
-        if (!$hasDoctrineCollectionType) {
+        if (!$has_doctrine_collection_type) {
             return \false;
         }
-        return $isArrayType;
+        return $is_array_type;
     }
-    public function isInstanceOfCollectionType(Type $type): bool
+    public function is_instance_of_collection_type(Type $type): bool
     {
-        if (!$type instanceof ObjectType) {
+        if (!$type instanceof Object_Type) {
             return \false;
         }
-        return $type->isInstanceOf('Doctrine\Common\Collections\Collection')->yes();
+        return $type->is_instance_of('Doctrine\Common\Collections\Collection')->yes();
     }
 }

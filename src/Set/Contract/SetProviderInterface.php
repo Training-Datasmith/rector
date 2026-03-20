@@ -1,10 +1,9 @@
 <?php
 
 declare (strict_types=1);
-
 namespace Rector\Set\Contract;
 
-interface SetProviderInterface
+interface Set_Provider_Interface
 {
     /**
      * @return SetInterface[]

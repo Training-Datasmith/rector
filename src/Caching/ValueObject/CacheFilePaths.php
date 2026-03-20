@@ -1,39 +1,38 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Caching\Value_Object;
 
-namespace Rector\Caching\ValueObject;
-
-final class CacheFilePaths
+final class Cache_File_Paths
 {
     /**
      * @readonly
      */
-    private string $firstDirectory;
+    private string $first_directory;
     /**
      * @readonly
      */
-    private string $secondDirectory;
+    private string $second_directory;
     /**
      * @readonly
      */
-    private string $filePath;
-    public function __construct(string $firstDirectory, string $secondDirectory, string $filePath)
+    private string $file_path;
+    public function __construct(string $first_directory, string $second_directory, string $file_path)
     {
-        $this->firstDirectory = $firstDirectory;
-        $this->secondDirectory = $secondDirectory;
-        $this->filePath = $filePath;
+        $this->first_directory = $first_directory;
+        $this->second_directory = $second_directory;
+        $this->file_path = $file_path;
     }
-    public function getFirstDirectory(): string
+    public function get_first_directory(): string
     {
-        return $this->firstDirectory;
+        return $this->first_directory;
     }
-    public function getSecondDirectory(): string
+    public function get_second_directory(): string
     {
-        return $this->secondDirectory;
+        return $this->second_directory;
     }
-    public function getFilePath(): string
+    public function get_file_path(): string
     {
-        return $this->filePath;
+        return $this->file_path;
     }
 }

@@ -1,13 +1,12 @@
 <?php
 
 declare (strict_types=1);
-
-namespace Rector\Set\ValueObject;
+namespace Rector\Set\Value_Object;
 
 /**
  * @api
  */
-final class SetList
+final class Set_List
 {
     /**
      * @internal

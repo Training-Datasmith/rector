@@ -1,53 +1,51 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Node_Decorator;
 
-namespace Rector\NodeDecorator;
-
-use PhpParser\Node;
-use Rector\Contract\Rector\RectorInterface;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-
-final class CreatedByRuleDecorator
+use Php_Parser\Node;
+use Rector\Contract\Rector\Rector_Interface;
+use Rector\Node_Type_Resolver\Node\Attribute_Key;
+final class Created_By_Rule_Decorator
 {
     /**
      * @param array<Node>|Node $node
      * @param class-string<RectorInterface> $rectorClass
      */
-    public function decorate($node, Node $originalNode, string $rectorClass): void
+    public function decorate($node, Node $original_node, string $rector_class): void
     {
-        if ($node instanceof Node && $node === $originalNode) {
-            $this->createByRule($node, $rectorClass);
+        if ($node instanceof Node && $node === $original_node) {
+            $this->create_by_rule($node, $rector_class);
             return;
         }
         if ($node instanceof Node) {
             $node = [$node];
         }
-        foreach ($node as $singleNode) {
-            if (get_class($singleNode) === get_class($originalNode)) {
-                $this->createByRule($singleNode, $rectorClass);
+        foreach ($node as $single_node) {
+            if (get_class($single_node) === get_class($original_node)) {
+                $this->create_by_rule($single_node, $rector_class);
             }
         }
-        $this->createByRule($originalNode, $rectorClass);
+        $this->create_by_rule($original_node, $rector_class);
     }
     /**
      * @param class-string<RectorInterface> $rectorClass
      */
-    private function createByRule(Node $node, string $rectorClass): void
+    private function create_by_rule(Node $node, string $rector_class): void
     {
         /** @var class-string<RectorInterface>[] $createdByRule */
-        $createdByRule = $node->getAttribute(AttributeKey::CREATED_BY_RULE) ?? [];
+        $created_by_rule = $node->get_attribute(Attribute_Key::CREATED_BY_RULE) ?? [];
         // empty array, insert
-        if ($createdByRule === []) {
-            $node->setAttribute(AttributeKey::CREATED_BY_RULE, [$rectorClass]);
+        if ($created_by_rule === []) {
+            $node->set_attribute(Attribute_Key::CREATED_BY_RULE, [$rector_class]);
             return;
         }
         // consecutive, no need to refill
-        if (end($createdByRule) === $rectorClass) {
+        if (end($created_by_rule) === $rector_class) {
             return;
         }
         // filter out when exists, then append
-        $createdByRule = array_filter($createdByRule, static fn (string $rectorRule): bool => $rectorRule !== $rectorClass);
-        $node->setAttribute(AttributeKey::CREATED_BY_RULE, array_merge($createdByRule, [$rectorClass]));
+        $created_by_rule = array_filter($created_by_rule, static fn(string $rector_rule): bool => $rector_rule !== $rector_class);
+        $node->set_attribute(Attribute_Key::CREATED_BY_RULE, array_merge($created_by_rule, [$rector_class]));
     }
 }

@@ -1,29 +1,27 @@
 <?php
 
 declare (strict_types=1);
-
 namespace Rector\Configuration;
 
-use Rector\Configuration\Parameter\SimpleParameterProvider;
-use Rector\Skipper\FileSystem\PathNormalizer;
-
-final class VendorMissAnalyseGuard
+use Rector\Configuration\Parameter\Simple_Parameter_Provider;
+use Rector\Skipper\File_System\Path_Normalizer;
+final class Vendor_Miss_Analyse_Guard
 {
     /**
      * @param string[] $filePaths
      */
-    public function isVendorAnalyzed(array $filePaths): bool
+    public function is_vendor_analyzed(array $file_paths): bool
     {
-        if ($this->hasDowngradeSets()) {
+        if ($this->has_downgrade_sets()) {
             return \false;
         }
-        return $this->containsVendorPath($filePaths);
+        return $this->contains_vendor_path($file_paths);
     }
-    private function hasDowngradeSets(): bool
+    private function has_downgrade_sets(): bool
     {
-        $registeredRectorSets = SimpleParameterProvider::provideArrayParameter(\Rector\Configuration\Option::REGISTERED_RECTOR_SETS);
-        foreach ($registeredRectorSets as $registeredRectorSet) {
-            if (strpos((string) $registeredRectorSet, 'downgrade-') !== \false) {
+        $registered_rector_sets = Simple_Parameter_Provider::provide_array_parameter(\Rector\Configuration\Option::REGISTERED_RECTOR_SETS);
+        foreach ($registered_rector_sets as $registered_rector_set) {
+            if (strpos((string) $registered_rector_set, 'downgrade-') !== \false) {
                 return \true;
             }
         }
@@ -32,12 +30,12 @@ final class VendorMissAnalyseGuard
     /**
      * @param string[] $filePaths
      */
-    private function containsVendorPath(array $filePaths): bool
+    private function contains_vendor_path(array $file_paths): bool
     {
-        $cwdLength = strlen(getcwd());
-        foreach ($filePaths as $filePath) {
-            $normalizedPath = PathNormalizer::normalize(realpath($filePath));
-            if (strncmp((string) substr($normalizedPath, $cwdLength), '/vendor/', strlen('/vendor/')) === 0) {
+        $cwd_length = strlen(getcwd());
+        foreach ($file_paths as $file_path) {
+            $normalized_path = Path_Normalizer::normalize(realpath($file_path));
+            if (strncmp((string) substr($normalized_path, $cwd_length), '/vendor/', strlen('/vendor/')) === 0) {
                 return \true;
             }
         }

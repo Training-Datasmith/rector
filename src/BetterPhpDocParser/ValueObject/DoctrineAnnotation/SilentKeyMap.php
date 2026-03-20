@@ -1,10 +1,9 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Better_Php_Doc_Parser\Value_Object\Doctrine_Annotation;
 
-namespace Rector\BetterPhpDocParser\ValueObject\DoctrineAnnotation;
-
-final class SilentKeyMap
+final class Silent_Key_Map
 {
     /**
      * @var array<string, string>

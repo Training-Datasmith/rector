@@ -1,26 +1,24 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Changes_Reporting\Output;
 
-namespace Rector\ChangesReporting\Output;
-
-use Rector\ChangesReporting\Contract\Output\OutputFormatterInterface;
+use Rector\Changes_Reporting\Contract\Output\Output_Formatter_Interface;
 use Rector\Configuration\Option;
-use Rector\Configuration\Parameter\SimpleParameterProvider;
-use Rector\ValueObject\Configuration;
-use Rector\ValueObject\Error\SystemError;
-use Rector\ValueObject\ProcessResult;
-use Rector\ValueObject\Reporting\FileDiff;
-use RectorPrefix202603\Nette\Utils\Strings;
-use RectorPrefix202603\Symfony\Component\Console\Formatter\OutputFormatter;
-use RectorPrefix202603\Symfony\Component\Console\Style\SymfonyStyle;
-
-final class ConsoleOutputFormatter implements OutputFormatterInterface
+use Rector\Configuration\Parameter\Simple_Parameter_Provider;
+use Rector\Value_Object\Configuration;
+use Rector\Value_Object\Error\System_Error;
+use Rector\Value_Object\Process_Result;
+use Rector\Value_Object\Reporting\File_Diff;
+use Rector_Prefix202603\Nette\Utils\Strings;
+use Rector_Prefix202603\Symfony\Component\Console\Formatter\Output_Formatter;
+use Rector_Prefix202603\Symfony\Component\Console\Style\Symfony_Style;
+final class Console_Output_Formatter implements Output_Formatter_Interface
 {
     /**
      * @readonly
      */
-    private SymfonyStyle $symfonyStyle;
+    private Symfony_Style $symfony_style;
     /**
      * @var string
      */
@@ -30,100 +28,100 @@ final class ConsoleOutputFormatter implements OutputFormatterInterface
      * @var string
      */
     private const ON_LINE_REGEX = '# on line #';
-    public function __construct(SymfonyStyle $symfonyStyle)
+    public function __construct(Symfony_Style $symfony_style)
     {
-        $this->symfonyStyle = $symfonyStyle;
+        $this->symfony_style = $symfony_style;
     }
-    public function report(ProcessResult $processResult, Configuration $configuration): void
+    public function report(Process_Result $process_result, Configuration $configuration): void
     {
-        if ($configuration->shouldShowDiffs()) {
-            $this->reportFileDiffs($processResult->getFileDiffs(), $configuration->isReportingWithRealPath());
+        if ($configuration->should_show_diffs()) {
+            $this->report_file_diffs($process_result->get_file_diffs(), $configuration->is_reporting_with_real_path());
         }
-        $this->reportErrors($processResult->getSystemErrors(), $configuration->isReportingWithRealPath());
-        if ($processResult->getSystemErrors() !== []) {
+        $this->report_errors($process_result->get_system_errors(), $configuration->is_reporting_with_real_path());
+        if ($process_result->get_system_errors() !== []) {
             return;
         }
         // to keep space between progress bar and success message
-        if ($configuration->shouldShowProgressBar() && $processResult->getFileDiffs() === []) {
-            $this->symfonyStyle->newLine();
+        if ($configuration->should_show_progress_bar() && $process_result->get_file_diffs() === []) {
+            $this->symfony_style->new_line();
         }
-        $message = $this->createSuccessMessage($processResult, $configuration);
-        $this->symfonyStyle->success($message);
+        $message = $this->create_success_message($process_result, $configuration);
+        $this->symfony_style->success($message);
     }
-    public function getName(): string
+    public function get_name(): string
     {
         return self::NAME;
     }
     /**
      * @param FileDiff[] $fileDiffs
      */
-    private function reportFileDiffs(array $fileDiffs, bool $absoluteFilePath): void
+    private function report_file_diffs(array $file_diffs, bool $absolute_file_path): void
     {
-        if (count($fileDiffs) <= 0) {
+        if (count($file_diffs) <= 0) {
             return;
         }
         // normalize
-        ksort($fileDiffs);
-        $message = sprintf('%d file%s with changes', count($fileDiffs), count($fileDiffs) === 1 ? '' : 's');
-        $this->symfonyStyle->title($message);
+        ksort($file_diffs);
+        $message = sprintf('%d file%s with changes', count($file_diffs), count($file_diffs) === 1 ? '' : 's');
+        $this->symfony_style->title($message);
         $i = 0;
-        foreach ($fileDiffs as $fileDiff) {
-            $filePath = $absoluteFilePath ? $fileDiff->getAbsoluteFilePath() ?? '' : $fileDiff->getRelativeFilePath();
+        foreach ($file_diffs as $file_diff) {
+            $file_path = $absolute_file_path ? $file_diff->get_absolute_file_path() ?? '' : $file_diff->get_relative_file_path();
             // append line number for faster file jump in diff
-            $firstLineNumber = $fileDiff->getFirstLineNumber();
-            if ($firstLineNumber !== null) {
-                $filePath .= ':' . $firstLineNumber;
+            $first_line_number = $file_diff->get_first_line_number();
+            if ($first_line_number !== null) {
+                $file_path .= ':' . $first_line_number;
             }
-            $filePathWithUrl = $this->addEditorUrl($filePath, $fileDiff->getAbsoluteFilePath(), $fileDiff->getRelativeFilePath(), (string) $fileDiff->getFirstLineNumber());
-            $message = sprintf('<options=bold>%d) %s</>', ++$i, $filePathWithUrl);
-            $this->symfonyStyle->writeln($message);
-            $this->symfonyStyle->newLine();
-            $this->symfonyStyle->writeln($fileDiff->getDiffConsoleFormatted());
-            if ($fileDiff->getRectorChanges() !== []) {
-                $this->symfonyStyle->writeln('<options=underscore>Applied rules:</>');
-                $this->symfonyStyle->listing($fileDiff->getRectorShortClasses());
-                $this->symfonyStyle->newLine();
+            $file_path_with_url = $this->add_editor_url($file_path, $file_diff->get_absolute_file_path(), $file_diff->get_relative_file_path(), (string) $file_diff->get_first_line_number());
+            $message = sprintf('<options=bold>%d) %s</>', ++$i, $file_path_with_url);
+            $this->symfony_style->writeln($message);
+            $this->symfony_style->new_line();
+            $this->symfony_style->writeln($file_diff->get_diff_console_formatted());
+            if ($file_diff->get_rector_changes() !== []) {
+                $this->symfony_style->writeln('<options=underscore>Applied rules:</>');
+                $this->symfony_style->listing($file_diff->get_rector_short_classes());
+                $this->symfony_style->new_line();
             }
         }
     }
     /**
      * @param SystemError[] $errors
      */
-    private function reportErrors(array $errors, bool $absoluteFilePath): void
+    private function report_errors(array $errors, bool $absolute_file_path): void
     {
         foreach ($errors as $error) {
-            $errorMessage = $error->getMessage();
-            $errorMessage = $this->normalizePathsToRelativeWithLine($errorMessage);
-            $errorMessage = str_replace("\r\n", "\n", $errorMessage);
-            $filePath = $absoluteFilePath ? $error->getAbsoluteFilePath() : $error->getRelativeFilePath();
-            $message = sprintf('Could not process %s%s, due to: %s"%s".', $filePath !== null ? '"' . $filePath . '" file' : 'some files', $error->getRectorClass() !== null ? ' by "' . $error->getRectorClass() . '"' : '', "\n", $errorMessage);
-            if ($error->getLine() !== null) {
-                $message .= ' On line: ' . $error->getLine();
+            $error_message = $error->get_message();
+            $error_message = $this->normalize_paths_to_relative_with_line($error_message);
+            $error_message = str_replace("\r\n", "\n", $error_message);
+            $file_path = $absolute_file_path ? $error->get_absolute_file_path() : $error->get_relative_file_path();
+            $message = sprintf('Could not process %s%s, due to: %s"%s".', $file_path !== null ? '"' . $file_path . '" file' : 'some files', $error->get_rector_class() !== null ? ' by "' . $error->get_rector_class() . '"' : '', "\n", $error_message);
+            if ($error->get_line() !== null) {
+                $message .= ' On line: ' . $error->get_line();
             }
-            $this->symfonyStyle->error($message);
+            $this->symfony_style->error($message);
         }
     }
-    private function normalizePathsToRelativeWithLine(string $errorMessage): string
+    private function normalize_paths_to_relative_with_line(string $error_message): string
     {
         $regex = '#' . preg_quote(getcwd(), '#') . '/#';
-        $errorMessage = Strings::replace($errorMessage, $regex);
-        return Strings::replace($errorMessage, self::ON_LINE_REGEX);
+        $error_message = Strings::replace($error_message, $regex);
+        return Strings::replace($error_message, self::ON_LINE_REGEX);
     }
-    private function createSuccessMessage(ProcessResult $processResult, Configuration $configuration): string
+    private function create_success_message(Process_Result $process_result, Configuration $configuration): string
     {
-        $changeCount = $processResult->getTotalChanged();
-        if ($changeCount === 0) {
+        $change_count = $process_result->get_total_changed();
+        if ($change_count === 0) {
             return 'Rector is done!';
         }
-        return sprintf('%d file%s %s by Rector', $changeCount, $changeCount > 1 ? 's' : '', $configuration->isDryRun() ? 'would have been changed (dry-run)' : ($changeCount === 1 ? 'has' : 'have') . ' been changed');
+        return sprintf('%d file%s %s by Rector', $change_count, $change_count > 1 ? 's' : '', $configuration->is_dry_run() ? 'would have been changed (dry-run)' : ($change_count === 1 ? 'has' : 'have') . ' been changed');
     }
-    private function addEditorUrl(string $filePath, ?string $absoluteFilePath, ?string $relativeFilePath, ?string $lineNumber): string
+    private function add_editor_url(string $file_path, ?string $absolute_file_path, ?string $relative_file_path, ?string $line_number): string
     {
-        $editorUrl = SimpleParameterProvider::provideStringParameter(Option::EDITOR_URL, '');
-        if ($editorUrl !== '') {
-            $editorUrl = str_replace(['%file%', '%relFile%', '%line%'], [(string) $absoluteFilePath, (string) $relativeFilePath, (string) $lineNumber], $editorUrl);
-            $filePath = '<href=' . OutputFormatter::escape($editorUrl) . '>' . $filePath . '</>';
+        $editor_url = Simple_Parameter_Provider::provide_string_parameter(Option::EDITOR_URL, '');
+        if ($editor_url !== '') {
+            $editor_url = str_replace(['%file%', '%relFile%', '%line%'], [(string) $absolute_file_path, (string) $relative_file_path, (string) $line_number], $editor_url);
+            $file_path = '<href=' . Output_Formatter::escape($editor_url) . '>' . $file_path . '</>';
         }
-        return $filePath;
+        return $file_path;
     }
 }

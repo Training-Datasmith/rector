@@ -1,46 +1,44 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Dependency_Injection\Laravel;
 
-namespace Rector\DependencyInjection\Laravel;
-
-use Rector\Util\Reflection\PrivatesAccessor;
-use RectorPrefix202603\Illuminate\Container\Container;
-
+use Rector\Util\Reflection\Privates_Accessor;
+use Rector_Prefix202603\Illuminate\Container\Container;
 /**
  * Helper service to modify Laravel container
  */
-final class ContainerMemento
+final class Container_Memento
 {
     /**
      * @api
      * @see https://tomasvotruba.com/blog/removing-service-from-laravel-container-is-not-that-easy
      */
-    public static function forgetTag(Container $container, string $tagToForget): void
+    public static function forget_tag(Container $container, string $tag_to_forget): void
     {
         // 1. forget instances
-        $taggedClasses = $container->tagged($tagToForget);
-        foreach ($taggedClasses as $taggedClass) {
-            $container->offsetUnset(get_class($taggedClass));
+        $tagged_classes = $container->tagged($tag_to_forget);
+        foreach ($tagged_classes as $tagged_class) {
+            $container->offsetUnset(get_class($tagged_class));
         }
         // 2. forget tagged references
-        $privatesAccessor = new PrivatesAccessor();
-        $privatesAccessor->propertyClosure($container, 'tags', static function (array $tags) use ($tagToForget): array {
-            unset($tags[$tagToForget]);
+        $privates_accessor = new Privates_Accessor();
+        $privates_accessor->property_closure($container, 'tags', static function (array $tags) use ($tag_to_forget): array {
+            unset($tags[$tag_to_forget]);
             return $tags;
         });
     }
-    public static function forgetService(Container $container, string $typeToForget): void
+    public static function forget_service(Container $container, string $type_to_forget): void
     {
         // 1. remove the service
-        $container->offsetUnset($typeToForget);
+        $container->offsetUnset($type_to_forget);
         // 2. remove all tagged rules
-        $privatesAccessor = new PrivatesAccessor();
-        $privatesAccessor->propertyClosure($container, 'tags', static function (array $tags) use ($typeToForget): array {
-            foreach ($tags as $tagName => $taggedClasses) {
-                foreach ($taggedClasses as $key => $taggedClass) {
-                    if (is_a($taggedClass, $typeToForget, \true)) {
-                        unset($tags[$tagName][$key]);
+        $privates_accessor = new Privates_Accessor();
+        $privates_accessor->property_closure($container, 'tags', static function (array $tags) use ($type_to_forget): array {
+            foreach ($tags as $tag_name => $tagged_classes) {
+                foreach ($tagged_classes as $key => $tagged_class) {
+                    if (is_a($tagged_class, $type_to_forget, \true)) {
+                        unset($tags[$tag_name][$key]);
                     }
                 }
             }

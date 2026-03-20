@@ -1,22 +1,20 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Node_Name_Resolver\Node_Name_Resolver;
 
-namespace Rector\NodeNameResolver\NodeNameResolver;
-
-use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Error;
-use PhpParser\Node\Param;
-use PHPStan\Analyser\Scope;
-use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
-
+use Php_Parser\Node;
+use Php_Parser\Node\Expr;
+use Php_Parser\Node\Expr\Error;
+use Php_Parser\Node\Param;
+use Php_Stan\Analyser\Scope;
+use Rector\Node_Name_Resolver\Contract\Node_Name_Resolver_Interface;
 /**
  * @implements NodeNameResolverInterface<Param>
  */
-final class ParamNameResolver implements NodeNameResolverInterface
+final class Param_Name_Resolver implements Node_Name_Resolver_Interface
 {
-    public function getNode(): string
+    public function get_node(): string
     {
         return Param::class;
     }

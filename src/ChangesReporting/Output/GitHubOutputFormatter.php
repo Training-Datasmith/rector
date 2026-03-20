@@ -9,18 +9,16 @@
  * @see https://github.com/orgs/community/discussions/129899
  */
 declare (strict_types=1);
+namespace Rector\Changes_Reporting\Output;
 
-namespace Rector\ChangesReporting\Output;
-
-use Rector\ChangesReporting\Contract\Output\OutputFormatterInterface;
-use Rector\ValueObject\Configuration;
-use Rector\ValueObject\ProcessResult;
-
+use Rector\Changes_Reporting\Contract\Output\Output_Formatter_Interface;
+use Rector\Value_Object\Configuration;
+use Rector\Value_Object\Process_Result;
 /**
  * @phpstan-type AnnotationProperties array{title?: string|null, file?: string|null, col?: int|null, endColumn?: int|null, line?: int|null, endLine?: int|null}
  * @see \Rector\Tests\ChangesReporting\Output\GitHubOutputFormatterTest
  */
-final class GitHubOutputFormatter implements OutputFormatterInterface
+final class Git_Hub_Output_Formatter implements Output_Formatter_Interface
 {
     /**
      * @var string
@@ -30,52 +28,52 @@ final class GitHubOutputFormatter implements OutputFormatterInterface
      * @var string
      */
     private const GROUP_NAME = 'Rector report';
-    public function getName(): string
+    public function get_name(): string
     {
         return self::NAME;
     }
-    public function report(ProcessResult $processResult, Configuration $configuration): void
+    public function report(Process_Result $process_result, Configuration $configuration): void
     {
-        $this->startGroup();
-        $this->reportSystemErrors($processResult, $configuration);
-        $this->reportFileDiffs($processResult, $configuration);
-        $this->endGroup();
+        $this->start_group();
+        $this->report_system_errors($process_result, $configuration);
+        $this->report_file_diffs($process_result, $configuration);
+        $this->end_group();
     }
-    private function startGroup(): void
+    private function start_group(): void
     {
         echo sprintf('::group::%s', self::GROUP_NAME) . \PHP_EOL;
     }
-    private function endGroup(): void
+    private function end_group(): void
     {
         echo '::endgroup::' . \PHP_EOL;
     }
-    private function reportSystemErrors(ProcessResult $processResult, Configuration $configuration): void
+    private function report_system_errors(Process_Result $process_result, Configuration $configuration): void
     {
-        foreach ($processResult->getSystemErrors() as $systemError) {
-            $filePath = $configuration->isReportingWithRealPath() ? $systemError->getAbsoluteFilePath() : $systemError->getRelativeFilePath();
-            $line = $systemError->getLine();
-            $message = trim($systemError->getRectorShortClass() . \PHP_EOL . $systemError->getMessage());
-            $this->reportErrorAnnotation($message, ['file' => $filePath, 'line' => $line]);
+        foreach ($process_result->get_system_errors() as $system_error) {
+            $file_path = $configuration->is_reporting_with_real_path() ? $system_error->get_absolute_file_path() : $system_error->get_relative_file_path();
+            $line = $system_error->get_line();
+            $message = trim($system_error->get_rector_short_class() . \PHP_EOL . $system_error->get_message());
+            $this->report_error_annotation($message, ['file' => $file_path, 'line' => $line]);
         }
     }
-    private function reportFileDiffs(ProcessResult $processResult, Configuration $configuration): void
+    private function report_file_diffs(Process_Result $process_result, Configuration $configuration): void
     {
-        $fileDiffs = $processResult->getFileDiffs();
-        ksort($fileDiffs);
-        foreach ($fileDiffs as $fileDiff) {
-            $filePath = $configuration->isReportingWithRealPath() ? $fileDiff->getAbsoluteFilePath() : $fileDiff->getRelativeFilePath();
-            $line = $fileDiff->getFirstLineNumber();
-            $endLine = $fileDiff->getLastLineNumber();
-            $message = trim(implode(' / ', $fileDiff->getRectorShortClasses())) . \PHP_EOL . \PHP_EOL . $fileDiff->getDiff();
-            $this->reportErrorAnnotation($message, ['file' => $filePath, 'line' => $line, 'endLine' => $endLine]);
+        $file_diffs = $process_result->get_file_diffs();
+        ksort($file_diffs);
+        foreach ($file_diffs as $file_diff) {
+            $file_path = $configuration->is_reporting_with_real_path() ? $file_diff->get_absolute_file_path() : $file_diff->get_relative_file_path();
+            $line = $file_diff->get_first_line_number();
+            $end_line = $file_diff->get_last_line_number();
+            $message = trim(implode(' / ', $file_diff->get_rector_short_classes())) . \PHP_EOL . \PHP_EOL . $file_diff->get_diff();
+            $this->report_error_annotation($message, ['file' => $file_path, 'line' => $line, 'endLine' => $end_line]);
         }
     }
     /**
      * @param AnnotationProperties $annotationProperties
      */
-    private function reportErrorAnnotation(string $message, array $annotationProperties): void
+    private function report_error_annotation(string $message, array $annotation_properties): void
     {
-        $properties = $this->sanitizeAnnotationProperties($annotationProperties);
+        $properties = $this->sanitize_annotation_properties($annotation_properties);
         $command = sprintf('::error %s::%s', $properties, $message);
         // Sanitize command
         $command = str_replace(['%', "\r", "\n"], ['%25', '%0D', '%0A'], $command);
@@ -84,22 +82,22 @@ final class GitHubOutputFormatter implements OutputFormatterInterface
     /**
      * @param AnnotationProperties $annotationProperties
      */
-    private function sanitizeAnnotationProperties(array $annotationProperties): string
+    private function sanitize_annotation_properties(array $annotation_properties): string
     {
-        if (!isset($annotationProperties['line']) || !$annotationProperties['line']) {
-            $annotationProperties['line'] = 0;
+        if (!isset($annotation_properties['line']) || !$annotation_properties['line']) {
+            $annotation_properties['line'] = 0;
         }
         // This is a workaround for buggy endLine. See https://github.com/orgs/community/discussions/129899
         // TODO: Should be removed once github will have fixed it issue.
-        unset($annotationProperties['endLine']);
-        $nonNullProperties = array_filter($annotationProperties, static fn ($value): bool => $value !== null);
-        $sanitizedProperties = array_map(fn (string $key, $value): string => sprintf('%s=%s', $key, $this->sanitizeAnnotationProperty($value)), array_keys($nonNullProperties), $nonNullProperties);
-        return implode(',', $sanitizedProperties);
+        unset($annotation_properties['endLine']);
+        $non_null_properties = array_filter($annotation_properties, static fn($value): bool => $value !== null);
+        $sanitized_properties = array_map(fn(string $key, $value): string => sprintf('%s=%s', $key, $this->sanitize_annotation_property($value)), array_keys($non_null_properties), $non_null_properties);
+        return implode(',', $sanitized_properties);
     }
     /**
      * @param string|int|null $value
      */
-    private function sanitizeAnnotationProperty($value): string
+    private function sanitize_annotation_property($value): string
     {
         if ($value === null || $value === '') {
             return '';

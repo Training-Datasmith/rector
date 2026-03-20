@@ -1,14 +1,12 @@
 <?php
 
 declare (strict_types=1);
-
 namespace Rector\Php;
 
-use PHPStan\Analyser\Scope;
-
-final class ReservedKeywordAnalyzer
+use Php_Stan\Analyser\Scope;
+final class Reserved_Keyword_Analyzer
 {
-    public function isNativeVariable(string $name): bool
+    public function is_native_variable(string $name): bool
     {
         return in_array($name, Scope::SUPERGLOBAL_VARIABLES, \true);
     }

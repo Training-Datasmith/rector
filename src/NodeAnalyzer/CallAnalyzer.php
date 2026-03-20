@@ -1,48 +1,46 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Node_Analyzer;
 
-namespace Rector\NodeAnalyzer;
-
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\BinaryOp;
-use PhpParser\Node\Expr\BooleanNot;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\NullsafeMethodCall;
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt\If_;
-use PHPStan\Analyser\Scope;
-use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\Type\ObjectType;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-
-final class CallAnalyzer
+use Php_Parser\Node\Expr;
+use Php_Parser\Node\Expr\Binary_Op;
+use Php_Parser\Node\Expr\Boolean_Not;
+use Php_Parser\Node\Expr\Method_Call;
+use Php_Parser\Node\Expr\Nullsafe_Method_Call;
+use Php_Parser\Node\Expr\Static_Call;
+use Php_Parser\Node\Expr\Variable;
+use Php_Parser\Node\Stmt\If_;
+use Php_Stan\Analyser\Scope;
+use Php_Stan\Reflection\Reflection_Provider;
+use Php_Stan\Type\Object_Type;
+use Rector\Node_Type_Resolver\Node\Attribute_Key;
+final class Call_Analyzer
 {
     /**
      * @readonly
      */
-    private ReflectionProvider $reflectionProvider;
+    private Reflection_Provider $reflection_provider;
     /**
      * @var array<class-string<Expr>>
      */
-    private const OBJECT_CALL_TYPES = [MethodCall::class, NullsafeMethodCall::class, StaticCall::class];
-    public function __construct(ReflectionProvider $reflectionProvider)
+    private const OBJECT_CALL_TYPES = [Method_Call::class, Nullsafe_Method_Call::class, Static_Call::class];
+    public function __construct(Reflection_Provider $reflection_provider)
     {
-        $this->reflectionProvider = $reflectionProvider;
+        $this->reflection_provider = $reflection_provider;
     }
-    public function isObjectCall(Expr $expr): bool
+    public function is_object_call(Expr $expr): bool
     {
-        if ($expr instanceof BooleanNot) {
+        if ($expr instanceof Boolean_Not) {
             $expr = $expr->expr;
         }
-        if ($expr instanceof BinaryOp) {
-            $isObjectCallLeft = $this->isObjectCall($expr->left);
-            $isObjectCallRight = $this->isObjectCall($expr->right);
-            return $isObjectCallLeft || $isObjectCallRight;
+        if ($expr instanceof Binary_Op) {
+            $is_object_call_left = $this->is_object_call($expr->left);
+            $is_object_call_right = $this->is_object_call($expr->right);
+            return $is_object_call_left || $is_object_call_right;
         }
-        foreach (self::OBJECT_CALL_TYPES as $objectCallType) {
-            if ($expr instanceof $objectCallType) {
+        foreach (self::OBJECT_CALL_TYPES as $object_call_type) {
+            if ($expr instanceof $object_call_type) {
                 return \true;
             }
         }
@@ -51,30 +49,30 @@ final class CallAnalyzer
     /**
      * @param If_[] $ifs
      */
-    public function doesIfHasObjectCall(array $ifs): bool
+    public function does_if_has_object_call(array $ifs): bool
     {
         foreach ($ifs as $if) {
-            if ($this->isObjectCall($if->cond)) {
+            if ($this->is_object_call($if->cond)) {
                 return \true;
             }
         }
         return \false;
     }
-    public function isNewInstance(Variable $variable): bool
+    public function is_new_instance(Variable $variable): bool
     {
-        $scope = $variable->getAttribute(AttributeKey::SCOPE);
+        $scope = $variable->get_attribute(Attribute_Key::SCOPE);
         if (!$scope instanceof Scope) {
             return \false;
         }
-        $type = $scope->getNativeType($variable);
-        if (!$type instanceof ObjectType) {
+        $type = $scope->get_native_type($variable);
+        if (!$type instanceof Object_Type) {
             return \false;
         }
-        $className = $type->getClassName();
-        if (!$this->reflectionProvider->hasClass($className)) {
+        $class_name = $type->get_class_name();
+        if (!$this->reflection_provider->has_class($class_name)) {
             return \false;
         }
-        $classReflection = $this->reflectionProvider->getClass($className);
-        return $classReflection->getNativeReflection()->isInstantiable();
+        $class_reflection = $this->reflection_provider->get_class($class_name);
+        return $class_reflection->get_native_reflection()->is_instantiable();
     }
 }

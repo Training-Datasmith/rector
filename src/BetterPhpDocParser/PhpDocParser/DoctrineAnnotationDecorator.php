@@ -1,58 +1,56 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Better_Php_Doc_Parser\Php_Doc_Parser;
 
-namespace Rector\BetterPhpDocParser\PhpDocParser;
-
-use PhpParser\Node;
-use PHPStan\PhpDocParser\Ast\PhpDoc\Doctrine\DoctrineTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\InvalidTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocChildNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTextNode;
-use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use PHPStan\PhpDocParser\Lexer\Lexer;
-use PHPStan\Type\ObjectType;
-use Rector\BetterPhpDocParser\Attributes\AttributeMirrorer;
-use Rector\BetterPhpDocParser\Contract\PhpDocParser\PhpDocNodeDecoratorInterface;
-use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
-use Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode;
-use Rector\BetterPhpDocParser\PhpDocInfo\TokenIteratorFactory;
-use Rector\BetterPhpDocParser\ValueObject\DoctrineAnnotation\SilentKeyMap;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
-use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
-use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
-use Rector\TypeDeclaration\PHPStan\ObjectTypeSpecifier;
-use Rector\Util\StringUtils;
-use RectorPrefix202603\Nette\Utils\Strings;
-use RectorPrefix202603\Webmozart\Assert\Assert;
-
-final class DoctrineAnnotationDecorator implements PhpDocNodeDecoratorInterface
+use Php_Parser\Node;
+use Php_Stan\Php_Doc_Parser\Ast\Php_Doc\Doctrine\Doctrine_Tag_Value_Node;
+use Php_Stan\Php_Doc_Parser\Ast\Php_Doc\Generic_Tag_Value_Node;
+use Php_Stan\Php_Doc_Parser\Ast\Php_Doc\Invalid_Tag_Value_Node;
+use Php_Stan\Php_Doc_Parser\Ast\Php_Doc\Php_Doc_Child_Node;
+use Php_Stan\Php_Doc_Parser\Ast\Php_Doc\Php_Doc_Node;
+use Php_Stan\Php_Doc_Parser\Ast\Php_Doc\Php_Doc_Tag_Node;
+use Php_Stan\Php_Doc_Parser\Ast\Php_Doc\Php_Doc_Text_Node;
+use Php_Stan\Php_Doc_Parser\Ast\Type\Identifier_Type_Node;
+use Php_Stan\Php_Doc_Parser\Lexer\Lexer;
+use Php_Stan\Type\Object_Type;
+use Rector\Better_Php_Doc_Parser\Attributes\Attribute_Mirrorer;
+use Rector\Better_Php_Doc_Parser\Contract\Php_Doc_Parser\Php_Doc_Node_Decorator_Interface;
+use Rector\Better_Php_Doc_Parser\Php_Doc\Doctrine_Annotation_Tag_Value_Node;
+use Rector\Better_Php_Doc_Parser\Php_Doc\Spaceless_Php_Doc_Tag_Node;
+use Rector\Better_Php_Doc_Parser\Php_Doc_Info\Token_Iterator_Factory;
+use Rector\Better_Php_Doc_Parser\Value_Object\Doctrine_Annotation\Silent_Key_Map;
+use Rector\Better_Php_Doc_Parser\Value_Object\Php_Doc_Attribute_Key;
+use Rector\Better_Php_Doc_Parser\Value_Object\Start_And_End;
+use Rector\Node_Type_Resolver\Node\Attribute_Key;
+use Rector\Static_Type_Mapper\Value_Object\Type\Aliased_Object_Type;
+use Rector\Static_Type_Mapper\Value_Object\Type\Shortened_Object_Type;
+use Rector\Type_Declaration\Php_Stan\Object_Type_Specifier;
+use Rector\Util\String_Utils;
+use Rector_Prefix202603\Nette\Utils\Strings;
+use Rector_Prefix202603\Webmozart\Assert\Assert;
+final class Doctrine_Annotation_Decorator implements Php_Doc_Node_Decorator_Interface
 {
     /**
      * @readonly
      */
-    private \Rector\BetterPhpDocParser\PhpDocParser\ClassAnnotationMatcher $classAnnotationMatcher;
+    private \Rector\Better_Php_Doc_Parser\Php_Doc_Parser\Class_Annotation_Matcher $class_annotation_matcher;
     /**
      * @readonly
      */
-    private \Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser $staticDoctrineAnnotationParser;
+    private \Rector\Better_Php_Doc_Parser\Php_Doc_Parser\Static_Doctrine_Annotation_Parser $static_doctrine_annotation_parser;
     /**
      * @readonly
      */
-    private TokenIteratorFactory $tokenIteratorFactory;
+    private Token_Iterator_Factory $token_iterator_factory;
     /**
      * @readonly
      */
-    private AttributeMirrorer $attributeMirrorer;
+    private Attribute_Mirrorer $attribute_mirrorer;
     /**
      * @readonly
      */
-    private ObjectTypeSpecifier $objectTypeSpecifier;
+    private Object_Type_Specifier $object_type_specifier;
     /**
      * @see https://regex101.com/r/bGp2V0/2
      * @var string
@@ -78,314 +76,314 @@ final class DoctrineAnnotationDecorator implements PhpDocNodeDecoratorInterface
      * @var string
      */
     private const STAR_COMMENT_REGEX = '#^\s*\*#ms';
-    public function __construct(\Rector\BetterPhpDocParser\PhpDocParser\ClassAnnotationMatcher $classAnnotationMatcher, \Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser $staticDoctrineAnnotationParser, TokenIteratorFactory $tokenIteratorFactory, AttributeMirrorer $attributeMirrorer, ObjectTypeSpecifier $objectTypeSpecifier)
+    public function __construct(\Rector\Better_Php_Doc_Parser\Php_Doc_Parser\Class_Annotation_Matcher $class_annotation_matcher, \Rector\Better_Php_Doc_Parser\Php_Doc_Parser\Static_Doctrine_Annotation_Parser $static_doctrine_annotation_parser, Token_Iterator_Factory $token_iterator_factory, Attribute_Mirrorer $attribute_mirrorer, Object_Type_Specifier $object_type_specifier)
     {
-        $this->classAnnotationMatcher = $classAnnotationMatcher;
-        $this->staticDoctrineAnnotationParser = $staticDoctrineAnnotationParser;
-        $this->tokenIteratorFactory = $tokenIteratorFactory;
-        $this->attributeMirrorer = $attributeMirrorer;
-        $this->objectTypeSpecifier = $objectTypeSpecifier;
+        $this->class_annotation_matcher = $class_annotation_matcher;
+        $this->static_doctrine_annotation_parser = $static_doctrine_annotation_parser;
+        $this->token_iterator_factory = $token_iterator_factory;
+        $this->attribute_mirrorer = $attribute_mirrorer;
+        $this->object_type_specifier = $object_type_specifier;
     }
-    public function decorate(PhpDocNode $phpDocNode, Node $phpNode): void
+    public function decorate(Php_Doc_Node $php_doc_node, Node $php_node): void
     {
         // merge split doctrine nested tags
-        $this->mergeNestedDoctrineAnnotations($phpDocNode);
-        $this->transformGenericTagValueNodesToDoctrineAnnotationTagValueNodes($phpDocNode, $phpNode);
+        $this->merge_nested_doctrine_annotations($php_doc_node);
+        $this->transform_generic_tag_value_nodes_to_doctrine_annotation_tag_value_nodes($php_doc_node, $php_node);
     }
     /**
      * Join token iterator with all the following nodes if nested
      */
-    private function mergeNestedDoctrineAnnotations(PhpDocNode $phpDocNode): void
+    private function merge_nested_doctrine_annotations(Php_Doc_Node $php_doc_node): void
     {
-        $removedKeys = [];
-        foreach ($phpDocNode->children as $key => $phpDocChildNode) {
-            if (in_array($key, $removedKeys, \true)) {
+        $removed_keys = [];
+        foreach ($php_doc_node->children as $key => $php_doc_child_node) {
+            if (in_array($key, $removed_keys, \true)) {
                 continue;
             }
-            if (!$phpDocChildNode instanceof PhpDocTagNode) {
+            if (!$php_doc_child_node instanceof Php_Doc_Tag_Node) {
                 continue;
             }
-            if (!$phpDocChildNode->value instanceof GenericTagValueNode) {
+            if (!$php_doc_child_node->value instanceof Generic_Tag_Value_Node) {
                 continue;
             }
-            $genericTagValueNode = $phpDocChildNode->value;
-            while (isset($phpDocNode->children[$key])) {
+            $generic_tag_value_node = $php_doc_child_node->value;
+            while (isset($php_doc_node->children[$key])) {
                 ++$key;
                 // no more next nodes
-                if (!isset($phpDocNode->children[$key])) {
+                if (!isset($php_doc_node->children[$key])) {
                     break;
                 }
-                $nextPhpDocChildNode = $phpDocNode->children[$key];
-                if ($nextPhpDocChildNode instanceof PhpDocTextNode && StringUtils::isMatch($nextPhpDocChildNode->text, self::NESTED_ANNOTATION_END_REGEX)) {
+                $next_php_doc_child_node = $php_doc_node->children[$key];
+                if ($next_php_doc_child_node instanceof Php_Doc_Text_Node && String_Utils::is_match($next_php_doc_child_node->text, self::NESTED_ANNOTATION_END_REGEX)) {
                     // @todo how to detect previously opened brackets?
                     // probably local property with holding count of opened brackets
-                    $composedContent = $genericTagValueNode->value . \PHP_EOL . $nextPhpDocChildNode->text;
-                    $genericTagValueNode->value = $composedContent;
-                    $startAndEnd = $this->combineStartAndEnd($phpDocChildNode, $nextPhpDocChildNode);
-                    $phpDocChildNode->setAttribute(PhpDocAttributeKey::START_AND_END, $startAndEnd);
-                    $removedKeys[] = $key;
-                    $removedKeys[] = $key + 1;
+                    $composed_content = $generic_tag_value_node->value . \PHP_EOL . $next_php_doc_child_node->text;
+                    $generic_tag_value_node->value = $composed_content;
+                    $start_and_end = $this->combine_start_and_end($php_doc_child_node, $next_php_doc_child_node);
+                    $php_doc_child_node->set_attribute(Php_Doc_Attribute_Key::START_AND_END, $start_and_end);
+                    $removed_keys[] = $key;
+                    $removed_keys[] = $key + 1;
                     continue;
                 }
-                if (!$nextPhpDocChildNode instanceof PhpDocTagNode) {
+                if (!$next_php_doc_child_node instanceof Php_Doc_Tag_Node) {
                     continue;
                 }
-                if (!$nextPhpDocChildNode->value instanceof GenericTagValueNode) {
+                if (!$next_php_doc_child_node->value instanceof Generic_Tag_Value_Node) {
                     continue;
                 }
-                if ($this->isClosedContent($genericTagValueNode->value)) {
+                if ($this->is_closed_content($generic_tag_value_node->value)) {
                     break;
                 }
-                $composedContent = $genericTagValueNode->value . \PHP_EOL . $nextPhpDocChildNode->name . $nextPhpDocChildNode->value->value;
+                $composed_content = $generic_tag_value_node->value . \PHP_EOL . $next_php_doc_child_node->name . $next_php_doc_child_node->value->value;
                 // cleanup the next from closing
-                $genericTagValueNode->value = $composedContent;
-                $startAndEnd = $this->combineStartAndEnd($phpDocChildNode, $nextPhpDocChildNode);
-                $phpDocChildNode->setAttribute(PhpDocAttributeKey::START_AND_END, $startAndEnd);
-                $currentChildValueNode = $phpDocNode->children[$key];
-                if (!$currentChildValueNode instanceof PhpDocTagNode) {
+                $generic_tag_value_node->value = $composed_content;
+                $start_and_end = $this->combine_start_and_end($php_doc_child_node, $next_php_doc_child_node);
+                $php_doc_child_node->set_attribute(Php_Doc_Attribute_Key::START_AND_END, $start_and_end);
+                $current_child_value_node = $php_doc_node->children[$key];
+                if (!$current_child_value_node instanceof Php_Doc_Tag_Node) {
                     continue;
                 }
-                $currentGenericTagValueNode = $currentChildValueNode->value;
-                if (!$currentGenericTagValueNode instanceof GenericTagValueNode) {
+                $current_generic_tag_value_node = $current_child_value_node->value;
+                if (!$current_generic_tag_value_node instanceof Generic_Tag_Value_Node) {
                     continue;
                 }
-                $removedKeys[] = $key;
+                $removed_keys[] = $key;
             }
         }
-        foreach (array_keys($phpDocNode->children) as $key) {
-            if (!in_array($key, $removedKeys, \true)) {
+        foreach (array_keys($php_doc_node->children) as $key) {
+            if (!in_array($key, $removed_keys, \true)) {
                 continue;
             }
-            unset($phpDocNode->children[$key]);
+            unset($php_doc_node->children[$key]);
         }
     }
-    private function processTextSpacelessInTextNode(PhpDocNode $phpDocNode, PhpDocTextNode $phpDocTextNode, Node $currentPhpNode, int $key): void
+    private function process_text_spaceless_in_text_node(Php_Doc_Node $php_doc_node, Php_Doc_Text_Node $php_doc_text_node, Node $current_php_node, int $key): void
     {
-        $spacelessPhpDocTagNodes = $this->resolveFqnAnnotationSpacelessPhpDocTagNode($phpDocTextNode, $currentPhpNode);
-        if ($spacelessPhpDocTagNodes === []) {
+        $spaceless_php_doc_tag_nodes = $this->resolve_fqn_annotation_spaceless_php_doc_tag_node($php_doc_text_node, $current_php_node);
+        if ($spaceless_php_doc_tag_nodes === []) {
             return;
         }
-        $texts = Strings::split($phpDocTextNode->text, self::NEWLINE_ANNOTATION_FQCN_REGEX);
-        $otherText = $texts[0];
-        if (strncmp((string) $otherText, '@\\', strlen('@\\')) !== 0 && trim((string) $otherText) !== '') {
-            $phpDocNode->children[$key] = new PhpDocTextNode($otherText);
-            array_splice($phpDocNode->children, $key + 1, 0, $spacelessPhpDocTagNodes);
+        $texts = Strings::split($php_doc_text_node->text, self::NEWLINE_ANNOTATION_FQCN_REGEX);
+        $other_text = $texts[0];
+        if (strncmp((string) $other_text, '@\\', strlen('@\\')) !== 0 && trim((string) $other_text) !== '') {
+            $php_doc_node->children[$key] = new Php_Doc_Text_Node($other_text);
+            array_splice($php_doc_node->children, $key + 1, 0, $spaceless_php_doc_tag_nodes);
             return;
         }
-        unset($phpDocNode->children[$key]);
-        array_splice($phpDocNode->children, $key, 0, $spacelessPhpDocTagNodes);
+        unset($php_doc_node->children[$key]);
+        array_splice($php_doc_node->children, $key, 0, $spaceless_php_doc_tag_nodes);
     }
-    private function transformGenericTagValueNodesToDoctrineAnnotationTagValueNodes(PhpDocNode $phpDocNode, Node $currentPhpNode): void
+    private function transform_generic_tag_value_nodes_to_doctrine_annotation_tag_value_nodes(Php_Doc_Node $php_doc_node, Node $current_php_node): void
     {
-        foreach ($phpDocNode->children as $key => $phpDocChildNode) {
+        foreach ($php_doc_node->children as $key => $php_doc_child_node) {
             // the @\FQN use case
-            if ($phpDocChildNode instanceof PhpDocTextNode) {
-                $this->processTextSpacelessInTextNode($phpDocNode, $phpDocChildNode, $currentPhpNode, $key);
+            if ($php_doc_child_node instanceof Php_Doc_Text_Node) {
+                $this->process_text_spaceless_in_text_node($php_doc_node, $php_doc_child_node, $current_php_node, $key);
                 continue;
             }
-            if (!$phpDocChildNode instanceof PhpDocTagNode) {
+            if (!$php_doc_child_node instanceof Php_Doc_Tag_Node) {
                 continue;
             }
             // single quoted got invalid tag, keep process
-            if ($phpDocChildNode->value instanceof InvalidTagValueNode) {
-                $name = ltrim($phpDocChildNode->name, '@');
-                $values = $phpDocChildNode->value->value;
-                $this->processDoctrine($currentPhpNode, $name, $phpDocChildNode, $phpDocNode, $key, $values);
+            if ($php_doc_child_node->value instanceof Invalid_Tag_Value_Node) {
+                $name = ltrim($php_doc_child_node->name, '@');
+                $values = $php_doc_child_node->value->value;
+                $this->process_doctrine($current_php_node, $name, $php_doc_child_node, $php_doc_node, $key, $values);
             }
             // needs stable correct detection of full class name
-            if ($phpDocChildNode->value instanceof DoctrineTagValueNode) {
-                $name = ltrim($phpDocChildNode->name, '@');
-                $values = implode(', ', $phpDocChildNode->value->annotation->arguments);
-                $this->processDoctrine($currentPhpNode, $name, $phpDocChildNode, $phpDocNode, $key, $values);
+            if ($php_doc_child_node->value instanceof Doctrine_Tag_Value_Node) {
+                $name = ltrim($php_doc_child_node->name, '@');
+                $values = implode(', ', $php_doc_child_node->value->annotation->arguments);
+                $this->process_doctrine($current_php_node, $name, $php_doc_child_node, $php_doc_node, $key, $values);
                 continue;
             }
-            if (!$phpDocChildNode->value instanceof GenericTagValueNode) {
-                $this->processDescriptionAsSpacelessPhpDoctagNode($phpDocNode, $phpDocChildNode, $currentPhpNode, $key);
+            if (!$php_doc_child_node->value instanceof Generic_Tag_Value_Node) {
+                $this->process_description_as_spaceless_php_doctag_node($php_doc_node, $php_doc_child_node, $current_php_node, $key);
                 continue;
             }
             // known doc tag to annotation class
-            $fullyQualifiedAnnotationClass = $this->classAnnotationMatcher->resolveTagFullyQualifiedName($phpDocChildNode->name, $currentPhpNode);
+            $fully_qualified_annotation_class = $this->class_annotation_matcher->resolve_tag_fully_qualified_name($php_doc_child_node->name, $current_php_node);
             // not an annotations class
-            if (strpos($fullyQualifiedAnnotationClass, '\\') === \false && !in_array($fullyQualifiedAnnotationClass, self::ALLOWED_SHORT_ANNOTATIONS, \true)) {
+            if (strpos($fully_qualified_annotation_class, '\\') === \false && !in_array($fully_qualified_annotation_class, self::ALLOWED_SHORT_ANNOTATIONS, \true)) {
                 continue;
             }
-            while (isset($phpDocNode->children[$key]) && $phpDocNode->children[$key] !== $phpDocChildNode) {
+            while (isset($php_doc_node->children[$key]) && $php_doc_node->children[$key] !== $php_doc_child_node) {
                 ++$key;
             }
-            $phpDocTextNode = new PhpDocTextNode($phpDocChildNode->value->value);
-            $startAndEnd = $phpDocChildNode->value->getAttribute(PhpDocAttributeKey::START_AND_END);
-            if (!$startAndEnd instanceof StartAndEnd) {
-                $spacelessPhpDocTagNode = $this->createSpacelessPhpDocTagNode($phpDocChildNode->name, $phpDocChildNode->value, $fullyQualifiedAnnotationClass, $currentPhpNode);
-                $this->attributeMirrorer->mirror($phpDocChildNode, $spacelessPhpDocTagNode);
-                $phpDocNode->children[$key] = $spacelessPhpDocTagNode;
+            $php_doc_text_node = new Php_Doc_Text_Node($php_doc_child_node->value->value);
+            $start_and_end = $php_doc_child_node->value->get_attribute(Php_Doc_Attribute_Key::START_AND_END);
+            if (!$start_and_end instanceof Start_And_End) {
+                $spaceless_php_doc_tag_node = $this->create_spaceless_php_doc_tag_node($php_doc_child_node->name, $php_doc_child_node->value, $fully_qualified_annotation_class, $current_php_node);
+                $this->attribute_mirrorer->mirror($php_doc_child_node, $spaceless_php_doc_tag_node);
+                $php_doc_node->children[$key] = $spaceless_php_doc_tag_node;
                 continue;
             }
-            $phpDocTextNode->setAttribute(PhpDocAttributeKey::START_AND_END, $startAndEnd);
-            $spacelessPhpDocTagNodes = $this->resolveFqnAnnotationSpacelessPhpDocTagNode($phpDocTextNode, $currentPhpNode);
-            if ($spacelessPhpDocTagNodes === []) {
-                $spacelessPhpDocTagNode = $this->createSpacelessPhpDocTagNode($phpDocChildNode->name, $phpDocChildNode->value, $fullyQualifiedAnnotationClass, $currentPhpNode);
-                $this->attributeMirrorer->mirror($phpDocChildNode, $spacelessPhpDocTagNode);
-                $phpDocNode->children[$key] = $spacelessPhpDocTagNode;
+            $php_doc_text_node->set_attribute(Php_Doc_Attribute_Key::START_AND_END, $start_and_end);
+            $spaceless_php_doc_tag_nodes = $this->resolve_fqn_annotation_spaceless_php_doc_tag_node($php_doc_text_node, $current_php_node);
+            if ($spaceless_php_doc_tag_nodes === []) {
+                $spaceless_php_doc_tag_node = $this->create_spaceless_php_doc_tag_node($php_doc_child_node->name, $php_doc_child_node->value, $fully_qualified_annotation_class, $current_php_node);
+                $this->attribute_mirrorer->mirror($php_doc_child_node, $spaceless_php_doc_tag_node);
+                $php_doc_node->children[$key] = $spaceless_php_doc_tag_node;
                 continue;
             }
-            Assert::isAOf($phpDocNode->children[$key], PhpDocTagNode::class);
-            $texts = Strings::split($phpDocChildNode->value->value, self::NEWLINE_ANNOTATION_FQCN_REGEX);
-            $phpDocNode->children[$key]->value = new GenericTagValueNode($texts[0]);
-            $phpDocNode->children[$key]->value->setAttribute(PhpDocAttributeKey::START_AND_END, $startAndEnd);
-            $spacelessPhpDocTagNode = $this->createSpacelessPhpDocTagNode($phpDocNode->children[$key]->name, $phpDocNode->children[$key]->value, $fullyQualifiedAnnotationClass, $currentPhpNode);
-            $this->attributeMirrorer->mirror($phpDocNode->children[$key], $spacelessPhpDocTagNode);
-            $phpDocNode->children[$key] = $spacelessPhpDocTagNode;
+            Assert::is_a_of($php_doc_node->children[$key], Php_Doc_Tag_Node::class);
+            $texts = Strings::split($php_doc_child_node->value->value, self::NEWLINE_ANNOTATION_FQCN_REGEX);
+            $php_doc_node->children[$key]->value = new Generic_Tag_Value_Node($texts[0]);
+            $php_doc_node->children[$key]->value->set_attribute(Php_Doc_Attribute_Key::START_AND_END, $start_and_end);
+            $spaceless_php_doc_tag_node = $this->create_spaceless_php_doc_tag_node($php_doc_node->children[$key]->name, $php_doc_node->children[$key]->value, $fully_qualified_annotation_class, $current_php_node);
+            $this->attribute_mirrorer->mirror($php_doc_node->children[$key], $spaceless_php_doc_tag_node);
+            $php_doc_node->children[$key] = $spaceless_php_doc_tag_node;
             // require to reprint the generic
-            $phpDocNode->children[$key]->value->setAttribute(PhpDocAttributeKey::ORIG_NODE, null);
-            array_splice($phpDocNode->children, $key + 1, 0, $spacelessPhpDocTagNodes);
+            $php_doc_node->children[$key]->value->set_attribute(Php_Doc_Attribute_Key::ORIG_NODE, null);
+            array_splice($php_doc_node->children, $key + 1, 0, $spaceless_php_doc_tag_nodes);
         }
     }
     /**
      * @param mixed $key
      */
-    private function processDoctrine(Node $currentPhpNode, string $name, PhpDocTagNode $phpDocTagNode, PhpDocNode $phpDocNode, $key, string $values): void
+    private function process_doctrine(Node $current_php_node, string $name, Php_Doc_Tag_Node $php_doc_tag_node, Php_Doc_Node $php_doc_node, $key, string $values): void
     {
-        $type = $this->objectTypeSpecifier->narrowToFullyQualifiedOrAliasedObjectType($currentPhpNode, new ObjectType($name), $currentPhpNode->getAttribute(AttributeKey::SCOPE));
-        $fullyQualifiedAnnotationClass = null;
-        if ($type instanceof ShortenedObjectType || $type instanceof AliasedObjectType) {
-            $fullyQualifiedAnnotationClass = $type->getFullyQualifiedName();
-        } elseif ($type instanceof ObjectType) {
-            $fullyQualifiedAnnotationClass = $type->getClassName();
+        $type = $this->object_type_specifier->narrow_to_fully_qualified_or_aliased_object_type($current_php_node, new Object_Type($name), $current_php_node->get_attribute(Attribute_Key::SCOPE));
+        $fully_qualified_annotation_class = null;
+        if ($type instanceof Shortened_Object_Type || $type instanceof Aliased_Object_Type) {
+            $fully_qualified_annotation_class = $type->get_fully_qualified_name();
+        } elseif ($type instanceof Object_Type) {
+            $fully_qualified_annotation_class = $type->get_class_name();
         }
-        if ($fullyQualifiedAnnotationClass === null) {
+        if ($fully_qualified_annotation_class === null) {
             return;
         }
         if ($values !== '') {
             $values = Strings::replace($values, self::STAR_COMMENT_REGEX);
-            if ($phpDocTagNode->value instanceof DoctrineTagValueNode) {
+            if ($php_doc_tag_node->value instanceof Doctrine_Tag_Value_Node) {
                 $values = '(' . $values . ')';
-                if ($phpDocTagNode->value->description !== '') {
-                    $values .= $phpDocTagNode->value->description;
+                if ($php_doc_tag_node->value->description !== '') {
+                    $values .= $php_doc_tag_node->value->description;
                 }
             }
         }
-        $genericTagValueNode = new GenericTagValueNode($values);
-        $startAndEnd = $phpDocTagNode->getAttribute(PhpDocAttributeKey::START_AND_END);
-        $genericTagValueNode->setAttribute(PhpDocAttributeKey::START_AND_END, $startAndEnd);
-        $spacelessPhpDocTagNode = $this->createSpacelessPhpDocTagNode('@' . $name, $genericTagValueNode, $fullyQualifiedAnnotationClass, $currentPhpNode);
-        $this->attributeMirrorer->mirror($phpDocTagNode, $spacelessPhpDocTagNode);
-        $phpDocNode->children[$key] = $spacelessPhpDocTagNode;
+        $generic_tag_value_node = new Generic_Tag_Value_Node($values);
+        $start_and_end = $php_doc_tag_node->get_attribute(Php_Doc_Attribute_Key::START_AND_END);
+        $generic_tag_value_node->set_attribute(Php_Doc_Attribute_Key::START_AND_END, $start_and_end);
+        $spaceless_php_doc_tag_node = $this->create_spaceless_php_doc_tag_node('@' . $name, $generic_tag_value_node, $fully_qualified_annotation_class, $current_php_node);
+        $this->attribute_mirrorer->mirror($php_doc_tag_node, $spaceless_php_doc_tag_node);
+        $php_doc_node->children[$key] = $spaceless_php_doc_tag_node;
     }
-    private function processDescriptionAsSpacelessPhpDoctagNode(PhpDocNode $phpDocNode, PhpDocTagNode $phpDocTagNode, Node $currentPhpNode, int $key): void
+    private function process_description_as_spaceless_php_doctag_node(Php_Doc_Node $php_doc_node, Php_Doc_Tag_Node $php_doc_tag_node, Node $current_php_node, int $key): void
     {
-        if (!property_exists($phpDocTagNode->value, 'description')) {
+        if (!property_exists($php_doc_tag_node->value, 'description')) {
             return;
         }
-        $description = (string) $phpDocTagNode->value->description;
+        $description = (string) $php_doc_tag_node->value->description;
         if (strpos($description, "\n") === \false) {
             return;
         }
-        $phpDocTextNode = new PhpDocTextNode($description);
-        $startAndEnd = $phpDocTagNode->value->getAttribute(PhpDocAttributeKey::START_AND_END);
-        if (!$startAndEnd instanceof StartAndEnd) {
+        $php_doc_text_node = new Php_Doc_Text_Node($description);
+        $start_and_end = $php_doc_tag_node->value->get_attribute(Php_Doc_Attribute_Key::START_AND_END);
+        if (!$start_and_end instanceof Start_And_End) {
             return;
         }
-        $phpDocTextNode->setAttribute(PhpDocAttributeKey::START_AND_END, $startAndEnd);
-        $spacelessPhpDocTagNodes = $this->resolveFqnAnnotationSpacelessPhpDocTagNode($phpDocTextNode, $currentPhpNode);
-        if ($spacelessPhpDocTagNodes === []) {
+        $php_doc_text_node->set_attribute(Php_Doc_Attribute_Key::START_AND_END, $start_and_end);
+        $spaceless_php_doc_tag_nodes = $this->resolve_fqn_annotation_spaceless_php_doc_tag_node($php_doc_text_node, $current_php_node);
+        if ($spaceless_php_doc_tag_nodes === []) {
             return;
         }
-        while (isset($phpDocNode->children[$key]) && $phpDocNode->children[$key] !== $phpDocTagNode) {
+        while (isset($php_doc_node->children[$key]) && $php_doc_node->children[$key] !== $php_doc_tag_node) {
             ++$key;
         }
-        unset($phpDocNode->children[$key]);
-        $classNode = new PhpDocTagNode($phpDocTagNode->name, $phpDocTagNode->value);
+        unset($php_doc_node->children[$key]);
+        $class_node = new Php_Doc_Tag_Node($php_doc_tag_node->name, $php_doc_tag_node->value);
         $description = Strings::replace($description, self::LONG_ANNOTATION_REGEX, '');
         $description = (string) substr($description, 0, -7);
-        $phpDocTagNode->value->description = $description;
-        $phpDocNode->children[$key] = $classNode;
-        array_splice($phpDocNode->children, $key + 1, 0, $spacelessPhpDocTagNodes);
+        $php_doc_tag_node->value->description = $description;
+        $php_doc_node->children[$key] = $class_node;
+        array_splice($php_doc_node->children, $key + 1, 0, $spaceless_php_doc_tag_nodes);
     }
     /**
      * This is closed block, e.g. {( ... )},
      * false on: {( ... )
      */
-    private function isClosedContent(string $composedContent): bool
+    private function is_closed_content(string $composed_content): bool
     {
-        $composedTokenIterator = $this->tokenIteratorFactory->create($composedContent);
-        $tokenCount = $composedTokenIterator->count();
-        $openBracketCount = 0;
-        $closeBracketCount = 0;
-        if ($composedContent === '') {
+        $composed_token_iterator = $this->token_iterator_factory->create($composed_content);
+        $token_count = $composed_token_iterator->count();
+        $open_bracket_count = 0;
+        $close_bracket_count = 0;
+        if ($composed_content === '') {
             return \true;
         }
         do {
-            if ($composedTokenIterator->isCurrentTokenType(Lexer::TOKEN_OPEN_CURLY_BRACKET, Lexer::TOKEN_OPEN_PARENTHESES) || strpos($composedTokenIterator->currentTokenValue(), '{') !== \false || strpos($composedTokenIterator->currentTokenValue(), '(') !== \false) {
-                ++$openBracketCount;
+            if ($composed_token_iterator->is_current_token_type(Lexer::TOKEN_OPEN_CURLY_BRACKET, Lexer::TOKEN_OPEN_PARENTHESES) || strpos($composed_token_iterator->current_token_value(), '{') !== \false || strpos($composed_token_iterator->current_token_value(), '(') !== \false) {
+                ++$open_bracket_count;
             }
-            if ($composedTokenIterator->isCurrentTokenType(Lexer::TOKEN_CLOSE_CURLY_BRACKET, Lexer::TOKEN_CLOSE_PARENTHESES) || strpos($composedTokenIterator->currentTokenValue(), '}') !== \false || strpos($composedTokenIterator->currentTokenValue(), ')') !== \false) {
-                ++$closeBracketCount;
+            if ($composed_token_iterator->is_current_token_type(Lexer::TOKEN_CLOSE_CURLY_BRACKET, Lexer::TOKEN_CLOSE_PARENTHESES) || strpos($composed_token_iterator->current_token_value(), '}') !== \false || strpos($composed_token_iterator->current_token_value(), ')') !== \false) {
+                ++$close_bracket_count;
             }
-            $composedTokenIterator->next();
-        } while ($composedTokenIterator->currentPosition() < $tokenCount - 1);
-        return $openBracketCount === $closeBracketCount;
+            $composed_token_iterator->next();
+        } while ($composed_token_iterator->current_position() < $token_count - 1);
+        return $open_bracket_count === $close_bracket_count;
     }
-    private function createSpacelessPhpDocTagNode(string $tagName, GenericTagValueNode $genericTagValueNode, string $fullyQualifiedAnnotationClass, Node $currentPhpNode): SpacelessPhpDocTagNode
+    private function create_spaceless_php_doc_tag_node(string $tag_name, Generic_Tag_Value_Node $generic_tag_value_node, string $fully_qualified_annotation_class, Node $current_php_node): Spaceless_Php_Doc_Tag_Node
     {
-        $formerStartEnd = $genericTagValueNode->getAttribute(PhpDocAttributeKey::START_AND_END);
-        return $this->createDoctrineSpacelessPhpDocTagNode($genericTagValueNode->value, $tagName, $fullyQualifiedAnnotationClass, $formerStartEnd, $currentPhpNode);
+        $former_start_end = $generic_tag_value_node->get_attribute(Php_Doc_Attribute_Key::START_AND_END);
+        return $this->create_doctrine_spaceless_php_doc_tag_node($generic_tag_value_node->value, $tag_name, $fully_qualified_annotation_class, $former_start_end, $current_php_node);
     }
-    private function createDoctrineSpacelessPhpDocTagNode(string $annotationContent, string $tagName, string $fullyQualifiedAnnotationClass, StartAndEnd $startAndEnd, Node $currentPhpNode): SpacelessPhpDocTagNode
+    private function create_doctrine_spaceless_php_doc_tag_node(string $annotation_content, string $tag_name, string $fully_qualified_annotation_class, Start_And_End $start_and_end, Node $current_php_node): Spaceless_Php_Doc_Tag_Node
     {
-        $nestedTokenIterator = $this->tokenIteratorFactory->create($annotationContent);
+        $nested_token_iterator = $this->token_iterator_factory->create($annotation_content);
         // mimics doctrine behavior just in phpdoc-parser syntax :)
         // https://github.com/doctrine/annotations/blob/c66f06b7c83e9a2a7523351a9d5a4b55f885e574/lib/Doctrine/Common/Annotations/DocParser.php#L742
-        $values = $this->staticDoctrineAnnotationParser->resolveAnnotationMethodCall($nestedTokenIterator, $currentPhpNode);
-        $identifierTypeNode = new IdentifierTypeNode($tagName);
-        $identifierTypeNode->setAttribute(PhpDocAttributeKey::RESOLVED_CLASS, $fullyQualifiedAnnotationClass);
-        $doctrineAnnotationTagValueNode = new DoctrineAnnotationTagValueNode($identifierTypeNode, $annotationContent, $values, SilentKeyMap::CLASS_NAMES_TO_SILENT_KEYS[$fullyQualifiedAnnotationClass] ?? null);
-        $doctrineAnnotationTagValueNode->setAttribute(PhpDocAttributeKey::START_AND_END, $startAndEnd);
-        return new SpacelessPhpDocTagNode($tagName, $doctrineAnnotationTagValueNode);
+        $values = $this->static_doctrine_annotation_parser->resolve_annotation_method_call($nested_token_iterator, $current_php_node);
+        $identifier_type_node = new Identifier_Type_Node($tag_name);
+        $identifier_type_node->set_attribute(Php_Doc_Attribute_Key::RESOLVED_CLASS, $fully_qualified_annotation_class);
+        $doctrine_annotation_tag_value_node = new Doctrine_Annotation_Tag_Value_Node($identifier_type_node, $annotation_content, $values, Silent_Key_Map::CLASS_NAMES_TO_SILENT_KEYS[$fully_qualified_annotation_class] ?? null);
+        $doctrine_annotation_tag_value_node->set_attribute(Php_Doc_Attribute_Key::START_AND_END, $start_and_end);
+        return new Spaceless_Php_Doc_Tag_Node($tag_name, $doctrine_annotation_tag_value_node);
     }
-    private function combineStartAndEnd(\PHPStan\PhpDocParser\Ast\Node $startPhpDocChildNode, PhpDocChildNode $endPhpDocChildNode): StartAndEnd
+    private function combine_start_and_end(\Php_Stan\Php_Doc_Parser\Ast\Node $start_php_doc_child_node, Php_Doc_Child_Node $end_php_doc_child_node): Start_And_End
     {
         /** @var StartAndEnd $currentStartAndEnd */
-        $currentStartAndEnd = $startPhpDocChildNode->getAttribute(PhpDocAttributeKey::START_AND_END);
+        $current_start_and_end = $start_php_doc_child_node->get_attribute(Php_Doc_Attribute_Key::START_AND_END);
         /** @var StartAndEnd $nextStartAndEnd */
-        $nextStartAndEnd = $endPhpDocChildNode->getAttribute(PhpDocAttributeKey::START_AND_END);
-        return new StartAndEnd($currentStartAndEnd->getStart(), $nextStartAndEnd->getEnd());
+        $next_start_and_end = $end_php_doc_child_node->get_attribute(Php_Doc_Attribute_Key::START_AND_END);
+        return new Start_And_End($current_start_and_end->get_start(), $next_start_and_end->get_end());
     }
     /**
      * @return SpacelessPhpDocTagNode[]
      */
-    private function resolveFqnAnnotationSpacelessPhpDocTagNode(PhpDocTextNode $phpDocTextNode, Node $currentPhpNode): array
+    private function resolve_fqn_annotation_spaceless_php_doc_tag_node(Php_Doc_Text_Node $php_doc_text_node, Node $current_php_node): array
     {
-        $matches = Strings::matchAll($phpDocTextNode->text, self::LONG_ANNOTATION_REGEX);
-        $spacelessPhpDocTagNodes = [];
+        $matches = Strings::match_all($php_doc_text_node->text, self::LONG_ANNOTATION_REGEX);
+        $spaceless_php_doc_tag_nodes = [];
         foreach ($matches as $match) {
-            $fullyQualifiedAnnotationClass = $match['class_name'] ?? null;
-            if ($fullyQualifiedAnnotationClass === null) {
+            $fully_qualified_annotation_class = $match['class_name'] ?? null;
+            if ($fully_qualified_annotation_class === null) {
                 continue;
             }
-            $nestedAnnotationOpen = explode('(', (string) $fullyQualifiedAnnotationClass);
-            $fullyQualifiedAnnotationClass = $nestedAnnotationOpen[0];
-            $tagName = '@\\' . $fullyQualifiedAnnotationClass;
-            $formerStartEnd = $phpDocTextNode->getAttribute(PhpDocAttributeKey::START_AND_END);
-            $annotationContent = $this->resolveAnnotationContent($match['annotation_content'] ?? '', $nestedAnnotationOpen);
-            $spacelessPhpDocTagNodes[] = $this->createDoctrineSpacelessPhpDocTagNode($annotationContent, $tagName, $fullyQualifiedAnnotationClass, $formerStartEnd, $currentPhpNode);
+            $nested_annotation_open = explode('(', (string) $fully_qualified_annotation_class);
+            $fully_qualified_annotation_class = $nested_annotation_open[0];
+            $tag_name = '@\\' . $fully_qualified_annotation_class;
+            $former_start_end = $php_doc_text_node->get_attribute(Php_Doc_Attribute_Key::START_AND_END);
+            $annotation_content = $this->resolve_annotation_content($match['annotation_content'] ?? '', $nested_annotation_open);
+            $spaceless_php_doc_tag_nodes[] = $this->create_doctrine_spaceless_php_doc_tag_node($annotation_content, $tag_name, $fully_qualified_annotation_class, $former_start_end, $current_php_node);
         }
-        return $spacelessPhpDocTagNodes;
+        return $spaceless_php_doc_tag_nodes;
     }
     /**
      * @param string[]|null[] $nestedAnnotationOpen
      */
-    private function resolveAnnotationContent(string $annotationContent, array $nestedAnnotationOpen): string
+    private function resolve_annotation_content(string $annotation_content, array $nested_annotation_open): string
     {
-        if (!isset($nestedAnnotationOpen[1])) {
-            return $annotationContent;
+        if (!isset($nested_annotation_open[1])) {
+            return $annotation_content;
         }
-        $trimmedNestedAnnotationOpen = trim($nestedAnnotationOpen[1]);
-        if (substr_compare($trimmedNestedAnnotationOpen, '{', -strlen('{')) === 0) {
-            return $annotationContent;
+        $trimmed_nested_annotation_open = trim($nested_annotation_open[1]);
+        if (substr_compare($trimmed_nested_annotation_open, '{', -strlen('{')) === 0) {
+            return $annotation_content;
         }
-        if ($trimmedNestedAnnotationOpen === '') {
-            return $annotationContent;
+        if ($trimmed_nested_annotation_open === '') {
+            return $annotation_content;
         }
-        return '("' . trim($trimmedNestedAnnotationOpen, '"\'') . '")';
+        return '("' . trim($trimmed_nested_annotation_open, '"\'') . '")';
     }
 }

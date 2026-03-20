@@ -1,30 +1,28 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Skipper\Skip_Criteria_Resolver;
 
-namespace Rector\Skipper\SkipCriteriaResolver;
-
-use Rector\Configuration\Deprecation\Contract\DeprecatedInterface;
+use Rector\Configuration\Deprecation\Contract\Deprecated_Interface;
 use Rector\Configuration\Option;
-use Rector\Configuration\Parameter\SimpleParameterProvider;
-use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
-
+use Rector\Configuration\Parameter\Simple_Parameter_Provider;
+use Rector\Testing\Php_Unit\Static_Php_Unit_Environment;
 /**
  * @see \Rector\Tests\Skipper\Skipper\SkippedClassResolverTest
  */
-final class SkippedClassResolver
+final class Skipped_Class_Resolver
 {
     /**
      * @var null|array<class-string, string[]|null>
      */
-    private ?array $skippedClassesToFiles = null;
+    private ?array $skipped_classes_to_files = null;
     /**
      * @return array<class-string<DeprecatedInterface>>
      */
-    public function resolveDeprecatedSkippedClasses(): array
+    public function resolve_deprecated_skipped_classes(): array
     {
-        $skippedClassNames = array_keys($this->resolve());
-        return array_filter($skippedClassNames, fn (string $class): bool => is_a($class, DeprecatedInterface::class, \true));
+        $skipped_class_names = array_keys($this->resolve());
+        return array_filter($skipped_class_names, fn(string $class): bool => is_a($class, Deprecated_Interface::class, \true));
     }
     /**
      * @return array<class-string, string[]|null>
@@ -32,15 +30,15 @@ final class SkippedClassResolver
     public function resolve(): array
     {
         // disable cache in tests
-        if (StaticPHPUnitEnvironment::isPHPUnitRun()) {
-            $this->skippedClassesToFiles = null;
+        if (Static_Php_Unit_Environment::is_php_unit_run()) {
+            $this->skipped_classes_to_files = null;
         }
         // already cached, even only empty array
-        if ($this->skippedClassesToFiles !== null) {
-            return $this->skippedClassesToFiles;
+        if ($this->skipped_classes_to_files !== null) {
+            return $this->skipped_classes_to_files;
         }
-        $skip = SimpleParameterProvider::provideArrayParameter(Option::SKIP);
-        $this->skippedClassesToFiles = [];
+        $skip = Simple_Parameter_Provider::provide_array_parameter(Option::SKIP);
+        $this->skipped_classes_to_files = [];
         foreach ($skip as $key => $value) {
             // e.g. [SomeClass::class] → shift values to [SomeClass::class => null]
             if (is_int($key)) {
@@ -54,8 +52,8 @@ final class SkippedClassResolver
             if (!class_exists($key) && !interface_exists($key)) {
                 continue;
             }
-            $this->skippedClassesToFiles[$key] = $value;
+            $this->skipped_classes_to_files[$key] = $value;
         }
-        return $this->skippedClassesToFiles;
+        return $this->skipped_classes_to_files;
     }
 }

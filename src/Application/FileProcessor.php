@@ -1,180 +1,178 @@
 <?php
 
 declare (strict_types=1);
-
 namespace Rector\Application;
 
-use PHPStan\AnalysedCodeException;
-use PHPStan\Parser\ParserErrorsException;
-use Rector\Caching\Detector\ChangedFilesDetector;
-use Rector\ChangesReporting\ValueObjectFactory\ErrorFactory;
-use Rector\ChangesReporting\ValueObjectFactory\FileDiffFactory;
-use Rector\Exception\ShouldNotHappenException;
-use Rector\FileSystem\FilePathHelper;
-use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
-use Rector\PhpParser\Node\FileNode;
-use Rector\PhpParser\NodeTraverser\RectorNodeTraverser;
-use Rector\PhpParser\Parser\ParserErrors;
-use Rector\PhpParser\Parser\RectorParser;
-use Rector\PhpParser\Printer\BetterStandardPrinter;
-use Rector\PostRector\Application\PostFileProcessor;
-use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
-use Rector\ValueObject\Application\File;
-use Rector\ValueObject\Configuration;
-use Rector\ValueObject\Error\SystemError;
-use Rector\ValueObject\FileProcessResult;
-use RectorPrefix202603\Nette\Utils\FileSystem;
-use RectorPrefix202603\Symfony\Component\Console\Style\SymfonyStyle;
+use Php_Stan\Analysed_Code_Exception;
+use Php_Stan\Parser\Parser_Errors_Exception;
+use Rector\Caching\Detector\Changed_Files_Detector;
+use Rector\Changes_Reporting\Value_Object_Factory\Error_Factory;
+use Rector\Changes_Reporting\Value_Object_Factory\File_Diff_Factory;
+use Rector\Exception\Should_Not_Happen_Exception;
+use Rector\File_System\File_Path_Helper;
+use Rector\Node_Type_Resolver\Node_Scope_And_Metadata_Decorator;
+use Rector\Php_Parser\Node\File_Node;
+use Rector\Php_Parser\Node_Traverser\Rector_Node_Traverser;
+use Rector\Php_Parser\Parser\Parser_Errors;
+use Rector\Php_Parser\Parser\Rector_Parser;
+use Rector\Php_Parser\Printer\Better_Standard_Printer;
+use Rector\Post_Rector\Application\Post_File_Processor;
+use Rector\Testing\Php_Unit\Static_Php_Unit_Environment;
+use Rector\Value_Object\Application\File;
+use Rector\Value_Object\Configuration;
+use Rector\Value_Object\Error\System_Error;
+use Rector\Value_Object\File_Process_Result;
+use Rector_Prefix202603\Nette\Utils\File_System;
+use Rector_Prefix202603\Symfony\Component\Console\Style\Symfony_Style;
 use Throwable;
-
-final class FileProcessor
+final class File_Processor
 {
     /**
      * @readonly
      */
-    private BetterStandardPrinter $betterStandardPrinter;
+    private Better_Standard_Printer $better_standard_printer;
     /**
      * @readonly
      */
-    private RectorNodeTraverser $rectorNodeTraverser;
+    private Rector_Node_Traverser $rector_node_traverser;
     /**
      * @readonly
      */
-    private SymfonyStyle $symfonyStyle;
+    private Symfony_Style $symfony_style;
     /**
      * @readonly
      */
-    private FileDiffFactory $fileDiffFactory;
+    private File_Diff_Factory $file_diff_factory;
     /**
      * @readonly
      */
-    private ChangedFilesDetector $changedFilesDetector;
+    private Changed_Files_Detector $changed_files_detector;
     /**
      * @readonly
      */
-    private ErrorFactory $errorFactory;
+    private Error_Factory $error_factory;
     /**
      * @readonly
      */
-    private FilePathHelper $filePathHelper;
+    private File_Path_Helper $file_path_helper;
     /**
      * @readonly
      */
-    private PostFileProcessor $postFileProcessor;
+    private Post_File_Processor $post_file_processor;
     /**
      * @readonly
      */
-    private RectorParser $rectorParser;
+    private Rector_Parser $rector_parser;
     /**
      * @readonly
      */
-    private NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator;
-    public function __construct(BetterStandardPrinter $betterStandardPrinter, RectorNodeTraverser $rectorNodeTraverser, SymfonyStyle $symfonyStyle, FileDiffFactory $fileDiffFactory, ChangedFilesDetector $changedFilesDetector, ErrorFactory $errorFactory, FilePathHelper $filePathHelper, PostFileProcessor $postFileProcessor, RectorParser $rectorParser, NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator)
+    private Node_Scope_And_Metadata_Decorator $node_scope_and_metadata_decorator;
+    public function __construct(Better_Standard_Printer $better_standard_printer, Rector_Node_Traverser $rector_node_traverser, Symfony_Style $symfony_style, File_Diff_Factory $file_diff_factory, Changed_Files_Detector $changed_files_detector, Error_Factory $error_factory, File_Path_Helper $file_path_helper, Post_File_Processor $post_file_processor, Rector_Parser $rector_parser, Node_Scope_And_Metadata_Decorator $node_scope_and_metadata_decorator)
     {
-        $this->betterStandardPrinter = $betterStandardPrinter;
-        $this->rectorNodeTraverser = $rectorNodeTraverser;
-        $this->symfonyStyle = $symfonyStyle;
-        $this->fileDiffFactory = $fileDiffFactory;
-        $this->changedFilesDetector = $changedFilesDetector;
-        $this->errorFactory = $errorFactory;
-        $this->filePathHelper = $filePathHelper;
-        $this->postFileProcessor = $postFileProcessor;
-        $this->rectorParser = $rectorParser;
-        $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
+        $this->better_standard_printer = $better_standard_printer;
+        $this->rector_node_traverser = $rector_node_traverser;
+        $this->symfony_style = $symfony_style;
+        $this->file_diff_factory = $file_diff_factory;
+        $this->changed_files_detector = $changed_files_detector;
+        $this->error_factory = $error_factory;
+        $this->file_path_helper = $file_path_helper;
+        $this->post_file_processor = $post_file_processor;
+        $this->rector_parser = $rector_parser;
+        $this->node_scope_and_metadata_decorator = $node_scope_and_metadata_decorator;
     }
-    public function processFile(File $file, Configuration $configuration): FileProcessResult
+    public function process_file(File $file, Configuration $configuration): File_Process_Result
     {
         // 1. parse files to nodes
-        $parsingSystemError = $this->parseFileAndDecorateNodes($file);
-        if ($parsingSystemError instanceof SystemError) {
+        $parsing_system_error = $this->parse_file_and_decorate_nodes($file);
+        if ($parsing_system_error instanceof System_Error) {
             // we cannot process this file as the parsing and type resolving itself went wrong
-            return new FileProcessResult([$parsingSystemError], null, \false);
+            return new File_Process_Result([$parsing_system_error], null, \false);
         }
-        $fileHasChanged = \false;
-        $filePath = $file->getFilePath();
+        $file_has_changed = \false;
+        $file_path = $file->get_file_path();
         do {
-            $file->changeHasChanged(\false);
+            $file->change_has_changed(\false);
             // 1. change nodes with Rector Rules
-            $newStmts = $this->rectorNodeTraverser->traverse($file->getNewStmts());
+            $new_stmts = $this->rector_node_traverser->traverse($file->get_new_stmts());
             // 2. apply post rectors
-            $postNewStmts = $this->postFileProcessor->traverse($newStmts, $file);
+            $post_new_stmts = $this->post_file_processor->traverse($new_stmts, $file);
             // 3. this is needed for new tokens added in "afterTraverse()"
-            $file->changeNewStmts($postNewStmts);
+            $file->change_new_stmts($post_new_stmts);
             // 4. print to file or string
             // important to detect if file has changed
-            $this->printFile($file, $configuration, $filePath);
+            $this->print_file($file, $configuration, $file_path);
             // no change in current iteration, stop
-            if (!$file->hasChanged()) {
+            if (!$file->has_changed()) {
                 break;
             }
-            $fileHasChanged = \true;
+            $file_has_changed = \true;
         } while (\true);
         // 5. add as cacheable if not changed at all
-        if (!$fileHasChanged) {
-            $this->changedFilesDetector->addCacheableFile($filePath);
+        if (!$file_has_changed) {
+            $this->changed_files_detector->add_cacheable_file($file_path);
         } else {
             // when changed, set final status changed to true
             // to ensure it make sense to verify in next process when needed
-            $file->changeHasChanged(\true);
+            $file->change_has_changed(\true);
         }
-        $rectorWithLineChanges = $file->getRectorWithLineChanges();
-        if ($file->hasChanged() || $rectorWithLineChanges !== []) {
-            $currentFileDiff = $this->fileDiffFactory->createFileDiffWithLineChanges($configuration->shouldShowDiffs(), $file, $file->getOriginalFileContent(), $file->getFileContent(), $file->getRectorWithLineChanges());
-            $file->setFileDiff($currentFileDiff);
+        $rector_with_line_changes = $file->get_rector_with_line_changes();
+        if ($file->has_changed() || $rector_with_line_changes !== []) {
+            $current_file_diff = $this->file_diff_factory->create_file_diff_with_line_changes($configuration->should_show_diffs(), $file, $file->get_original_file_content(), $file->get_file_content(), $file->get_rector_with_line_changes());
+            $file->set_file_diff($current_file_diff);
         }
-        return new FileProcessResult([], $file->getFileDiff(), $file->hasChanged());
+        return new File_Process_Result([], $file->get_file_diff(), $file->has_changed());
     }
-    private function parseFileAndDecorateNodes(File $file): ?SystemError
+    private function parse_file_and_decorate_nodes(File $file): ?System_Error
     {
         try {
             try {
-                $this->parseFileNodes($file);
-            } catch (ParserErrorsException $exception) {
-                $this->parseFileNodes($file, \false);
+                $this->parse_file_nodes($file);
+            } catch (Parser_Errors_Exception $exception) {
+                $this->parse_file_nodes($file, \false);
             }
-        } catch (ShouldNotHappenException $shouldNotHappenException) {
-            throw $shouldNotHappenException;
-        } catch (AnalysedCodeException $analysedCodeException) {
+        } catch (Should_Not_Happen_Exception $should_not_happen_exception) {
+            throw $should_not_happen_exception;
+        } catch (Analysed_Code_Exception $analysed_code_exception) {
             // inform about missing classes in tests
-            if (StaticPHPUnitEnvironment::isPHPUnitRun()) {
-                throw $analysedCodeException;
+            if (Static_Php_Unit_Environment::is_php_unit_run()) {
+                throw $analysed_code_exception;
             }
-            return $this->errorFactory->createAutoloadError($analysedCodeException, $file->getFilePath());
+            return $this->error_factory->create_autoload_error($analysed_code_exception, $file->get_file_path());
         } catch (Throwable $throwable) {
-            if ($this->symfonyStyle->isVerbose() || StaticPHPUnitEnvironment::isPHPUnitRun()) {
+            if ($this->symfony_style->is_verbose() || Static_Php_Unit_Environment::is_php_unit_run()) {
                 throw $throwable;
             }
-            $relativeFilePath = $this->filePathHelper->relativePath($file->getFilePath());
-            if ($throwable instanceof ParserErrorsException) {
-                $throwable = new ParserErrors($throwable);
+            $relative_file_path = $this->file_path_helper->relative_path($file->get_file_path());
+            if ($throwable instanceof Parser_Errors_Exception) {
+                $throwable = new Parser_Errors($throwable);
             }
-            return new SystemError($throwable->getMessage(), $relativeFilePath, $throwable->getLine());
+            return new System_Error($throwable->get_message(), $relative_file_path, $throwable->get_line());
         }
         return null;
     }
-    private function printFile(File $file, Configuration $configuration, string $filePath): void
+    private function print_file(File $file, Configuration $configuration, string $file_path): void
     {
         // only save to string first, no need to print to file when not needed
-        $newFileContent = $this->betterStandardPrinter->printFormatPreserving($file->getNewStmts(), $file->getOldStmts(), $file->getOldTokens());
+        $new_file_content = $this->better_standard_printer->print_format_preserving($file->get_new_stmts(), $file->get_old_stmts(), $file->get_old_tokens());
         // change file content early to make $file->hasChanged() based on new content
-        $file->changeFileContent($newFileContent);
-        if ($configuration->isDryRun()) {
+        $file->change_file_content($new_file_content);
+        if ($configuration->is_dry_run()) {
             return;
         }
-        if (!$file->hasChanged()) {
+        if (!$file->has_changed()) {
             return;
         }
-        FileSystem::write($filePath, $newFileContent, null);
+        File_System::write($file_path, $new_file_content, null);
     }
-    private function parseFileNodes(File $file, bool $forNewestSupportedVersion = \true): void
+    private function parse_file_nodes(File $file, bool $for_newest_supported_version = \true): void
     {
         // store tokens by original file content, so we don't have to print them right now
-        $stmtsAndTokens = $this->rectorParser->parseFileContentToStmtsAndTokens($file->getOriginalFileContent(), $forNewestSupportedVersion);
-        $oldStmts = $stmtsAndTokens->getStmts();
+        $stmts_and_tokens = $this->rector_parser->parse_file_content_to_stmts_and_tokens($file->get_original_file_content(), $for_newest_supported_version);
+        $old_stmts = $stmts_and_tokens->get_stmts();
         // wrap in FileNode to allow file-level rules
-        $oldStmts = [new FileNode($oldStmts)];
-        $oldTokens = $stmtsAndTokens->getTokens();
-        $newStmts = $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($file->getFilePath(), $oldStmts);
-        $file->hydrateStmtsAndTokens($newStmts, $oldStmts, $oldTokens);
+        $old_stmts = [new File_Node($old_stmts)];
+        $old_tokens = $stmts_and_tokens->get_tokens();
+        $new_stmts = $this->node_scope_and_metadata_decorator->decorate_nodes_from_file($file->get_file_path(), $old_stmts);
+        $file->hydrate_stmts_and_tokens($new_stmts, $old_stmts, $old_tokens);
     }
 }

@@ -1,57 +1,55 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Node_Type_Resolver\Node_Type_Resolver;
 
-namespace Rector\NodeTypeResolver\NodeTypeResolver;
-
-use PhpParser\Node;
-use PhpParser\Node\InterpolatedStringPart;
-use PhpParser\Node\Scalar;
-use PhpParser\Node\Scalar\Float_;
-use PhpParser\Node\Scalar\Int_;
-use PhpParser\Node\Scalar\InterpolatedString;
-use PhpParser\Node\Scalar\MagicConst;
-use PhpParser\Node\Scalar\String_;
-use PHPStan\Type\Constant\ConstantFloatType;
-use PHPStan\Type\Constant\ConstantIntegerType;
-use PHPStan\Type\Constant\ConstantStringType;
-use PHPStan\Type\StringType;
-use PHPStan\Type\Type;
-use Rector\Exception\NotImplementedYetException;
-use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
-
+use Php_Parser\Node;
+use Php_Parser\Node\Interpolated_String_Part;
+use Php_Parser\Node\Scalar;
+use Php_Parser\Node\Scalar\Float_;
+use Php_Parser\Node\Scalar\Int_;
+use Php_Parser\Node\Scalar\Interpolated_String;
+use Php_Parser\Node\Scalar\Magic_Const;
+use Php_Parser\Node\Scalar\String_;
+use Php_Stan\Type\Constant\Constant_Float_Type;
+use Php_Stan\Type\Constant\Constant_Integer_Type;
+use Php_Stan\Type\Constant\Constant_String_Type;
+use Php_Stan\Type\String_Type;
+use Php_Stan\Type\Type;
+use Rector\Exception\Not_Implemented_Yet_Exception;
+use Rector\Node_Type_Resolver\Contract\Node_Type_Resolver_Interface;
 /**
  * @implements NodeTypeResolverInterface<Scalar>
  */
-final class ScalarTypeResolver implements NodeTypeResolverInterface
+final class Scalar_Type_Resolver implements Node_Type_Resolver_Interface
 {
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeClasses(): array
+    public function get_node_classes(): array
     {
         return [Scalar::class];
     }
     public function resolve(Node $node): Type
     {
         if ($node instanceof Float_) {
-            return new ConstantFloatType($node->value);
+            return new Constant_Float_Type($node->value);
         }
         if ($node instanceof String_) {
-            return new ConstantStringType($node->value);
+            return new Constant_String_Type($node->value);
         }
         if ($node instanceof Int_) {
-            return new ConstantIntegerType($node->value);
+            return new Constant_Integer_Type($node->value);
         }
-        if ($node instanceof MagicConst) {
-            return new ConstantStringType($node->getName());
+        if ($node instanceof Magic_Const) {
+            return new Constant_String_Type($node->get_name());
         }
-        if ($node instanceof InterpolatedString) {
-            return new StringType();
+        if ($node instanceof Interpolated_String) {
+            return new String_Type();
         }
-        if ($node instanceof InterpolatedStringPart) {
-            return new ConstantStringType($node->value);
+        if ($node instanceof Interpolated_String_Part) {
+            return new Constant_String_Type($node->value);
         }
-        throw new NotImplementedYetException();
+        throw new Not_Implemented_Yet_Exception();
     }
 }

@@ -1,88 +1,86 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Node_Type_Resolver\Reflection\Better_Reflection\Source_Locator_Provider;
 
-namespace Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider;
-
-use PHPStan\BetterReflection\SourceLocator\Type\AggregateSourceLocator;
-use PHPStan\BetterReflection\SourceLocator\Type\SourceLocator;
-use PHPStan\Reflection\BetterReflection\SourceLocator\OptimizedDirectorySourceLocatorFactory;
-use PHPStan\Reflection\BetterReflection\SourceLocator\OptimizedSingleFileSourceLocatorRepository;
-use Rector\Contract\DependencyInjection\ResettableInterface;
-use Rector\Testing\PHPUnit\StaticPHPUnitEnvironment;
-
+use Php_Stan\Better_Reflection\Source_Locator\Type\Aggregate_Source_Locator;
+use Php_Stan\Better_Reflection\Source_Locator\Type\Source_Locator;
+use Php_Stan\Reflection\Better_Reflection\Source_Locator\Optimized_Directory_Source_Locator_Factory;
+use Php_Stan\Reflection\Better_Reflection\Source_Locator\Optimized_Single_File_Source_Locator_Repository;
+use Rector\Contract\Dependency_Injection\Resettable_Interface;
+use Rector\Testing\Php_Unit\Static_Php_Unit_Environment;
 /**
  * @api phpstan external
  */
-final class DynamicSourceLocatorProvider implements ResettableInterface
+final class Dynamic_Source_Locator_Provider implements Resettable_Interface
 {
     /**
      * @readonly
      */
-    private OptimizedDirectorySourceLocatorFactory $optimizedDirectorySourceLocatorFactory;
+    private Optimized_Directory_Source_Locator_Factory $optimized_directory_source_locator_factory;
     /**
      * @readonly
      */
-    private OptimizedSingleFileSourceLocatorRepository $optimizedSingleFileSourceLocatorRepository;
+    private Optimized_Single_File_Source_Locator_Repository $optimized_single_file_source_locator_repository;
     /**
      * @var string[]
      */
-    private array $filePaths = [];
+    private array $file_paths = [];
     /**
      * @var string[]
      */
     private array $directories = [];
-    private ?AggregateSourceLocator $aggregateSourceLocator = null;
-    public function __construct(OptimizedDirectorySourceLocatorFactory $optimizedDirectorySourceLocatorFactory, OptimizedSingleFileSourceLocatorRepository $optimizedSingleFileSourceLocatorRepository)
+    private ?Aggregate_Source_Locator $aggregate_source_locator = null;
+    public function __construct(Optimized_Directory_Source_Locator_Factory $optimized_directory_source_locator_factory, Optimized_Single_File_Source_Locator_Repository $optimized_single_file_source_locator_repository)
     {
-        $this->optimizedDirectorySourceLocatorFactory = $optimizedDirectorySourceLocatorFactory;
-        $this->optimizedSingleFileSourceLocatorRepository = $optimizedSingleFileSourceLocatorRepository;
+        $this->optimized_directory_source_locator_factory = $optimized_directory_source_locator_factory;
+        $this->optimized_single_file_source_locator_repository = $optimized_single_file_source_locator_repository;
     }
-    public function setFilePath(string $filePath): void
+    public function set_file_path(string $file_path): void
     {
-        $this->filePaths = [$filePath];
+        $this->file_paths = [$file_path];
     }
     /**
      * @param string[] $files
      */
-    public function addFiles(array $files): void
+    public function add_files(array $files): void
     {
-        $this->filePaths = array_unique(array_merge($this->filePaths, $files));
+        $this->file_paths = array_unique(array_merge($this->file_paths, $files));
     }
     /**
      * @param string[] $directories
      */
-    public function addDirectories(array $directories): void
+    public function add_directories(array $directories): void
     {
         $this->directories = array_unique(array_merge($this->directories, $directories));
     }
-    public function provide(): SourceLocator
+    public function provide(): Source_Locator
     {
         // do not cache for PHPUnit, as in test every fixture is different
-        $isPHPUnitRun = StaticPHPUnitEnvironment::isPHPUnitRun();
-        if ($this->aggregateSourceLocator instanceof AggregateSourceLocator && !$isPHPUnitRun) {
-            return $this->aggregateSourceLocator;
+        $is_php_unit_run = Static_Php_Unit_Environment::is_php_unit_run();
+        if ($this->aggregate_source_locator instanceof Aggregate_Source_Locator && !$is_php_unit_run) {
+            return $this->aggregate_source_locator;
         }
-        $sourceLocators = [];
-        foreach ($this->filePaths as $file) {
-            $sourceLocators[] = $this->optimizedSingleFileSourceLocatorRepository->getOrCreate($file);
+        $source_locators = [];
+        foreach ($this->file_paths as $file) {
+            $source_locators[] = $this->optimized_single_file_source_locator_repository->get_or_create($file);
         }
         foreach ($this->directories as $directory) {
-            $sourceLocators[] = $this->optimizedDirectorySourceLocatorFactory->createByDirectory($directory);
+            $source_locators[] = $this->optimized_directory_source_locator_factory->create_by_directory($directory);
         }
-        return $this->aggregateSourceLocator = new AggregateSourceLocator($sourceLocators);
+        return $this->aggregate_source_locator = new Aggregate_Source_Locator($source_locators);
     }
-    public function arePathsEmpty(): bool
+    public function are_paths_empty(): bool
     {
-        return $this->filePaths === [] && $this->directories === [];
+        return $this->file_paths === [] && $this->directories === [];
     }
     /**
      * @api to allow fast single-container tests
      */
     public function reset(): void
     {
-        $this->filePaths = [];
+        $this->file_paths = [];
         $this->directories = [];
-        $this->aggregateSourceLocator = null;
+        $this->aggregate_source_locator = null;
     }
 }

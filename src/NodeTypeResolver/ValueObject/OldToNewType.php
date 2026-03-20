@@ -1,32 +1,30 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Node_Type_Resolver\Value_Object;
 
-namespace Rector\NodeTypeResolver\ValueObject;
-
-use PHPStan\Type\Type;
-
-final class OldToNewType
+use Php_Stan\Type\Type;
+final class Old_To_New_Type
 {
     /**
      * @readonly
      */
-    private Type $oldType;
+    private Type $old_type;
     /**
      * @readonly
      */
-    private Type $newType;
-    public function __construct(Type $oldType, Type $newType)
+    private Type $new_type;
+    public function __construct(Type $old_type, Type $new_type)
     {
-        $this->oldType = $oldType;
-        $this->newType = $newType;
+        $this->old_type = $old_type;
+        $this->new_type = $new_type;
     }
-    public function getOldType(): Type
+    public function get_old_type(): Type
     {
-        return $this->oldType;
+        return $this->old_type;
     }
-    public function getNewType(): Type
+    public function get_new_type(): Type
     {
-        return $this->newType;
+        return $this->new_type;
     }
 }

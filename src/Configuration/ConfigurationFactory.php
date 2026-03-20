@@ -1,113 +1,111 @@
 <?php
 
 declare (strict_types=1);
-
 namespace Rector\Configuration;
 
-use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
-use Rector\Configuration\Parameter\SimpleParameterProvider;
-use Rector\ValueObject\Configuration;
-use RectorPrefix202603\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202603\Symfony\Component\Console\Style\SymfonyStyle;
-
+use Rector\Changes_Reporting\Output\Console_Output_Formatter;
+use Rector\Configuration\Parameter\Simple_Parameter_Provider;
+use Rector\Value_Object\Configuration;
+use Rector_Prefix202603\Symfony\Component\Console\Input\Input_Interface;
+use Rector_Prefix202603\Symfony\Component\Console\Style\Symfony_Style;
 /**
  * @see \Rector\Tests\Configuration\ConfigurationFactoryTest
  */
-final class ConfigurationFactory
+final class Configuration_Factory
 {
     /**
      * @readonly
      */
-    private SymfonyStyle $symfonyStyle;
+    private Symfony_Style $symfony_style;
     /**
      * @readonly
      */
-    private \Rector\Configuration\OnlyRuleResolver $onlyRuleResolver;
-    public function __construct(SymfonyStyle $symfonyStyle, \Rector\Configuration\OnlyRuleResolver $onlyRuleResolver)
+    private \Rector\Configuration\Only_Rule_Resolver $only_rule_resolver;
+    public function __construct(Symfony_Style $symfony_style, \Rector\Configuration\Only_Rule_Resolver $only_rule_resolver)
     {
-        $this->symfonyStyle = $symfonyStyle;
-        $this->onlyRuleResolver = $onlyRuleResolver;
+        $this->symfony_style = $symfony_style;
+        $this->only_rule_resolver = $only_rule_resolver;
     }
     /**
      * @api used in tests
      * @param string[] $paths
      */
-    public function createForTests(array $paths): Configuration
+    public function create_for_tests(array $paths): Configuration
     {
-        $fileExtensions = SimpleParameterProvider::provideArrayParameter(\Rector\Configuration\Option::FILE_EXTENSIONS);
-        return new Configuration(\false, \true, \false, ConsoleOutputFormatter::NAME, $fileExtensions, $paths, \true, null, null, \false, null, \false, \false);
+        $file_extensions = Simple_Parameter_Provider::provide_array_parameter(\Rector\Configuration\Option::FILE_EXTENSIONS);
+        return new Configuration(\false, \true, \false, Console_Output_Formatter::NAME, $file_extensions, $paths, \true, null, null, \false, null, \false, \false);
     }
     /**
      * Needs to run in the start of the life cycle, since the rest of workflow uses it.
      */
-    public function createFromInput(InputInterface $input): Configuration
+    public function create_from_input(Input_Interface $input): Configuration
     {
-        $isDryRun = (bool) $input->getOption(\Rector\Configuration\Option::DRY_RUN);
-        $shouldClearCache = (bool) $input->getOption(\Rector\Configuration\Option::CLEAR_CACHE);
-        $outputFormat = (string) $input->getOption(\Rector\Configuration\Option::OUTPUT_FORMAT);
-        $showProgressBar = $this->shouldShowProgressBar($input, $outputFormat);
-        $showDiffs = $this->shouldShowDiffs($input);
-        $paths = $this->resolvePaths($input);
-        $fileExtensions = SimpleParameterProvider::provideArrayParameter(\Rector\Configuration\Option::FILE_EXTENSIONS);
+        $is_dry_run = (bool) $input->get_option(\Rector\Configuration\Option::DRY_RUN);
+        $should_clear_cache = (bool) $input->get_option(\Rector\Configuration\Option::CLEAR_CACHE);
+        $output_format = (string) $input->get_option(\Rector\Configuration\Option::OUTPUT_FORMAT);
+        $show_progress_bar = $this->should_show_progress_bar($input, $output_format);
+        $show_diffs = $this->should_show_diffs($input);
+        $paths = $this->resolve_paths($input);
+        $file_extensions = Simple_Parameter_Provider::provide_array_parameter(\Rector\Configuration\Option::FILE_EXTENSIONS);
         // filter rule and path
-        $onlyRule = $input->getOption(\Rector\Configuration\Option::ONLY);
-        if ($onlyRule !== null) {
-            $onlyRule = $this->onlyRuleResolver->resolve($onlyRule);
+        $only_rule = $input->get_option(\Rector\Configuration\Option::ONLY);
+        if ($only_rule !== null) {
+            $only_rule = $this->only_rule_resolver->resolve($only_rule);
         }
-        $onlySuffix = $input->getOption(\Rector\Configuration\Option::ONLY_SUFFIX);
-        $isParallel = SimpleParameterProvider::provideBoolParameter(\Rector\Configuration\Option::PARALLEL);
-        $parallelPort = (string) $input->getOption(\Rector\Configuration\Option::PARALLEL_PORT);
-        $parallelIdentifier = (string) $input->getOption(\Rector\Configuration\Option::PARALLEL_IDENTIFIER);
-        $isDebug = (bool) $input->getOption(\Rector\Configuration\Option::DEBUG);
+        $only_suffix = $input->get_option(\Rector\Configuration\Option::ONLY_SUFFIX);
+        $is_parallel = Simple_Parameter_Provider::provide_bool_parameter(\Rector\Configuration\Option::PARALLEL);
+        $parallel_port = (string) $input->get_option(\Rector\Configuration\Option::PARALLEL_PORT);
+        $parallel_identifier = (string) $input->get_option(\Rector\Configuration\Option::PARALLEL_IDENTIFIER);
+        $is_debug = (bool) $input->get_option(\Rector\Configuration\Option::DEBUG);
         // using debug disables parallel, so emitting exception is straightforward and easier to debug
-        if ($isDebug) {
-            $isParallel = \false;
+        if ($is_debug) {
+            $is_parallel = \false;
         }
-        $memoryLimit = $this->resolveMemoryLimit($input);
-        $isReportingWithRealPath = SimpleParameterProvider::provideBoolParameter(\Rector\Configuration\Option::ABSOLUTE_FILE_PATH);
-        $levelOverflows = SimpleParameterProvider::provideArrayParameter(\Rector\Configuration\Option::LEVEL_OVERFLOWS);
-        return new Configuration($isDryRun, $showProgressBar, $shouldClearCache, $outputFormat, $fileExtensions, $paths, $showDiffs, $parallelPort, $parallelIdentifier, $isParallel, $memoryLimit, $isDebug, $isReportingWithRealPath, $onlyRule, $onlySuffix, $levelOverflows);
+        $memory_limit = $this->resolve_memory_limit($input);
+        $is_reporting_with_real_path = Simple_Parameter_Provider::provide_bool_parameter(\Rector\Configuration\Option::ABSOLUTE_FILE_PATH);
+        $level_overflows = Simple_Parameter_Provider::provide_array_parameter(\Rector\Configuration\Option::LEVEL_OVERFLOWS);
+        return new Configuration($is_dry_run, $show_progress_bar, $should_clear_cache, $output_format, $file_extensions, $paths, $show_diffs, $parallel_port, $parallel_identifier, $is_parallel, $memory_limit, $is_debug, $is_reporting_with_real_path, $only_rule, $only_suffix, $level_overflows);
     }
-    private function shouldShowProgressBar(InputInterface $input, string $outputFormat): bool
+    private function should_show_progress_bar(Input_Interface $input, string $output_format): bool
     {
-        $noProgressBar = (bool) $input->getOption(\Rector\Configuration\Option::NO_PROGRESS_BAR);
-        if ($noProgressBar) {
+        $no_progress_bar = (bool) $input->get_option(\Rector\Configuration\Option::NO_PROGRESS_BAR);
+        if ($no_progress_bar) {
             return \false;
         }
-        if ($this->symfonyStyle->isVerbose()) {
+        if ($this->symfony_style->is_verbose()) {
             return \false;
         }
-        return $outputFormat === ConsoleOutputFormatter::NAME;
+        return $output_format === Console_Output_Formatter::NAME;
     }
-    private function shouldShowDiffs(InputInterface $input): bool
+    private function should_show_diffs(Input_Interface $input): bool
     {
-        $noDiffs = (bool) $input->getOption(\Rector\Configuration\Option::NO_DIFFS);
-        if ($noDiffs) {
+        $no_diffs = (bool) $input->get_option(\Rector\Configuration\Option::NO_DIFFS);
+        if ($no_diffs) {
             return \false;
         }
         // fallback to parameter
-        return !SimpleParameterProvider::provideBoolParameter(\Rector\Configuration\Option::NO_DIFFS, \false);
+        return !Simple_Parameter_Provider::provide_bool_parameter(\Rector\Configuration\Option::NO_DIFFS, \false);
     }
     /**
      * @return string[]|mixed[]
      */
-    private function resolvePaths(InputInterface $input): array
+    private function resolve_paths(Input_Interface $input): array
     {
-        $commandLinePaths = (array) $input->getArgument(\Rector\Configuration\Option::SOURCE);
+        $command_line_paths = (array) $input->get_argument(\Rector\Configuration\Option::SOURCE);
         // give priority to command line
-        if ($commandLinePaths !== []) {
-            $this->setFilesWithoutExtensionParameter($commandLinePaths);
-            return $commandLinePaths;
+        if ($command_line_paths !== []) {
+            $this->set_files_without_extension_parameter($command_line_paths);
+            return $command_line_paths;
         }
         // fallback to parameter
-        $configPaths = SimpleParameterProvider::provideArrayParameter(\Rector\Configuration\Option::PATHS);
-        $this->setFilesWithoutExtensionParameter($configPaths);
-        return $configPaths;
+        $config_paths = Simple_Parameter_Provider::provide_array_parameter(\Rector\Configuration\Option::PATHS);
+        $this->set_files_without_extension_parameter($config_paths);
+        return $config_paths;
     }
     /**
      * @param string[] $paths
      */
-    private function setFilesWithoutExtensionParameter(array $paths): void
+    private function set_files_without_extension_parameter(array $paths): void
     {
         foreach ($paths as $path) {
             if (is_file($path) && pathinfo($path, \PATHINFO_EXTENSION) === '') {
@@ -115,19 +113,19 @@ final class ConfigurationFactory
                 if ($path === \false) {
                     continue;
                 }
-                SimpleParameterProvider::addParameter(\Rector\Configuration\Option::FILES_WITHOUT_EXTENSION, $path);
+                Simple_Parameter_Provider::add_parameter(\Rector\Configuration\Option::FILES_WITHOUT_EXTENSION, $path);
             }
         }
     }
-    private function resolveMemoryLimit(InputInterface $input): ?string
+    private function resolve_memory_limit(Input_Interface $input): ?string
     {
-        $memoryLimit = $input->getOption(\Rector\Configuration\Option::MEMORY_LIMIT);
-        if ($memoryLimit !== null) {
-            return (string) $memoryLimit;
+        $memory_limit = $input->get_option(\Rector\Configuration\Option::MEMORY_LIMIT);
+        if ($memory_limit !== null) {
+            return (string) $memory_limit;
         }
-        if (!SimpleParameterProvider::hasParameter(\Rector\Configuration\Option::MEMORY_LIMIT)) {
+        if (!Simple_Parameter_Provider::has_parameter(\Rector\Configuration\Option::MEMORY_LIMIT)) {
             return null;
         }
-        return SimpleParameterProvider::provideStringParameter(\Rector\Configuration\Option::MEMORY_LIMIT);
+        return Simple_Parameter_Provider::provide_string_parameter(\Rector\Configuration\Option::MEMORY_LIMIT);
     }
 }

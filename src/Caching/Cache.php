@@ -1,44 +1,42 @@
 <?php
 
 declare (strict_types=1);
-
 namespace Rector\Caching;
 
-use Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
-use Rector\Caching\Enum\CacheKey;
-
+use Rector\Caching\Contract\Value_Object\Storage\Cache_Storage_Interface;
+use Rector\Caching\Enum\Cache_Key;
 final class Cache
 {
     /**
      * @readonly
      */
-    private CacheStorageInterface $cacheStorage;
-    public function __construct(CacheStorageInterface $cacheStorage)
+    private Cache_Storage_Interface $cache_storage;
+    public function __construct(Cache_Storage_Interface $cache_storage)
     {
-        $this->cacheStorage = $cacheStorage;
+        $this->cache_storage = $cache_storage;
     }
     /**
      * @param CacheKey::* $variableKey
      * @return mixed|null
      */
-    public function load(string $key, string $variableKey)
+    public function load(string $key, string $variable_key)
     {
-        return $this->cacheStorage->load($key, $variableKey);
+        return $this->cache_storage->load($key, $variable_key);
     }
     /**
      * @param CacheKey::* $variableKey
      * @param mixed $data
      */
-    public function save(string $key, string $variableKey, $data): void
+    public function save(string $key, string $variable_key, $data): void
     {
-        $this->cacheStorage->save($key, $variableKey, $data);
+        $this->cache_storage->save($key, $variable_key, $data);
     }
     public function clear(): void
     {
-        $this->cacheStorage->clear();
+        $this->cache_storage->clear();
     }
-    public function clean(string $cacheKey): void
+    public function clean(string $cache_key): void
     {
-        $this->cacheStorage->clean($cacheKey);
+        $this->cache_storage->clean($cache_key);
     }
 }

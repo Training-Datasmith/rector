@@ -1,41 +1,39 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Node_Type_Resolver\Php_Doc\Node_Analyzer;
 
-namespace Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer;
-
-use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-
-final class DocBlockTagReplacer
+use Php_Stan\Php_Doc_Parser\Ast\Php_Doc\Generic_Tag_Value_Node;
+use Php_Stan\Php_Doc_Parser\Ast\Php_Doc\Php_Doc_Tag_Node;
+use Rector\Better_Php_Doc_Parser\Annotation\Annotation_Naming;
+use Rector\Better_Php_Doc_Parser\Php_Doc_Info\Php_Doc_Info;
+final class Doc_Block_Tag_Replacer
 {
     /**
      * @readonly
      */
-    private AnnotationNaming $annotationNaming;
-    public function __construct(AnnotationNaming $annotationNaming)
+    private Annotation_Naming $annotation_naming;
+    public function __construct(Annotation_Naming $annotation_naming)
     {
-        $this->annotationNaming = $annotationNaming;
+        $this->annotation_naming = $annotation_naming;
     }
-    public function replaceTagByAnother(PhpDocInfo $phpDocInfo, string $oldTag, string $newTag): bool
+    public function replace_tag_by_another(Php_Doc_Info $php_doc_info, string $old_tag, string $new_tag): bool
     {
-        $hasChanged = \false;
-        $oldTag = $this->annotationNaming->normalizeName($oldTag);
-        $newTag = $this->annotationNaming->normalizeName($newTag);
-        $phpDocNode = $phpDocInfo->getPhpDocNode();
-        foreach ($phpDocNode->children as $key => $phpDocChildNode) {
-            if (!$phpDocChildNode instanceof PhpDocTagNode) {
+        $has_changed = \false;
+        $old_tag = $this->annotation_naming->normalize_name($old_tag);
+        $new_tag = $this->annotation_naming->normalize_name($new_tag);
+        $php_doc_node = $php_doc_info->get_php_doc_node();
+        foreach ($php_doc_node->children as $key => $php_doc_child_node) {
+            if (!$php_doc_child_node instanceof Php_Doc_Tag_Node) {
                 continue;
             }
-            if ($phpDocChildNode->name !== $oldTag) {
+            if ($php_doc_child_node->name !== $old_tag) {
                 continue;
             }
-            unset($phpDocNode->children[$key]);
-            $phpDocNode->children[] = new PhpDocTagNode($newTag, new GenericTagValueNode(''));
-            $hasChanged = \true;
+            unset($php_doc_node->children[$key]);
+            $php_doc_node->children[] = new Php_Doc_Tag_Node($new_tag, new Generic_Tag_Value_Node(''));
+            $has_changed = \true;
         }
-        return $hasChanged;
+        return $has_changed;
     }
 }

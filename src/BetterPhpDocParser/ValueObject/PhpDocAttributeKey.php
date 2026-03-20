@@ -1,12 +1,10 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Better_Php_Doc_Parser\Value_Object;
 
-namespace Rector\BetterPhpDocParser\ValueObject;
-
-use Rector\PhpDocParser\PhpDocParser\ValueObject\PhpDocAttributeKey as NativePhpDocAttributeKey;
-
-final class PhpDocAttributeKey
+use Rector\Php_Doc_Parser\Php_Doc_Parser\Value_Object\Php_Doc_Attribute_Key as NativePhpDocAttributeKey;
+final class Php_Doc_Attribute_Key
 {
     /**
      * @var string
@@ -20,7 +18,7 @@ final class PhpDocAttributeKey
     /**
      * @var string
      */
-    public const PARENT = NativePhpDocAttributeKey::PARENT;
+    public const PARENT = Native_Php_Doc_Attribute_Key::PARENT;
     /**
      * @var string
      */
@@ -28,5 +26,5 @@ final class PhpDocAttributeKey
     /**
      * @var string
      */
-    public const ORIG_NODE = NativePhpDocAttributeKey::ORIG_NODE;
+    public const ORIG_NODE = Native_Php_Doc_Attribute_Key::ORIG_NODE;
 }

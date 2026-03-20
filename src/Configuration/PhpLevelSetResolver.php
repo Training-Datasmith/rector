@@ -1,37 +1,35 @@
 <?php
 
 declare (strict_types=1);
-
 namespace Rector\Configuration;
 
-use Rector\Set\ValueObject\SetList;
-use Rector\Tests\Configuration\PhpLevelSetResolverTest;
-use Rector\ValueObject\PhpVersion;
-use RectorPrefix202603\Webmozart\Assert\Assert;
-
+use Rector\Set\Value_Object\Set_List;
+use Rector\Tests\Configuration\Php_Level_Set_Resolver_Test;
+use Rector\Value_Object\Php_Version;
+use Rector_Prefix202603\Webmozart\Assert\Assert;
 /**
  * @see PhpLevelSetResolverTest
  * @see \Rector\Tests\Configuration\PhpLevelSetResolverTest
  */
-final class PhpLevelSetResolver
+final class Php_Level_Set_Resolver
 {
     /**
      * @var array<PhpVersion::*, SetList::PHP_*>
      */
-    private const VERSION_LOWER_BOUND_CONFIGS = [PhpVersion::PHP_52 => SetList::PHP_52, PhpVersion::PHP_53 => SetList::PHP_53, PhpVersion::PHP_54 => SetList::PHP_54, PhpVersion::PHP_55 => SetList::PHP_55, PhpVersion::PHP_56 => SetList::PHP_56, PhpVersion::PHP_70 => SetList::PHP_70, PhpVersion::PHP_71 => SetList::PHP_71, PhpVersion::PHP_72 => SetList::PHP_72, PhpVersion::PHP_73 => SetList::PHP_73, PhpVersion::PHP_74 => SetList::PHP_74, PhpVersion::PHP_80 => SetList::PHP_80, PhpVersion::PHP_81 => SetList::PHP_81, PhpVersion::PHP_82 => SetList::PHP_82, PhpVersion::PHP_83 => SetList::PHP_83, PhpVersion::PHP_84 => SetList::PHP_84, PhpVersion::PHP_85 => SetList::PHP_85];
+    private const VERSION_LOWER_BOUND_CONFIGS = [Php_Version::PHP_52 => Set_List::PHP_52, Php_Version::PHP_53 => Set_List::PHP_53, Php_Version::PHP_54 => Set_List::PHP_54, Php_Version::PHP_55 => Set_List::PHP_55, Php_Version::PHP_56 => Set_List::PHP_56, Php_Version::PHP_70 => Set_List::PHP_70, Php_Version::PHP_71 => Set_List::PHP_71, Php_Version::PHP_72 => Set_List::PHP_72, Php_Version::PHP_73 => Set_List::PHP_73, Php_Version::PHP_74 => Set_List::PHP_74, Php_Version::PHP_80 => Set_List::PHP_80, Php_Version::PHP_81 => Set_List::PHP_81, Php_Version::PHP_82 => Set_List::PHP_82, Php_Version::PHP_83 => Set_List::PHP_83, Php_Version::PHP_84 => Set_List::PHP_84, Php_Version::PHP_85 => Set_List::PHP_85];
     /**
      * @param PhpVersion::* $phpVersion
      * @return string[]
      */
-    public static function resolveFromPhpVersion(int $phpVersion): array
+    public static function resolve_from_php_version(int $php_version): array
     {
-        $configFilePaths = [];
-        foreach (self::VERSION_LOWER_BOUND_CONFIGS as $versionLowerBound => $phpSetFilePath) {
-            if ($versionLowerBound <= $phpVersion) {
-                $configFilePaths[] = $phpSetFilePath;
+        $config_file_paths = [];
+        foreach (self::VERSION_LOWER_BOUND_CONFIGS as $version_lower_bound => $php_set_file_path) {
+            if ($version_lower_bound <= $php_version) {
+                $config_file_paths[] = $php_set_file_path;
             }
         }
-        Assert::allFileExists($configFilePaths);
-        return $configFilePaths;
+        Assert::all_file_exists($config_file_paths);
+        return $config_file_paths;
     }
 }

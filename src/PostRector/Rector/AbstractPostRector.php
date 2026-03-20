@@ -1,40 +1,38 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Post_Rector\Rector;
 
-namespace Rector\PostRector\Rector;
-
-use PhpParser\Node;
-use PhpParser\Node\Stmt;
-use PhpParser\NodeVisitorAbstract;
-use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
-use Rector\PostRector\Contract\Rector\PostRectorInterface;
-use Rector\ValueObject\Application\File;
-use RectorPrefix202603\Webmozart\Assert\Assert;
-
-abstract class AbstractPostRector extends NodeVisitorAbstract implements PostRectorInterface
+use Php_Parser\Node;
+use Php_Parser\Node\Stmt;
+use Php_Parser\Node_Visitor_Abstract;
+use Rector\Changes_Reporting\Value_Object\Rector_With_Line_Change;
+use Rector\Post_Rector\Contract\Rector\Post_Rector_Interface;
+use Rector\Value_Object\Application\File;
+use Rector_Prefix202603\Webmozart\Assert\Assert;
+abstract class Abstract_Post_Rector extends Node_Visitor_Abstract implements Post_Rector_Interface
 {
-    private ?\Rector\ValueObject\Application\File $file = null;
+    private ?\Rector\Value_Object\Application\File $file = null;
     /**
      * @param Stmt[] $stmts
      */
-    public function shouldTraverse(array $stmts): bool
+    public function should_traverse(array $stmts): bool
     {
         return \true;
     }
-    public function setFile(File $file): void
+    public function set_file(File $file): void
     {
         $this->file = $file;
     }
-    public function getFile(): File
+    public function get_file(): File
     {
-        Assert::isInstanceOf($this->file, File::class);
+        Assert::is_instance_of($this->file, File::class);
         return $this->file;
     }
-    protected function addRectorClassWithLine(Node $node): void
+    protected function add_rector_class_with_line(Node $node): void
     {
-        Assert::isInstanceOf($this->file, File::class);
-        $rectorWithLineChange = new RectorWithLineChange(static::class, $node->getStartLine());
-        $this->file->addRectorClassWithLine($rectorWithLineChange);
+        Assert::is_instance_of($this->file, File::class);
+        $rector_with_line_change = new Rector_With_Line_Change(static::class, $node->get_start_line());
+        $this->file->add_rector_class_with_line($rector_with_line_change);
     }
 }

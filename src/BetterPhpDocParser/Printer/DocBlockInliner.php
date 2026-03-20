@@ -1,12 +1,10 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Better_Php_Doc_Parser\Printer;
 
-namespace Rector\BetterPhpDocParser\Printer;
-
-use RectorPrefix202603\Nette\Utils\Strings;
-
-final class DocBlockInliner
+use Rector_Prefix202603\Nette\Utils\Strings;
+final class Doc_Block_Inliner
 {
     /**
      * @see https://regex101.com/r/Mjb0qi/3
@@ -18,9 +16,9 @@ final class DocBlockInliner
      * @var string
      */
     private const NEWLINE_MIDDLE_DOC_REGEX = "#(?:\r\n|\n) \\* #";
-    public function inline(string $docContent): string
+    public function inline(string $doc_content): string
     {
-        $docContent = Strings::replace($docContent, self::NEWLINE_MIDDLE_DOC_REGEX, ' ');
-        return Strings::replace($docContent, self::NEWLINE_CLOSING_DOC_REGEX, ' */');
+        $doc_content = Strings::replace($doc_content, self::NEWLINE_MIDDLE_DOC_REGEX, ' ');
+        return Strings::replace($doc_content, self::NEWLINE_CLOSING_DOC_REGEX, ' */');
     }
 }

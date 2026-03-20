@@ -1,28 +1,26 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Static_Type_Mapper\Php_Parser;
 
-namespace Rector\StaticTypeMapper\PhpParser;
-
-use PhpParser\Node;
-use PhpParser\Node\Scalar\String_;
-use PHPStan\Type\StringType;
-use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
-
+use Php_Parser\Node;
+use Php_Parser\Node\Scalar\String_;
+use Php_Stan\Type\String_Type;
+use Rector\Static_Type_Mapper\Contract\Php_Parser\Php_Parser_Node_Mapper_Interface;
 /**
  * @implements PhpParserNodeMapperInterface<String_>
  */
-final class StringNodeMapper implements PhpParserNodeMapperInterface
+final class String_Node_Mapper implements Php_Parser_Node_Mapper_Interface
 {
-    public function getNodeType(): string
+    public function get_node_type(): string
     {
         return String_::class;
     }
     /**
      * @param String_ $node
      */
-    public function mapToPHPStan(Node $node): StringType
+    public function map_to_php_stan(Node $node): String_Type
     {
-        return new StringType();
+        return new String_Type();
     }
 }

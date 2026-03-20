@@ -1,14 +1,12 @@
 <?php
 
 declare (strict_types=1);
-
 namespace Rector\Skipper\Skipper;
 
-use PhpParser\Node;
-use Rector\Contract\Rector\RectorInterface;
-use Rector\ProcessAnalyzer\RectifiedAnalyzer;
-use Rector\Skipper\SkipVoter\ClassSkipVoter;
-
+use Php_Parser\Node;
+use Rector\Contract\Rector\Rector_Interface;
+use Rector\Process_Analyzer\Rectified_Analyzer;
+use Rector\Skipper\Skip_Voter\Class_Skip_Voter;
 /**
  * @api
  * @see \Rector\Tests\Skipper\Skipper\SkipperTest
@@ -18,51 +16,51 @@ final class Skipper
     /**
      * @readonly
      */
-    private RectifiedAnalyzer $rectifiedAnalyzer;
+    private Rectified_Analyzer $rectified_analyzer;
     /**
      * @readonly
      */
-    private \Rector\Skipper\Skipper\PathSkipper $pathSkipper;
+    private \Rector\Skipper\Skipper\Path_Skipper $path_skipper;
     /**
      * @readonly
      */
-    private ClassSkipVoter $classSkipVoter;
-    public function __construct(RectifiedAnalyzer $rectifiedAnalyzer, \Rector\Skipper\Skipper\PathSkipper $pathSkipper, ClassSkipVoter $classSkipVoter)
+    private Class_Skip_Voter $class_skip_voter;
+    public function __construct(Rectified_Analyzer $rectified_analyzer, \Rector\Skipper\Skipper\Path_Skipper $path_skipper, Class_Skip_Voter $class_skip_voter)
     {
-        $this->rectifiedAnalyzer = $rectifiedAnalyzer;
-        $this->pathSkipper = $pathSkipper;
-        $this->classSkipVoter = $classSkipVoter;
+        $this->rectified_analyzer = $rectified_analyzer;
+        $this->path_skipper = $path_skipper;
+        $this->class_skip_voter = $class_skip_voter;
     }
     /**
      * @param string|object $element
      */
-    public function shouldSkipElement($element): bool
+    public function should_skip_element($element): bool
     {
-        return $this->shouldSkipElementAndFilePath($element, __FILE__);
+        return $this->should_skip_element_and_file_path($element, __FILE__);
     }
-    public function shouldSkipFilePath(string $filePath): bool
+    public function should_skip_file_path(string $file_path): bool
     {
-        return $this->pathSkipper->shouldSkip($filePath);
+        return $this->path_skipper->should_skip($file_path);
     }
     /**
      * @param string|object $element
      */
-    public function shouldSkipElementAndFilePath($element, string $filePath): bool
+    public function should_skip_element_and_file_path($element, string $file_path): bool
     {
-        if (!$this->classSkipVoter->match($element)) {
+        if (!$this->class_skip_voter->match($element)) {
             return \false;
         }
-        return $this->classSkipVoter->shouldSkip($element, $filePath);
+        return $this->class_skip_voter->should_skip($element, $file_path);
     }
     /**
      * @param class-string<RectorInterface> $rectorClass
      * @param string|object $element
      */
-    public function shouldSkipCurrentNode($element, string $filePath, string $rectorClass, Node $node): bool
+    public function should_skip_current_node($element, string $file_path, string $rector_class, Node $node): bool
     {
-        if ($this->shouldSkipElementAndFilePath($element, $filePath)) {
+        if ($this->should_skip_element_and_file_path($element, $file_path)) {
             return \true;
         }
-        return $this->rectifiedAnalyzer->hasRectified($rectorClass, $node);
+        return $this->rectified_analyzer->has_rectified($rector_class, $node);
     }
 }

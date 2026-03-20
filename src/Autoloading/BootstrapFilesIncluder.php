@@ -1,50 +1,48 @@
 <?php
 
 declare (strict_types=1);
-
 namespace Rector\Autoloading;
 
 use Rector\Configuration\Option;
-use Rector\Configuration\Parameter\SimpleParameterProvider;
-use Rector\Exception\ShouldNotHappenException;
-use RectorPrefix202603\Webmozart\Assert\Assert;
-use RecursiveDirectoryIterator;
-use RecursiveIteratorIterator;
-use SplFileInfo;
-
+use Rector\Configuration\Parameter\Simple_Parameter_Provider;
+use Rector\Exception\Should_Not_Happen_Exception;
+use Rector_Prefix202603\Webmozart\Assert\Assert;
+use Recursive_Directory_Iterator;
+use Recursive_Iterator_Iterator;
+use Spl_File_Info;
 /**
  * @see \Rector\Tests\Autoloading\BootstrapFilesIncluderTest
  */
-final class BootstrapFilesIncluder
+final class Bootstrap_Files_Includer
 {
     /**
      * Inspired by
      * @see https://github.com/phpstan/phpstan-src/commit/aad1bf888ab7b5808898ee5fe2228bb8bb4e4cf1
      */
-    public function includeBootstrapFiles(): void
+    public function include_bootstrap_files(): void
     {
-        $bootstrapFiles = SimpleParameterProvider::provideArrayParameter(Option::BOOTSTRAP_FILES);
-        Assert::allString($bootstrapFiles);
+        $bootstrap_files = Simple_Parameter_Provider::provide_array_parameter(Option::BOOTSTRAP_FILES);
+        Assert::all_string($bootstrap_files);
         /** @var string[] $bootstrapFiles */
-        foreach ($bootstrapFiles as $bootstrapFile) {
-            if (!is_file($bootstrapFile)) {
-                throw new ShouldNotHappenException(sprintf('Bootstrap file "%s" does not exist.', $bootstrapFile));
+        foreach ($bootstrap_files as $bootstrap_file) {
+            if (!is_file($bootstrap_file)) {
+                throw new Should_Not_Happen_Exception(sprintf('Bootstrap file "%s" does not exist.', $bootstrap_file));
             }
-            require $bootstrapFile;
+            require $bootstrap_file;
         }
-        $this->requireRectorStubs();
+        $this->require_rector_stubs();
     }
-    private function requireRectorStubs(): void
+    private function require_rector_stubs(): void
     {
-        $stubsRectorDirectory = realpath(__DIR__ . '/../../stubs-rector');
-        if ($stubsRectorDirectory === \false) {
+        $stubs_rector_directory = realpath(__DIR__ . '/../../stubs-rector');
+        if ($stubs_rector_directory === \false) {
             return;
         }
-        $dir = new RecursiveDirectoryIterator($stubsRectorDirectory, RecursiveDirectoryIterator::SKIP_DOTS);
-        $stubs = new RecursiveIteratorIterator($dir);
+        $dir = new Recursive_Directory_Iterator($stubs_rector_directory, Recursive_Directory_Iterator::SKIP_DOTS);
+        $stubs = new Recursive_Iterator_Iterator($dir);
         foreach ($stubs as $stub) {
             /** @var SplFileInfo $stub */
-            require_once $stub->getRealPath();
+            require_once $stub->get_real_path();
         }
     }
 }

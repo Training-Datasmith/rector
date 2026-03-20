@@ -1,35 +1,33 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Node_Type_Resolver\Node_Type_Resolver;
 
-namespace Rector\NodeTypeResolver\NodeTypeResolver;
-
-use PhpParser\Node;
-use PhpParser\Node\Name;
-use PhpParser\Node\Name\FullyQualified;
-use PHPStan\Analyser\Scope;
-use PHPStan\Reflection\ClassReflection;
-use PHPStan\Type\MixedType;
-use PHPStan\Type\ObjectType;
-use PHPStan\Type\Type;
-use PHPStan\Type\UnionType;
-use Rector\Enum\ObjectReference;
-use Rector\NodeTypeResolver\Contract\NodeTypeResolverInterface;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-
+use Php_Parser\Node;
+use Php_Parser\Node\Name;
+use Php_Parser\Node\Name\Fully_Qualified;
+use Php_Stan\Analyser\Scope;
+use Php_Stan\Reflection\Class_Reflection;
+use Php_Stan\Type\Mixed_Type;
+use Php_Stan\Type\Object_Type;
+use Php_Stan\Type\Type;
+use Php_Stan\Type\Union_Type;
+use Rector\Enum\Object_Reference;
+use Rector\Node_Type_Resolver\Contract\Node_Type_Resolver_Interface;
+use Rector\Node_Type_Resolver\Node\Attribute_Key;
 /**
  * @see \Rector\Tests\NodeTypeResolver\PerNodeTypeResolver\NameTypeResolver\NameTypeResolverTest
  *
  * @implements NodeTypeResolverInterface<Name|FullyQualified>
  */
-final class NameTypeResolver implements NodeTypeResolverInterface
+final class Name_Type_Resolver implements Node_Type_Resolver_Interface
 {
     /**
      * @return array<class-string<Node>>
      */
-    public function getNodeClasses(): array
+    public function get_node_classes(): array
     {
-        return [Name::class, FullyQualified::class];
+        return [Name::class, Fully_Qualified::class];
     }
     /**
      * @param Name $node
@@ -37,57 +35,57 @@ final class NameTypeResolver implements NodeTypeResolverInterface
     public function resolve(Node $node): Type
     {
         // not instanceof FullyQualified means it is a Name
-        if (!$node instanceof FullyQualified && $node->hasAttribute(AttributeKey::NAMESPACED_NAME)) {
-            return $this->resolve(new FullyQualified($node->getAttribute(AttributeKey::NAMESPACED_NAME)));
+        if (!$node instanceof Fully_Qualified && $node->has_attribute(Attribute_Key::NAMESPACED_NAME)) {
+            return $this->resolve(new Fully_Qualified($node->get_attribute(Attribute_Key::NAMESPACED_NAME)));
         }
-        if ($node->toString() === ObjectReference::PARENT) {
-            return $this->resolveParent($node);
+        if ($node->to_string() === Object_Reference::PARENT) {
+            return $this->resolve_parent($node);
         }
-        $fullyQualifiedName = $this->resolveFullyQualifiedName($node);
-        return new ObjectType($fullyQualifiedName);
+        $fully_qualified_name = $this->resolve_fully_qualified_name($node);
+        return new Object_Type($fully_qualified_name);
     }
-    private function resolveClassReflection(\PhpParser\Node\Name $node): ?ClassReflection
+    private function resolve_class_reflection(\Php_Parser\Node\Name $node): ?Class_Reflection
     {
-        $scope = $node->getAttribute(AttributeKey::SCOPE);
+        $scope = $node->get_attribute(Attribute_Key::SCOPE);
         if (!$scope instanceof Scope) {
             return null;
         }
-        return $scope->getClassReflection();
+        return $scope->get_class_reflection();
     }
     /**
      * @return \PHPStan\Type\MixedType|\PHPStan\Type\ObjectType|\PHPStan\Type\UnionType
      */
-    private function resolveParent(Name $name)
+    private function resolve_parent(Name $name)
     {
-        $classReflection = $this->resolveClassReflection($name);
-        if (!$classReflection instanceof ClassReflection || !$classReflection->isClass()) {
-            return new MixedType();
+        $class_reflection = $this->resolve_class_reflection($name);
+        if (!$class_reflection instanceof Class_Reflection || !$class_reflection->is_class()) {
+            return new Mixed_Type();
         }
-        if ($classReflection->isAnonymous()) {
-            return new MixedType();
+        if ($class_reflection->is_anonymous()) {
+            return new Mixed_Type();
         }
-        $parentClassObjectTypes = [];
-        foreach ($classReflection->getParents() as $parentClassReflection) {
-            $parentClassObjectTypes[] = new ObjectType($parentClassReflection->getName());
+        $parent_class_object_types = [];
+        foreach ($class_reflection->get_parents() as $parent_class_reflection) {
+            $parent_class_object_types[] = new Object_Type($parent_class_reflection->get_name());
         }
-        if ($parentClassObjectTypes === []) {
-            return new MixedType();
+        if ($parent_class_object_types === []) {
+            return new Mixed_Type();
         }
-        if (count($parentClassObjectTypes) === 1) {
-            return $parentClassObjectTypes[0];
+        if (count($parent_class_object_types) === 1) {
+            return $parent_class_object_types[0];
         }
-        return new UnionType($parentClassObjectTypes);
+        return new Union_Type($parent_class_object_types);
     }
-    private function resolveFullyQualifiedName(Name $name): string
+    private function resolve_fully_qualified_name(Name $name): string
     {
-        $nameValue = $name->toString();
-        if (in_array($nameValue, [ObjectReference::SELF, ObjectReference::STATIC], \true)) {
-            $classReflection = $this->resolveClassReflection($name);
-            if (!$classReflection instanceof ClassReflection || $classReflection->isAnonymous()) {
-                return $name->toString();
+        $name_value = $name->to_string();
+        if (in_array($name_value, [Object_Reference::SELF, Object_Reference::STATIC], \true)) {
+            $class_reflection = $this->resolve_class_reflection($name);
+            if (!$class_reflection instanceof Class_Reflection || $class_reflection->is_anonymous()) {
+                return $name->to_string();
             }
-            return $classReflection->getName();
+            return $class_reflection->get_name();
         }
-        return $nameValue;
+        return $name_value;
     }
 }

@@ -1,10 +1,9 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Php_Stan_Static_Type_Mapper\Enum;
 
-namespace Rector\PHPStanStaticTypeMapper\Enum;
-
-final class TypeKind
+final class Type_Kind
 {
     /**
      * @var string

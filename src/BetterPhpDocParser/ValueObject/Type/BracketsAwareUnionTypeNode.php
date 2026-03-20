@@ -1,25 +1,23 @@
 <?php
 
 declare (strict_types=1);
-
-namespace Rector\BetterPhpDocParser\ValueObject\Type;
+namespace Rector\Better_Php_Doc_Parser\Value_Object\Type;
 
 use Override;
-use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
-
-final class BracketsAwareUnionTypeNode extends UnionTypeNode
+use Php_Stan\Php_Doc_Parser\Ast\Type\Type_Node;
+use Php_Stan\Php_Doc_Parser\Ast\Type\Union_Type_Node;
+final class Brackets_Aware_Union_Type_Node extends Union_Type_Node
 {
     /**
      * @readonly
      */
-    private bool $isWrappedInBrackets = \false;
+    private bool $is_wrapped_in_brackets = \false;
     /**
      * @param TypeNode[] $types
      */
-    public function __construct(array $types, bool $isWrappedInBrackets = \false)
+    public function __construct(array $types, bool $is_wrapped_in_brackets = \false)
     {
-        $this->isWrappedInBrackets = $isWrappedInBrackets;
+        $this->is_wrapped_in_brackets = $is_wrapped_in_brackets;
         parent::__construct($types);
     }
     /**
@@ -35,13 +33,13 @@ final class BracketsAwareUnionTypeNode extends UnionTypeNode
             $types[] = (string) $type;
         }
         $types = array_unique($types);
-        if (!$this->isWrappedInBrackets) {
+        if (!$this->is_wrapped_in_brackets) {
             return implode('|', $types);
         }
         return '(' . implode('|', $types) . ')';
     }
-    public function isWrappedInBrackets(): bool
+    public function is_wrapped_in_brackets(): bool
     {
-        return $this->isWrappedInBrackets;
+        return $this->is_wrapped_in_brackets;
     }
 }

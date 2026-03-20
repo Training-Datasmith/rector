@@ -1,80 +1,78 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Node_Manipulator;
 
-namespace Rector\NodeManipulator;
-
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Property;
-use PHPStan\Type\Type;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpParser\Node\NodeFactory;
-
-final class ClassInsertManipulator
+use Php_Parser\Node\Stmt\Class_;
+use Php_Parser\Node\Stmt\Class_Method;
+use Php_Parser\Node\Stmt\Property;
+use Php_Stan\Type\Type;
+use Rector\Node_Type_Resolver\Node\Attribute_Key;
+use Rector\Php_Parser\Node\Node_Factory;
+final class Class_Insert_Manipulator
 {
     /**
      * @readonly
      */
-    private NodeFactory $nodeFactory;
-    public function __construct(NodeFactory $nodeFactory)
+    private Node_Factory $node_factory;
+    public function __construct(Node_Factory $node_factory)
     {
-        $this->nodeFactory = $nodeFactory;
+        $this->node_factory = $node_factory;
     }
     /**
      * @api
      * @param \PhpParser\Node\Stmt\Property|\PhpParser\Node\Stmt\ClassConst|\PhpParser\Node\Stmt\ClassMethod $addedStmt
      */
-    public function addAsFirstMethod(Class_ $class, $addedStmt): void
+    public function add_as_first_method(Class_ $class, $added_stmt): void
     {
-        $scope = $class->getAttribute(AttributeKey::SCOPE);
-        $addedStmt->setAttribute(AttributeKey::SCOPE, $scope);
+        $scope = $class->get_attribute(Attribute_Key::SCOPE);
+        $added_stmt->set_attribute(Attribute_Key::SCOPE, $scope);
         // no stmts? add this one
         if ($class->stmts === []) {
-            $class->stmts[] = $addedStmt;
+            $class->stmts[] = $added_stmt;
             return;
         }
-        $newClassStmts = [];
-        $isAdded = \false;
-        foreach ($class->stmts as $key => $classStmt) {
-            $nextStmt = $class->stmts[$key + 1] ?? null;
-            if ($isAdded === \false) {
+        $new_class_stmts = [];
+        $is_added = \false;
+        foreach ($class->stmts as $key => $class_stmt) {
+            $next_stmt = $class->stmts[$key + 1] ?? null;
+            if ($is_added === \false) {
                 // first class method
-                if ($classStmt instanceof ClassMethod) {
-                    $newClassStmts[] = $addedStmt;
-                    $newClassStmts[] = $classStmt;
-                    $isAdded = \true;
+                if ($class_stmt instanceof Class_Method) {
+                    $new_class_stmts[] = $added_stmt;
+                    $new_class_stmts[] = $class_stmt;
+                    $is_added = \true;
                     continue;
                 }
                 // after last property
-                if ($classStmt instanceof Property && !$nextStmt instanceof Property) {
-                    $newClassStmts[] = $classStmt;
-                    $newClassStmts[] = $addedStmt;
-                    $isAdded = \true;
+                if ($class_stmt instanceof Property && !$next_stmt instanceof Property) {
+                    $new_class_stmts[] = $class_stmt;
+                    $new_class_stmts[] = $added_stmt;
+                    $is_added = \true;
                     continue;
                 }
             }
-            $newClassStmts[] = $classStmt;
+            $new_class_stmts[] = $class_stmt;
         }
         // still not added? try after last trait
         // @todo
-        if ($isAdded) {
-            $class->stmts = $newClassStmts;
+        if ($is_added) {
+            $class->stmts = $new_class_stmts;
             return;
         }
         // keep added at least as first stmt
-        $class->stmts = array_merge([$addedStmt], $class->stmts);
+        $class->stmts = array_merge([$added_stmt], $class->stmts);
     }
     /**
      * @internal Use PropertyAdder service instead
      */
-    public function addPropertyToClass(Class_ $class, string $name, ?Type $type): void
+    public function add_property_to_class(Class_ $class, string $name, ?Type $type): void
     {
-        $existingProperty = $class->getProperty($name);
-        if ($existingProperty instanceof Property) {
+        $existing_property = $class->get_property($name);
+        if ($existing_property instanceof Property) {
             return;
         }
-        $property = $this->nodeFactory->createPrivatePropertyFromNameAndType($name, $type);
-        $this->addAsFirstMethod($class, $property);
+        $property = $this->node_factory->create_private_property_from_name_and_type($name, $type);
+        $this->add_as_first_method($class, $property);
     }
 }

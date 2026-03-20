@@ -1,28 +1,26 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Node_Manipulator;
 
-namespace Rector\NodeManipulator;
-
-use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\BinaryOp;
-use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
-use PhpParser\Node\Expr\BinaryOp\BooleanOr;
-use PhpParser\Node\Expr\BooleanNot;
-use Rector\Exception\ShouldNotHappenException;
-use Rector\Php71\ValueObject\TwoNodeMatch;
-use Rector\PhpParser\Node\AssignAndBinaryMap;
-
-final class BinaryOpManipulator
+use Php_Parser\Node;
+use Php_Parser\Node\Expr;
+use Php_Parser\Node\Expr\Binary_Op;
+use Php_Parser\Node\Expr\Binary_Op\Boolean_And;
+use Php_Parser\Node\Expr\Binary_Op\Boolean_Or;
+use Php_Parser\Node\Expr\Boolean_Not;
+use Rector\Exception\Should_Not_Happen_Exception;
+use Rector\Php71\Value_Object\Two_Node_Match;
+use Rector\Php_Parser\Node\Assign_And_Binary_Map;
+final class Binary_Op_Manipulator
 {
     /**
      * @readonly
      */
-    private AssignAndBinaryMap $assignAndBinaryMap;
-    public function __construct(AssignAndBinaryMap $assignAndBinaryMap)
+    private Assign_And_Binary_Map $assign_and_binary_map;
+    public function __construct(Assign_And_Binary_Map $assign_and_binary_map)
     {
-        $this->assignAndBinaryMap = $assignAndBinaryMap;
+        $this->assign_and_binary_map = $assign_and_binary_map;
     }
     /**
      * Tries to match left or right parts (xor),
@@ -31,106 +29,106 @@ final class BinaryOpManipulator
      * @param callable(Node $firstNode, Node $secondNode): bool|class-string<Node> $firstCondition
      * @param callable(Node $firstNode, Node $secondNode): bool|class-string<Node> $secondCondition
      */
-    public function matchFirstAndSecondConditionNode(BinaryOp $binaryOp, $firstCondition, $secondCondition): ?TwoNodeMatch
+    public function match_first_and_second_condition_node(Binary_Op $binary_op, $first_condition, $second_condition): ?Two_Node_Match
     {
-        $this->validateCondition($firstCondition);
-        $this->validateCondition($secondCondition);
-        $firstCondition = $this->normalizeCondition($firstCondition);
-        $secondCondition = $this->normalizeCondition($secondCondition);
-        if ($firstCondition($binaryOp->left, $binaryOp->right) && $secondCondition($binaryOp->right, $binaryOp->left)) {
-            return new TwoNodeMatch($binaryOp->left, $binaryOp->right);
+        $this->validate_condition($first_condition);
+        $this->validate_condition($second_condition);
+        $first_condition = $this->normalize_condition($first_condition);
+        $second_condition = $this->normalize_condition($second_condition);
+        if ($first_condition($binary_op->left, $binary_op->right) && $second_condition($binary_op->right, $binary_op->left)) {
+            return new Two_Node_Match($binary_op->left, $binary_op->right);
         }
-        if (!$firstCondition($binaryOp->right, $binaryOp->left)) {
+        if (!$first_condition($binary_op->right, $binary_op->left)) {
             return null;
         }
-        if (!$secondCondition($binaryOp->left, $binaryOp->right)) {
+        if (!$second_condition($binary_op->left, $binary_op->right)) {
             return null;
         }
-        return new TwoNodeMatch($binaryOp->right, $binaryOp->left);
+        return new Two_Node_Match($binary_op->right, $binary_op->left);
     }
-    public function inverseBooleanOr(BooleanOr $booleanOr): ?BinaryOp
+    public function inverse_boolean_or(Boolean_Or $boolean_or): ?Binary_Op
     {
         // no nesting
-        if ($booleanOr->left instanceof BooleanOr) {
+        if ($boolean_or->left instanceof Boolean_Or) {
             return null;
         }
-        if ($booleanOr->right instanceof BooleanOr) {
+        if ($boolean_or->right instanceof Boolean_Or) {
             return null;
         }
-        $inversedNodeClass = $this->resolveInversedNodeClass($booleanOr);
-        if ($inversedNodeClass === null) {
+        $inversed_node_class = $this->resolve_inversed_node_class($boolean_or);
+        if ($inversed_node_class === null) {
             return null;
         }
-        $firstInversedExpr = $this->inverseNode($booleanOr->left);
-        $secondInversedExpr = $this->inverseNode($booleanOr->right);
-        return new $inversedNodeClass($firstInversedExpr, $secondInversedExpr);
+        $first_inversed_expr = $this->inverse_node($boolean_or->left);
+        $second_inversed_expr = $this->inverse_node($boolean_or->right);
+        return new $inversed_node_class($first_inversed_expr, $second_inversed_expr);
     }
-    public function invertCondition(BinaryOp $binaryOp): ?BinaryOp
+    public function invert_condition(Binary_Op $binary_op): ?Binary_Op
     {
         // no nesting
-        if ($binaryOp->left instanceof BooleanOr) {
+        if ($binary_op->left instanceof Boolean_Or) {
             return null;
         }
-        if ($binaryOp->right instanceof BooleanOr) {
+        if ($binary_op->right instanceof Boolean_Or) {
             return null;
         }
-        $inversedNodeClass = $this->resolveInversedNodeClass($binaryOp);
-        if ($inversedNodeClass === null) {
+        $inversed_node_class = $this->resolve_inversed_node_class($binary_op);
+        if ($inversed_node_class === null) {
             return null;
         }
-        return new $inversedNodeClass($binaryOp->left, $binaryOp->right);
+        return new $inversed_node_class($binary_op->left, $binary_op->right);
     }
     /**
      * @return \PhpParser\Node\Expr\BinaryOp|\PhpParser\Node\Expr|\PhpParser\Node\Expr\BooleanNot
      */
-    public function inverseNode(Expr $expr)
+    public function inverse_node(Expr $expr)
     {
-        if ($expr instanceof BinaryOp) {
-            $inversedBinaryOp = $this->assignAndBinaryMap->getInversed($expr);
-            if ($inversedBinaryOp !== null) {
-                return new $inversedBinaryOp($expr->left, $expr->right);
+        if ($expr instanceof Binary_Op) {
+            $inversed_binary_op = $this->assign_and_binary_map->get_inversed($expr);
+            if ($inversed_binary_op !== null) {
+                return new $inversed_binary_op($expr->left, $expr->right);
             }
         }
-        if ($expr instanceof BooleanNot) {
+        if ($expr instanceof Boolean_Not) {
             return $expr->expr;
         }
-        return new BooleanNot($expr);
+        return new Boolean_Not($expr);
     }
     /**
      * @param callable(Node $firstNode, Node $secondNode): bool|class-string<Node> $firstCondition
      */
-    private function validateCondition($firstCondition): void
+    private function validate_condition($first_condition): void
     {
-        if (is_callable($firstCondition)) {
+        if (is_callable($first_condition)) {
             return;
         }
-        if (is_a($firstCondition, Node::class, \true)) {
+        if (is_a($first_condition, Node::class, \true)) {
             return;
         }
-        throw new ShouldNotHappenException();
+        throw new Should_Not_Happen_Exception();
     }
     /**
      * @param callable(Node $firstNode, Node $secondNode): bool|class-string<Node> $condition
      * @return callable(Node $firstNode, Node $secondNode): bool
      */
-    private function normalizeCondition($condition): callable
+    private function normalize_condition($condition): callable
     {
         if (is_callable($condition)) {
             return $condition;
         }
-        return static fn (Node $node): bool => $node instanceof $condition;
+        return static fn(Node $node): bool => $node instanceof $condition;
     }
     /**
      * @return class-string<BinaryOp>|null
      */
-    private function resolveInversedNodeClass(BinaryOp $binaryOp): ?string
+    private function resolve_inversed_node_class(Binary_Op $binary_op): ?string
     {
-        $inversedNodeClass = $this->assignAndBinaryMap->getInversed($binaryOp);
-        if ($inversedNodeClass !== null) {
-            return $inversedNodeClass;
+        $inversed_node_class = $this->assign_and_binary_map->get_inversed($binary_op);
+        if ($inversed_node_class !== null) {
+            return $inversed_node_class;
         }
-        if ($binaryOp instanceof BooleanOr) {
-            return BooleanAnd::class;
+        if ($binary_op instanceof Boolean_Or) {
+            return Boolean_And::class;
         }
         return null;
     }

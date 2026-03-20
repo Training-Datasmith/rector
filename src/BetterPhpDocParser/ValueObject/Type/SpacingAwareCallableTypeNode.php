@@ -1,60 +1,58 @@
 <?php
 
 declare (strict_types=1);
-
-namespace Rector\BetterPhpDocParser\ValueObject\Type;
+namespace Rector\Better_Php_Doc_Parser\Value_Object\Type;
 
 use Override;
-use PHPStan\PhpDocParser\Ast\Type\CallableTypeNode;
-
-final class SpacingAwareCallableTypeNode extends CallableTypeNode
+use Php_Stan\Php_Doc_Parser\Ast\Type\Callable_Type_Node;
+final class Spacing_Aware_Callable_Type_Node extends Callable_Type_Node
 {
     #[Override]
     public function __toString(): string
     {
         // keep original (Psalm?) format, see https://github.com/rectorphp/rector/issues/2841
-        return $this->createExplicitCallable();
+        return $this->create_explicit_callable();
     }
-    private function createExplicitCallable(): string
+    private function create_explicit_callable(): string
     {
-        $parameterTypeString = $this->createParameterTypeString();
-        $returnTypeAsString = (string) $this->returnType;
-        if (strpos($returnTypeAsString, '|') !== \false) {
-            $returnTypeAsString = '(' . $returnTypeAsString . ')';
+        $parameter_type_string = $this->create_parameter_type_string();
+        $return_type_as_string = (string) $this->return_type;
+        if (strpos($return_type_as_string, '|') !== \false) {
+            $return_type_as_string = '(' . $return_type_as_string . ')';
         }
-        $parameterTypeString = $this->normalizeParameterType($parameterTypeString, $returnTypeAsString);
-        $returnTypeAsString = $this->normalizeReturnType($parameterTypeString, $returnTypeAsString);
-        return sprintf('%s%s%s', $this->identifier->name, $parameterTypeString, $returnTypeAsString);
+        $parameter_type_string = $this->normalize_parameter_type($parameter_type_string, $return_type_as_string);
+        $return_type_as_string = $this->normalize_return_type($parameter_type_string, $return_type_as_string);
+        return sprintf('%s%s%s', $this->identifier->name, $parameter_type_string, $return_type_as_string);
     }
-    private function createParameterTypeString(): string
+    private function create_parameter_type_string(): string
     {
-        $parameterTypeStrings = [];
+        $parameter_type_strings = [];
         foreach ($this->parameters as $parameter) {
-            $parameterTypeStrings[] = trim((string) $parameter);
+            $parameter_type_strings[] = trim((string) $parameter);
         }
-        $parameterTypeString = implode(', ', $parameterTypeStrings);
-        return trim($parameterTypeString);
+        $parameter_type_string = implode(', ', $parameter_type_strings);
+        return trim($parameter_type_string);
     }
-    private function normalizeParameterType(string $parameterTypeString, string $returnTypeAsString): string
+    private function normalize_parameter_type(string $parameter_type_string, string $return_type_as_string): string
     {
-        if ($parameterTypeString !== '') {
-            return '(' . $parameterTypeString . ')';
+        if ($parameter_type_string !== '') {
+            return '(' . $parameter_type_string . ')';
         }
-        if ($returnTypeAsString === 'mixed') {
-            return $parameterTypeString;
+        if ($return_type_as_string === 'mixed') {
+            return $parameter_type_string;
         }
-        if ($returnTypeAsString === '') {
-            return $parameterTypeString;
+        if ($return_type_as_string === '') {
+            return $parameter_type_string;
         }
         return '()';
     }
-    private function normalizeReturnType(string $parameterTypeString, string $returnTypeAsString): string
+    private function normalize_return_type(string $parameter_type_string, string $return_type_as_string): string
     {
-        if ($returnTypeAsString !== 'mixed') {
-            return ':' . $returnTypeAsString;
+        if ($return_type_as_string !== 'mixed') {
+            return ':' . $return_type_as_string;
         }
-        if ($parameterTypeString !== '') {
-            return ':' . $returnTypeAsString;
+        if ($parameter_type_string !== '') {
+            return ':' . $return_type_as_string;
         }
         return '';
     }

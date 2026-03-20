@@ -1,17 +1,15 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Php_Doc_Parser\Php_Doc_Parser\Php_Doc_Node_Visitor;
 
-namespace Rector\PhpDocParser\PhpDocParser\PhpDocNodeVisitor;
-
-use PHPStan\PhpDocParser\Ast\Node;
-
-final class CallablePhpDocNodeVisitor extends \Rector\PhpDocParser\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor
+use Php_Stan\Php_Doc_Parser\Ast\Node;
+final class Callable_Php_Doc_Node_Visitor extends \Rector\Php_Doc_Parser\Php_Doc_Parser\Php_Doc_Node_Visitor\Abstract_Php_Doc_Node_Visitor
 {
     /**
      * @readonly
      */
-    private ?string $docContent;
+    private ?string $doc_content;
     /**
      * @var callable(Node, string|null): (int|null|Node)
      */
@@ -19,17 +17,17 @@ final class CallablePhpDocNodeVisitor extends \Rector\PhpDocParser\PhpDocParser\
     /**
      * @param callable(Node $callable, string|null $docContent): (int|null|Node) $callable
      */
-    public function __construct(callable $callable, ?string $docContent)
+    public function __construct(callable $callable, ?string $doc_content)
     {
-        $this->docContent = $docContent;
+        $this->doc_content = $doc_content;
         $this->callable = $callable;
     }
     /**
      * @return int|\PHPStan\PhpDocParser\Ast\Node|null
      */
-    public function enterNode(Node $node)
+    public function enter_node(Node $node)
     {
         $callable = $this->callable;
-        return $callable($node, $this->docContent);
+        return $callable($node, $this->doc_content);
     }
 }

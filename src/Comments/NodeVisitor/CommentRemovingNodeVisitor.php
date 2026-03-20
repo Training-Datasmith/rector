@@ -1,21 +1,19 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Comments\Node_Visitor;
 
-namespace Rector\Comments\NodeVisitor;
-
-use PhpParser\Node;
-use PhpParser\NodeVisitorAbstract;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-
-final class CommentRemovingNodeVisitor extends NodeVisitorAbstract
+use Php_Parser\Node;
+use Php_Parser\Node_Visitor_Abstract;
+use Rector\Node_Type_Resolver\Node\Attribute_Key;
+final class Comment_Removing_Node_Visitor extends Node_Visitor_Abstract
 {
-    public function enterNode(Node $node): Node
+    public function enter_node(Node $node): Node
     {
         // the node must be cloned, so original node is not touched in final print
-        $clonedNode = clone $node;
-        $clonedNode->setAttribute(AttributeKey::COMMENTS, []);
-        $clonedNode->setAttribute(AttributeKey::PHP_DOC_INFO, null);
-        return $clonedNode;
+        $cloned_node = clone $node;
+        $cloned_node->set_attribute(Attribute_Key::COMMENTS, []);
+        $cloned_node->set_attribute(Attribute_Key::PHP_DOC_INFO, null);
+        return $cloned_node;
     }
 }

@@ -1,38 +1,36 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Value_Object;
 
-namespace Rector\ValueObject;
-
-use Rector\ChangesReporting\Output\ConsoleOutputFormatter;
+use Rector\Changes_Reporting\Output\Console_Output_Formatter;
 use Rector\Configuration\Option;
-use Rector\Configuration\Parameter\SimpleParameterProvider;
-use Rector\ValueObject\Configuration\LevelOverflow;
-use RectorPrefix202603\Webmozart\Assert\Assert;
-
+use Rector\Configuration\Parameter\Simple_Parameter_Provider;
+use Rector\Value_Object\Configuration\Level_Overflow;
+use Rector_Prefix202603\Webmozart\Assert\Assert;
 final class Configuration
 {
     /**
      * @readonly
      */
-    private bool $isDryRun = \false;
+    private bool $is_dry_run = \false;
     /**
      * @readonly
      */
-    private bool $showProgressBar = \true;
+    private bool $show_progress_bar = \true;
     /**
      * @readonly
      */
-    private bool $shouldClearCache = \false;
+    private bool $should_clear_cache = \false;
     /**
      * @readonly
      */
-    private string $outputFormat = ConsoleOutputFormatter::NAME;
+    private string $output_format = Console_Output_Formatter::NAME;
     /**
      * @var string[]
      * @readonly
      */
-    private array $fileExtensions = ['php'];
+    private array $file_extensions = ['php'];
     /**
      * @var string[]
      * @readonly
@@ -41,150 +39,150 @@ final class Configuration
     /**
      * @readonly
      */
-    private bool $showDiffs = \true;
+    private bool $show_diffs = \true;
     /**
      * @readonly
      */
-    private ?string $parallelPort;
+    private ?string $parallel_port;
     /**
      * @readonly
      */
-    private ?string $parallelIdentifier;
+    private ?string $parallel_identifier;
     /**
      * @readonly
      */
-    private bool $isParallel = \false;
+    private bool $is_parallel = \false;
     /**
      * @readonly
      */
-    private ?string $memoryLimit;
+    private ?string $memory_limit;
     /**
      * @readonly
      */
-    private bool $isDebug = \false;
+    private bool $is_debug = \false;
     /**
      * @readonly
      */
-    private bool $reportingWithRealPath = \false;
+    private bool $reporting_with_real_path = \false;
     /**
      * @readonly
      */
-    private ?string $onlyRule = null;
+    private ?string $only_rule = null;
     /**
      * @readonly
      */
-    private ?string $onlySuffix = null;
+    private ?string $only_suffix = null;
     /**
      * @var LevelOverflow[]
      * @readonly
      */
-    private array $levelOverflows = [];
+    private array $level_overflows = [];
     /**
      * @param string[] $fileExtensions
      * @param string[] $paths
      * @param LevelOverflow[] $levelOverflows
      */
-    public function __construct(bool $isDryRun = \false, bool $showProgressBar = \true, bool $shouldClearCache = \false, string $outputFormat = ConsoleOutputFormatter::NAME, array $fileExtensions = ['php'], array $paths = [], bool $showDiffs = \true, ?string $parallelPort = null, ?string $parallelIdentifier = null, bool $isParallel = \false, ?string $memoryLimit = null, bool $isDebug = \false, bool $reportingWithRealPath = \false, ?string $onlyRule = null, ?string $onlySuffix = null, array $levelOverflows = [])
+    public function __construct(bool $is_dry_run = \false, bool $show_progress_bar = \true, bool $should_clear_cache = \false, string $output_format = Console_Output_Formatter::NAME, array $file_extensions = ['php'], array $paths = [], bool $show_diffs = \true, ?string $parallel_port = null, ?string $parallel_identifier = null, bool $is_parallel = \false, ?string $memory_limit = null, bool $is_debug = \false, bool $reporting_with_real_path = \false, ?string $only_rule = null, ?string $only_suffix = null, array $level_overflows = [])
     {
-        $this->isDryRun = $isDryRun;
-        $this->showProgressBar = $showProgressBar;
-        $this->shouldClearCache = $shouldClearCache;
-        $this->outputFormat = $outputFormat;
-        $this->fileExtensions = $fileExtensions;
+        $this->is_dry_run = $is_dry_run;
+        $this->show_progress_bar = $show_progress_bar;
+        $this->should_clear_cache = $should_clear_cache;
+        $this->output_format = $output_format;
+        $this->file_extensions = $file_extensions;
         $this->paths = $paths;
-        $this->showDiffs = $showDiffs;
-        $this->parallelPort = $parallelPort;
-        $this->parallelIdentifier = $parallelIdentifier;
-        $this->isParallel = $isParallel;
-        $this->memoryLimit = $memoryLimit;
-        $this->isDebug = $isDebug;
-        $this->reportingWithRealPath = $reportingWithRealPath;
-        $this->onlyRule = $onlyRule;
-        $this->onlySuffix = $onlySuffix;
-        $this->levelOverflows = $levelOverflows;
+        $this->show_diffs = $show_diffs;
+        $this->parallel_port = $parallel_port;
+        $this->parallel_identifier = $parallel_identifier;
+        $this->is_parallel = $is_parallel;
+        $this->memory_limit = $memory_limit;
+        $this->is_debug = $is_debug;
+        $this->reporting_with_real_path = $reporting_with_real_path;
+        $this->only_rule = $only_rule;
+        $this->only_suffix = $only_suffix;
+        $this->level_overflows = $level_overflows;
     }
-    public function isDryRun(): bool
+    public function is_dry_run(): bool
     {
-        return $this->isDryRun;
+        return $this->is_dry_run;
     }
-    public function shouldShowProgressBar(): bool
+    public function should_show_progress_bar(): bool
     {
-        return $this->showProgressBar;
+        return $this->show_progress_bar;
     }
-    public function shouldClearCache(): bool
+    public function should_clear_cache(): bool
     {
-        return $this->shouldClearCache;
+        return $this->should_clear_cache;
     }
     /**
      * @return string[]
      */
-    public function getFileExtensions(): array
+    public function get_file_extensions(): array
     {
-        Assert::notEmpty($this->fileExtensions);
-        return $this->fileExtensions;
+        Assert::not_empty($this->file_extensions);
+        return $this->file_extensions;
     }
-    public function getOnlyRule(): ?string
+    public function get_only_rule(): ?string
     {
-        return $this->onlyRule;
+        return $this->only_rule;
     }
     /**
      * @return string[]
      */
-    public function getPaths(): array
+    public function get_paths(): array
     {
         return $this->paths;
     }
-    public function getOutputFormat(): string
+    public function get_output_format(): string
     {
-        return $this->outputFormat;
+        return $this->output_format;
     }
-    public function shouldShowDiffs(): bool
+    public function should_show_diffs(): bool
     {
-        return $this->showDiffs;
+        return $this->show_diffs;
     }
-    public function getParallelPort(): ?string
+    public function get_parallel_port(): ?string
     {
-        return $this->parallelPort;
+        return $this->parallel_port;
     }
-    public function getParallelIdentifier(): ?string
+    public function get_parallel_identifier(): ?string
     {
-        return $this->parallelIdentifier;
+        return $this->parallel_identifier;
     }
-    public function isParallel(): bool
+    public function is_parallel(): bool
     {
-        return $this->isParallel;
+        return $this->is_parallel;
     }
-    public function getMemoryLimit(): ?string
+    public function get_memory_limit(): ?string
     {
-        return $this->memoryLimit;
+        return $this->memory_limit;
     }
-    public function isDebug(): bool
+    public function is_debug(): bool
     {
-        return $this->isDebug;
+        return $this->is_debug;
     }
-    public function isReportingWithRealPath(): bool
+    public function is_reporting_with_real_path(): bool
     {
-        return $this->reportingWithRealPath;
+        return $this->reporting_with_real_path;
     }
-    public function getOnlySuffix(): ?string
+    public function get_only_suffix(): ?string
     {
-        return $this->onlySuffix;
+        return $this->only_suffix;
     }
     /**
      * @return LevelOverflow[]
      */
-    public function getLevelOverflows(): array
+    public function get_level_overflows(): array
     {
-        return $this->levelOverflows;
+        return $this->level_overflows;
     }
     /**
      * @return string[]
      */
-    public function getBothSetAndRulesDuplicatedRegistrations(): array
+    public function get_both_set_and_rules_duplicated_registrations(): array
     {
-        $rootStandaloneRegisteredRules = SimpleParameterProvider::provideArrayParameter(Option::ROOT_STANDALONE_REGISTERED_RULES);
-        $setRegisteredRules = SimpleParameterProvider::provideArrayParameter(Option::SET_REGISTERED_RULES);
-        $ruleDuplicatedRegistrations = array_intersect($rootStandaloneRegisteredRules, $setRegisteredRules);
-        return array_unique($ruleDuplicatedRegistrations);
+        $root_standalone_registered_rules = Simple_Parameter_Provider::provide_array_parameter(Option::ROOT_STANDALONE_REGISTERED_RULES);
+        $set_registered_rules = Simple_Parameter_Provider::provide_array_parameter(Option::SET_REGISTERED_RULES);
+        $rule_duplicated_registrations = array_intersect($root_standalone_registered_rules, $set_registered_rules);
+        return array_unique($rule_duplicated_registrations);
     }
 }

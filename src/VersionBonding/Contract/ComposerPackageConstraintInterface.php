@@ -1,11 +1,9 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Version_Bonding\Contract;
 
-namespace Rector\VersionBonding\Contract;
-
-use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
-
+use Rector\Version_Bonding\Value_Object\Composer_Package_Constraint;
 /**
  * Can be implemented by @see \Rector\Contract\Rector\RectorInterface
  *
@@ -13,7 +11,7 @@ use Rector\VersionBonding\ValueObject\ComposerPackageConstraint;
  *
  * @api used by extensions
  */
-interface ComposerPackageConstraintInterface
+interface Composer_Package_Constraint_Interface
 {
-    public function provideComposerPackageConstraint(): ComposerPackageConstraint;
+    public function provide_composer_package_constraint(): Composer_Package_Constraint;
 }

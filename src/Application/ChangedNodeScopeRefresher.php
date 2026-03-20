@@ -1,70 +1,68 @@
 <?php
 
 declare (strict_types=1);
-
 namespace Rector\Application;
 
-use PhpParser\Modifiers;
-use PhpParser\Node;
-use PhpParser\Node\Arg;
-use PhpParser\Node\ArrayItem;
-use PhpParser\Node\Attribute;
-use PhpParser\Node\AttributeGroup;
-use PhpParser\Node\ClosureUse;
-use PhpParser\Node\DeclareItem;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Param;
-use PhpParser\Node\PropertyItem;
-use PhpParser\Node\StaticVar;
-use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\Declare_;
-use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\Property;
-use PhpParser\Node\Stmt\Static_;
-use PhpParser\Node\Stmt\Use_;
-use PhpParser\Node\UseItem;
-use PHPStan\Analyser\MutatingScope;
-use Rector\Exception\ShouldNotHappenException;
-use Rector\NodeAnalyzer\ScopeAnalyzer;
-use Rector\NodeTypeResolver\PHPStan\Scope\PHPStanNodeScopeResolver;
-use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
-
+use Php_Parser\Modifiers;
+use Php_Parser\Node;
+use Php_Parser\Node\Arg;
+use Php_Parser\Node\Array_Item;
+use Php_Parser\Node\Attribute;
+use Php_Parser\Node\Attribute_Group;
+use Php_Parser\Node\Closure_Use;
+use Php_Parser\Node\Declare_Item;
+use Php_Parser\Node\Expr;
+use Php_Parser\Node\Expr\Array_;
+use Php_Parser\Node\Expr\Closure;
+use Php_Parser\Node\Expr\New_;
+use Php_Parser\Node\Param;
+use Php_Parser\Node\Property_Item;
+use Php_Parser\Node\Static_Var;
+use Php_Parser\Node\Stmt;
+use Php_Parser\Node\Stmt\Class_;
+use Php_Parser\Node\Stmt\Declare_;
+use Php_Parser\Node\Stmt\Expression;
+use Php_Parser\Node\Stmt\Property;
+use Php_Parser\Node\Stmt\Static_;
+use Php_Parser\Node\Stmt\Use_;
+use Php_Parser\Node\Use_Item;
+use Php_Stan\Analyser\Mutating_Scope;
+use Rector\Exception\Should_Not_Happen_Exception;
+use Rector\Node_Analyzer\Scope_Analyzer;
+use Rector\Node_Type_Resolver\Php_Stan\Scope\Php_Stan_Node_Scope_Resolver;
+use Rector\Php_Doc_Parser\Node_Traverser\Simple_Callable_Node_Traverser;
 /**
  * In case of changed node, we need to re-traverse the PHPStan Scope to make all the new nodes aware of what is going on.
  */
-final class ChangedNodeScopeRefresher
+final class Changed_Node_Scope_Refresher
 {
     /**
      * @readonly
      */
-    private PHPStanNodeScopeResolver $phpStanNodeScopeResolver;
+    private Php_Stan_Node_Scope_Resolver $php_stan_node_scope_resolver;
     /**
      * @readonly
      */
-    private ScopeAnalyzer $scopeAnalyzer;
+    private Scope_Analyzer $scope_analyzer;
     /**
      * @readonly
      */
-    private SimpleCallableNodeTraverser $simpleCallableNodeTraverser;
-    public function __construct(PHPStanNodeScopeResolver $phpStanNodeScopeResolver, ScopeAnalyzer $scopeAnalyzer, SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
+    private Simple_Callable_Node_Traverser $simple_callable_node_traverser;
+    public function __construct(Php_Stan_Node_Scope_Resolver $php_stan_node_scope_resolver, Scope_Analyzer $scope_analyzer, Simple_Callable_Node_Traverser $simple_callable_node_traverser)
     {
-        $this->phpStanNodeScopeResolver = $phpStanNodeScopeResolver;
-        $this->scopeAnalyzer = $scopeAnalyzer;
-        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
+        $this->php_stan_node_scope_resolver = $php_stan_node_scope_resolver;
+        $this->scope_analyzer = $scope_analyzer;
+        $this->simple_callable_node_traverser = $simple_callable_node_traverser;
     }
-    public function refresh(Node $node, string $filePath, ?MutatingScope $mutatingScope): void
+    public function refresh(Node $node, string $file_path, ?Mutating_Scope $mutating_scope): void
     {
         // nothing to refresh
-        if (!$this->scopeAnalyzer->isRefreshable($node)) {
+        if (!$this->scope_analyzer->is_refreshable($node)) {
             return;
         }
-        if (!$mutatingScope instanceof MutatingScope) {
-            $errorMessage = sprintf('Node "%s" with is missing scope required for scope refresh', get_class($node));
-            throw new ShouldNotHappenException($errorMessage);
+        if (!$mutating_scope instanceof Mutating_Scope) {
+            $error_message = sprintf('Node "%s" with is missing scope required for scope refresh', get_class($node));
+            throw new Should_Not_Happen_Exception($error_message);
         }
         /**
          * The reindex is needed to:
@@ -74,14 +72,14 @@ final class ChangedNodeScopeRefresher
          *              - first rule: - Class_ → ClassMethod → remove stmt with index 0
          *              - second rule: - ClassMethod → here fetch the index 0 that no longer exists
          */
-        SimpleCallableNodeTraverser::traverse($node, fn (Node $subNode): ?Node => \Rector\Application\NodeAttributeReIndexer::reIndexNodeAttributes($subNode));
-        $stmts = $this->resolveStmts($node);
-        $this->phpStanNodeScopeResolver->processNodes($stmts, $filePath, $mutatingScope);
+        Simple_Callable_Node_Traverser::traverse($node, fn(Node $sub_node): ?Node => \Rector\Application\Node_Attribute_Re_Indexer::re_index_node_attributes($sub_node));
+        $stmts = $this->resolve_stmts($node);
+        $this->php_stan_node_scope_resolver->process_nodes($stmts, $file_path, $mutating_scope);
     }
     /**
      * @return Stmt[]
      */
-    private function resolveStmts(Node $node): array
+    private function resolve_stmts(Node $node): array
     {
         if ($node instanceof Stmt) {
             return [$node];
@@ -90,24 +88,24 @@ final class ChangedNodeScopeRefresher
             return [new Expression($node)];
         }
         // moved from Expr/Stmt to directly under Node on PHPParser 5
-        if ($node instanceof ArrayItem) {
+        if ($node instanceof Array_Item) {
             return [new Expression(new Array_([$node]))];
         }
-        if ($node instanceof ClosureUse) {
+        if ($node instanceof Closure_Use) {
             $closure = new Closure();
             $closure->uses[] = $node;
             return [new Expression($closure)];
         }
-        if ($node instanceof DeclareItem) {
+        if ($node instanceof Declare_Item) {
             return [new Declare_([$node])];
         }
-        if ($node instanceof PropertyItem) {
+        if ($node instanceof Property_Item) {
             return [new Property(Modifiers::PUBLIC, [$node])];
         }
-        if ($node instanceof StaticVar) {
+        if ($node instanceof Static_Var) {
             return [new Static_([$node])];
         }
-        if ($node instanceof UseItem) {
+        if ($node instanceof Use_Item) {
             return [new Use_([$node])];
         }
         if ($node instanceof Param) {
@@ -115,38 +113,38 @@ final class ChangedNodeScopeRefresher
             $closure->params[] = $node;
             return [new Expression($closure)];
         }
-        if ($node instanceof AttributeGroup) {
+        if ($node instanceof Attribute_Group) {
             $class = new Class_(null);
-            $class->attrGroups[] = $node;
-            $this->setLineAttributesOnClass($class, $node);
+            $class->attr_groups[] = $node;
+            $this->set_line_attributes_on_class($class, $node);
             return [$class];
         }
         if ($node instanceof Attribute) {
             $class = new Class_(null);
-            $class->attrGroups[] = new AttributeGroup([$node]);
-            $this->setLineAttributesOnClass($class, $node);
+            $class->attr_groups[] = new Attribute_Group([$node]);
+            $this->set_line_attributes_on_class($class, $node);
             return [$class];
         }
         if ($node instanceof Arg) {
-            $class = new Class_(null, [], ['startLine' => $node->getStartLine(), 'endLine' => $node->getEndLine()]);
+            $class = new Class_(null, [], ['startLine' => $node->get_start_line(), 'endLine' => $node->get_end_line()]);
             $new = new New_($class, [$node]);
             return [new Expression($new)];
         }
-        $errorMessage = sprintf('Complete parent node of "%s" be a stmt.', get_class($node));
-        throw new ShouldNotHappenException($errorMessage);
+        $error_message = sprintf('Complete parent node of "%s" be a stmt.', get_class($node));
+        throw new Should_Not_Happen_Exception($error_message);
     }
     /**
      * @param \PhpParser\Node\Attribute|\PhpParser\Node\AttributeGroup $node
      */
-    private function setLineAttributesOnClass(Class_ $class, $node): void
+    private function set_line_attributes_on_class(Class_ $class, $node): void
     {
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable([$class], function (Node $subNode) use ($node): Node {
-            if ($subNode->getStartLine() >= 0 && $subNode->getEndLine() >= 0) {
-                return $subNode;
+        $this->simple_callable_node_traverser->traverse_nodes_with_callable([$class], function (Node $sub_node) use ($node): Node {
+            if ($sub_node->get_start_line() >= 0 && $sub_node->get_end_line() >= 0) {
+                return $sub_node;
             }
-            $subNode->setAttribute('startLine', $node->getStartLine());
-            $subNode->setAttribute('endLine', $node->getEndLine());
-            return $subNode;
+            $sub_node->set_attribute('startLine', $node->get_start_line());
+            $sub_node->set_attribute('endLine', $node->get_end_line());
+            return $sub_node;
         });
     }
 }

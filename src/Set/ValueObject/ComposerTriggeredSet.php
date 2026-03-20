@@ -1,27 +1,25 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Set\Value_Object;
 
-namespace Rector\Set\ValueObject;
-
-use Rector\Composer\ValueObject\InstalledPackage;
-use Rector\Set\Contract\SetInterface;
-use RectorPrefix202603\Composer\Semver\Semver;
-use RectorPrefix202603\Webmozart\Assert\Assert;
-
+use Rector\Composer\Value_Object\Installed_Package;
+use Rector\Set\Contract\Set_Interface;
+use Rector_Prefix202603\Composer\Semver\Semver;
+use Rector_Prefix202603\Webmozart\Assert\Assert;
 /**
  * @api used by extensions
  */
-final class ComposerTriggeredSet implements SetInterface
+final class Composer_Triggered_Set implements Set_Interface
 {
     /**
      * @readonly
      */
-    private string $groupName;
+    private string $group_name;
     /**
      * @readonly
      */
-    private string $packageName;
+    private string $package_name;
     /**
      * @readonly
      */
@@ -29,44 +27,44 @@ final class ComposerTriggeredSet implements SetInterface
     /**
      * @readonly
      */
-    private string $setFilePath;
+    private string $set_file_path;
     /**
      * @see https://regex101.com/r/ioYomu/1
      * @var string
      */
     private const PACKAGE_REGEX = '#^[a-z0-9-]+\/([a-z0-9-_]+|\*)$#';
-    public function __construct(string $groupName, string $packageName, string $version, string $setFilePath)
+    public function __construct(string $group_name, string $package_name, string $version, string $set_file_path)
     {
-        $this->groupName = $groupName;
-        $this->packageName = $packageName;
+        $this->group_name = $group_name;
+        $this->package_name = $package_name;
         $this->version = $version;
-        $this->setFilePath = $setFilePath;
-        Assert::regex($this->packageName, self::PACKAGE_REGEX);
-        Assert::fileExists($setFilePath);
+        $this->set_file_path = $set_file_path;
+        Assert::regex($this->package_name, self::PACKAGE_REGEX);
+        Assert::file_exists($set_file_path);
     }
-    public function getGroupName(): string
+    public function get_group_name(): string
     {
-        return $this->groupName;
+        return $this->group_name;
     }
-    public function getSetFilePath(): string
+    public function get_set_file_path(): string
     {
-        return $this->setFilePath;
+        return $this->set_file_path;
     }
     /**
      * @param InstalledPackage[] $installedPackages
      */
-    public function matchInstalledPackages(array $installedPackages): bool
+    public function match_installed_packages(array $installed_packages): bool
     {
-        foreach ($installedPackages as $installedPackage) {
-            if ($installedPackage->getName() !== $this->packageName) {
+        foreach ($installed_packages as $installed_package) {
+            if ($installed_package->get_name() !== $this->package_name) {
                 continue;
             }
-            return Semver::satisfies($installedPackage->getVersion(), '^' . $this->version);
+            return Semver::satisfies($installed_package->get_version(), '^' . $this->version);
         }
         return \false;
     }
-    public function getName(): string
+    public function get_name(): string
     {
-        return $this->packageName . ' ' . $this->version;
+        return $this->package_name . ' ' . $this->version;
     }
 }

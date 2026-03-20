@@ -1,146 +1,144 @@
 <?php
 
 declare (strict_types=1);
-
-namespace Rector\NodeTypeResolver\PHPStan\Scope;
+namespace Rector\Node_Type_Resolver\Php_Stan\Scope;
 
 use Error;
-use PhpParser\Node;
-use PhpParser\Node\Arg;
-use PhpParser\Node\ArrayItem;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayDimFetch;
-use PhpParser\Node\Expr\ArrowFunction;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\AssignOp;
-use PhpParser\Node\Expr\AssignRef;
-use PhpParser\Node\Expr\BinaryOp;
-use PhpParser\Node\Expr\BitwiseNot;
-use PhpParser\Node\Expr\BooleanNot;
-use PhpParser\Node\Expr\CallLike;
-use PhpParser\Node\Expr\Cast;
-use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Expr\Clone_;
-use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\Expr\ConstFetch;
-use PhpParser\Node\Expr\Empty_;
-use PhpParser\Node\Expr\ErrorSuppress;
-use PhpParser\Node\Expr\Eval_;
-use PhpParser\Node\Expr\Exit_;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\Include_;
-use PhpParser\Node\Expr\Instanceof_;
-use PhpParser\Node\Expr\Isset_;
-use PhpParser\Node\Expr\List_;
-use PhpParser\Node\Expr\Match_;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Expr\NullsafeMethodCall;
-use PhpParser\Node\Expr\PostDec;
-use PhpParser\Node\Expr\PostInc;
-use PhpParser\Node\Expr\PreDec;
-use PhpParser\Node\Expr\PreInc;
-use PhpParser\Node\Expr\Print_;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Expr\StaticPropertyFetch;
-use PhpParser\Node\Expr\Ternary;
-use PhpParser\Node\Expr\Throw_;
-use PhpParser\Node\Expr\UnaryMinus;
-use PhpParser\Node\Expr\UnaryPlus;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Expr\Yield_;
-use PhpParser\Node\Expr\YieldFrom;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\IntersectionType;
-use PhpParser\Node\Name;
-use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\NullableType;
-use PhpParser\Node\Param;
-use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Catch_;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassConst;
-use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Do_;
-use PhpParser\Node\Stmt\Echo_;
-use PhpParser\Node\Stmt\ElseIf_;
-use PhpParser\Node\Stmt\Enum_;
-use PhpParser\Node\Stmt\EnumCase;
-use PhpParser\Node\Stmt\Expression;
-use PhpParser\Node\Stmt\Finally_;
-use PhpParser\Node\Stmt\For_;
-use PhpParser\Node\Stmt\Foreach_;
-use PhpParser\Node\Stmt\Function_;
-use PhpParser\Node\Stmt\If_;
-use PhpParser\Node\Stmt\Interface_;
-use PhpParser\Node\Stmt\Property;
-use PhpParser\Node\Stmt\Return_;
-use PhpParser\Node\Stmt\Switch_;
-use PhpParser\Node\Stmt\Trait_;
-use PhpParser\Node\Stmt\TryCatch;
-use PhpParser\Node\Stmt\Unset_;
-use PhpParser\Node\Stmt\While_;
-use PhpParser\Node\UnionType;
-use PhpParser\NodeTraverser;
-use PHPStan\Analyser\Fiber\FiberScope;
-use PHPStan\Analyser\MutatingScope;
-use PHPStan\Analyser\NodeScopeResolver;
-use PHPStan\Analyser\ScopeContext;
-use PHPStan\Analyser\UndefinedVariableException;
-use PHPStan\Node\FunctionCallableNode;
-use PHPStan\Node\InstantiationCallableNode;
-use PHPStan\Node\MethodCallableNode;
-use PHPStan\Node\Printer\Printer;
-use PHPStan\Node\StaticMethodCallableNode;
-use PHPStan\Node\UnreachableStatementNode;
-use PHPStan\Node\VirtualNode;
-use PHPStan\Parser\ParserErrorsException;
-use PHPStan\PhpDocParser\Parser\ParserException;
-use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\ShouldNotHappenException;
-use PHPStan\Type\ObjectType;
-use PHPStan\Type\TypeCombinator;
-use Rector\Contract\PhpParser\DecoratingNodeVisitorInterface;
-use Rector\NodeAnalyzer\ClassAnalyzer;
-use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpParser\Node\FileNode;
-use Rector\Util\Reflection\PrivatesAccessor;
-use RectorPrefix202603\Webmozart\Assert\Assert;
-
+use Php_Parser\Node;
+use Php_Parser\Node\Arg;
+use Php_Parser\Node\Array_Item;
+use Php_Parser\Node\Expr;
+use Php_Parser\Node\Expr\Array_;
+use Php_Parser\Node\Expr\Array_Dim_Fetch;
+use Php_Parser\Node\Expr\Arrow_Function;
+use Php_Parser\Node\Expr\Assign;
+use Php_Parser\Node\Expr\Assign_Op;
+use Php_Parser\Node\Expr\Assign_Ref;
+use Php_Parser\Node\Expr\Binary_Op;
+use Php_Parser\Node\Expr\Bitwise_Not;
+use Php_Parser\Node\Expr\Boolean_Not;
+use Php_Parser\Node\Expr\Call_Like;
+use Php_Parser\Node\Expr\Cast;
+use Php_Parser\Node\Expr\Class_Const_Fetch;
+use Php_Parser\Node\Expr\Clone_;
+use Php_Parser\Node\Expr\Closure;
+use Php_Parser\Node\Expr\Const_Fetch;
+use Php_Parser\Node\Expr\Empty_;
+use Php_Parser\Node\Expr\Error_Suppress;
+use Php_Parser\Node\Expr\Eval_;
+use Php_Parser\Node\Expr\Exit_;
+use Php_Parser\Node\Expr\Func_Call;
+use Php_Parser\Node\Expr\Include_;
+use Php_Parser\Node\Expr\Instanceof_;
+use Php_Parser\Node\Expr\Isset_;
+use Php_Parser\Node\Expr\List_;
+use Php_Parser\Node\Expr\Match_;
+use Php_Parser\Node\Expr\Method_Call;
+use Php_Parser\Node\Expr\New_;
+use Php_Parser\Node\Expr\Nullsafe_Method_Call;
+use Php_Parser\Node\Expr\Post_Dec;
+use Php_Parser\Node\Expr\Post_Inc;
+use Php_Parser\Node\Expr\Pre_Dec;
+use Php_Parser\Node\Expr\Pre_Inc;
+use Php_Parser\Node\Expr\Print_;
+use Php_Parser\Node\Expr\Property_Fetch;
+use Php_Parser\Node\Expr\Static_Call;
+use Php_Parser\Node\Expr\Static_Property_Fetch;
+use Php_Parser\Node\Expr\Ternary;
+use Php_Parser\Node\Expr\Throw_;
+use Php_Parser\Node\Expr\Unary_Minus;
+use Php_Parser\Node\Expr\Unary_Plus;
+use Php_Parser\Node\Expr\Variable;
+use Php_Parser\Node\Expr\Yield_;
+use Php_Parser\Node\Expr\Yield_From;
+use Php_Parser\Node\Identifier;
+use Php_Parser\Node\Intersection_Type;
+use Php_Parser\Node\Name;
+use Php_Parser\Node\Name\Fully_Qualified;
+use Php_Parser\Node\Nullable_Type;
+use Php_Parser\Node\Param;
+use Php_Parser\Node\Stmt;
+use Php_Parser\Node\Stmt\Catch_;
+use Php_Parser\Node\Stmt\Class_;
+use Php_Parser\Node\Stmt\Class_Const;
+use Php_Parser\Node\Stmt\Class_Like;
+use Php_Parser\Node\Stmt\Class_Method;
+use Php_Parser\Node\Stmt\Do_;
+use Php_Parser\Node\Stmt\Echo_;
+use Php_Parser\Node\Stmt\Else_If_;
+use Php_Parser\Node\Stmt\Enum_;
+use Php_Parser\Node\Stmt\Enum_Case;
+use Php_Parser\Node\Stmt\Expression;
+use Php_Parser\Node\Stmt\Finally_;
+use Php_Parser\Node\Stmt\For_;
+use Php_Parser\Node\Stmt\Foreach_;
+use Php_Parser\Node\Stmt\Function_;
+use Php_Parser\Node\Stmt\If_;
+use Php_Parser\Node\Stmt\Interface_;
+use Php_Parser\Node\Stmt\Property;
+use Php_Parser\Node\Stmt\Return_;
+use Php_Parser\Node\Stmt\Switch_;
+use Php_Parser\Node\Stmt\Trait_;
+use Php_Parser\Node\Stmt\Try_Catch;
+use Php_Parser\Node\Stmt\Unset_;
+use Php_Parser\Node\Stmt\While_;
+use Php_Parser\Node\Union_Type;
+use Php_Parser\Node_Traverser;
+use Php_Stan\Analyser\Fiber\Fiber_Scope;
+use Php_Stan\Analyser\Mutating_Scope;
+use Php_Stan\Analyser\Node_Scope_Resolver;
+use Php_Stan\Analyser\Scope_Context;
+use Php_Stan\Analyser\Undefined_Variable_Exception;
+use Php_Stan\Node\Function_Callable_Node;
+use Php_Stan\Node\Instantiation_Callable_Node;
+use Php_Stan\Node\Method_Callable_Node;
+use Php_Stan\Node\Printer\Printer;
+use Php_Stan\Node\Static_Method_Callable_Node;
+use Php_Stan\Node\Unreachable_Statement_Node;
+use Php_Stan\Node\Virtual_Node;
+use Php_Stan\Parser\Parser_Errors_Exception;
+use Php_Stan\Php_Doc_Parser\Parser\Parser_Exception;
+use Php_Stan\Reflection\Reflection_Provider;
+use Php_Stan\Should_Not_Happen_Exception;
+use Php_Stan\Type\Object_Type;
+use Php_Stan\Type\Type_Combinator;
+use Rector\Contract\Php_Parser\Decorating_Node_Visitor_Interface;
+use Rector\Node_Analyzer\Class_Analyzer;
+use Rector\Node_Name_Resolver\Node_Name_Resolver;
+use Rector\Node_Type_Resolver\Node\Attribute_Key;
+use Rector\Php_Parser\Node\File_Node;
+use Rector\Util\Reflection\Privates_Accessor;
+use Rector_Prefix202603\Webmozart\Assert\Assert;
 /**
  * @inspired by https://github.com/silverstripe/silverstripe-upgrader/blob/532182b23e854d02e0b27e68ebc394f436de0682/src/UpgradeRule/PHP/Visitor/PHPStanScopeVisitor.php
  * - https://github.com/silverstripe/silverstripe-upgrader/pull/57/commits/e5c7cfa166ad940d9d4ff69537d9f7608e992359#diff-5e0807bb3dc03d6a8d8b6ad049abd774
  */
-final class PHPStanNodeScopeResolver
+final class Php_Stan_Node_Scope_Resolver
 {
     /**
      * @readonly
      */
-    private NodeScopeResolver $nodeScopeResolver;
+    private Node_Scope_Resolver $node_scope_resolver;
     /**
      * @readonly
      */
-    private ReflectionProvider $reflectionProvider;
+    private Reflection_Provider $reflection_provider;
     /**
      * @readonly
      */
-    private \Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory $scopeFactory;
+    private \Rector\Node_Type_Resolver\Php_Stan\Scope\Scope_Factory $scope_factory;
     /**
      * @readonly
      */
-    private PrivatesAccessor $privatesAccessor;
+    private Privates_Accessor $privates_accessor;
     /**
      * @readonly
      */
-    private NodeNameResolver $nodeNameResolver;
+    private Node_Name_Resolver $node_name_resolver;
     /**
      * @readonly
      */
-    private ClassAnalyzer $classAnalyzer;
+    private Class_Analyzer $class_analyzer;
     /**
      * @var string
      */
@@ -148,372 +146,372 @@ final class PHPStanNodeScopeResolver
     /**
      * @readonly
      */
-    private NodeTraverser $nodeTraverser;
+    private Node_Traverser $node_traverser;
     /**
      * @param DecoratingNodeVisitorInterface[] $decoratingNodeVisitors
      */
-    public function __construct(NodeScopeResolver $nodeScopeResolver, ReflectionProvider $reflectionProvider, iterable $decoratingNodeVisitors, \Rector\NodeTypeResolver\PHPStan\Scope\ScopeFactory $scopeFactory, PrivatesAccessor $privatesAccessor, NodeNameResolver $nodeNameResolver, ClassAnalyzer $classAnalyzer)
+    public function __construct(Node_Scope_Resolver $node_scope_resolver, Reflection_Provider $reflection_provider, iterable $decorating_node_visitors, \Rector\Node_Type_Resolver\Php_Stan\Scope\Scope_Factory $scope_factory, Privates_Accessor $privates_accessor, Node_Name_Resolver $node_name_resolver, Class_Analyzer $class_analyzer)
     {
-        $this->nodeScopeResolver = $nodeScopeResolver;
-        $this->reflectionProvider = $reflectionProvider;
-        $this->scopeFactory = $scopeFactory;
-        $this->privatesAccessor = $privatesAccessor;
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->classAnalyzer = $classAnalyzer;
+        $this->node_scope_resolver = $node_scope_resolver;
+        $this->reflection_provider = $reflection_provider;
+        $this->scope_factory = $scope_factory;
+        $this->privates_accessor = $privates_accessor;
+        $this->node_name_resolver = $node_name_resolver;
+        $this->class_analyzer = $class_analyzer;
         // @todo make use of immutable, to avoid tedious traversing
-        $this->nodeTraverser = new NodeTraverser(...$decoratingNodeVisitors);
+        $this->node_traverser = new Node_Traverser(...$decorating_node_visitors);
     }
     /**
      * @param Stmt[] $stmts
      * @return Stmt[]
      */
-    public function processNodes(array $stmts, string $filePath, ?MutatingScope $formerMutatingScope = null): array
+    public function process_nodes(array $stmts, string $file_path, ?Mutating_Scope $former_mutating_scope = null): array
     {
         /**
          * The stmts must be array of Stmt, or it will be silently skipped by PHPStan
          * @see vendor/phpstan/phpstan/phpstan.phar/src/Analyser/NodeScopeResolver.php:282
          */
-        Assert::allIsInstanceOf($stmts, Stmt::class);
-        $scope = $formerMutatingScope ?? $this->scopeFactory->createFromFile($filePath);
-        $nodeCallback = function (Node $node, MutatingScope $mutatingScope) use (&$nodeCallback, $filePath): void {
-            if ($mutatingScope instanceof FiberScope) {
-                $mutatingScope = $mutatingScope->toMutatingScope();
+        Assert::all_is_instance_of($stmts, Stmt::class);
+        $scope = $former_mutating_scope ?? $this->scope_factory->create_from_file($file_path);
+        $node_callback = function (Node $node, Mutating_Scope $mutating_scope) use (&$node_callback, $file_path): void {
+            if ($mutating_scope instanceof Fiber_Scope) {
+                $mutating_scope = $mutating_scope->to_mutating_scope();
             }
             // the class reflection is resolved AFTER entering to class node
             // so we need to get it from the first after this one
             if ($node instanceof Class_ || $node instanceof Interface_ || $node instanceof Enum_) {
                 /** @var MutatingScope $mutatingScope */
-                $mutatingScope = $this->resolveClassOrInterfaceScope($node, $mutatingScope);
-                $node->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+                $mutating_scope = $this->resolve_class_or_interface_scope($node, $mutating_scope);
+                $node->set_attribute(Attribute_Key::SCOPE, $mutating_scope);
                 if ($node instanceof Class_) {
-                    if ($node->extends instanceof FullyQualified) {
-                        $node->extends->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+                    if ($node->extends instanceof Fully_Qualified) {
+                        $node->extends->set_attribute(Attribute_Key::SCOPE, $mutating_scope);
                     }
                     foreach ($node->implements as $implement) {
-                        $implement->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+                        $implement->set_attribute(Attribute_Key::SCOPE, $mutating_scope);
                     }
                 }
                 return;
             }
             if ($node instanceof Trait_) {
-                $this->processTrait($node, $mutatingScope, $nodeCallback);
+                $this->process_trait($node, $mutating_scope, $node_callback);
                 return;
             }
             // special case for unreachable nodes
             // early check here as UnreachableStatementNode is special VirtualNode
             // so node to be checked inside
-            if ($node instanceof UnreachableStatementNode) {
-                $this->processUnreachableStatementNode($node, $mutatingScope, $nodeCallback);
+            if ($node instanceof Unreachable_Statement_Node) {
+                $this->process_unreachable_statement_node($node, $mutating_scope, $node_callback);
                 return;
             }
             // init current Node set Attribute
             // not a VirtualNode, then set scope attribute
             // do not return early, as its properties will be checked next
-            if (!$node instanceof VirtualNode) {
-                $node->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+            if (!$node instanceof Virtual_Node) {
+                $node->set_attribute(Attribute_Key::SCOPE, $mutating_scope);
             }
             // handle unwrapped stmts
-            if ($node instanceof FileNode) {
-                $this->nodeScopeResolverProcessNodes($node->stmts, $mutatingScope, $nodeCallback);
+            if ($node instanceof File_Node) {
+                $this->node_scope_resolver_process_nodes($node->stmts, $mutating_scope, $node_callback);
                 return;
             }
-            $this->decorateNodeAttrGroups($node, $mutatingScope, $nodeCallback);
-            if (($node instanceof Expression || $node instanceof Return_ || $node instanceof EnumCase || $node instanceof Cast || $node instanceof YieldFrom || $node instanceof UnaryMinus || $node instanceof UnaryPlus || $node instanceof Throw_ || $node instanceof Empty_ || $node instanceof BooleanNot || $node instanceof Clone_ || $node instanceof ErrorSuppress || $node instanceof BitwiseNot || $node instanceof Eval_ || $node instanceof Print_ || $node instanceof Exit_ || $node instanceof ArrowFunction || $node instanceof Include_ || $node instanceof Instanceof_) && $node->expr instanceof Expr) {
-                $node->expr->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+            $this->decorate_node_attr_groups($node, $mutating_scope, $node_callback);
+            if (($node instanceof Expression || $node instanceof Return_ || $node instanceof Enum_Case || $node instanceof Cast || $node instanceof Yield_From || $node instanceof Unary_Minus || $node instanceof Unary_Plus || $node instanceof Throw_ || $node instanceof Empty_ || $node instanceof Boolean_Not || $node instanceof Clone_ || $node instanceof Error_Suppress || $node instanceof Bitwise_Not || $node instanceof Eval_ || $node instanceof Print_ || $node instanceof Exit_ || $node instanceof Arrow_Function || $node instanceof Include_ || $node instanceof Instanceof_) && $node->expr instanceof Expr) {
+                $node->expr->set_attribute(Attribute_Key::SCOPE, $mutating_scope);
                 return;
             }
-            if ($node instanceof PostInc || $node instanceof PostDec || $node instanceof PreInc || $node instanceof PreDec) {
-                $node->var->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+            if ($node instanceof Post_Inc || $node instanceof Post_Dec || $node instanceof Pre_Inc || $node instanceof Pre_Dec) {
+                $node->var->set_attribute(Attribute_Key::SCOPE, $mutating_scope);
                 return;
             }
-            if ($node instanceof ArrayDimFetch) {
-                $node->var->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+            if ($node instanceof Array_Dim_Fetch) {
+                $node->var->set_attribute(Attribute_Key::SCOPE, $mutating_scope);
                 if ($node->dim instanceof Expr) {
-                    $node->dim->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+                    $node->dim->set_attribute(Attribute_Key::SCOPE, $mutating_scope);
                 }
                 return;
             }
-            if ($node instanceof Assign || $node instanceof AssignOp || $node instanceof AssignRef) {
-                $this->processAssign($node, $mutatingScope);
+            if ($node instanceof Assign || $node instanceof Assign_Op || $node instanceof Assign_Ref) {
+                $this->process_assign($node, $mutating_scope);
                 if ($node->var instanceof Variable && $node->var->name instanceof Expr) {
-                    $this->nodeScopeResolverProcessNodes([new Expression($node->var), new Expression($node->expr)], $mutatingScope, $nodeCallback);
+                    $this->node_scope_resolver_process_nodes([new Expression($node->var), new Expression($node->expr)], $mutating_scope, $node_callback);
                 }
                 return;
             }
             if ($node instanceof Ternary) {
-                $this->processTernary($node, $mutatingScope);
+                $this->process_ternary($node, $mutating_scope);
                 return;
             }
-            if ($node instanceof BinaryOp) {
-                $this->processBinaryOp($node, $mutatingScope);
+            if ($node instanceof Binary_Op) {
+                $this->process_binary_op($node, $mutating_scope);
                 return;
             }
             if ($node instanceof Arg) {
-                $node->value->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+                $node->value->set_attribute(Attribute_Key::SCOPE, $mutating_scope);
                 return;
             }
             if ($node instanceof Foreach_) {
                 // decorate value as well
-                $node->valueVar->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-                if ($node->valueVar instanceof List_) {
-                    $this->processArray($node->valueVar, $mutatingScope);
+                $node->value_var->set_attribute(Attribute_Key::SCOPE, $mutating_scope);
+                if ($node->value_var instanceof List_) {
+                    $this->process_array($node->value_var, $mutating_scope);
                 }
                 return;
             }
             if ($node instanceof For_) {
                 foreach (array_merge($node->init, $node->cond, $node->loop) as $expr) {
-                    $expr->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-                    if ($expr instanceof BinaryOp) {
-                        $this->processBinaryOp($expr, $mutatingScope);
+                    $expr->set_attribute(Attribute_Key::SCOPE, $mutating_scope);
+                    if ($expr instanceof Binary_Op) {
+                        $this->process_binary_op($expr, $mutating_scope);
                     }
                     if ($expr instanceof Assign) {
-                        $this->processAssign($expr, $mutatingScope);
+                        $this->process_assign($expr, $mutating_scope);
                     }
                 }
                 return;
             }
             if ($node instanceof Array_) {
-                $this->processArray($node, $mutatingScope);
+                $this->process_array($node, $mutating_scope);
                 return;
             }
             if ($node instanceof Property) {
-                $this->processProperty($node, $mutatingScope, $nodeCallback);
+                $this->process_property($node, $mutating_scope, $node_callback);
                 return;
             }
             if ($node instanceof Switch_) {
-                $this->processSwitch($node, $mutatingScope);
+                $this->process_switch($node, $mutating_scope);
                 return;
             }
-            if ($node instanceof TryCatch) {
-                $this->processTryCatch($node, $mutatingScope);
+            if ($node instanceof Try_Catch) {
+                $this->process_try_catch($node, $mutating_scope);
                 return;
             }
             if ($node instanceof Catch_) {
-                $this->processCatch($node, $filePath, $mutatingScope);
+                $this->process_catch($node, $file_path, $mutating_scope);
                 return;
             }
-            if ($node instanceof NullableType) {
-                $node->type->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+            if ($node instanceof Nullable_Type) {
+                $node->type->set_attribute(Attribute_Key::SCOPE, $mutating_scope);
                 return;
             }
-            if ($node instanceof UnionType || $node instanceof IntersectionType) {
+            if ($node instanceof Union_Type || $node instanceof Intersection_Type) {
                 foreach ($node->types as $type) {
-                    $type->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+                    $type->set_attribute(Attribute_Key::SCOPE, $mutating_scope);
                 }
                 return;
             }
-            if ($node instanceof StaticPropertyFetch || $node instanceof ClassConstFetch) {
-                $node->class->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-                $node->name->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+            if ($node instanceof Static_Property_Fetch || $node instanceof Class_Const_Fetch) {
+                $node->class->set_attribute(Attribute_Key::SCOPE, $mutating_scope);
+                $node->name->set_attribute(Attribute_Key::SCOPE, $mutating_scope);
                 return;
             }
-            if ($node instanceof PropertyFetch) {
-                $node->var->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-                $node->name->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+            if ($node instanceof Property_Fetch) {
+                $node->var->set_attribute(Attribute_Key::SCOPE, $mutating_scope);
+                $node->name->set_attribute(Attribute_Key::SCOPE, $mutating_scope);
                 return;
             }
-            if ($node instanceof ConstFetch) {
-                $node->name->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+            if ($node instanceof Const_Fetch) {
+                $node->name->set_attribute(Attribute_Key::SCOPE, $mutating_scope);
                 return;
             }
-            if ($node instanceof CallLike) {
-                $this->processCallLike($node, $mutatingScope);
+            if ($node instanceof Call_Like) {
+                $this->process_call_like($node, $mutating_scope);
                 return;
             }
             if ($node instanceof Match_) {
-                $this->processMatch($node, $mutatingScope);
+                $this->process_match($node, $mutating_scope);
                 return;
             }
             if ($node instanceof Yield_) {
-                $this->processYield($node, $mutatingScope);
+                $this->process_yield($node, $mutating_scope);
                 return;
             }
             if ($node instanceof Isset_ || $node instanceof Unset_) {
-                $this->processIssetOrUnset($node, $mutatingScope);
+                $this->process_isset_or_unset($node, $mutating_scope);
                 return;
             }
             if ($node instanceof Echo_) {
-                $this->processEcho($node, $mutatingScope);
+                $this->process_echo($node, $mutating_scope);
                 return;
             }
-            if ($node instanceof If_ || $node instanceof ElseIf_ || $node instanceof Do_ || $node instanceof While_) {
-                $node->cond->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+            if ($node instanceof If_ || $node instanceof Else_If_ || $node instanceof Do_ || $node instanceof While_) {
+                $node->cond->set_attribute(Attribute_Key::SCOPE, $mutating_scope);
                 return;
             }
-            if ($node instanceof MethodCallableNode || $node instanceof FunctionCallableNode || $node instanceof StaticMethodCallableNode || $node instanceof InstantiationCallableNode) {
-                $node->getOriginalNode()->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-                $this->processCallLike($node->getOriginalNode(), $mutatingScope);
+            if ($node instanceof Method_Callable_Node || $node instanceof Function_Callable_Node || $node instanceof Static_Method_Callable_Node || $node instanceof Instantiation_Callable_Node) {
+                $node->get_original_node()->set_attribute(Attribute_Key::SCOPE, $mutating_scope);
+                $this->process_call_like($node->get_original_node(), $mutating_scope);
                 return;
             }
         };
         try {
-            $this->nodeScopeResolverProcessNodes($stmts, $scope, $nodeCallback);
+            $this->node_scope_resolver_process_nodes($stmts, $scope, $node_callback);
         } catch (Error $error) {
-            if (strncmp($error->getMessage(), 'Call to undefined method ' . Printer::class . '::pPHPStan_', strlen('Call to undefined method ' . Printer::class . '::pPHPStan_')) !== 0) {
+            if (strncmp($error->get_message(), 'Call to undefined method ' . Printer::class . '::pPHPStan_', strlen('Call to undefined method ' . Printer::class . '::pPHPStan_')) !== 0) {
                 throw $error;
             }
             // nothing we can do more precise here as error printing from deep internal PHPStan Printer service with service injection we cannot reset
             // in the middle of process
             // fallback to fill by found scope
-            \Rector\NodeTypeResolver\PHPStan\Scope\RectorNodeScopeResolver::processNodes($stmts, $scope);
+            \Rector\Node_Type_Resolver\Php_Stan\Scope\Rector_Node_Scope_Resolver::process_nodes($stmts, $scope);
         }
         // use after scope filling so DecoratingNodeVisitorInterface instance can fetch the scope of target node
         // @see https://github.com/rectorphp/rector-src/pull/7721#discussion_r2595932460
-        $this->nodeTraverser->traverse($stmts);
+        $this->node_traverser->traverse($stmts);
         return $stmts;
     }
-    private function processYield(Yield_ $yield, MutatingScope $mutatingScope): void
+    private function process_yield(Yield_ $yield, Mutating_Scope $mutating_scope): void
     {
         if ($yield->key instanceof Expr) {
-            $yield->key->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+            $yield->key->set_attribute(Attribute_Key::SCOPE, $mutating_scope);
         }
         if ($yield->value instanceof Expr) {
-            $yield->value->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+            $yield->value->set_attribute(Attribute_Key::SCOPE, $mutating_scope);
         }
     }
     /**
      * @param \PhpParser\Node\Expr\Isset_|\PhpParser\Node\Stmt\Unset_ $node
      */
-    private function processIssetOrUnset($node, MutatingScope $mutatingScope): void
+    private function process_isset_or_unset($node, Mutating_Scope $mutating_scope): void
     {
         foreach ($node->vars as $var) {
-            $var->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+            $var->set_attribute(Attribute_Key::SCOPE, $mutating_scope);
         }
     }
-    private function processEcho(Echo_ $echo, MutatingScope $mutatingScope): void
+    private function process_echo(Echo_ $echo, Mutating_Scope $mutating_scope): void
     {
         foreach ($echo->exprs as $expr) {
-            $expr->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+            $expr->set_attribute(Attribute_Key::SCOPE, $mutating_scope);
         }
     }
-    private function processMatch(Match_ $match, MutatingScope $mutatingScope): void
+    private function process_match(Match_ $match, Mutating_Scope $mutating_scope): void
     {
-        $match->cond->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+        $match->cond->set_attribute(Attribute_Key::SCOPE, $mutating_scope);
         foreach ($match->arms as $arm) {
             if ($arm->conds !== null) {
                 foreach ($arm->conds as $cond) {
-                    $cond->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+                    $cond->set_attribute(Attribute_Key::SCOPE, $mutating_scope);
                 }
             }
-            $arm->body->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+            $arm->body->set_attribute(Attribute_Key::SCOPE, $mutating_scope);
         }
     }
     /**
      * @param Stmt[] $stmts
      * @param callable(Node $node, MutatingScope $scope): void $nodeCallback
      */
-    private function nodeScopeResolverProcessNodes(array $stmts, MutatingScope $mutatingScope, callable $nodeCallback): void
+    private function node_scope_resolver_process_nodes(array $stmts, Mutating_Scope $mutating_scope, callable $node_callback): void
     {
         try {
-            $this->nodeScopeResolver->processNodes($stmts, $mutatingScope, $nodeCallback);
-        } catch (ParserErrorsException|ParserException|ShouldNotHappenException|UndefinedVariableException $exception) {
+            $this->node_scope_resolver->process_nodes($stmts, $mutating_scope, $node_callback);
+        } catch (Parser_Errors_Exception|Parser_Exception|Should_Not_Happen_Exception|Undefined_Variable_Exception $exception) {
             // nothing we can do more precise here as error parsing from deep internal PHPStan service with service injection we cannot reset
             // in the middle of process
             // fallback to fill by found scope
-            \Rector\NodeTypeResolver\PHPStan\Scope\RectorNodeScopeResolver::processNodes($stmts, $mutatingScope);
+            \Rector\Node_Type_Resolver\Php_Stan\Scope\Rector_Node_Scope_Resolver::process_nodes($stmts, $mutating_scope);
         }
     }
-    private function processCallLike(CallLike $callLike, MutatingScope $mutatingScope): void
+    private function process_call_like(Call_Like $call_like, Mutating_Scope $mutating_scope): void
     {
-        if ($callLike instanceof StaticCall) {
-            $callLike->class->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-            $callLike->name->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-        } elseif ($callLike instanceof MethodCall || $callLike instanceof NullsafeMethodCall) {
-            $callLike->var->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-            $callLike->name->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-        } elseif ($callLike instanceof FuncCall) {
-            $callLike->name->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-        } elseif ($callLike instanceof New_ && !$callLike->class instanceof Class_) {
-            $callLike->class->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+        if ($call_like instanceof Static_Call) {
+            $call_like->class->set_attribute(Attribute_Key::SCOPE, $mutating_scope);
+            $call_like->name->set_attribute(Attribute_Key::SCOPE, $mutating_scope);
+        } elseif ($call_like instanceof Method_Call || $call_like instanceof Nullsafe_Method_Call) {
+            $call_like->var->set_attribute(Attribute_Key::SCOPE, $mutating_scope);
+            $call_like->name->set_attribute(Attribute_Key::SCOPE, $mutating_scope);
+        } elseif ($call_like instanceof Func_Call) {
+            $call_like->name->set_attribute(Attribute_Key::SCOPE, $mutating_scope);
+        } elseif ($call_like instanceof New_ && !$call_like->class instanceof Class_) {
+            $call_like->class->set_attribute(Attribute_Key::SCOPE, $mutating_scope);
         }
     }
     /**
      * @param \PhpParser\Node\Expr\Assign|\PhpParser\Node\Expr\AssignOp|\PhpParser\Node\Expr\AssignRef $assign
      */
-    private function processAssign($assign, MutatingScope $mutatingScope): void
+    private function process_assign($assign, Mutating_Scope $mutating_scope): void
     {
-        $assign->var->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-        $assign->expr->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+        $assign->var->set_attribute(Attribute_Key::SCOPE, $mutating_scope);
+        $assign->expr->set_attribute(Attribute_Key::SCOPE, $mutating_scope);
     }
     /**
      * @param \PhpParser\Node\Expr\List_|\PhpParser\Node\Expr\Array_ $array
      */
-    private function processArray($array, MutatingScope $mutatingScope): void
+    private function process_array($array, Mutating_Scope $mutating_scope): void
     {
-        foreach ($array->items as $arrayItem) {
-            if (!$arrayItem instanceof ArrayItem) {
+        foreach ($array->items as $array_item) {
+            if (!$array_item instanceof Array_Item) {
                 continue;
             }
-            $this->processArrayItem($arrayItem, $mutatingScope);
+            $this->process_array_item($array_item, $mutating_scope);
         }
     }
-    private function processArrayItem(ArrayItem $arrayItem, MutatingScope $mutatingScope): void
+    private function process_array_item(Array_Item $array_item, Mutating_Scope $mutating_scope): void
     {
-        $arrayItem->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-        if ($arrayItem->key instanceof Expr) {
-            $arrayItem->key->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+        $array_item->set_attribute(Attribute_Key::SCOPE, $mutating_scope);
+        if ($array_item->key instanceof Expr) {
+            $array_item->key->set_attribute(Attribute_Key::SCOPE, $mutating_scope);
         }
-        $arrayItem->value->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-        if ($arrayItem->value instanceof List_) {
-            $this->processArray($arrayItem->value, $mutatingScope);
+        $array_item->value->set_attribute(Attribute_Key::SCOPE, $mutating_scope);
+        if ($array_item->value instanceof List_) {
+            $this->process_array($array_item->value, $mutating_scope);
         }
     }
     /**
      * @param callable(Node $trait, MutatingScope $scope): void $nodeCallback
      */
-    private function decorateNodeAttrGroups(Node $node, MutatingScope $mutatingScope, callable $nodeCallback): void
+    private function decorate_node_attr_groups(Node $node, Mutating_Scope $mutating_scope, callable $node_callback): void
     {
         // better to have AttrGroupsAwareInterface for all Node definition with attrGroups property
         // but because may conflict with StmtsAwareInterface patch, this needs to be here
-        if (!$node instanceof Param && !$node instanceof ArrowFunction && !$node instanceof Closure && !$node instanceof ClassConst && !$node instanceof ClassLike && !$node instanceof ClassMethod && !$node instanceof EnumCase && !$node instanceof Function_ && !$node instanceof Property) {
+        if (!$node instanceof Param && !$node instanceof Arrow_Function && !$node instanceof Closure && !$node instanceof Class_Const && !$node instanceof Class_Like && !$node instanceof Class_Method && !$node instanceof Enum_Case && !$node instanceof Function_ && !$node instanceof Property) {
             return;
         }
-        foreach ($node->attrGroups as $attrGroup) {
-            foreach ($attrGroup->attrs as $attr) {
+        foreach ($node->attr_groups as $attr_group) {
+            foreach ($attr_group->attrs as $attr) {
                 foreach ($attr->args as $arg) {
-                    $this->nodeScopeResolverProcessNodes([new Expression($arg->value)], $mutatingScope, $nodeCallback);
+                    $this->node_scope_resolver_process_nodes([new Expression($arg->value)], $mutating_scope, $node_callback);
                 }
             }
         }
     }
-    private function processSwitch(Switch_ $switch, MutatingScope $mutatingScope): void
+    private function process_switch(Switch_ $switch, Mutating_Scope $mutating_scope): void
     {
-        $switch->cond->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+        $switch->cond->set_attribute(Attribute_Key::SCOPE, $mutating_scope);
         // decorate value as well
         foreach ($switch->cases as $case) {
-            $case->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+            $case->set_attribute(Attribute_Key::SCOPE, $mutating_scope);
         }
     }
-    private function processCatch(Catch_ $catch, string $filePath, MutatingScope $mutatingScope): void
+    private function process_catch(Catch_ $catch, string $file_path, Mutating_Scope $mutating_scope): void
     {
-        $varName = $catch->var instanceof Variable ? $this->nodeNameResolver->getName($catch->var) : null;
-        $type = TypeCombinator::union(...array_map(static fn (Name $name): ObjectType => new ObjectType((string) $name), $catch->types));
-        $catchMutatingScope = $mutatingScope->enterCatchType($type, $varName);
-        $this->processNodes($catch->stmts, $filePath, $catchMutatingScope);
+        $var_name = $catch->var instanceof Variable ? $this->node_name_resolver->get_name($catch->var) : null;
+        $type = Type_Combinator::union(...array_map(static fn(Name $name): Object_Type => new Object_Type((string) $name), $catch->types));
+        $catch_mutating_scope = $mutating_scope->enter_catch_type($type, $var_name);
+        $this->process_nodes($catch->stmts, $file_path, $catch_mutating_scope);
     }
-    private function processTryCatch(TryCatch $tryCatch, MutatingScope $mutatingScope): void
+    private function process_try_catch(Try_Catch $try_catch, Mutating_Scope $mutating_scope): void
     {
-        if ($tryCatch->finally instanceof Finally_) {
-            $tryCatch->finally->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+        if ($try_catch->finally instanceof Finally_) {
+            $try_catch->finally->set_attribute(Attribute_Key::SCOPE, $mutating_scope);
         }
     }
     /**
      * @param callable(Node $node, MutatingScope $scope): void $nodeCallback
      */
-    private function processUnreachableStatementNode(UnreachableStatementNode $unreachableStatementNode, MutatingScope $mutatingScope, callable $nodeCallback): void
+    private function process_unreachable_statement_node(Unreachable_Statement_Node $unreachable_statement_node, Mutating_Scope $mutating_scope, callable $node_callback): void
     {
-        $originalStmt = $unreachableStatementNode->getOriginalStatement();
-        $this->nodeScopeResolverProcessNodes(array_merge([$originalStmt], $unreachableStatementNode->getNextStatements()), $mutatingScope, $nodeCallback);
+        $original_stmt = $unreachable_statement_node->get_original_statement();
+        $this->node_scope_resolver_process_nodes(array_merge([$original_stmt], $unreachable_statement_node->get_next_statements()), $mutating_scope, $node_callback);
     }
     /**
      * @param callable(Node $node, MutatingScope $scope): void $nodeCallback
      */
-    private function processProperty(Property $property, MutatingScope $mutatingScope, callable $nodeCallback): void
+    private function process_property(Property $property, Mutating_Scope $mutating_scope, callable $node_callback): void
     {
-        foreach ($property->props as $propertyProperty) {
-            $propertyProperty->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-            if ($propertyProperty->default instanceof Expr) {
-                $propertyProperty->default->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+        foreach ($property->props as $property_property) {
+            $property_property->set_attribute(Attribute_Key::SCOPE, $mutating_scope);
+            if ($property_property->default instanceof Expr) {
+                $property_property->default->set_attribute(Attribute_Key::SCOPE, $mutating_scope);
             }
         }
         foreach ($property->hooks as $hook) {
@@ -522,84 +520,84 @@ final class PHPStanNodeScopeResolver
             }
             /** @var Stmt[] $stmts */
             $stmts = $hook->body instanceof Expr ? [new Expression($hook->body)] : [$hook->body];
-            $this->nodeScopeResolverProcessNodes($stmts, $mutatingScope, $nodeCallback);
+            $this->node_scope_resolver_process_nodes($stmts, $mutating_scope, $node_callback);
         }
     }
-    private function processBinaryOp(BinaryOp $binaryOp, MutatingScope $mutatingScope): void
+    private function process_binary_op(Binary_Op $binary_op, Mutating_Scope $mutating_scope): void
     {
-        $binaryOp->left->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-        $binaryOp->right->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+        $binary_op->left->set_attribute(Attribute_Key::SCOPE, $mutating_scope);
+        $binary_op->right->set_attribute(Attribute_Key::SCOPE, $mutating_scope);
     }
-    private function processTernary(Ternary $ternary, MutatingScope $mutatingScope): void
+    private function process_ternary(Ternary $ternary, Mutating_Scope $mutating_scope): void
     {
         if ($ternary->if instanceof Expr) {
-            $ternary->if->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+            $ternary->if->set_attribute(Attribute_Key::SCOPE, $mutating_scope);
         }
-        $ternary->else->setAttribute(AttributeKey::SCOPE, $mutatingScope);
+        $ternary->else->set_attribute(Attribute_Key::SCOPE, $mutating_scope);
     }
     /**
      * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Enum_ $classLike
      */
-    private function resolveClassOrInterfaceScope($classLike, MutatingScope $mutatingScope): MutatingScope
+    private function resolve_class_or_interface_scope($class_like, Mutating_Scope $mutating_scope): Mutating_Scope
     {
-        $isAnonymous = $this->classAnalyzer->isAnonymousClass($classLike);
+        $is_anonymous = $this->class_analyzer->is_anonymous_class($class_like);
         // is anonymous class? - not possible to enter it since PHPStan 0.12.33, see https://github.com/phpstan/phpstan-src/commit/e87fb0ec26f9c8552bbeef26a868b1e5d8185e91
-        if ($classLike instanceof Class_ && $isAnonymous) {
-            $classReflection = $this->reflectionProvider->getAnonymousClassReflection($classLike, $mutatingScope);
+        if ($class_like instanceof Class_ && $is_anonymous) {
+            $class_reflection = $this->reflection_provider->get_anonymous_class_reflection($class_like, $mutating_scope);
         } else {
-            $className = $this->resolveClassName($classLike);
-            if (!$this->reflectionProvider->hasClass($className)) {
-                return $mutatingScope;
+            $class_name = $this->resolve_class_name($class_like);
+            if (!$this->reflection_provider->has_class($class_name)) {
+                return $mutating_scope;
             }
-            $classReflection = $this->reflectionProvider->getClass($className);
+            $class_reflection = $this->reflection_provider->get_class($class_name);
         }
         try {
-            return $mutatingScope->enterClass($classReflection);
-        } catch (ShouldNotHappenException $exception) {
+            return $mutating_scope->enter_class($class_reflection);
+        } catch (Should_Not_Happen_Exception $exception) {
         }
-        $context = $this->privatesAccessor->getPrivateProperty($mutatingScope, 'context');
-        $this->privatesAccessor->setPrivateProperty($context, 'classReflection', null);
+        $context = $this->privates_accessor->get_private_property($mutating_scope, 'context');
+        $this->privates_accessor->set_private_property($context, 'classReflection', null);
         try {
-            return $mutatingScope->enterClass($classReflection);
-        } catch (ShouldNotHappenException $exception) {
+            return $mutating_scope->enter_class($class_reflection);
+        } catch (Should_Not_Happen_Exception $exception) {
         }
-        return $mutatingScope;
+        return $mutating_scope;
     }
     /**
      * @param \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Trait_|\PhpParser\Node\Stmt\Enum_ $classLike
      */
-    private function resolveClassName($classLike): string
+    private function resolve_class_name($class_like): string
     {
-        if ($classLike->namespacedName instanceof Name) {
-            return (string) $classLike->namespacedName;
+        if ($class_like->namespaced_name instanceof Name) {
+            return (string) $class_like->namespaced_name;
         }
-        if (!$classLike->name instanceof Identifier) {
+        if (!$class_like->name instanceof Identifier) {
             return '';
         }
-        return $classLike->name->toString();
+        return $class_like->name->to_string();
     }
     /**
      * @param callable(Node $trait, MutatingScope $scope): void $nodeCallback
      */
-    private function processTrait(Trait_ $trait, MutatingScope $mutatingScope, callable $nodeCallback): void
+    private function process_trait(Trait_ $trait, Mutating_Scope $mutating_scope, callable $node_callback): void
     {
-        $traitName = $this->resolveClassName($trait);
-        if (!$this->reflectionProvider->hasClass($traitName)) {
-            $trait->setAttribute(AttributeKey::SCOPE, $mutatingScope);
-            $this->nodeScopeResolverProcessNodes($trait->stmts, $mutatingScope, $nodeCallback);
-            $this->decorateNodeAttrGroups($trait, $mutatingScope, $nodeCallback);
+        $trait_name = $this->resolve_class_name($trait);
+        if (!$this->reflection_provider->has_class($trait_name)) {
+            $trait->set_attribute(Attribute_Key::SCOPE, $mutating_scope);
+            $this->node_scope_resolver_process_nodes($trait->stmts, $mutating_scope, $node_callback);
+            $this->decorate_node_attr_groups($trait, $mutating_scope, $node_callback);
             return;
         }
-        $traitClassReflection = $this->reflectionProvider->getClass($traitName);
-        $traitScope = clone $mutatingScope;
+        $trait_class_reflection = $this->reflection_provider->get_class($trait_name);
+        $trait_scope = clone $mutating_scope;
         /** @var ScopeContext $scopeContext */
-        $scopeContext = $this->privatesAccessor->getPrivateProperty($traitScope, self::CONTEXT);
-        $traitContext = clone $scopeContext;
+        $scope_context = $this->privates_accessor->get_private_property($trait_scope, self::CONTEXT);
+        $trait_context = clone $scope_context;
         // before entering the class/trait again, we have to tell scope no class was set, otherwise it crashes
-        $this->privatesAccessor->setPrivateProperty($traitContext, 'classReflection', $traitClassReflection);
-        $this->privatesAccessor->setPrivateProperty($traitScope, self::CONTEXT, $traitContext);
-        $trait->setAttribute(AttributeKey::SCOPE, $traitScope);
-        $this->nodeScopeResolverProcessNodes($trait->stmts, $traitScope, $nodeCallback);
-        $this->decorateNodeAttrGroups($trait, $traitScope, $nodeCallback);
+        $this->privates_accessor->set_private_property($trait_context, 'classReflection', $trait_class_reflection);
+        $this->privates_accessor->set_private_property($trait_scope, self::CONTEXT, $trait_context);
+        $trait->set_attribute(Attribute_Key::SCOPE, $trait_scope);
+        $this->node_scope_resolver_process_nodes($trait->stmts, $trait_scope, $node_callback);
+        $this->decorate_node_attr_groups($trait, $trait_scope, $node_callback);
     }
 }

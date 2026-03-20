@@ -1,13 +1,11 @@
 <?php
 
 declare (strict_types=1);
-
 namespace Rector\Differ;
 
-use RectorPrefix202603\SebastianBergmann\Diff\Differ;
-use RectorPrefix202603\SebastianBergmann\Diff\Output\StrictUnifiedDiffOutputBuilder;
-
-final class DefaultDiffer
+use Rector_Prefix202603\Sebastian_Bergmann\Diff\Differ;
+use Rector_Prefix202603\Sebastian_Bergmann\Diff\Output\Strict_Unified_Diff_Output_Builder;
+final class Default_Differ
 {
     /**
      * @readonly
@@ -15,8 +13,8 @@ final class DefaultDiffer
     private Differ $differ;
     public function __construct()
     {
-        $strictUnifiedDiffOutputBuilder = new StrictUnifiedDiffOutputBuilder(['fromFile' => 'Original', 'toFile' => 'New']);
-        $this->differ = new Differ($strictUnifiedDiffOutputBuilder);
+        $strict_unified_diff_output_builder = new Strict_Unified_Diff_Output_Builder(['fromFile' => 'Original', 'toFile' => 'New']);
+        $this->differ = new Differ($strict_unified_diff_output_builder);
     }
     public function diff(string $old, string $new): string
     {

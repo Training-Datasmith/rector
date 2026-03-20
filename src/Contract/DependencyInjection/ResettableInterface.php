@@ -1,10 +1,9 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Contract\Dependency_Injection;
 
-namespace Rector\Contract\DependencyInjection;
-
-interface ResettableInterface
+interface Resettable_Interface
 {
     public function reset(): void;
 }

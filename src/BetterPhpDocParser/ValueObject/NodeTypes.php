@@ -1,26 +1,24 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Better_Php_Doc_Parser\Value_Object;
 
-namespace Rector\BetterPhpDocParser\ValueObject;
-
-use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PropertyTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\ThrowsTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
-use Rector\Enum\ClassName;
-
-final class NodeTypes
+use Php_Stan\Php_Doc_Parser\Ast\Php_Doc\Param_Tag_Value_Node;
+use Php_Stan\Php_Doc_Parser\Ast\Php_Doc\Php_Doc_Tag_Value_Node;
+use Php_Stan\Php_Doc_Parser\Ast\Php_Doc\Property_Tag_Value_Node;
+use Php_Stan\Php_Doc_Parser\Ast\Php_Doc\Return_Tag_Value_Node;
+use Php_Stan\Php_Doc_Parser\Ast\Php_Doc\Template_Tag_Value_Node;
+use Php_Stan\Php_Doc_Parser\Ast\Php_Doc\Throws_Tag_Value_Node;
+use Php_Stan\Php_Doc_Parser\Ast\Php_Doc\Var_Tag_Value_Node;
+use Rector\Enum\Class_Name;
+final class Node_Types
 {
     /**
      * @var array<class-string<PhpDocTagValueNode>>
      */
-    public const TYPE_AWARE_NODES = [VarTagValueNode::class, ParamTagValueNode::class, ReturnTagValueNode::class, ThrowsTagValueNode::class, PropertyTagValueNode::class, TemplateTagValueNode::class];
+    public const TYPE_AWARE_NODES = [Var_Tag_Value_Node::class, Param_Tag_Value_Node::class, Return_Tag_Value_Node::class, Throws_Tag_Value_Node::class, Property_Tag_Value_Node::class, Template_Tag_Value_Node::class];
     /**
      * @var string[]
      */
-    public const TYPE_AWARE_DOCTRINE_ANNOTATION_CLASSES = [ClassName::JMS_TYPE, 'Doctrine\ORM\Mapping\OneToMany', 'Symfony\Component\Validator\Constraints\Choice', 'Symfony\Component\Validator\Constraints\Email', 'Symfony\Component\Validator\Constraints\Range'];
+    public const TYPE_AWARE_DOCTRINE_ANNOTATION_CLASSES = [Class_Name::JMS_TYPE, 'Doctrine\ORM\Mapping\OneToMany', 'Symfony\Component\Validator\Constraints\Choice', 'Symfony\Component\Validator\Constraints\Email', 'Symfony\Component\Validator\Constraints\Range'];
 }

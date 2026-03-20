@@ -1,65 +1,63 @@
 <?php
 
 declare (strict_types=1);
-
 namespace Rector\Validation;
 
 use Rector\Configuration\Option;
-use Rector\Configuration\Parameter\SimpleParameterProvider;
-use Rector\Exception\ShouldNotHappenException;
-
-final class RectorConfigValidator
+use Rector\Configuration\Parameter\Simple_Parameter_Provider;
+use Rector\Exception\Should_Not_Happen_Exception;
+final class Rector_Config_Validator
 {
     /**
      * @param string[] $rectorClasses
      */
-    public static function ensureNoDuplicatedClasses(array $rectorClasses): void
+    public static function ensure_no_duplicated_classes(array $rector_classes): void
     {
-        $duplicatedRectorClasses = self::resolveDuplicatedValues($rectorClasses);
-        if ($duplicatedRectorClasses === []) {
+        $duplicated_rector_classes = self::resolve_duplicated_values($rector_classes);
+        if ($duplicated_rector_classes === []) {
             return;
         }
-        throw new ShouldNotHappenException('Following rules are registered twice: ' . implode(', ', $duplicatedRectorClasses));
+        throw new Should_Not_Happen_Exception('Following rules are registered twice: ' . implode(', ', $duplicated_rector_classes));
     }
     /**
      * @param mixed[] $skip
      */
-    public static function ensureRectorRulesExist(array $skip): void
+    public static function ensure_rector_rules_exist(array $skip): void
     {
-        $nonExistingRules = [];
-        $skippedRectorRules = [];
+        $non_existing_rules = [];
+        $skipped_rector_rules = [];
         foreach ($skip as $key => $value) {
-            if (self::isRectorClassValue($key)) {
+            if (self::is_rector_class_value($key)) {
                 if (class_exists($key)) {
-                    $skippedRectorRules[] = $key;
+                    $skipped_rector_rules[] = $key;
                 } else {
-                    $nonExistingRules[] = $key;
+                    $non_existing_rules[] = $key;
                 }
                 continue;
             }
-            if (!self::isRectorClassValue($value)) {
+            if (!self::is_rector_class_value($value)) {
                 continue;
             }
             if (class_exists($value)) {
-                $skippedRectorRules[] = $value;
+                $skipped_rector_rules[] = $value;
                 continue;
             }
-            $nonExistingRules[] = $value;
+            $non_existing_rules[] = $value;
         }
-        SimpleParameterProvider::addParameter(Option::SKIPPED_RECTOR_RULES, $skippedRectorRules);
-        if ($nonExistingRules === []) {
+        Simple_Parameter_Provider::add_parameter(Option::SKIPPED_RECTOR_RULES, $skipped_rector_rules);
+        if ($non_existing_rules === []) {
             return;
         }
-        $nonExistingRulesString = '';
-        foreach ($nonExistingRules as $nonExistingRule) {
-            $nonExistingRulesString .= ' * ' . $nonExistingRule . \PHP_EOL;
+        $non_existing_rules_string = '';
+        foreach ($non_existing_rules as $non_existing_rule) {
+            $non_existing_rules_string .= ' * ' . $non_existing_rule . \PHP_EOL;
         }
-        throw new ShouldNotHappenException('These rules from "$rectorConfig->skip()" do not exist - remove them or fix their names:' . \PHP_EOL . $nonExistingRulesString);
+        throw new Should_Not_Happen_Exception('These rules from "$rectorConfig->skip()" do not exist - remove them or fix their names:' . \PHP_EOL . $non_existing_rules_string);
     }
     /**
      * @param mixed $value
      */
-    private static function isRectorClassValue($value): bool
+    private static function is_rector_class_value($value): bool
     {
         // only validate string
         if (!is_string($value)) {
@@ -84,7 +82,7 @@ final class RectorConfigValidator
      * @param string[] $values
      * @return string[]
      */
-    private static function resolveDuplicatedValues(array $values): array
+    private static function resolve_duplicated_values(array $values): array
     {
         $counted = array_count_values($values);
         $duplicates = [];

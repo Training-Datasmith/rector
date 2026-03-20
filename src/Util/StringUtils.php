@@ -1,14 +1,12 @@
 <?php
 
 declare (strict_types=1);
-
 namespace Rector\Util;
 
-use RectorPrefix202603\Nette\Utils\Strings;
-
-final class StringUtils
+use Rector_Prefix202603\Nette\Utils\Strings;
+final class String_Utils
 {
-    public static function isMatch(string $value, string $regex): bool
+    public static function is_match(string $value, string $regex): bool
     {
         $match = Strings::match($value, $regex);
         return $match !== null;

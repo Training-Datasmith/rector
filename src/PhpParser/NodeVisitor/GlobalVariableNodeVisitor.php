@@ -1,55 +1,53 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Php_Parser\Node_Visitor;
 
-namespace Rector\PhpParser\NodeVisitor;
-
-use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\Global_;
-use PhpParser\NodeVisitor;
-use PhpParser\NodeVisitorAbstract;
-use Rector\Contract\PhpParser\DecoratingNodeVisitorInterface;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
-use Rector\PhpParser\Enum\NodeGroup;
-use RectorPrefix202603\Webmozart\Assert\Assert;
-
-final class GlobalVariableNodeVisitor extends NodeVisitorAbstract implements DecoratingNodeVisitorInterface
+use Php_Parser\Node;
+use Php_Parser\Node\Expr;
+use Php_Parser\Node\Expr\Variable;
+use Php_Parser\Node\Stmt;
+use Php_Parser\Node\Stmt\Class_;
+use Php_Parser\Node\Stmt\Global_;
+use Php_Parser\Node_Visitor;
+use Php_Parser\Node_Visitor_Abstract;
+use Rector\Contract\Php_Parser\Decorating_Node_Visitor_Interface;
+use Rector\Node_Type_Resolver\Node\Attribute_Key;
+use Rector\Php_Doc_Parser\Node_Traverser\Simple_Callable_Node_Traverser;
+use Rector\Php_Parser\Enum\Node_Group;
+use Rector_Prefix202603\Webmozart\Assert\Assert;
+final class Global_Variable_Node_Visitor extends Node_Visitor_Abstract implements Decorating_Node_Visitor_Interface
 {
     /**
      * @readonly
      */
-    private SimpleCallableNodeTraverser $simpleCallableNodeTraverser;
-    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
+    private Simple_Callable_Node_Traverser $simple_callable_node_traverser;
+    public function __construct(Simple_Callable_Node_Traverser $simple_callable_node_traverser)
     {
-        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
+        $this->simple_callable_node_traverser = $simple_callable_node_traverser;
     }
-    public function enterNode(Node $node): ?Node
+    public function enter_node(Node $node): ?Node
     {
-        if (!NodeGroup::isStmtAwareNode($node)) {
+        if (!Node_Group::is_stmt_aware_node($node)) {
             return null;
         }
-        Assert::propertyExists($node, 'stmts');
+        Assert::property_exists($node, 'stmts');
         if ($node->stmts === null) {
             return null;
         }
         /** @var string[] $globalVariableNames */
-        $globalVariableNames = [];
+        $global_variable_names = [];
         foreach ($node->stmts as $stmt) {
             if (!$stmt instanceof Global_) {
-                $this->setIsGlobalVarAttribute($stmt, $globalVariableNames);
+                $this->set_is_global_var_attribute($stmt, $global_variable_names);
                 continue;
             }
             foreach ($stmt->vars as $variable) {
                 if ($variable instanceof Variable && !$variable->name instanceof Expr) {
-                    $variable->setAttribute(AttributeKey::IS_GLOBAL_VAR, \true);
+                    $variable->set_attribute(Attribute_Key::IS_GLOBAL_VAR, \true);
                     /** @var string $variableName */
-                    $variableName = $variable->name;
-                    $globalVariableNames[] = $variableName;
+                    $variable_name = $variable->name;
+                    $global_variable_names[] = $variable_name;
                 }
             }
         }
@@ -58,26 +56,26 @@ final class GlobalVariableNodeVisitor extends NodeVisitorAbstract implements Dec
     /**
      * @param string[] $globalVariableNames
      */
-    private function setIsGlobalVarAttribute(Stmt $stmt, array $globalVariableNames): void
+    private function set_is_global_var_attribute(Stmt $stmt, array $global_variable_names): void
     {
-        if ($globalVariableNames === []) {
+        if ($global_variable_names === []) {
             return;
         }
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmt, static function (Node $subNode) use ($globalVariableNames) {
-            if ($subNode instanceof Class_) {
-                return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+        $this->simple_callable_node_traverser->traverse_nodes_with_callable($stmt, static function (Node $sub_node) use ($global_variable_names) {
+            if ($sub_node instanceof Class_) {
+                return Node_Visitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
-            if (!$subNode instanceof Variable) {
+            if (!$sub_node instanceof Variable) {
                 return null;
             }
-            if ($subNode->name instanceof Expr) {
+            if ($sub_node->name instanceof Expr) {
                 return null;
             }
-            if (!in_array($subNode->name, $globalVariableNames, \true)) {
+            if (!in_array($sub_node->name, $global_variable_names, \true)) {
                 return null;
             }
-            $subNode->setAttribute(AttributeKey::IS_GLOBAL_VAR, \true);
-            return $subNode;
+            $sub_node->set_attribute(Attribute_Key::IS_GLOBAL_VAR, \true);
+            return $sub_node;
         });
     }
 }

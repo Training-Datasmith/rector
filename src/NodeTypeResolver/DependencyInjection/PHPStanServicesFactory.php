@@ -1,60 +1,58 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Node_Type_Resolver\Dependency_Injection;
 
-namespace Rector\NodeTypeResolver\DependencyInjection;
-
-use PhpParser\Lexer;
-use PHPStan\Analyser\NodeScopeResolver;
-use PHPStan\Analyser\ScopeFactory;
-use PHPStan\DependencyInjection\Container;
-use PHPStan\DependencyInjection\ContainerFactory;
-use PHPStan\File\FileHelper;
-use PHPStan\Parser\Parser;
-use PHPStan\PhpDoc\TypeNodeResolver;
-use PHPStan\Reflection\ReflectionProvider;
+use Php_Parser\Lexer;
+use Php_Stan\Analyser\Node_Scope_Resolver;
+use Php_Stan\Analyser\Scope_Factory;
+use Php_Stan\Dependency_Injection\Container;
+use Php_Stan\Dependency_Injection\Container_Factory;
+use Php_Stan\File\File_Helper;
+use Php_Stan\Parser\Parser;
+use Php_Stan\Php_Doc\Type_Node_Resolver;
+use Php_Stan\Reflection\Reflection_Provider;
 use Rector\Configuration\Option;
-use Rector\Configuration\Parameter\SimpleParameterProvider;
-use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
-use RectorPrefix202603\Symfony\Component\Console\Input\ArrayInput;
-use RectorPrefix202603\Symfony\Component\Console\Output\ConsoleOutput;
-use RectorPrefix202603\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix202603\Webmozart\Assert\Assert;
+use Rector\Configuration\Parameter\Simple_Parameter_Provider;
+use Rector\Node_Type_Resolver\Reflection\Better_Reflection\Source_Locator_Provider\Dynamic_Source_Locator_Provider;
+use Rector_Prefix202603\Symfony\Component\Console\Input\Array_Input;
+use Rector_Prefix202603\Symfony\Component\Console\Output\Console_Output;
+use Rector_Prefix202603\Symfony\Component\Console\Style\Symfony_Style;
+use Rector_Prefix202603\Webmozart\Assert\Assert;
 use Throwable;
-
 /**
  * Factory so Symfony app can use services from PHPStan container
  *
  * @see \Rector\NodeTypeResolver\DependencyInjection\PHPStanServicesFactory
  */
-final class PHPStanServicesFactory
+final class Php_Stan_Services_Factory
 {
     /**
      * @var string
      */
     private const INVALID_BLEEDING_EDGE_PATH_MESSAGE = <<<MESSAGE_ERROR
-'%s, use full path bleedingEdge.neon config, eg:
-
-includes:
-    - phar://vendor/phpstan/phpstan/phpstan.phar/conf/bleedingEdge.neon
-
-in your included phpstan configuration.
-
-MESSAGE_ERROR;
+    '%s, use full path bleedingEdge.neon config, eg:
+    
+    includes:
+        - phar://vendor/phpstan/phpstan/phpstan.phar/conf/bleedingEdge.neon
+    
+    in your included phpstan configuration.
+    
+    MESSAGE_ERROR;
     /**
      * @readonly
      */
     private Container $container;
     public function __construct()
     {
-        $containerFactory = new ContainerFactory(getcwd());
-        $additionalConfigFiles = $this->resolveAdditionalConfigFiles();
+        $container_factory = new Container_Factory(getcwd());
+        $additional_config_files = $this->resolve_additional_config_files();
         try {
-            $this->container = $containerFactory->create(SimpleParameterProvider::provideStringParameter(Option::CONTAINER_CACHE_DIRECTORY), $additionalConfigFiles, []);
+            $this->container = $container_factory->create(Simple_Parameter_Provider::provide_string_parameter(Option::CONTAINER_CACHE_DIRECTORY), $additional_config_files, []);
         } catch (Throwable $throwable) {
-            if ($throwable->getMessage() === "File 'phar://phpstan.phar/conf/bleedingEdge.neon' is missing or is not readable.") {
-                $symfonyStyle = new SymfonyStyle(new ArrayInput([]), new ConsoleOutput());
-                $symfonyStyle->error(str_replace("\r\n", "\n", sprintf(self::INVALID_BLEEDING_EDGE_PATH_MESSAGE, $throwable->getMessage())));
+            if ($throwable->get_message() === "File 'phar://phpstan.phar/conf/bleedingEdge.neon' is missing or is not readable.") {
+                $symfony_style = new Symfony_Style(new Array_Input([]), new Console_Output());
+                $symfony_style->error(str_replace("\r\n", "\n", sprintf(self::INVALID_BLEEDING_EDGE_PATH_MESSAGE, $throwable->get_message())));
                 exit(-1);
             }
             throw $throwable;
@@ -63,37 +61,37 @@ MESSAGE_ERROR;
     /**
      * @api
      */
-    public function createReflectionProvider(): ReflectionProvider
+    public function create_reflection_provider(): Reflection_Provider
     {
-        return $this->container->getByType(ReflectionProvider::class);
+        return $this->container->get_by_type(Reflection_Provider::class);
     }
     /**
      * @api
      */
-    public function createEmulativeLexer(): Lexer
+    public function create_emulative_lexer(): Lexer
     {
-        return $this->container->getService('currentPhpVersionLexer');
+        return $this->container->get_service('currentPhpVersionLexer');
     }
     /**
      * @api
      */
-    public function createPHPStanParser(): Parser
+    public function create_php_stan_parser(): Parser
     {
-        return $this->container->getService('currentPhpVersionRichParser');
+        return $this->container->get_service('currentPhpVersionRichParser');
     }
     /**
      * @api
      */
-    public function createNodeScopeResolver(): NodeScopeResolver
+    public function create_node_scope_resolver(): Node_Scope_Resolver
     {
-        return $this->container->getByType(NodeScopeResolver::class);
+        return $this->container->get_by_type(Node_Scope_Resolver::class);
     }
     /**
      * @api
      */
-    public function createScopeFactory(): ScopeFactory
+    public function create_scope_factory(): Scope_Factory
     {
-        return $this->container->getByType(ScopeFactory::class);
+        return $this->container->get_by_type(Scope_Factory::class);
     }
     /**
      * @template TObject as Object
@@ -101,47 +99,47 @@ MESSAGE_ERROR;
      * @param class-string<TObject> $type
      * @return TObject
      */
-    public function getByType(string $type): object
+    public function get_by_type(string $type): object
     {
-        return $this->container->getByType($type);
+        return $this->container->get_by_type($type);
     }
     /**
      * @api
      */
-    public function createFileHelper(): FileHelper
+    public function create_file_helper(): File_Helper
     {
-        return $this->container->getByType(FileHelper::class);
+        return $this->container->get_by_type(File_Helper::class);
     }
     /**
      * @api
      */
-    public function createTypeNodeResolver(): TypeNodeResolver
+    public function create_type_node_resolver(): Type_Node_Resolver
     {
-        return $this->container->getByType(TypeNodeResolver::class);
+        return $this->container->get_by_type(Type_Node_Resolver::class);
     }
     /**
      * @api
      */
-    public function createDynamicSourceLocatorProvider(): DynamicSourceLocatorProvider
+    public function create_dynamic_source_locator_provider(): Dynamic_Source_Locator_Provider
     {
-        return $this->container->getByType(DynamicSourceLocatorProvider::class);
+        return $this->container->get_by_type(Dynamic_Source_Locator_Provider::class);
     }
     /**
      * @return string[]
      */
-    private function resolveAdditionalConfigFiles(): array
+    private function resolve_additional_config_files(): array
     {
-        $additionalConfigFiles = [];
-        if (SimpleParameterProvider::hasParameter(Option::PHPSTAN_FOR_RECTOR_PATHS)) {
-            $paths = SimpleParameterProvider::provideArrayParameter(Option::PHPSTAN_FOR_RECTOR_PATHS);
+        $additional_config_files = [];
+        if (Simple_Parameter_Provider::has_parameter(Option::PHPSTAN_FOR_RECTOR_PATHS)) {
+            $paths = Simple_Parameter_Provider::provide_array_parameter(Option::PHPSTAN_FOR_RECTOR_PATHS);
             foreach ($paths as $path) {
                 Assert::string($path);
-                $additionalConfigFiles[] = $path;
+                $additional_config_files[] = $path;
             }
         }
-        $additionalConfigFiles[] = __DIR__ . '/../../../config/phpstan/static-reflection.neon';
-        $additionalConfigFiles[] = __DIR__ . '/../../../config/phpstan/better-infer.neon';
-        $additionalConfigFiles[] = __DIR__ . '/../../../config/phpstan/parser.neon';
-        return array_filter($additionalConfigFiles, \Closure::fromCallable('file_exists'));
+        $additional_config_files[] = __DIR__ . '/../../../config/phpstan/static-reflection.neon';
+        $additional_config_files[] = __DIR__ . '/../../../config/phpstan/better-infer.neon';
+        $additional_config_files[] = __DIR__ . '/../../../config/phpstan/parser.neon';
+        return array_filter($additional_config_files, \Closure::from_callable('file_exists'));
     }
 }

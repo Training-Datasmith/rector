@@ -1,12 +1,10 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Php_Doc_Parser\Php_Doc_Parser\Php_Doc_Node_Visitor;
 
-namespace Rector\PhpDocParser\PhpDocParser\PhpDocNodeVisitor;
-
-use PHPStan\PhpDocParser\Ast\Node;
-use Rector\PhpDocParser\PhpDocParser\ValueObject\PhpDocAttributeKey;
-
+use Php_Stan\Php_Doc_Parser\Ast\Node;
+use Rector\Php_Doc_Parser\Php_Doc_Parser\Value_Object\Php_Doc_Attribute_Key;
 /**
  * @api
  *
@@ -14,21 +12,21 @@ use Rector\PhpDocParser\PhpDocParser\ValueObject\PhpDocAttributeKey;
  *
  * @see \Rector\Tests\PhpDocParser\PhpDocParser\PhpDocNodeVisitor\ParentConnectingPhpDocNodeVisitorTest
  */
-final class ParentConnectingPhpDocNodeVisitor extends \Rector\PhpDocParser\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor
+final class Parent_Connecting_Php_Doc_Node_Visitor extends \Rector\Php_Doc_Parser\Php_Doc_Parser\Php_Doc_Node_Visitor\Abstract_Php_Doc_Node_Visitor
 {
     /**
      * @var Node[]
      */
     private array $stack = [];
-    public function beforeTraverse(Node $node): void
+    public function before_traverse(Node $node): void
     {
         $this->stack = [$node];
     }
-    public function enterNode(Node $node): Node
+    public function enter_node(Node $node): Node
     {
         if ($this->stack !== []) {
-            $parentNode = $this->stack[count($this->stack) - 1];
-            $node->setAttribute(PhpDocAttributeKey::PARENT, $parentNode);
+            $parent_node = $this->stack[count($this->stack) - 1];
+            $node->set_attribute(Php_Doc_Attribute_Key::PARENT, $parent_node);
         }
         $this->stack[] = $node;
         return $node;
@@ -36,7 +34,7 @@ final class ParentConnectingPhpDocNodeVisitor extends \Rector\PhpDocParser\PhpDo
     /**
      * @return null|int|\PhpParser\Node|Node[] Replacement node (or special return
      */
-    public function leaveNode(Node $node)
+    public function leave_node(Node $node)
     {
         array_pop($this->stack);
         return null;

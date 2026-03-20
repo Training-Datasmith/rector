@@ -1,30 +1,29 @@
 <?php
 
 declare (strict_types=1);
-
-namespace Rector\FileSystem;
+namespace Rector\File_System;
 
 /**
  * @see \Rector\Tests\FileSystem\FileAndDirectoryFilter\FileAndDirectoryFilterTest
  */
-final class FileAndDirectoryFilter
+final class File_And_Directory_Filter
 {
     /**
      * @param string[] $filesAndDirectories
      * @return string[]
      */
-    public function filterDirectories(array $filesAndDirectories): array
+    public function filter_directories(array $files_and_directories): array
     {
-        $directories = array_filter($filesAndDirectories, \Closure::fromCallable('is_dir'));
+        $directories = array_filter($files_and_directories, \Closure::from_callable('is_dir'));
         return array_values($directories);
     }
     /**
      * @param string[] $filesAndDirectories
      * @return string[]
      */
-    public function filterFiles(array $filesAndDirectories): array
+    public function filter_files(array $files_and_directories): array
     {
-        $files = array_filter($filesAndDirectories, \Closure::fromCallable('is_file'));
+        $files = array_filter($files_and_directories, \Closure::from_callable('is_file'));
         return array_values($files);
     }
 }

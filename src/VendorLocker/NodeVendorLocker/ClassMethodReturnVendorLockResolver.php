@@ -1,73 +1,71 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Vendor_Locker\Node_Vendor_Locker;
 
-namespace Rector\VendorLocker\NodeVendorLocker;
-
-use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Reflection\ClassReflection;
-use PHPStan\Reflection\ExtendedFunctionVariant;
-use PHPStan\Type\MixedType;
-use Rector\NodeAnalyzer\MagicClassMethodAnalyzer;
-use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\Reflection\ReflectionResolver;
-
-final class ClassMethodReturnVendorLockResolver
+use Php_Parser\Node\Stmt\Class_Method;
+use Php_Stan\Reflection\Class_Reflection;
+use Php_Stan\Reflection\Extended_Function_Variant;
+use Php_Stan\Type\Mixed_Type;
+use Rector\Node_Analyzer\Magic_Class_Method_Analyzer;
+use Rector\Node_Name_Resolver\Node_Name_Resolver;
+use Rector\Reflection\Reflection_Resolver;
+final class Class_Method_Return_Vendor_Lock_Resolver
 {
     /**
      * @readonly
      */
-    private NodeNameResolver $nodeNameResolver;
+    private Node_Name_Resolver $node_name_resolver;
     /**
      * @readonly
      */
-    private ReflectionResolver $reflectionResolver;
+    private Reflection_Resolver $reflection_resolver;
     /**
      * @readonly
      */
-    private MagicClassMethodAnalyzer $magicClassMethodAnalyzer;
-    public function __construct(NodeNameResolver $nodeNameResolver, ReflectionResolver $reflectionResolver, MagicClassMethodAnalyzer $magicClassMethodAnalyzer)
+    private Magic_Class_Method_Analyzer $magic_class_method_analyzer;
+    public function __construct(Node_Name_Resolver $node_name_resolver, Reflection_Resolver $reflection_resolver, Magic_Class_Method_Analyzer $magic_class_method_analyzer)
     {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->reflectionResolver = $reflectionResolver;
-        $this->magicClassMethodAnalyzer = $magicClassMethodAnalyzer;
+        $this->node_name_resolver = $node_name_resolver;
+        $this->reflection_resolver = $reflection_resolver;
+        $this->magic_class_method_analyzer = $magic_class_method_analyzer;
     }
-    public function isVendorLocked(ClassMethod $classMethod): bool
+    public function is_vendor_locked(Class_Method $class_method): bool
     {
-        if ($this->magicClassMethodAnalyzer->isUnsafeOverridden($classMethod)) {
+        if ($this->magic_class_method_analyzer->is_unsafe_overridden($class_method)) {
             return \true;
         }
-        if ($classMethod->isPrivate()) {
+        if ($class_method->is_private()) {
             return \false;
         }
-        $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
-        if (!$classReflection instanceof ClassReflection) {
+        $class_reflection = $this->reflection_resolver->resolve_class_reflection($class_method);
+        if (!$class_reflection instanceof Class_Reflection) {
             return \false;
         }
-        $methodName = $this->nodeNameResolver->getName($classMethod);
-        return $this->isVendorLockedByAncestors($classReflection, $methodName);
+        $method_name = $this->node_name_resolver->get_name($class_method);
+        return $this->is_vendor_locked_by_ancestors($class_reflection, $method_name);
     }
-    private function isVendorLockedByAncestors(ClassReflection $classReflection, string $methodName): bool
+    private function is_vendor_locked_by_ancestors(Class_Reflection $class_reflection, string $method_name): bool
     {
-        foreach ($classReflection->getAncestors() as $ancestorClassReflections) {
-            if ($ancestorClassReflections === $classReflection) {
+        foreach ($class_reflection->get_ancestors() as $ancestor_class_reflections) {
+            if ($ancestor_class_reflections === $class_reflection) {
                 continue;
             }
-            $nativeClassReflection = $ancestorClassReflections->getNativeReflection();
+            $native_class_reflection = $ancestor_class_reflections->get_native_reflection();
             // this should avoid detecting @method as real method
-            if (!$nativeClassReflection->hasMethod($methodName)) {
+            if (!$native_class_reflection->has_method($method_name)) {
                 continue;
             }
-            if (!$ancestorClassReflections->hasNativeMethod($methodName)) {
+            if (!$ancestor_class_reflections->has_native_method($method_name)) {
                 continue;
             }
-            $parentClassMethodReflection = $ancestorClassReflections->getNativeMethod($methodName);
-            $parametersAcceptor = $parentClassMethodReflection->getVariants()[0];
-            if (!$parametersAcceptor instanceof ExtendedFunctionVariant) {
+            $parent_class_method_reflection = $ancestor_class_reflections->get_native_method($method_name);
+            $parameters_acceptor = $parent_class_method_reflection->get_variants()[0];
+            if (!$parameters_acceptor instanceof Extended_Function_Variant) {
                 continue;
             }
             // here we count only on strict types, not on docs
-            return !$parametersAcceptor->getNativeReturnType() instanceof MixedType;
+            return !$parameters_acceptor->get_native_return_type() instanceof Mixed_Type;
         }
         return \false;
     }

@@ -1,12 +1,10 @@
 <?php
 
 declare (strict_types=1);
-
 namespace Rector\Util;
 
-use RectorPrefix202603\Nette\Utils\Strings;
-
-final class NewLineSplitter
+use Rector_Prefix202603\Nette\Utils\Strings;
+final class New_Line_Splitter
 {
     /**
      * @see https://regex101.com/r/qduj2O/4

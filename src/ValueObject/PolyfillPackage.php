@@ -1,13 +1,12 @@
 <?php
 
 declare (strict_types=1);
-
-namespace Rector\ValueObject;
+namespace Rector\Value_Object;
 
 /**
  * @api
  */
-final class PolyfillPackage
+final class Polyfill_Package
 {
     /**
      * @var string

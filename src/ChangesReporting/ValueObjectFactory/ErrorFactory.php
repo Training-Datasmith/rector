@@ -1,31 +1,29 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Changes_Reporting\Value_Object_Factory;
 
-namespace Rector\ChangesReporting\ValueObjectFactory;
-
-use PHPStan\AnalysedCodeException;
-use Rector\FileSystem\FilePathHelper;
-use Rector\ValueObject\Error\SystemError;
-
-final class ErrorFactory
+use Php_Stan\Analysed_Code_Exception;
+use Rector\File_System\File_Path_Helper;
+use Rector\Value_Object\Error\System_Error;
+final class Error_Factory
 {
     /**
      * @readonly
      */
-    private FilePathHelper $filePathHelper;
-    public function __construct(FilePathHelper $filePathHelper)
+    private File_Path_Helper $file_path_helper;
+    public function __construct(File_Path_Helper $file_path_helper)
     {
-        $this->filePathHelper = $filePathHelper;
+        $this->file_path_helper = $file_path_helper;
     }
-    public function createAutoloadError(AnalysedCodeException $analysedCodeException, string $filePath): SystemError
+    public function create_autoload_error(Analysed_Code_Exception $analysed_code_exception, string $file_path): System_Error
     {
-        $message = $this->createExceptionMessage($analysedCodeException);
-        $relativeFilePath = $this->filePathHelper->relativePath($filePath);
-        return new SystemError($message, $relativeFilePath);
+        $message = $this->create_exception_message($analysed_code_exception);
+        $relative_file_path = $this->file_path_helper->relative_path($file_path);
+        return new System_Error($message, $relative_file_path);
     }
-    private function createExceptionMessage(AnalysedCodeException $analysedCodeException): string
+    private function create_exception_message(Analysed_Code_Exception $analysed_code_exception): string
     {
-        return sprintf('Analyze error: "%s". Include your files in "$rectorConfig->autoloadPaths([...]);" or "$rectorConfig->bootstrapFiles([...]);" in "rector.php" config.%sSee https://github.com/rectorphp/rector#configuration', $analysedCodeException->getMessage(), \PHP_EOL);
+        return sprintf('Analyze error: "%s". Include your files in "$rectorConfig->autoloadPaths([...]);" or "$rectorConfig->bootstrapFiles([...]);" in "rector.php" config.%sSee https://github.com/rectorphp/rector#configuration', $analysed_code_exception->get_message(), \PHP_EOL);
     }
 }

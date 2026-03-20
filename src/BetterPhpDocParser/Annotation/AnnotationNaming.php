@@ -1,12 +1,11 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Better_Php_Doc_Parser\Annotation;
 
-namespace Rector\BetterPhpDocParser\Annotation;
-
-final class AnnotationNaming
+final class Annotation_Naming
 {
-    public function normalizeName(string $name): string
+    public function normalize_name(string $name): string
     {
         return '@' . ltrim($name, '@');
     }

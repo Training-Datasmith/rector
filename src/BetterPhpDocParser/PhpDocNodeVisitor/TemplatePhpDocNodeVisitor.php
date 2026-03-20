@@ -1,66 +1,64 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Better_Php_Doc_Parser\Php_Doc_Node_Visitor;
 
-namespace Rector\BetterPhpDocParser\PhpDocNodeVisitor;
-
-use PHPStan\PhpDocParser\Ast\Attribute;
-use PHPStan\PhpDocParser\Ast\Node;
-use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
-use PHPStan\PhpDocParser\Lexer\Lexer;
-use Rector\BetterPhpDocParser\Attributes\AttributeMirrorer;
-use Rector\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface;
-use Rector\BetterPhpDocParser\DataProvider\CurrentTokenIteratorProvider;
-use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
-use Rector\BetterPhpDocParser\ValueObject\PhpDoc\SpacingAwareTemplateTagValueNode;
-use Rector\Exception\ShouldNotHappenException;
-use Rector\PhpDocParser\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
-
-final class TemplatePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor implements BasePhpDocNodeVisitorInterface
+use Php_Stan\Php_Doc_Parser\Ast\Attribute;
+use Php_Stan\Php_Doc_Parser\Ast\Node;
+use Php_Stan\Php_Doc_Parser\Ast\Php_Doc\Template_Tag_Value_Node;
+use Php_Stan\Php_Doc_Parser\Lexer\Lexer;
+use Rector\Better_Php_Doc_Parser\Attributes\Attribute_Mirrorer;
+use Rector\Better_Php_Doc_Parser\Contract\Base_Php_Doc_Node_Visitor_Interface;
+use Rector\Better_Php_Doc_Parser\Data_Provider\Current_Token_Iterator_Provider;
+use Rector\Better_Php_Doc_Parser\Value_Object\Parser\Better_Token_Iterator;
+use Rector\Better_Php_Doc_Parser\Value_Object\Php_Doc\Spacing_Aware_Template_Tag_Value_Node;
+use Rector\Exception\Should_Not_Happen_Exception;
+use Rector\Php_Doc_Parser\Php_Doc_Parser\Php_Doc_Node_Visitor\Abstract_Php_Doc_Node_Visitor;
+final class Template_Php_Doc_Node_Visitor extends Abstract_Php_Doc_Node_Visitor implements Base_Php_Doc_Node_Visitor_Interface
 {
     /**
      * @readonly
      */
-    private CurrentTokenIteratorProvider $currentTokenIteratorProvider;
+    private Current_Token_Iterator_Provider $current_token_iterator_provider;
     /**
      * @readonly
      */
-    private AttributeMirrorer $attributeMirrorer;
-    public function __construct(CurrentTokenIteratorProvider $currentTokenIteratorProvider, AttributeMirrorer $attributeMirrorer)
+    private Attribute_Mirrorer $attribute_mirrorer;
+    public function __construct(Current_Token_Iterator_Provider $current_token_iterator_provider, Attribute_Mirrorer $attribute_mirrorer)
     {
-        $this->currentTokenIteratorProvider = $currentTokenIteratorProvider;
-        $this->attributeMirrorer = $attributeMirrorer;
+        $this->current_token_iterator_provider = $current_token_iterator_provider;
+        $this->attribute_mirrorer = $attribute_mirrorer;
     }
-    public function enterNode(Node $node): ?Node
+    public function enter_node(Node $node): ?Node
     {
-        if (!$node instanceof TemplateTagValueNode) {
+        if (!$node instanceof Template_Tag_Value_Node) {
             return null;
         }
-        if ($node instanceof SpacingAwareTemplateTagValueNode) {
+        if ($node instanceof Spacing_Aware_Template_Tag_Value_Node) {
             return null;
         }
-        $betterTokenIterator = $this->currentTokenIteratorProvider->provide();
-        $startIndex = $node->getAttribute(Attribute::START_INDEX);
-        $endIndex = $node->getAttribute(Attribute::END_INDEX);
-        if ($startIndex === null || $endIndex === null) {
-            throw new ShouldNotHappenException();
+        $better_token_iterator = $this->current_token_iterator_provider->provide();
+        $start_index = $node->get_attribute(Attribute::START_INDEX);
+        $end_index = $node->get_attribute(Attribute::END_INDEX);
+        if ($start_index === null || $end_index === null) {
+            throw new Should_Not_Happen_Exception();
         }
-        $prepositions = $this->resolvePreposition($betterTokenIterator, $startIndex, $endIndex);
-        $spacingAwareTemplateTagValueNode = new SpacingAwareTemplateTagValueNode($node->name, $node->bound, $node->description, $prepositions);
-        $this->attributeMirrorer->mirror($node, $spacingAwareTemplateTagValueNode);
-        return $spacingAwareTemplateTagValueNode;
+        $prepositions = $this->resolve_preposition($better_token_iterator, $start_index, $end_index);
+        $spacing_aware_template_tag_value_node = new Spacing_Aware_Template_Tag_Value_Node($node->name, $node->bound, $node->description, $prepositions);
+        $this->attribute_mirrorer->mirror($node, $spacing_aware_template_tag_value_node);
+        return $spacing_aware_template_tag_value_node;
     }
-    private function resolvePreposition(BetterTokenIterator $betterTokenIterator, int $startIndex, int $endIndex): string
+    private function resolve_preposition(Better_Token_Iterator $better_token_iterator, int $start_index, int $end_index): string
     {
-        $partialTokens = $betterTokenIterator->partialTokens($startIndex, $endIndex);
-        foreach ($partialTokens as $partialToken) {
-            if ($partialToken[1] !== Lexer::TOKEN_IDENTIFIER) {
+        $partial_tokens = $better_token_iterator->partial_tokens($start_index, $end_index);
+        foreach ($partial_tokens as $partial_token) {
+            if ($partial_token[1] !== Lexer::TOKEN_IDENTIFIER) {
                 continue;
             }
-            if (!in_array($partialToken[0], ['as', 'of'], \true)) {
+            if (!in_array($partial_token[0], ['as', 'of'], \true)) {
                 continue;
             }
-            return $partialToken[0];
+            return $partial_token[0];
         }
         return 'of';
     }

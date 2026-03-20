@@ -1,20 +1,18 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Node_Name_Resolver\Node_Name_Resolver;
 
-namespace Rector\NodeNameResolver\NodeNameResolver;
-
-use PhpParser\Node;
-use PhpParser\Node\Stmt\Use_;
-use PHPStan\Analyser\Scope;
-use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
-
+use Php_Parser\Node;
+use Php_Parser\Node\Stmt\Use_;
+use Php_Stan\Analyser\Scope;
+use Rector\Node_Name_Resolver\Contract\Node_Name_Resolver_Interface;
 /**
  * @implements NodeNameResolverInterface<Use_>
  */
-final class UseNameResolver implements NodeNameResolverInterface
+final class Use_Name_Resolver implements Node_Name_Resolver_Interface
 {
-    public function getNode(): string
+    public function get_node(): string
     {
         return Use_::class;
     }
@@ -26,7 +24,7 @@ final class UseNameResolver implements NodeNameResolverInterface
         if ($node->uses === []) {
             return null;
         }
-        $onlyUse = $node->uses[0];
-        return $onlyUse->name->toString();
+        $only_use = $node->uses[0];
+        return $only_use->name->to_string();
     }
 }

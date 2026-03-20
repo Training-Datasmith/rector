@@ -1,32 +1,31 @@
 <?php
 
 declare (strict_types=1);
-
-namespace Rector\VersionBonding\ValueObject;
+namespace Rector\Version_Bonding\Value_Object;
 
 /**
  * @api used by extensions
  */
-final class ComposerPackageConstraint
+final class Composer_Package_Constraint
 {
     /**
      * @readonly
      */
-    private string $packageName;
+    private string $package_name;
     /**
      * @readonly
      */
     private string $constraint;
-    public function __construct(string $packageName, string $constraint)
+    public function __construct(string $package_name, string $constraint)
     {
-        $this->packageName = $packageName;
+        $this->package_name = $package_name;
         $this->constraint = $constraint;
     }
-    public function getPackageName(): string
+    public function get_package_name(): string
     {
-        return $this->packageName;
+        return $this->package_name;
     }
-    public function getConstraint(): string
+    public function get_constraint(): string
     {
         return $this->constraint;
     }

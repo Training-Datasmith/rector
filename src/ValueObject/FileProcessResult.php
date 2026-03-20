@@ -1,51 +1,49 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Value_Object;
 
-namespace Rector\ValueObject;
-
-use Rector\ValueObject\Error\SystemError;
-use Rector\ValueObject\Reporting\FileDiff;
-use RectorPrefix202603\Webmozart\Assert\Assert;
-
-final class FileProcessResult
+use Rector\Value_Object\Error\System_Error;
+use Rector\Value_Object\Reporting\File_Diff;
+use Rector_Prefix202603\Webmozart\Assert\Assert;
+final class File_Process_Result
 {
     /**
      * @var SystemError[]
      * @readonly
      */
-    private array $systemErrors;
+    private array $system_errors;
     /**
      * @readonly
      */
-    private ?FileDiff $fileDiff;
+    private ?File_Diff $file_diff;
     /**
      * @readonly
      */
-    private bool $hasChanged;
+    private bool $has_changed;
     /**
      * @param SystemError[] $systemErrors
      */
-    public function __construct(array $systemErrors, ?FileDiff $fileDiff, bool $hasChanged)
+    public function __construct(array $system_errors, ?File_Diff $file_diff, bool $has_changed)
     {
-        $this->systemErrors = $systemErrors;
-        $this->fileDiff = $fileDiff;
-        $this->hasChanged = $hasChanged;
-        Assert::allIsInstanceOf($systemErrors, SystemError::class);
+        $this->system_errors = $system_errors;
+        $this->file_diff = $file_diff;
+        $this->has_changed = $has_changed;
+        Assert::all_is_instance_of($system_errors, System_Error::class);
     }
     /**
      * @return SystemError[]
      */
-    public function getSystemErrors(): array
+    public function get_system_errors(): array
     {
-        return $this->systemErrors;
+        return $this->system_errors;
     }
-    public function getFileDiff(): ?FileDiff
+    public function get_file_diff(): ?File_Diff
     {
-        return $this->fileDiff;
+        return $this->file_diff;
     }
-    public function hasChanged(): bool
+    public function has_changed(): bool
     {
-        return $this->hasChanged;
+        return $this->has_changed;
     }
 }

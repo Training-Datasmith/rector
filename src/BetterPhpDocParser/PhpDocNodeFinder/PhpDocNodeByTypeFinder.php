@@ -1,62 +1,60 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Better_Php_Doc_Parser\Php_Doc_Node_Finder;
 
-namespace Rector\BetterPhpDocParser\PhpDocNodeFinder;
-
-use PHPStan\PhpDocParser\Ast\Node;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
-use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
-use Rector\PhpDocParser\PhpDocParser\PhpDocNodeTraverser;
-
-final class PhpDocNodeByTypeFinder
+use Php_Stan\Php_Doc_Parser\Ast\Node;
+use Php_Stan\Php_Doc_Parser\Ast\Php_Doc\Php_Doc_Node;
+use Rector\Better_Php_Doc_Parser\Php_Doc\Doctrine_Annotation_Tag_Value_Node;
+use Rector\Php_Doc_Parser\Php_Doc_Parser\Php_Doc_Node_Traverser;
+final class Php_Doc_Node_By_Type_Finder
 {
     /**
      * @template TNode as \PHPStan\PhpDocParser\Ast\Node
      * @param class-string<TNode> $desiredType
      * @return array<TNode>
      */
-    public function findByType(PhpDocNode $phpDocNode, string $desiredType): array
+    public function find_by_type(Php_Doc_Node $php_doc_node, string $desired_type): array
     {
-        $phpDocNodeTraverser = new PhpDocNodeTraverser();
-        $foundNodes = [];
-        $phpDocNodeTraverser->traverseWithCallable($phpDocNode, '', static function (Node $node) use (&$foundNodes, $desiredType): Node {
-            if (!$node instanceof $desiredType) {
+        $php_doc_node_traverser = new Php_Doc_Node_Traverser();
+        $found_nodes = [];
+        $php_doc_node_traverser->traverse_with_callable($php_doc_node, '', static function (Node $node) use (&$found_nodes, $desired_type): Node {
+            if (!$node instanceof $desired_type) {
                 return $node;
             }
             /** @var TNode $node */
-            $foundNodes[] = $node;
+            $found_nodes[] = $node;
             return $node;
         });
-        return $foundNodes;
+        return $found_nodes;
     }
     /**
      * @param string[] $classes
      * @return DoctrineAnnotationTagValueNode[]
      */
-    public function findDoctrineAnnotationsByClasses(PhpDocNode $phpDocNode, array $classes): array
+    public function find_doctrine_annotations_by_classes(Php_Doc_Node $php_doc_node, array $classes): array
     {
-        $doctrineAnnotationTagValueNodes = [];
+        $doctrine_annotation_tag_value_nodes = [];
         foreach ($classes as $class) {
-            $justFoundTagValueNodes = $this->findDoctrineAnnotationsByClass($phpDocNode, $class);
-            $doctrineAnnotationTagValueNodes = array_merge($doctrineAnnotationTagValueNodes, $justFoundTagValueNodes);
+            $just_found_tag_value_nodes = $this->find_doctrine_annotations_by_class($php_doc_node, $class);
+            $doctrine_annotation_tag_value_nodes = array_merge($doctrine_annotation_tag_value_nodes, $just_found_tag_value_nodes);
         }
-        return $doctrineAnnotationTagValueNodes;
+        return $doctrine_annotation_tag_value_nodes;
     }
     /**
      * @param class-string $desiredClass
      * @return DoctrineAnnotationTagValueNode[]
      */
-    public function findDoctrineAnnotationsByClass(PhpDocNode $phpDocNode, string $desiredClass): array
+    public function find_doctrine_annotations_by_class(Php_Doc_Node $php_doc_node, string $desired_class): array
     {
-        $desiredDoctrineTagValueNodes = [];
+        $desired_doctrine_tag_value_nodes = [];
         /** @var DoctrineAnnotationTagValueNode[] $doctrineTagValueNodes */
-        $doctrineTagValueNodes = $this->findByType($phpDocNode, DoctrineAnnotationTagValueNode::class);
-        foreach ($doctrineTagValueNodes as $doctrineTagValueNode) {
-            if ($doctrineTagValueNode->hasClassName($desiredClass)) {
-                $desiredDoctrineTagValueNodes[] = $doctrineTagValueNode;
+        $doctrine_tag_value_nodes = $this->find_by_type($php_doc_node, Doctrine_Annotation_Tag_Value_Node::class);
+        foreach ($doctrine_tag_value_nodes as $doctrine_tag_value_node) {
+            if ($doctrine_tag_value_node->has_class_name($desired_class)) {
+                $desired_doctrine_tag_value_nodes[] = $doctrine_tag_value_node;
             }
         }
-        return $desiredDoctrineTagValueNodes;
+        return $desired_doctrine_tag_value_nodes;
     }
 }

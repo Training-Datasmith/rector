@@ -1,10 +1,9 @@
 <?php
 
 declare (strict_types=1);
-
 namespace Rector\Testing\Contract;
 
-interface RectorTestInterface
+interface Rector_Test_Interface
 {
-    public function provideConfigFilePath(): string;
+    public function provide_config_file_path(): string;
 }

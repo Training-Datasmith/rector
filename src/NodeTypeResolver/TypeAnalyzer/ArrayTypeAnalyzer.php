@@ -1,25 +1,23 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Node_Type_Resolver\Type_Analyzer;
 
-namespace Rector\NodeTypeResolver\TypeAnalyzer;
-
-use PhpParser\Node\Expr;
-use Rector\NodeTypeResolver\NodeTypeResolver;
-
-final class ArrayTypeAnalyzer
+use Php_Parser\Node\Expr;
+use Rector\Node_Type_Resolver\Node_Type_Resolver;
+final class Array_Type_Analyzer
 {
     /**
      * @readonly
      */
-    private NodeTypeResolver $nodeTypeResolver;
-    public function __construct(NodeTypeResolver $nodeTypeResolver)
+    private Node_Type_Resolver $node_type_resolver;
+    public function __construct(Node_Type_Resolver $node_type_resolver)
     {
-        $this->nodeTypeResolver = $nodeTypeResolver;
+        $this->node_type_resolver = $node_type_resolver;
     }
-    public function isArrayType(Expr $expr): bool
+    public function is_array_type(Expr $expr): bool
     {
-        $nodeType = $this->nodeTypeResolver->getNativeType($expr);
-        return $nodeType->isArray()->yes();
+        $node_type = $this->node_type_resolver->get_native_type($expr);
+        return $node_type->is_array()->yes();
     }
 }

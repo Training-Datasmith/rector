@@ -1,16 +1,14 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\File_System;
 
-namespace Rector\FileSystem;
-
-use RectorPrefix202603\Symfony\Component\Finder\Finder;
-use RectorPrefix202603\Symfony\Component\Finder\SplFileInfo;
-
+use Rector_Prefix202603\Symfony\Component\Finder\Finder;
+use Rector_Prefix202603\Symfony\Component\Finder\Spl_File_Info;
 /**
  * @see \Rector\Tests\FileSystem\InitFilePathsResolver\InitFilePathsResolverTest
  */
-final class InitFilePathsResolver
+final class Init_File_Paths_Resolver
 {
     /**
      * @see https://regex101.com/r/XkQ6Pe/1
@@ -20,23 +18,23 @@ final class InitFilePathsResolver
     /**
      * @return string[]
      */
-    public function resolve(string $projectDirectory): array
+    public function resolve(string $project_directory): array
     {
-        $rootDirectoryFinder = Finder::create()->directories()->depth(0)->notPath(self::DO_NOT_INCLUDE_PATHS_REGEX)->in($projectDirectory)->sortByName();
+        $root_directory_finder = Finder::create()->directories()->depth(0)->not_path(self::DO_NOT_INCLUDE_PATHS_REGEX)->in($project_directory)->sort_by_name();
         /** @var SplFileInfo[] $rootDirectoryFileInfos */
-        $rootDirectoryFileInfos = iterator_to_array($rootDirectoryFinder);
-        $projectDirectories = [];
-        foreach ($rootDirectoryFileInfos as $rootDirectoryFileInfo) {
-            if (!$this->hasDirectoryFileInfoPhpFiles($rootDirectoryFileInfo)) {
+        $root_directory_file_infos = iterator_to_array($root_directory_finder);
+        $project_directories = [];
+        foreach ($root_directory_file_infos as $root_directory_file_info) {
+            if (!$this->has_directory_file_info_php_files($root_directory_file_info)) {
                 continue;
             }
-            $projectDirectories[] = $rootDirectoryFileInfo->getRelativePathname();
+            $project_directories[] = $root_directory_file_info->get_relative_pathname();
         }
-        return $projectDirectories;
+        return $project_directories;
     }
-    private function hasDirectoryFileInfoPhpFiles(SplFileInfo $rootDirectoryFileInfo): bool
+    private function has_directory_file_info_php_files(Spl_File_Info $root_directory_file_info): bool
     {
         // is directory with PHP files?
-        return Finder::create()->files()->in($rootDirectoryFileInfo->getPathname())->name('*.php')->hasResults();
+        return Finder::create()->files()->in($root_directory_file_info->get_pathname())->name('*.php')->has_results();
     }
 }

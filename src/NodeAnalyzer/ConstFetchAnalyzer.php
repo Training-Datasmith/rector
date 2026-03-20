@@ -1,43 +1,41 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Node_Analyzer;
 
-namespace Rector\NodeAnalyzer;
-
-use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\ConstFetch;
-
+use Php_Parser\Node;
+use Php_Parser\Node\Expr;
+use Php_Parser\Node\Expr\Const_Fetch;
 /**
  * Read-only utils for ClassConstAnalyzer Node:
  * "false, true..."
  */
-final class ConstFetchAnalyzer
+final class Const_Fetch_Analyzer
 {
-    public function isTrueOrFalse(Expr $expr): bool
+    public function is_true_or_false(Expr $expr): bool
     {
-        if ($this->isTrue($expr)) {
+        if ($this->is_true($expr)) {
             return \true;
         }
-        return $this->isFalse($expr);
+        return $this->is_false($expr);
     }
-    public function isFalse(Expr $expr): bool
+    public function is_false(Expr $expr): bool
     {
-        return $this->isConstantWithLowercasedName($expr, 'false');
+        return $this->is_constant_with_lowercased_name($expr, 'false');
     }
-    public function isTrue(Expr $expr): bool
+    public function is_true(Expr $expr): bool
     {
-        return $this->isConstantWithLowercasedName($expr, 'true');
+        return $this->is_constant_with_lowercased_name($expr, 'true');
     }
-    public function isNull(Expr $expr): bool
+    public function is_null(Expr $expr): bool
     {
-        return $this->isConstantWithLowercasedName($expr, 'null');
+        return $this->is_constant_with_lowercased_name($expr, 'null');
     }
-    private function isConstantWithLowercasedName(Node $node, string $name): bool
+    private function is_constant_with_lowercased_name(Node $node, string $name): bool
     {
-        if (!$node instanceof ConstFetch) {
+        if (!$node instanceof Const_Fetch) {
             return \false;
         }
-        return $node->name->toLowerString() === $name;
+        return $node->name->to_lower_string() === $name;
     }
 }

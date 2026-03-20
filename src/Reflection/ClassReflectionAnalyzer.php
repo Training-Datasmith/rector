@@ -1,20 +1,18 @@
 <?php
 
 declare (strict_types=1);
-
 namespace Rector\Reflection;
 
-use PHPStan\Reflection\ClassReflection;
-use ReflectionEnum;
-
-final class ClassReflectionAnalyzer
+use Php_Stan\Reflection\Class_Reflection;
+use Reflection_Enum;
+final class Class_Reflection_Analyzer
 {
-    public function resolveParentClassName(ClassReflection $classReflection): ?string
+    public function resolve_parent_class_name(Class_Reflection $class_reflection): ?string
     {
-        $nativeReflection = $classReflection->getNativeReflection();
-        if ($nativeReflection instanceof ReflectionEnum) {
+        $native_reflection = $class_reflection->get_native_reflection();
+        if ($native_reflection instanceof Reflection_Enum) {
             return null;
         }
-        return $nativeReflection->getParentClassName();
+        return $native_reflection->get_parent_class_name();
     }
 }

@@ -1,13 +1,11 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Php_Parser\Value_Object;
 
-namespace Rector\PhpParser\ValueObject;
-
-use PhpParser\Node\Stmt;
-use PhpParser\Token;
-
-final class StmtsAndTokens
+use Php_Parser\Node\Stmt;
+use Php_Parser\Token;
+final class Stmts_And_Tokens
 {
     /**
      * @var Stmt[]
@@ -31,14 +29,14 @@ final class StmtsAndTokens
     /**
      * @return Stmt[]
      */
-    public function getStmts(): array
+    public function get_stmts(): array
     {
         return $this->stmts;
     }
     /**
      * @return array<int, Token>
      */
-    public function getTokens(): array
+    public function get_tokens(): array
     {
         return $this->tokens;
     }

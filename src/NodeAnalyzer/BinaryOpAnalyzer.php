@@ -1,37 +1,35 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Node_Analyzer;
 
-namespace Rector\NodeAnalyzer;
-
-use PhpParser\Node\Expr\BinaryOp;
-use PhpParser\Node\Expr\FuncCall;
-use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\ValueObject\FuncCallAndExpr;
-
-final class BinaryOpAnalyzer
+use Php_Parser\Node\Expr\Binary_Op;
+use Php_Parser\Node\Expr\Func_Call;
+use Rector\Node_Name_Resolver\Node_Name_Resolver;
+use Rector\Value_Object\Func_Call_And_Expr;
+final class Binary_Op_Analyzer
 {
     /**
      * @readonly
      */
-    private NodeNameResolver $nodeNameResolver;
-    public function __construct(NodeNameResolver $nodeNameResolver)
+    private Node_Name_Resolver $node_name_resolver;
+    public function __construct(Node_Name_Resolver $node_name_resolver)
     {
-        $this->nodeNameResolver = $nodeNameResolver;
+        $this->node_name_resolver = $node_name_resolver;
     }
-    public function matchFuncCallAndOtherExpr(BinaryOp $binaryOp, string $funcCallName): ?FuncCallAndExpr
+    public function match_func_call_and_other_expr(Binary_Op $binary_op, string $func_call_name): ?Func_Call_And_Expr
     {
-        if ($binaryOp->left instanceof FuncCall) {
-            if (!$this->nodeNameResolver->isName($binaryOp->left, $funcCallName)) {
+        if ($binary_op->left instanceof Func_Call) {
+            if (!$this->node_name_resolver->is_name($binary_op->left, $func_call_name)) {
                 return null;
             }
-            return new FuncCallAndExpr($binaryOp->left, $binaryOp->right);
+            return new Func_Call_And_Expr($binary_op->left, $binary_op->right);
         }
-        if ($binaryOp->right instanceof FuncCall) {
-            if (!$this->nodeNameResolver->isName($binaryOp->right, $funcCallName)) {
+        if ($binary_op->right instanceof Func_Call) {
+            if (!$this->node_name_resolver->is_name($binary_op->right, $func_call_name)) {
                 return null;
             }
-            return new FuncCallAndExpr($binaryOp->right, $binaryOp->left);
+            return new Func_Call_And_Expr($binary_op->right, $binary_op->left);
         }
         return null;
     }

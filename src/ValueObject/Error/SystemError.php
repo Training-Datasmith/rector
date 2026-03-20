@@ -1,17 +1,15 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Value_Object\Error;
 
-namespace Rector\ValueObject\Error;
-
-use Rector\Parallel\ValueObject\BridgeItem;
-use RectorPrefix202603\Nette\Utils\Strings;
-use RectorPrefix202603\Symplify\EasyParallel\Contract\SerializableInterface;
-
+use Rector\Parallel\Value_Object\Bridge_Item;
+use Rector_Prefix202603\Nette\Utils\Strings;
+use Rector_Prefix202603\Symplify\Easy_Parallel\Contract\Serializable_Interface;
 /**
  * @see \Rector\Tests\ValueObject\Error\SystemErrorTest
  */
-final class SystemError implements SerializableInterface
+final class System_Error implements Serializable_Interface
 {
     /**
      * @readonly
@@ -20,7 +18,7 @@ final class SystemError implements SerializableInterface
     /**
      * @readonly
      */
-    private ?string $relativeFilePath;
+    private ?string $relative_file_path;
     /**
      * @readonly
      */
@@ -28,32 +26,32 @@ final class SystemError implements SerializableInterface
     /**
      * @readonly
      */
-    private ?string $rectorClass;
-    public function __construct(string $message, ?string $relativeFilePath = null, ?int $line = null, ?string $rectorClass = null)
+    private ?string $rector_class;
+    public function __construct(string $message, ?string $relative_file_path = null, ?int $line = null, ?string $rector_class = null)
     {
         $this->message = $message;
-        $this->relativeFilePath = $relativeFilePath;
+        $this->relative_file_path = $relative_file_path;
         $this->line = $line;
-        $this->rectorClass = $rectorClass;
+        $this->rector_class = $rector_class;
     }
-    public function getMessage(): string
+    public function get_message(): string
     {
         return $this->message;
     }
-    public function getLine(): ?int
+    public function get_line(): ?int
     {
         return $this->line;
     }
-    public function getRelativeFilePath(): ?string
+    public function get_relative_file_path(): ?string
     {
-        return $this->relativeFilePath;
+        return $this->relative_file_path;
     }
-    public function getAbsoluteFilePath(): ?string
+    public function get_absolute_file_path(): ?string
     {
-        if ($this->relativeFilePath === null) {
+        if ($this->relative_file_path === null) {
             return null;
         }
-        return \realpath($this->relativeFilePath);
+        return \realpath($this->relative_file_path);
     }
     /**
      * @return array{
@@ -66,24 +64,24 @@ final class SystemError implements SerializableInterface
      */
     public function jsonSerialize(): array
     {
-        return [BridgeItem::MESSAGE => $this->message, BridgeItem::RELATIVE_FILE_PATH => $this->relativeFilePath, BridgeItem::ABSOLUTE_FILE_PATH => $this->getAbsoluteFilePath(), BridgeItem::LINE => $this->line, BridgeItem::RECTOR_CLASS => $this->rectorClass];
+        return [Bridge_Item::MESSAGE => $this->message, Bridge_Item::RELATIVE_FILE_PATH => $this->relative_file_path, Bridge_Item::ABSOLUTE_FILE_PATH => $this->get_absolute_file_path(), Bridge_Item::LINE => $this->line, Bridge_Item::RECTOR_CLASS => $this->rector_class];
     }
     /**
      * @param array<string, mixed> $json
      */
     public static function decode(array $json): self
     {
-        return new self($json[BridgeItem::MESSAGE], $json[BridgeItem::RELATIVE_FILE_PATH], $json[BridgeItem::LINE], $json[BridgeItem::RECTOR_CLASS]);
+        return new self($json[Bridge_Item::MESSAGE], $json[Bridge_Item::RELATIVE_FILE_PATH], $json[Bridge_Item::LINE], $json[Bridge_Item::RECTOR_CLASS]);
     }
-    public function getRectorClass(): ?string
+    public function get_rector_class(): ?string
     {
-        return $this->rectorClass;
+        return $this->rector_class;
     }
-    public function getRectorShortClass(): ?string
+    public function get_rector_short_class(): ?string
     {
-        $rectorClass = $this->rectorClass;
-        if (!in_array($rectorClass, [null, ''], \true)) {
-            return (string) Strings::after($rectorClass, '\\', -1);
+        $rector_class = $this->rector_class;
+        if (!in_array($rector_class, [null, ''], \true)) {
+            return (string) Strings::after($rector_class, '\\', -1);
         }
         return null;
     }

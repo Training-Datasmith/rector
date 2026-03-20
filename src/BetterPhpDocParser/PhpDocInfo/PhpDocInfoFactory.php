@@ -1,29 +1,27 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Better_Php_Doc_Parser\Php_Doc_Info;
 
-namespace Rector\BetterPhpDocParser\PhpDocInfo;
-
-use PhpParser\Comment\Doc;
-use PhpParser\Node;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
-use PHPStan\PhpDocParser\Lexer\Lexer;
-use Rector\BetterPhpDocParser\Annotation\AnnotationNaming;
-use Rector\BetterPhpDocParser\PhpDocNodeFinder\PhpDocNodeByTypeFinder;
-use Rector\BetterPhpDocParser\PhpDocNodeMapper;
-use Rector\BetterPhpDocParser\PhpDocParser\BetterPhpDocParser;
-use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
-use Rector\BetterPhpDocParser\ValueObject\StartAndEnd;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\StaticTypeMapper\StaticTypeMapper;
-
-final class PhpDocInfoFactory
+use Php_Parser\Comment\Doc;
+use Php_Parser\Node;
+use Php_Stan\Php_Doc_Parser\Ast\Php_Doc\Php_Doc_Node;
+use Php_Stan\Php_Doc_Parser\Lexer\Lexer;
+use Rector\Better_Php_Doc_Parser\Annotation\Annotation_Naming;
+use Rector\Better_Php_Doc_Parser\Php_Doc_Node_Finder\Php_Doc_Node_By_Type_Finder;
+use Rector\Better_Php_Doc_Parser\Php_Doc_Node_Mapper;
+use Rector\Better_Php_Doc_Parser\Php_Doc_Parser\Better_Php_Doc_Parser;
+use Rector\Better_Php_Doc_Parser\Value_Object\Parser\Better_Token_Iterator;
+use Rector\Better_Php_Doc_Parser\Value_Object\Php_Doc_Attribute_Key;
+use Rector\Better_Php_Doc_Parser\Value_Object\Start_And_End;
+use Rector\Node_Type_Resolver\Node\Attribute_Key;
+use Rector\Static_Type_Mapper\Static_Type_Mapper;
+final class Php_Doc_Info_Factory
 {
     /**
      * @readonly
      */
-    private PhpDocNodeMapper $phpDocNodeMapper;
+    private Php_Doc_Node_Mapper $php_doc_node_mapper;
     /**
      * @readonly
      */
@@ -31,100 +29,100 @@ final class PhpDocInfoFactory
     /**
      * @readonly
      */
-    private BetterPhpDocParser $betterPhpDocParser;
+    private Better_Php_Doc_Parser $better_php_doc_parser;
     /**
      * @readonly
      */
-    private StaticTypeMapper $staticTypeMapper;
+    private Static_Type_Mapper $static_type_mapper;
     /**
      * @readonly
      */
-    private AnnotationNaming $annotationNaming;
+    private Annotation_Naming $annotation_naming;
     /**
      * @readonly
      */
-    private PhpDocNodeByTypeFinder $phpDocNodeByTypeFinder;
+    private Php_Doc_Node_By_Type_Finder $php_doc_node_by_type_finder;
     /**
      * @var array<int, PhpDocInfo>
      */
-    private array $phpDocInfosByObjectId = [];
-    public function __construct(PhpDocNodeMapper $phpDocNodeMapper, Lexer $lexer, BetterPhpDocParser $betterPhpDocParser, StaticTypeMapper $staticTypeMapper, AnnotationNaming $annotationNaming, PhpDocNodeByTypeFinder $phpDocNodeByTypeFinder)
+    private array $php_doc_infos_by_object_id = [];
+    public function __construct(Php_Doc_Node_Mapper $php_doc_node_mapper, Lexer $lexer, Better_Php_Doc_Parser $better_php_doc_parser, Static_Type_Mapper $static_type_mapper, Annotation_Naming $annotation_naming, Php_Doc_Node_By_Type_Finder $php_doc_node_by_type_finder)
     {
-        $this->phpDocNodeMapper = $phpDocNodeMapper;
+        $this->php_doc_node_mapper = $php_doc_node_mapper;
         $this->lexer = $lexer;
-        $this->betterPhpDocParser = $betterPhpDocParser;
-        $this->staticTypeMapper = $staticTypeMapper;
-        $this->annotationNaming = $annotationNaming;
-        $this->phpDocNodeByTypeFinder = $phpDocNodeByTypeFinder;
+        $this->better_php_doc_parser = $better_php_doc_parser;
+        $this->static_type_mapper = $static_type_mapper;
+        $this->annotation_naming = $annotation_naming;
+        $this->php_doc_node_by_type_finder = $php_doc_node_by_type_finder;
     }
-    public function createFromNodeOrEmpty(Node $node): \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo
+    public function create_from_node_or_empty(Node $node): \Rector\Better_Php_Doc_Parser\Php_Doc_Info\Php_Doc_Info
     {
         // already added
-        $phpDocInfo = $node->getAttribute(AttributeKey::PHP_DOC_INFO);
-        if ($phpDocInfo instanceof \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo) {
-            return $phpDocInfo;
+        $php_doc_info = $node->get_attribute(Attribute_Key::PHP_DOC_INFO);
+        if ($php_doc_info instanceof \Rector\Better_Php_Doc_Parser\Php_Doc_Info\Php_Doc_Info) {
+            return $php_doc_info;
         }
-        $phpDocInfo = $this->createFromNode($node);
-        if ($phpDocInfo instanceof \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo) {
-            return $phpDocInfo;
+        $php_doc_info = $this->create_from_node($node);
+        if ($php_doc_info instanceof \Rector\Better_Php_Doc_Parser\Php_Doc_Info\Php_Doc_Info) {
+            return $php_doc_info;
         }
-        return $this->createEmpty($node);
+        return $this->create_empty($node);
     }
-    public function createFromNode(Node $node): ?\Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo
+    public function create_from_node(Node $node): ?\Rector\Better_Php_Doc_Parser\Php_Doc_Info\Php_Doc_Info
     {
-        $objectId = spl_object_id($node);
-        if (isset($this->phpDocInfosByObjectId[$objectId])) {
-            return $this->phpDocInfosByObjectId[$objectId];
+        $object_id = spl_object_id($node);
+        if (isset($this->php_doc_infos_by_object_id[$object_id])) {
+            return $this->php_doc_infos_by_object_id[$object_id];
         }
-        $docComment = $node->getDocComment();
-        if (!$docComment instanceof Doc) {
-            if ($node->getComments() === []) {
+        $doc_comment = $node->get_doc_comment();
+        if (!$doc_comment instanceof Doc) {
+            if ($node->get_comments() === []) {
                 return null;
             }
             // create empty node
-            $tokenIterator = new BetterTokenIterator([]);
-            $phpDocNode = new PhpDocNode([]);
+            $token_iterator = new Better_Token_Iterator([]);
+            $php_doc_node = new Php_Doc_Node([]);
         } else {
-            $tokens = $this->lexer->tokenize($docComment->getText());
-            $tokenIterator = new BetterTokenIterator($tokens);
-            $phpDocNode = $this->betterPhpDocParser->parseWithNode($tokenIterator, $node);
-            $this->setPositionOfLastToken($phpDocNode);
+            $tokens = $this->lexer->tokenize($doc_comment->get_text());
+            $token_iterator = new Better_Token_Iterator($tokens);
+            $php_doc_node = $this->better_php_doc_parser->parse_with_node($token_iterator, $node);
+            $this->set_position_of_last_token($php_doc_node);
         }
-        $phpDocInfo = $this->createFromPhpDocNode($phpDocNode, $tokenIterator, $node);
-        $this->phpDocInfosByObjectId[$objectId] = $phpDocInfo;
-        return $phpDocInfo;
+        $php_doc_info = $this->create_from_php_doc_node($php_doc_node, $token_iterator, $node);
+        $this->php_doc_infos_by_object_id[$object_id] = $php_doc_info;
+        return $php_doc_info;
     }
     /**
      * @api downgrade
      */
-    public function createEmpty(Node $node): \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo
+    public function create_empty(Node $node): \Rector\Better_Php_Doc_Parser\Php_Doc_Info\Php_Doc_Info
     {
-        $phpDocNode = new PhpDocNode([]);
-        $phpDocInfo = $this->createFromPhpDocNode($phpDocNode, new BetterTokenIterator([]), $node);
+        $php_doc_node = new Php_Doc_Node([]);
+        $php_doc_info = $this->create_from_php_doc_node($php_doc_node, new Better_Token_Iterator([]), $node);
         // multiline by default
-        $phpDocInfo->makeMultiLined();
-        return $phpDocInfo;
+        $php_doc_info->make_multi_lined();
+        return $php_doc_info;
     }
     /**
      * Needed for printing
      */
-    private function setPositionOfLastToken(PhpDocNode $phpDocNode): void
+    private function set_position_of_last_token(Php_Doc_Node $php_doc_node): void
     {
-        if ($phpDocNode->children === []) {
+        if ($php_doc_node->children === []) {
             return;
         }
-        $phpDocChildNodes = $phpDocNode->children;
-        $phpDocChildNode = array_pop($phpDocChildNodes);
-        $startAndEnd = $phpDocChildNode->getAttribute(PhpDocAttributeKey::START_AND_END);
-        if ($startAndEnd instanceof StartAndEnd) {
-            $phpDocNode->setAttribute(PhpDocAttributeKey::LAST_PHP_DOC_TOKEN_POSITION, $startAndEnd->getEnd());
+        $php_doc_child_nodes = $php_doc_node->children;
+        $php_doc_child_node = array_pop($php_doc_child_nodes);
+        $start_and_end = $php_doc_child_node->get_attribute(Php_Doc_Attribute_Key::START_AND_END);
+        if ($start_and_end instanceof Start_And_End) {
+            $php_doc_node->set_attribute(Php_Doc_Attribute_Key::LAST_PHP_DOC_TOKEN_POSITION, $start_and_end->get_end());
         }
     }
-    private function createFromPhpDocNode(PhpDocNode $phpDocNode, BetterTokenIterator $betterTokenIterator, Node $node): \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo
+    private function create_from_php_doc_node(Php_Doc_Node $php_doc_node, Better_Token_Iterator $better_token_iterator, Node $node): \Rector\Better_Php_Doc_Parser\Php_Doc_Info\Php_Doc_Info
     {
-        $this->phpDocNodeMapper->transform($phpDocNode, $betterTokenIterator);
-        $phpDocInfo = new \Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo($phpDocNode, $betterTokenIterator, $this->staticTypeMapper, $node, $this->annotationNaming, $this->phpDocNodeByTypeFinder);
-        $node->setAttribute(AttributeKey::PHP_DOC_INFO, $phpDocInfo);
-        return $phpDocInfo;
+        $this->php_doc_node_mapper->transform($php_doc_node, $better_token_iterator);
+        $php_doc_info = new \Rector\Better_Php_Doc_Parser\Php_Doc_Info\Php_Doc_Info($php_doc_node, $better_token_iterator, $this->static_type_mapper, $node, $this->annotation_naming, $this->php_doc_node_by_type_finder);
+        $node->set_attribute(Attribute_Key::PHP_DOC_INFO, $php_doc_info);
+        return $php_doc_info;
     }
 }

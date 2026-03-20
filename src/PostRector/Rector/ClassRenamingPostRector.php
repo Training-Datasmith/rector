@@ -1,84 +1,82 @@
 <?php
 
 declare (strict_types=1);
-
-namespace Rector\PostRector\Rector;
+namespace Rector\Post_Rector\Rector;
 
 use Override;
-use PhpParser\Node;
-use PhpParser\Node\Stmt\Namespace_;
-use PhpParser\NodeVisitor;
-use Rector\CodingStyle\Application\UseImportsRemover;
-use Rector\Configuration\RenamedClassesDataCollector;
-use Rector\PhpParser\Node\FileNode;
-use Rector\PostRector\Guard\AddUseStatementGuard;
-use Rector\Renaming\Collector\RenamedNameCollector;
-
-final class ClassRenamingPostRector extends \Rector\PostRector\Rector\AbstractPostRector
+use Php_Parser\Node;
+use Php_Parser\Node\Stmt\Namespace_;
+use Php_Parser\Node_Visitor;
+use Rector\Coding_Style\Application\Use_Imports_Remover;
+use Rector\Configuration\Renamed_Classes_Data_Collector;
+use Rector\Php_Parser\Node\File_Node;
+use Rector\Post_Rector\Guard\Add_Use_Statement_Guard;
+use Rector\Renaming\Collector\Renamed_Name_Collector;
+final class Class_Renaming_Post_Rector extends \Rector\Post_Rector\Rector\Abstract_Post_Rector
 {
     /**
      * @readonly
      */
-    private RenamedClassesDataCollector $renamedClassesDataCollector;
+    private Renamed_Classes_Data_Collector $renamed_classes_data_collector;
     /**
      * @readonly
      */
-    private UseImportsRemover $useImportsRemover;
+    private Use_Imports_Remover $use_imports_remover;
     /**
      * @readonly
      */
-    private RenamedNameCollector $renamedNameCollector;
+    private Renamed_Name_Collector $renamed_name_collector;
     /**
      * @readonly
      */
-    private AddUseStatementGuard $addUseStatementGuard;
+    private Add_Use_Statement_Guard $add_use_statement_guard;
     /**
      * @var array<string, string>
      */
-    private array $oldToNewClasses = [];
-    public function __construct(RenamedClassesDataCollector $renamedClassesDataCollector, UseImportsRemover $useImportsRemover, RenamedNameCollector $renamedNameCollector, AddUseStatementGuard $addUseStatementGuard)
+    private array $old_to_new_classes = [];
+    public function __construct(Renamed_Classes_Data_Collector $renamed_classes_data_collector, Use_Imports_Remover $use_imports_remover, Renamed_Name_Collector $renamed_name_collector, Add_Use_Statement_Guard $add_use_statement_guard)
     {
-        $this->renamedClassesDataCollector = $renamedClassesDataCollector;
-        $this->useImportsRemover = $useImportsRemover;
-        $this->renamedNameCollector = $renamedNameCollector;
-        $this->addUseStatementGuard = $addUseStatementGuard;
+        $this->renamed_classes_data_collector = $renamed_classes_data_collector;
+        $this->use_imports_remover = $use_imports_remover;
+        $this->renamed_name_collector = $renamed_name_collector;
+        $this->add_use_statement_guard = $add_use_statement_guard;
     }
     /**
      * @return \PhpParser\Node\Stmt\Namespace_|\Rector\PhpParser\Node\FileNode|int|null
      */
-    public function enterNode(Node $node)
+    public function enter_node(Node $node)
     {
-        if ($node instanceof FileNode) {
+        if ($node instanceof File_Node) {
             // handle in Namespace_ node
-            if ($node->isNamespaced()) {
+            if ($node->is_namespaced()) {
                 return null;
             }
             // handle here
-            $removedUses = $this->renamedClassesDataCollector->getOldClasses();
-            if ($this->useImportsRemover->removeImportsFromStmts($node, $removedUses)) {
-                $this->addRectorClassWithLine($node);
+            $removed_uses = $this->renamed_classes_data_collector->get_old_classes();
+            if ($this->use_imports_remover->remove_imports_from_stmts($node, $removed_uses)) {
+                $this->add_rector_class_with_line($node);
             }
-            $this->renamedNameCollector->reset();
+            $this->renamed_name_collector->reset();
             return $node;
         }
         if ($node instanceof Namespace_) {
-            $removedUses = $this->renamedClassesDataCollector->getOldClasses();
-            if ($this->useImportsRemover->removeImportsFromStmts($node, $removedUses)) {
-                $this->addRectorClassWithLine($node);
+            $removed_uses = $this->renamed_classes_data_collector->get_old_classes();
+            if ($this->use_imports_remover->remove_imports_from_stmts($node, $removed_uses)) {
+                $this->add_rector_class_with_line($node);
             }
-            $this->renamedNameCollector->reset();
+            $this->renamed_name_collector->reset();
             return $node;
         }
         // nothing else to handle here, as first 2 nodes we'll hit are handled above
-        return NodeVisitor::STOP_TRAVERSAL;
+        return Node_Visitor::STOP_TRAVERSAL;
     }
     #[Override]
-    public function shouldTraverse(array $stmts): bool
+    public function should_traverse(array $stmts): bool
     {
-        $this->oldToNewClasses = $this->renamedClassesDataCollector->getOldToNewClasses();
-        if ($this->oldToNewClasses === []) {
+        $this->old_to_new_classes = $this->renamed_classes_data_collector->get_old_to_new_classes();
+        if ($this->old_to_new_classes === []) {
             return \false;
         }
-        return $this->addUseStatementGuard->shouldTraverse($stmts, $this->getFile()->getFilePath());
+        return $this->add_use_statement_guard->should_traverse($stmts, $this->get_file()->get_file_path());
     }
 }

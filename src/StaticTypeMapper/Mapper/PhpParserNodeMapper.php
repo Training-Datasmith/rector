@@ -1,36 +1,34 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Static_Type_Mapper\Mapper;
 
-namespace Rector\StaticTypeMapper\Mapper;
-
-use PhpParser\Node;
-use PHPStan\Type\Type;
-use Rector\Exception\NotImplementedYetException;
-use Rector\StaticTypeMapper\Contract\PhpParser\PhpParserNodeMapperInterface;
-
-final class PhpParserNodeMapper
+use Php_Parser\Node;
+use Php_Stan\Type\Type;
+use Rector\Exception\Not_Implemented_Yet_Exception;
+use Rector\Static_Type_Mapper\Contract\Php_Parser\Php_Parser_Node_Mapper_Interface;
+final class Php_Parser_Node_Mapper
 {
     /**
      * @var PhpParserNodeMapperInterface[]
      * @readonly
      */
-    private iterable $phpParserNodeMappers;
+    private iterable $php_parser_node_mappers;
     /**
      * @param PhpParserNodeMapperInterface[] $phpParserNodeMappers
      */
-    public function __construct(iterable $phpParserNodeMappers)
+    public function __construct(iterable $php_parser_node_mappers)
     {
-        $this->phpParserNodeMappers = $phpParserNodeMappers;
+        $this->php_parser_node_mappers = $php_parser_node_mappers;
     }
-    public function mapToPHPStanType(Node $node): Type
+    public function map_to_php_stan_type(Node $node): Type
     {
-        foreach ($this->phpParserNodeMappers as $phpParserNodeMapper) {
-            if (!is_a($node, $phpParserNodeMapper->getNodeType())) {
+        foreach ($this->php_parser_node_mappers as $php_parser_node_mapper) {
+            if (!is_a($node, $php_parser_node_mapper->get_node_type())) {
                 continue;
             }
-            return $phpParserNodeMapper->mapToPHPStan($node);
+            return $php_parser_node_mapper->map_to_php_stan($node);
         }
-        throw new NotImplementedYetException(get_class($node));
+        throw new Not_Implemented_Yet_Exception(get_class($node));
     }
 }

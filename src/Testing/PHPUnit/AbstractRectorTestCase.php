@@ -1,217 +1,215 @@
 <?php
 
 declare (strict_types=1);
-
-namespace Rector\Testing\PHPUnit;
+namespace Rector\Testing\Php_Unit;
 
 use Iterator;
-use PHPUnit\Framework\ExpectationFailedException;
-use Rector\Application\ApplicationFileProcessor;
-use Rector\Autoloading\AdditionalAutoloader;
-use Rector\Autoloading\BootstrapFilesIncluder;
-use Rector\Configuration\ConfigurationFactory;
+use Php_Unit\Framework\Expectation_Failed_Exception;
+use Rector\Application\Application_File_Processor;
+use Rector\Autoloading\Additional_Autoloader;
+use Rector\Autoloading\Bootstrap_Files_Includer;
+use Rector\Configuration\Configuration_Factory;
 use Rector\Configuration\Option;
-use Rector\Configuration\Parameter\SimpleParameterProvider;
-use Rector\Contract\DependencyInjection\ResettableInterface;
-use Rector\Contract\Rector\RectorInterface;
-use Rector\DependencyInjection\Laravel\ContainerMemento;
-use Rector\Exception\ShouldNotHappenException;
-use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
-use Rector\PhpParser\NodeTraverser\RectorNodeTraverser;
-use Rector\Rector\AbstractRector;
-use Rector\Testing\Contract\RectorTestInterface;
-use Rector\Testing\Fixture\FixtureFileFinder;
-use Rector\Testing\Fixture\FixtureFileUpdater;
-use Rector\Testing\Fixture\FixtureSplitter;
-use Rector\Testing\PHPUnit\ValueObject\RectorTestResult;
-use Rector\Util\Reflection\PrivatesAccessor;
-use RectorPrefix202603\Illuminate\Container\RewindableGenerator;
-use RectorPrefix202603\Nette\Utils\FileSystem;
-use RectorPrefix202603\Nette\Utils\Strings;
-
+use Rector\Configuration\Parameter\Simple_Parameter_Provider;
+use Rector\Contract\Dependency_Injection\Resettable_Interface;
+use Rector\Contract\Rector\Rector_Interface;
+use Rector\Dependency_Injection\Laravel\Container_Memento;
+use Rector\Exception\Should_Not_Happen_Exception;
+use Rector\Node_Type_Resolver\Reflection\Better_Reflection\Source_Locator_Provider\Dynamic_Source_Locator_Provider;
+use Rector\Php_Parser\Node_Traverser\Rector_Node_Traverser;
+use Rector\Rector\Abstract_Rector;
+use Rector\Testing\Contract\Rector_Test_Interface;
+use Rector\Testing\Fixture\Fixture_File_Finder;
+use Rector\Testing\Fixture\Fixture_File_Updater;
+use Rector\Testing\Fixture\Fixture_Splitter;
+use Rector\Testing\Php_Unit\Value_Object\Rector_Test_Result;
+use Rector\Util\Reflection\Privates_Accessor;
+use Rector_Prefix202603\Illuminate\Container\Rewindable_Generator;
+use Rector_Prefix202603\Nette\Utils\File_System;
+use Rector_Prefix202603\Nette\Utils\Strings;
 /**
  * @api used by public
  */
-abstract class AbstractRectorTestCase extends \Rector\Testing\PHPUnit\AbstractLazyTestCase implements RectorTestInterface
+abstract class Abstract_Rector_Test_Case extends \Rector\Testing\Php_Unit\Abstract_Lazy_Test_Case implements Rector_Test_Interface
 {
-    private DynamicSourceLocatorProvider $dynamicSourceLocatorProvider;
-    private ApplicationFileProcessor $applicationFileProcessor;
-    private ?string $inputFilePath = null;
+    private Dynamic_Source_Locator_Provider $dynamic_source_locator_provider;
+    private Application_File_Processor $application_file_processor;
+    private ?string $input_file_path = null;
     /**
      * @var array<string, true>
      */
-    private static array $cacheByRuleAndConfig = [];
+    private static array $cache_by_rule_and_config = [];
     /**
      * Restore default parameters
      */
-    public static function tearDownAfterClass(): void
+    public static function tear_down_after_class(): void
     {
-        SimpleParameterProvider::setParameter(Option::AUTO_IMPORT_NAMES, \false);
-        SimpleParameterProvider::setParameter(Option::AUTO_IMPORT_DOC_BLOCK_NAMES, \false);
-        SimpleParameterProvider::setParameter(Option::REMOVE_UNUSED_IMPORTS, \false);
-        SimpleParameterProvider::setParameter(Option::IMPORT_SHORT_CLASSES, \true);
-        SimpleParameterProvider::setParameter(Option::INDENT_CHAR, ' ');
-        SimpleParameterProvider::setParameter(Option::INDENT_SIZE, 4);
-        SimpleParameterProvider::setParameter(Option::POLYFILL_PACKAGES, []);
-        SimpleParameterProvider::setParameter(Option::NEW_LINE_ON_FLUENT_CALL, \false);
-        SimpleParameterProvider::setParameter(Option::TREAT_CLASSES_AS_FINAL, \false);
+        Simple_Parameter_Provider::set_parameter(Option::AUTO_IMPORT_NAMES, \false);
+        Simple_Parameter_Provider::set_parameter(Option::AUTO_IMPORT_DOC_BLOCK_NAMES, \false);
+        Simple_Parameter_Provider::set_parameter(Option::REMOVE_UNUSED_IMPORTS, \false);
+        Simple_Parameter_Provider::set_parameter(Option::IMPORT_SHORT_CLASSES, \true);
+        Simple_Parameter_Provider::set_parameter(Option::INDENT_CHAR, ' ');
+        Simple_Parameter_Provider::set_parameter(Option::INDENT_SIZE, 4);
+        Simple_Parameter_Provider::set_parameter(Option::POLYFILL_PACKAGES, []);
+        Simple_Parameter_Provider::set_parameter(Option::NEW_LINE_ON_FLUENT_CALL, \false);
+        Simple_Parameter_Provider::set_parameter(Option::TREAT_CLASSES_AS_FINAL, \false);
     }
-    protected function setUp(): void
+    protected function set_up(): void
     {
-        parent::setUp();
-        $configFile = $this->provideConfigFilePath();
+        parent::set_up();
+        $config_file = $this->provide_config_file_path();
         // cleanup all registered rectors, so you can use only the new ones
-        $rectorConfig = self::getContainer();
+        $rector_config = self::get_container();
         // boot once for config + test case to avoid booting again and again for every test fixture
-        $cacheKey = sha1($configFile . static::class);
-        if (!isset(self::$cacheByRuleAndConfig[$cacheKey])) {
+        $cache_key = sha1($config_file . static::class);
+        if (!isset(self::$cache_by_rule_and_config[$cache_key])) {
             // reset
             /** @var RewindableGenerator<int, ResettableInterface> $resettables */
-            $resettables = $rectorConfig->tagged(ResettableInterface::class);
+            $resettables = $rector_config->tagged(Resettable_Interface::class);
             foreach ($resettables as $resettable) {
                 /** @var ResettableInterface $resettable */
                 $resettable->reset();
             }
-            $this->forgetRectorsRules();
-            $rectorConfig->resetRuleConfigurations();
+            $this->forget_rectors_rules();
+            $rector_config->reset_rule_configurations();
             // this has to be always empty, so we can add new rules with their configuration
-            $this->assertEmpty($rectorConfig->tagged(RectorInterface::class));
-            $this->bootFromConfigFiles([$configFile]);
-            $rectorsGenerator = $rectorConfig->tagged(RectorInterface::class);
-            $rectors = $rectorsGenerator instanceof RewindableGenerator ? iterator_to_array($rectorsGenerator->getIterator()) : [];
+            $this->assert_empty($rector_config->tagged(Rector_Interface::class));
+            $this->boot_from_config_files([$config_file]);
+            $rectors_generator = $rector_config->tagged(Rector_Interface::class);
+            $rectors = $rectors_generator instanceof Rewindable_Generator ? iterator_to_array($rectors_generator->getIterator()) : [];
             /** @var RectorNodeTraverser $rectorNodeTraverser */
-            $rectorNodeTraverser = $rectorConfig->make(RectorNodeTraverser::class);
-            $rectorNodeTraverser->refreshPhpRectors($rectors);
+            $rector_node_traverser = $rector_config->make(Rector_Node_Traverser::class);
+            $rector_node_traverser->refresh_php_rectors($rectors);
             // store cache
-            self::$cacheByRuleAndConfig[$cacheKey] = \true;
+            self::$cache_by_rule_and_config[$cache_key] = \true;
         }
-        $this->applicationFileProcessor = $this->make(ApplicationFileProcessor::class);
-        $this->dynamicSourceLocatorProvider = $this->make(DynamicSourceLocatorProvider::class);
+        $this->application_file_processor = $this->make(Application_File_Processor::class);
+        $this->dynamic_source_locator_provider = $this->make(Dynamic_Source_Locator_Provider::class);
         /** @var AdditionalAutoloader $additionalAutoloader */
-        $additionalAutoloader = $this->make(AdditionalAutoloader::class);
-        $additionalAutoloader->autoloadPaths();
+        $additional_autoloader = $this->make(Additional_Autoloader::class);
+        $additional_autoloader->autoload_paths();
         /** @var BootstrapFilesIncluder $bootstrapFilesIncluder */
-        $bootstrapFilesIncluder = $this->make(BootstrapFilesIncluder::class);
-        $bootstrapFilesIncluder->includeBootstrapFiles();
+        $bootstrap_files_includer = $this->make(Bootstrap_Files_Includer::class);
+        $bootstrap_files_includer->include_bootstrap_files();
     }
-    protected function tearDown(): void
+    protected function tear_down(): void
     {
         // clear temporary file
-        if (is_string($this->inputFilePath)) {
-            FileSystem::delete($this->inputFilePath);
+        if (is_string($this->input_file_path)) {
+            File_System::delete($this->input_file_path);
         }
     }
-    protected static function yieldFilesFromDirectory(string $directory, string $suffix = '*.php.inc'): Iterator
+    protected static function yield_files_from_directory(string $directory, string $suffix = '*.php.inc'): Iterator
     {
-        return FixtureFileFinder::yieldDirectory($directory, $suffix);
+        return Fixture_File_Finder::yield_directory($directory, $suffix);
     }
-    protected function doTestFile(string $fixtureFilePath, bool $includeFixtureDirectoryAsSource = \false): void
+    protected function do_test_file(string $fixture_file_path, bool $include_fixture_directory_as_source = \false): void
     {
         // prepare input file contents and expected file output contents
-        $fixtureFileContents = FileSystem::read($fixtureFilePath);
-        if (FixtureSplitter::containsSplit($fixtureFileContents)) {
+        $fixture_file_contents = File_System::read($fixture_file_path);
+        if (Fixture_Splitter::contains_split($fixture_file_contents)) {
             // changed content
-            [$inputFileContents, $expectedFileContents] = FixtureSplitter::splitFixtureFileContents($fixtureFileContents);
+            [$input_file_contents, $expected_file_contents] = Fixture_Splitter::split_fixture_file_contents($fixture_file_contents);
         } else {
             // no change
-            $inputFileContents = $fixtureFileContents;
-            $expectedFileContents = $fixtureFileContents;
+            $input_file_contents = $fixture_file_contents;
+            $expected_file_contents = $fixture_file_contents;
         }
-        $inputFilePath = $this->createInputFilePath($fixtureFilePath);
+        $input_file_path = $this->create_input_file_path($fixture_file_path);
         // to remove later in tearDown()
-        $this->inputFilePath = $inputFilePath;
-        if ($fixtureFilePath === $inputFilePath) {
-            throw new ShouldNotHappenException('Fixture file and input file cannot be the same: ' . $fixtureFilePath);
+        $this->input_file_path = $input_file_path;
+        if ($fixture_file_path === $input_file_path) {
+            throw new Should_Not_Happen_Exception('Fixture file and input file cannot be the same: ' . $fixture_file_path);
         }
         // write temp file
-        FileSystem::write($inputFilePath, $inputFileContents, null);
-        $this->doTestFileMatchesExpectedContent($inputFilePath, $inputFileContents, $expectedFileContents, $fixtureFilePath, $includeFixtureDirectoryAsSource);
+        File_System::write($input_file_path, $input_file_contents, null);
+        $this->do_test_file_matches_expected_content($input_file_path, $input_file_contents, $expected_file_contents, $fixture_file_path, $include_fixture_directory_as_source);
     }
-    protected function doTestFileExpectingWarningAboutRuleApplied(string $fixtureFilePath, string $expectedRuleApplied): void
+    protected function do_test_file_expecting_warning_about_rule_applied(string $fixture_file_path, string $expected_rule_applied): void
     {
         ob_start();
-        $this->doTestFile($fixtureFilePath);
+        $this->do_test_file($fixture_file_path);
         $content = ob_get_clean();
-        $fixtureName = basename($fixtureFilePath);
-        $testClass = static::class;
-        $this->assertSame(\PHP_EOL . 'WARNING: On fixture file "' . $fixtureName . '" for test "' . $testClass . '"' . \PHP_EOL . 'File not changed but some Rector rules applied:' . \PHP_EOL . ' * ' . $expectedRuleApplied . \PHP_EOL, $content);
+        $fixture_name = basename($fixture_file_path);
+        $test_class = static::class;
+        $this->assert_same(\PHP_EOL . 'WARNING: On fixture file "' . $fixture_name . '" for test "' . $test_class . '"' . \PHP_EOL . 'File not changed but some Rector rules applied:' . \PHP_EOL . ' * ' . $expected_rule_applied . \PHP_EOL, $content);
     }
-    private function forgetRectorsRules(): void
+    private function forget_rectors_rules(): void
     {
-        $rectorConfig = self::getContainer();
+        $rector_config = self::get_container();
         // 1. forget tagged services
-        ContainerMemento::forgetTag($rectorConfig, RectorInterface::class);
+        Container_Memento::forget_tag($rector_config, Rector_Interface::class);
         // 2. remove after binding too, to avoid setting configuration over and over again
-        $privatesAccessor = new PrivatesAccessor();
-        $privatesAccessor->propertyClosure($rectorConfig, 'afterResolvingCallbacks', static function (array $afterResolvingCallbacks): array {
-            foreach (array_keys($afterResolvingCallbacks) as $key) {
-                if ($key === AbstractRector::class) {
+        $privates_accessor = new Privates_Accessor();
+        $privates_accessor->property_closure($rector_config, 'afterResolvingCallbacks', static function (array $after_resolving_callbacks): array {
+            foreach (array_keys($after_resolving_callbacks) as $key) {
+                if ($key === Abstract_Rector::class) {
                     continue;
                 }
-                if (is_a($key, RectorInterface::class, \true)) {
-                    unset($afterResolvingCallbacks[$key]);
+                if (is_a($key, Rector_Interface::class, \true)) {
+                    unset($after_resolving_callbacks[$key]);
                 }
             }
-            return $afterResolvingCallbacks;
+            return $after_resolving_callbacks;
         });
     }
-    private function doTestFileMatchesExpectedContent(string $originalFilePath, string $inputFileContents, string $expectedFileContents, string $fixtureFilePath, bool $includeFixtureDirectoryAsSource): void
+    private function do_test_file_matches_expected_content(string $original_file_path, string $input_file_contents, string $expected_file_contents, string $fixture_file_path, bool $include_fixture_directory_as_source): void
     {
-        SimpleParameterProvider::setParameter(Option::SOURCE, [$originalFilePath]);
+        Simple_Parameter_Provider::set_parameter(Option::SOURCE, [$original_file_path]);
         // the file is now changed (if any rule matches)
-        $rectorTestResult = $this->processFilePath($originalFilePath, $includeFixtureDirectoryAsSource);
-        $changedContents = $rectorTestResult->getChangedContents();
-        $fixtureFilename = basename($fixtureFilePath);
-        $failureMessage = sprintf('Failed on fixture file "%s"', $fixtureFilename);
-        $numAppliedRectorClasses = count($rectorTestResult->getAppliedRectorClasses());
+        $rector_test_result = $this->process_file_path($original_file_path, $include_fixture_directory_as_source);
+        $changed_contents = $rector_test_result->get_changed_contents();
+        $fixture_filename = basename($fixture_file_path);
+        $failure_message = sprintf('Failed on fixture file "%s"', $fixture_filename);
+        $num_applied_rector_classes = count($rector_test_result->get_applied_rector_classes());
         // give more context about used rules in case of set testing
-        $appliedRulesList = '';
-        if ($numAppliedRectorClasses > 0) {
-            foreach ($rectorTestResult->getAppliedRectorClasses() as $appliedRectorClass) {
-                $appliedRulesList .= ' * ' . $appliedRectorClass . \PHP_EOL;
+        $applied_rules_list = '';
+        if ($num_applied_rector_classes > 0) {
+            foreach ($rector_test_result->get_applied_rector_classes() as $applied_rector_class) {
+                $applied_rules_list .= ' * ' . $applied_rector_class . \PHP_EOL;
             }
         }
-        if ($numAppliedRectorClasses > 1) {
-            $failureMessage .= \PHP_EOL . \PHP_EOL . 'Applied Rector rules:' . \PHP_EOL . $appliedRulesList;
+        if ($num_applied_rector_classes > 1) {
+            $failure_message .= \PHP_EOL . \PHP_EOL . 'Applied Rector rules:' . \PHP_EOL . $applied_rules_list;
         }
         try {
-            $this->assertSame($expectedFileContents, $changedContents, $failureMessage);
-        } catch (ExpectationFailedException $exception) {
-            FixtureFileUpdater::updateFixtureContent($inputFileContents, $changedContents, $fixtureFilePath);
+            $this->assert_same($expected_file_contents, $changed_contents, $failure_message);
+        } catch (Expectation_Failed_Exception $exception) {
+            Fixture_File_Updater::update_fixture_content($input_file_contents, $changed_contents, $fixture_file_path);
             // if not exact match, check the regex version (useful for generated hashes/uuids in the code)
-            $this->assertStringMatchesFormat($expectedFileContents, $changedContents, $failureMessage);
+            $this->assert_string_matches_format($expected_file_contents, $changed_contents, $failure_message);
         }
-        if ($inputFileContents === $expectedFileContents && $numAppliedRectorClasses > 0) {
-            $failureMessage = \PHP_EOL . sprintf('WARNING: On fixture file "%s" for test "%s"', $fixtureFilename, static::class) . \PHP_EOL . 'File not changed but some Rector rules applied:' . \PHP_EOL . $appliedRulesList;
-            echo $failureMessage;
+        if ($input_file_contents === $expected_file_contents && $num_applied_rector_classes > 0) {
+            $failure_message = \PHP_EOL . sprintf('WARNING: On fixture file "%s" for test "%s"', $fixture_filename, static::class) . \PHP_EOL . 'File not changed but some Rector rules applied:' . \PHP_EOL . $applied_rules_list;
+            echo $failure_message;
         }
     }
-    private function processFilePath(string $filePath, bool $includeFixtureDirectoryAsSource): RectorTestResult
+    private function process_file_path(string $file_path, bool $include_fixture_directory_as_source): Rector_Test_Result
     {
-        if ($includeFixtureDirectoryAsSource) {
-            $fixtureDirectory = dirname($filePath);
-            $this->dynamicSourceLocatorProvider->addDirectories([$fixtureDirectory]);
+        if ($include_fixture_directory_as_source) {
+            $fixture_directory = dirname($file_path);
+            $this->dynamic_source_locator_provider->add_directories([$fixture_directory]);
         } else {
-            $this->dynamicSourceLocatorProvider->setFilePath($filePath);
+            $this->dynamic_source_locator_provider->set_file_path($file_path);
         }
         /** @var ConfigurationFactory $configurationFactory */
-        $configurationFactory = $this->make(ConfigurationFactory::class);
-        $configuration = $configurationFactory->createForTests([$filePath]);
-        $processResult = $this->applicationFileProcessor->processFiles([$filePath], $configuration);
+        $configuration_factory = $this->make(Configuration_Factory::class);
+        $configuration = $configuration_factory->create_for_tests([$file_path]);
+        $process_result = $this->application_file_processor->process_files([$file_path], $configuration);
         // return changed file contents
-        $changedFileContents = FileSystem::read($filePath);
-        return new RectorTestResult($changedFileContents, $processResult);
+        $changed_file_contents = File_System::read($file_path);
+        return new Rector_Test_Result($changed_file_contents, $process_result);
     }
-    private function createInputFilePath(string $fixtureFilePath): string
+    private function create_input_file_path(string $fixture_file_path): string
     {
-        $inputFileDirectory = dirname($fixtureFilePath);
+        $input_file_directory = dirname($fixture_file_path);
         // remove ".inc" suffix
-        if (substr_compare($fixtureFilePath, '.inc', -strlen('.inc')) === 0) {
-            $trimmedFixtureFilePath = Strings::substring($fixtureFilePath, 0, -4);
+        if (substr_compare($fixture_file_path, '.inc', -strlen('.inc')) === 0) {
+            $trimmed_fixture_file_path = Strings::substring($fixture_file_path, 0, -4);
         } else {
-            $trimmedFixtureFilePath = $fixtureFilePath;
+            $trimmed_fixture_file_path = $fixture_file_path;
         }
-        $fixtureBasename = pathinfo($trimmedFixtureFilePath, \PATHINFO_BASENAME);
-        return $inputFileDirectory . '/' . $fixtureBasename;
+        $fixture_basename = pathinfo($trimmed_fixture_file_path, \PATHINFO_BASENAME);
+        return $input_file_directory . '/' . $fixture_basename;
     }
 }

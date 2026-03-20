@@ -1,26 +1,24 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Better_Php_Doc_Parser\Guard;
 
-namespace Rector\BetterPhpDocParser\Guard;
-
-use PHPStan\Type\MixedType;
-use PHPStan\Type\Type;
-use PHPStan\Type\UnionType;
-
-final class NewPhpDocFromPHPStanTypeGuard
+use Php_Stan\Type\Mixed_Type;
+use Php_Stan\Type\Type;
+use Php_Stan\Type\Union_Type;
+final class New_Php_Doc_From_Php_Stan_Type_Guard
 {
-    public function isLegal(Type $type): bool
+    public function is_legal(Type $type): bool
     {
-        if ($type instanceof UnionType) {
-            return $this->isLegalUnionType($type);
+        if ($type instanceof Union_Type) {
+            return $this->is_legal_union_type($type);
         }
         return \true;
     }
-    private function isLegalUnionType(UnionType $type): bool
+    private function is_legal_union_type(Union_Type $type): bool
     {
-        foreach ($type->getTypes() as $unionType) {
-            if ($unionType instanceof MixedType) {
+        foreach ($type->get_types() as $union_type) {
+            if ($union_type instanceof Mixed_Type) {
                 return \false;
             }
         }

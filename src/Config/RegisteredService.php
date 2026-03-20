@@ -1,15 +1,14 @@
 <?php
 
 declare (strict_types=1);
-
 namespace Rector\Config;
 
-final class RegisteredService
+final class Registered_Service
 {
     /**
      * @readonly
      */
-    private string $className;
+    private string $class_name;
     /**
      * @readonly
      */
@@ -18,21 +17,21 @@ final class RegisteredService
      * @readonly
      */
     private ?string $tag;
-    public function __construct(string $className, ?string $alias, ?string $tag)
+    public function __construct(string $class_name, ?string $alias, ?string $tag)
     {
-        $this->className = $className;
+        $this->class_name = $class_name;
         $this->alias = $alias;
         $this->tag = $tag;
     }
-    public function getClassName(): string
+    public function get_class_name(): string
     {
-        return $this->className;
+        return $this->class_name;
     }
-    public function getAlias(): ?string
+    public function get_alias(): ?string
     {
         return $this->alias;
     }
-    public function getTag(): ?string
+    public function get_tag(): ?string
     {
         return $this->tag;
     }

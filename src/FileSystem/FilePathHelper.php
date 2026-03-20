@@ -1,18 +1,16 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\File_System;
 
-namespace Rector\FileSystem;
-
-use Rector\Skipper\FileSystem\PathNormalizer;
-use RectorPrefix202603\Nette\Utils\Strings;
-use RectorPrefix202603\Symfony\Component\Filesystem\Filesystem;
-use RectorPrefix202603\Webmozart\Assert\Assert;
-
+use Rector\Skipper\File_System\Path_Normalizer;
+use Rector_Prefix202603\Nette\Utils\Strings;
+use Rector_Prefix202603\Symfony\Component\Filesystem\Filesystem;
+use Rector_Prefix202603\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\FileSystem\FilePathHelperTest
  */
-final class FilePathHelper
+final class File_Path_Helper
 {
     /**
      * @readonly
@@ -36,68 +34,68 @@ final class FilePathHelper
     {
         $this->filesystem = $filesystem;
     }
-    public function relativePath(string $fileRealPath): string
+    public function relative_path(string $file_real_path): string
     {
-        if (!$this->filesystem->isAbsolutePath($fileRealPath)) {
-            return $fileRealPath;
+        if (!$this->filesystem->is_absolute_path($file_real_path)) {
+            return $file_real_path;
         }
-        return $this->relativeFilePathFromDirectory($fileRealPath, getcwd());
+        return $this->relative_file_path_from_directory($file_real_path, getcwd());
     }
     /**
      * Used from
      * https://github.com/phpstan/phpstan-src/blob/02425e61aa48f0668b4efb3e73d52ad544048f65/src/File/FileHelper.php#L40, with custom modifications
      */
-    public function normalizePathAndSchema(string $originalPath): string
+    public function normalize_path_and_schema(string $original_path): string
     {
-        $directorySeparator = \DIRECTORY_SEPARATOR;
-        $matches = Strings::match($originalPath, self::SCHEME_PATH_REGEX);
+        $directory_separator = \DIRECTORY_SEPARATOR;
+        $matches = Strings::match($original_path, self::SCHEME_PATH_REGEX);
         if ($matches !== null) {
             [, $scheme, $path] = $matches;
         } else {
             $scheme = self::SCHEME_UNDEFINED;
-            $path = $originalPath;
+            $path = $original_path;
         }
-        $normalizedPath = PathNormalizer::normalize((string) $path);
-        $path = Strings::replace($normalizedPath, self::TWO_AND_MORE_SLASHES_REGEX, '/');
-        $pathRoot = strncmp($path, '/', strlen('/')) === 0 ? $directorySeparator : '';
-        $pathParts = explode('/', trim($path, '/'));
+        $normalized_path = Path_Normalizer::normalize((string) $path);
+        $path = Strings::replace($normalized_path, self::TWO_AND_MORE_SLASHES_REGEX, '/');
+        $path_root = strncmp($path, '/', strlen('/')) === 0 ? $directory_separator : '';
+        $path_parts = explode('/', trim($path, '/'));
         /** @var string $scheme */
-        $normalizedPathParts = $this->normalizePathParts($pathParts, $scheme);
-        $pathStart = $scheme !== self::SCHEME_UNDEFINED ? $scheme . '://' : '';
-        return PathNormalizer::normalize($pathStart . $pathRoot . implode($directorySeparator, $normalizedPathParts));
+        $normalized_path_parts = $this->normalize_path_parts($path_parts, $scheme);
+        $path_start = $scheme !== self::SCHEME_UNDEFINED ? $scheme . '://' : '';
+        return Path_Normalizer::normalize($path_start . $path_root . implode($directory_separator, $normalized_path_parts));
     }
-    private function relativeFilePathFromDirectory(string $fileRealPath, string $directory): string
+    private function relative_file_path_from_directory(string $file_real_path, string $directory): string
     {
         Assert::directory($directory);
-        $normalizedFileRealPath = PathNormalizer::normalize($fileRealPath);
-        $relativeFilePath = $this->filesystem->makePathRelative($normalizedFileRealPath, $directory);
-        return rtrim($relativeFilePath, '/');
+        $normalized_file_real_path = Path_Normalizer::normalize($file_real_path);
+        $relative_file_path = $this->filesystem->make_path_relative($normalized_file_real_path, $directory);
+        return rtrim($relative_file_path, '/');
     }
     /**
      * @param string[] $pathParts
      * @return string[]
      */
-    private function normalizePathParts(array $pathParts, string $scheme): array
+    private function normalize_path_parts(array $path_parts, string $scheme): array
     {
-        $normalizedPathParts = [];
-        foreach ($pathParts as $pathPart) {
-            if ($pathPart === '.') {
+        $normalized_path_parts = [];
+        foreach ($path_parts as $path_part) {
+            if ($path_part === '.') {
                 continue;
             }
-            if ($pathPart !== '..') {
-                $normalizedPathParts[] = $pathPart;
+            if ($path_part !== '..') {
+                $normalized_path_parts[] = $path_part;
                 continue;
             }
             /** @var string $removedPart */
-            $removedPart = array_pop($normalizedPathParts);
+            $removed_part = array_pop($normalized_path_parts);
             if ($scheme !== 'phar') {
                 continue;
             }
-            if (substr_compare($removedPart, '.phar', -strlen('.phar')) !== 0) {
+            if (substr_compare($removed_part, '.phar', -strlen('.phar')) !== 0) {
                 continue;
             }
             $scheme = self::SCHEME_UNDEFINED;
         }
-        return $normalizedPathParts;
+        return $normalized_path_parts;
     }
 }

@@ -1,26 +1,24 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Post_Rector\Application;
 
-namespace Rector\PostRector\Application;
-
-use PhpParser\Node\Stmt;
-use PhpParser\NodeTraverser;
+use Php_Parser\Node\Stmt;
+use Php_Parser\Node_Traverser;
 use Rector\Configuration\Option;
-use Rector\Configuration\Parameter\SimpleParameterProvider;
-use Rector\Configuration\RenamedClassesDataCollector;
-use Rector\Contract\DependencyInjection\ResettableInterface;
-use Rector\PostRector\Contract\Rector\PostRectorInterface;
-use Rector\PostRector\Rector\ClassRenamingPostRector;
-use Rector\PostRector\Rector\DocblockNameImportingPostRector;
-use Rector\PostRector\Rector\NameImportingPostRector;
-use Rector\PostRector\Rector\UnusedImportRemovingPostRector;
-use Rector\PostRector\Rector\UseAddingPostRector;
-use Rector\Renaming\Rector\Name\RenameClassRector;
+use Rector\Configuration\Parameter\Simple_Parameter_Provider;
+use Rector\Configuration\Renamed_Classes_Data_Collector;
+use Rector\Contract\Dependency_Injection\Resettable_Interface;
+use Rector\Post_Rector\Contract\Rector\Post_Rector_Interface;
+use Rector\Post_Rector\Rector\Class_Renaming_Post_Rector;
+use Rector\Post_Rector\Rector\Docblock_Name_Importing_Post_Rector;
+use Rector\Post_Rector\Rector\Name_Importing_Post_Rector;
+use Rector\Post_Rector\Rector\Unused_Import_Removing_Post_Rector;
+use Rector\Post_Rector\Rector\Use_Adding_Post_Rector;
+use Rector\Renaming\Rector\Name\Rename_Class_Rector;
 use Rector\Skipper\Skipper\Skipper;
-use Rector\ValueObject\Application\File;
-
-final class PostFileProcessor implements ResettableInterface
+use Rector\Value_Object\Application\File;
+final class Post_File_Processor implements Resettable_Interface
 {
     /**
      * @readonly
@@ -29,44 +27,44 @@ final class PostFileProcessor implements ResettableInterface
     /**
      * @readonly
      */
-    private UseAddingPostRector $useAddingPostRector;
+    private Use_Adding_Post_Rector $use_adding_post_rector;
     /**
      * @readonly
      */
-    private NameImportingPostRector $nameImportingPostRector;
+    private Name_Importing_Post_Rector $name_importing_post_rector;
     /**
      * @readonly
      */
-    private ClassRenamingPostRector $classRenamingPostRector;
+    private Class_Renaming_Post_Rector $class_renaming_post_rector;
     /**
      * @readonly
      */
-    private DocblockNameImportingPostRector $docblockNameImportingPostRector;
+    private Docblock_Name_Importing_Post_Rector $docblock_name_importing_post_rector;
     /**
      * @readonly
      */
-    private UnusedImportRemovingPostRector $unusedImportRemovingPostRector;
+    private Unused_Import_Removing_Post_Rector $unused_import_removing_post_rector;
     /**
      * @readonly
      */
-    private RenamedClassesDataCollector $renamedClassesDataCollector;
+    private Renamed_Classes_Data_Collector $renamed_classes_data_collector;
     /**
      * @var PostRectorInterface[]
      */
-    private array $postRectors = [];
-    public function __construct(Skipper $skipper, UseAddingPostRector $useAddingPostRector, NameImportingPostRector $nameImportingPostRector, ClassRenamingPostRector $classRenamingPostRector, DocblockNameImportingPostRector $docblockNameImportingPostRector, UnusedImportRemovingPostRector $unusedImportRemovingPostRector, RenamedClassesDataCollector $renamedClassesDataCollector)
+    private array $post_rectors = [];
+    public function __construct(Skipper $skipper, Use_Adding_Post_Rector $use_adding_post_rector, Name_Importing_Post_Rector $name_importing_post_rector, Class_Renaming_Post_Rector $class_renaming_post_rector, Docblock_Name_Importing_Post_Rector $docblock_name_importing_post_rector, Unused_Import_Removing_Post_Rector $unused_import_removing_post_rector, Renamed_Classes_Data_Collector $renamed_classes_data_collector)
     {
         $this->skipper = $skipper;
-        $this->useAddingPostRector = $useAddingPostRector;
-        $this->nameImportingPostRector = $nameImportingPostRector;
-        $this->classRenamingPostRector = $classRenamingPostRector;
-        $this->docblockNameImportingPostRector = $docblockNameImportingPostRector;
-        $this->unusedImportRemovingPostRector = $unusedImportRemovingPostRector;
-        $this->renamedClassesDataCollector = $renamedClassesDataCollector;
+        $this->use_adding_post_rector = $use_adding_post_rector;
+        $this->name_importing_post_rector = $name_importing_post_rector;
+        $this->class_renaming_post_rector = $class_renaming_post_rector;
+        $this->docblock_name_importing_post_rector = $docblock_name_importing_post_rector;
+        $this->unused_import_removing_post_rector = $unused_import_removing_post_rector;
+        $this->renamed_classes_data_collector = $renamed_classes_data_collector;
     }
     public function reset(): void
     {
-        $this->postRectors = [];
+        $this->post_rectors = [];
     }
     /**
      * @param Stmt[] $stmts
@@ -74,62 +72,62 @@ final class PostFileProcessor implements ResettableInterface
      */
     public function traverse(array $stmts, File $file): array
     {
-        foreach ($this->getPostRectors() as $postRector) {
+        foreach ($this->get_post_rectors() as $post_rector) {
             // file must be set early into PostRector class to ensure its usage
             // always match on skipping process
-            $postRector->setFile($file);
-            if ($this->shouldSkipPostRector($postRector, $file->getFilePath(), $stmts)) {
+            $post_rector->set_file($file);
+            if ($this->should_skip_post_rector($post_rector, $file->get_file_path(), $stmts)) {
                 continue;
             }
-            $nodeTraverser = new NodeTraverser($postRector);
-            $stmts = $nodeTraverser->traverse($stmts);
+            $node_traverser = new Node_Traverser($post_rector);
+            $stmts = $node_traverser->traverse($stmts);
         }
         return $stmts;
     }
     /**
      * @param Stmt[] $stmts
      */
-    private function shouldSkipPostRector(PostRectorInterface $postRector, string $filePath, array $stmts): bool
+    private function should_skip_post_rector(Post_Rector_Interface $post_rector, string $file_path, array $stmts): bool
     {
-        if ($this->skipper->shouldSkipElementAndFilePath($postRector, $filePath)) {
+        if ($this->skipper->should_skip_element_and_file_path($post_rector, $file_path)) {
             return \true;
         }
         // skip renaming if rename class rector is skipped
-        if ($postRector instanceof ClassRenamingPostRector && $this->skipper->shouldSkipElementAndFilePath(RenameClassRector::class, $filePath)) {
+        if ($post_rector instanceof Class_Renaming_Post_Rector && $this->skipper->should_skip_element_and_file_path(Rename_Class_Rector::class, $file_path)) {
             return \true;
         }
-        return !$postRector->shouldTraverse($stmts);
+        return !$post_rector->should_traverse($stmts);
     }
     /**
      * Lazy load, to enable test reset with different configuration
      * @return PostRectorInterface[]
      */
-    private function getPostRectors(): array
+    private function get_post_rectors(): array
     {
-        if ($this->postRectors !== []) {
-            return $this->postRectors;
+        if ($this->post_rectors !== []) {
+            return $this->post_rectors;
         }
-        $isRenamedClassEnabled = $this->renamedClassesDataCollector->getOldToNewClasses() !== [];
-        $isNameImportingEnabled = SimpleParameterProvider::provideBoolParameter(Option::AUTO_IMPORT_NAMES);
-        $isRemovingUnusedImportsEnabled = SimpleParameterProvider::provideBoolParameter(Option::REMOVE_UNUSED_IMPORTS);
-        $postRectors = [];
+        $is_renamed_class_enabled = $this->renamed_classes_data_collector->get_old_to_new_classes() !== [];
+        $is_name_importing_enabled = Simple_Parameter_Provider::provide_bool_parameter(Option::AUTO_IMPORT_NAMES);
+        $is_removing_unused_imports_enabled = Simple_Parameter_Provider::provide_bool_parameter(Option::REMOVE_UNUSED_IMPORTS);
+        $post_rectors = [];
         // sorted by priority, to keep removed imports in order
-        if ($isRenamedClassEnabled && $isNameImportingEnabled) {
-            $postRectors[] = $this->classRenamingPostRector;
+        if ($is_renamed_class_enabled && $is_name_importing_enabled) {
+            $post_rectors[] = $this->class_renaming_post_rector;
         }
         // import names
-        if ($isNameImportingEnabled) {
-            $postRectors[] = $this->nameImportingPostRector;
+        if ($is_name_importing_enabled) {
+            $post_rectors[] = $this->name_importing_post_rector;
             // import docblocks
-            if (SimpleParameterProvider::provideBoolParameter(Option::AUTO_IMPORT_DOC_BLOCK_NAMES)) {
-                $postRectors[] = $this->docblockNameImportingPostRector;
+            if (Simple_Parameter_Provider::provide_bool_parameter(Option::AUTO_IMPORT_DOC_BLOCK_NAMES)) {
+                $post_rectors[] = $this->docblock_name_importing_post_rector;
             }
         }
-        $postRectors[] = $this->useAddingPostRector;
-        if ($isRemovingUnusedImportsEnabled) {
-            $postRectors[] = $this->unusedImportRemovingPostRector;
+        $post_rectors[] = $this->use_adding_post_rector;
+        if ($is_removing_unused_imports_enabled) {
+            $post_rectors[] = $this->unused_import_removing_post_rector;
         }
-        $this->postRectors = $postRectors;
-        return $this->postRectors;
+        $this->post_rectors = $post_rectors;
+        return $this->post_rectors;
     }
 }

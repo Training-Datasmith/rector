@@ -1,33 +1,31 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Node_Type_Resolver\Php_Stan;
 
-namespace Rector\NodeTypeResolver\PHPStan;
-
-use PHPStan\Type\ObjectWithoutClassType;
-use PHPStan\Type\Type;
-use PHPStan\Type\TypeWithClassName;
-
-final class ObjectWithoutClassTypeWithParentTypes extends ObjectWithoutClassType
+use Php_Stan\Type\Object_Without_Class_Type;
+use Php_Stan\Type\Type;
+use Php_Stan\Type\Type_With_Class_Name;
+final class Object_Without_Class_Type_With_Parent_Types extends Object_Without_Class_Type
 {
     /**
      * @var TypeWithClassName[]
      * @readonly
      */
-    private array $parentTypes;
+    private array $parent_types;
     /**
      * @param TypeWithClassName[] $parentTypes
      */
-    public function __construct(array $parentTypes, ?Type $subtractedType = null)
+    public function __construct(array $parent_types, ?Type $subtracted_type = null)
     {
-        $this->parentTypes = $parentTypes;
-        parent::__construct($subtractedType);
+        $this->parent_types = $parent_types;
+        parent::__construct($subtracted_type);
     }
     /**
      * @return TypeWithClassName[]
      */
-    public function getParentTypes(): array
+    public function get_parent_types(): array
     {
-        return $this->parentTypes;
+        return $this->parent_types;
     }
 }

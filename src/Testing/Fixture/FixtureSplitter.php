@@ -1,34 +1,32 @@
 <?php
 
 declare (strict_types=1);
-
 namespace Rector\Testing\Fixture;
 
-use RectorPrefix202603\Nette\Utils\FileSystem;
-
+use Rector_Prefix202603\Nette\Utils\File_System;
 /**
  * @api
  */
-final class FixtureSplitter
+final class Fixture_Splitter
 {
-    public static function containsSplit(string $fixtureFileContent): bool
+    public static function contains_split(string $fixture_file_content): bool
     {
-        return strpos($fixtureFileContent, "-----\n") !== \false || strpos($fixtureFileContent, "-----\r\n") !== \false;
+        return strpos($fixture_file_content, "-----\n") !== \false || strpos($fixture_file_content, "-----\r\n") !== \false;
     }
     /**
      * @return array<int, string>
      */
-    public static function split(string $filePath): array
+    public static function split(string $file_path): array
     {
-        $fixtureFileContents = FileSystem::read($filePath);
-        return self::splitFixtureFileContents($fixtureFileContents);
+        $fixture_file_contents = File_System::read($file_path);
+        return self::split_fixture_file_contents($fixture_file_contents);
     }
     /**
      * @return array<int, string>
      */
-    public static function splitFixtureFileContents(string $fixtureFileContents): array
+    public static function split_fixture_file_contents(string $fixture_file_contents): array
     {
-        $fixtureFileContents = str_replace("\r\n", "\n", $fixtureFileContents);
-        return explode("-----\n", $fixtureFileContents);
+        $fixture_file_contents = str_replace("\r\n", "\n", $fixture_file_contents);
+        return explode("-----\n", $fixture_file_contents);
     }
 }

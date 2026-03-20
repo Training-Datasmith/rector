@@ -1,44 +1,42 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Php_Stan_Static_Type_Mapper\Type_Mapper;
 
-namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
-
-use PhpParser\Node;
-use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use PHPStan\Type\Accessory\HasPropertyType;
-use PHPStan\Type\Type;
-use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
-
+use Php_Parser\Node;
+use Php_Stan\Php_Doc_Parser\Ast\Type\Type_Node;
+use Php_Stan\Type\Accessory\Has_Property_Type;
+use Php_Stan\Type\Type;
+use Rector\Php_Stan_Static_Type_Mapper\Contract\Type_Mapper_Interface;
 /**
  * @implements TypeMapperInterface<HasPropertyType>
  */
-final class HasPropertyTypeMapper implements TypeMapperInterface
+final class Has_Property_Type_Mapper implements Type_Mapper_Interface
 {
     /**
      * @readonly
      */
-    private \Rector\PHPStanStaticTypeMapper\TypeMapper\ObjectWithoutClassTypeMapper $objectWithoutClassTypeMapper;
-    public function __construct(\Rector\PHPStanStaticTypeMapper\TypeMapper\ObjectWithoutClassTypeMapper $objectWithoutClassTypeMapper)
+    private \Rector\Php_Stan_Static_Type_Mapper\Type_Mapper\Object_Without_Class_Type_Mapper $object_without_class_type_mapper;
+    public function __construct(\Rector\Php_Stan_Static_Type_Mapper\Type_Mapper\Object_Without_Class_Type_Mapper $object_without_class_type_mapper)
     {
-        $this->objectWithoutClassTypeMapper = $objectWithoutClassTypeMapper;
+        $this->object_without_class_type_mapper = $object_without_class_type_mapper;
     }
-    public function getNodeClass(): string
+    public function get_node_class(): string
     {
-        return HasPropertyType::class;
-    }
-    /**
-     * @param HasPropertyType $type
-     */
-    public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
-    {
-        return $type->toPhpDocNode();
+        return Has_Property_Type::class;
     }
     /**
      * @param HasPropertyType $type
      */
-    public function mapToPhpParserNode(Type $type, string $typeKind): ?Node
+    public function map_to_php_stan_php_doc_type_node(Type $type): Type_Node
     {
-        return $this->objectWithoutClassTypeMapper->mapToPhpParserNode($type, $typeKind);
+        return $type->to_php_doc_node();
+    }
+    /**
+     * @param HasPropertyType $type
+     */
+    public function map_to_php_parser_node(Type $type, string $type_kind): ?Node
+    {
+        return $this->object_without_class_type_mapper->map_to_php_parser_node($type, $type_kind);
     }
 }

@@ -1,35 +1,33 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Php_Stan_Static_Type_Mapper\Type_Mapper;
 
-namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
-
-use PhpParser\Node\Identifier;
-use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use PHPStan\Type\Accessory\NonEmptyArrayType;
-use PHPStan\Type\Type;
-use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
-
+use Php_Parser\Node\Identifier;
+use Php_Stan\Php_Doc_Parser\Ast\Type\Type_Node;
+use Php_Stan\Type\Accessory\Non_Empty_Array_Type;
+use Php_Stan\Type\Type;
+use Rector\Php_Stan_Static_Type_Mapper\Contract\Type_Mapper_Interface;
 /**
  * @implements TypeMapperInterface<NonEmptyArrayType>
  */
-final class NonEmptyArrayTypeMapper implements TypeMapperInterface
+final class Non_Empty_Array_Type_Mapper implements Type_Mapper_Interface
 {
-    public function getNodeClass(): string
+    public function get_node_class(): string
     {
-        return NonEmptyArrayType::class;
+        return Non_Empty_Array_Type::class;
     }
     /**
      * @param NonEmptyArrayType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
+    public function map_to_php_stan_php_doc_type_node(Type $type): Type_Node
     {
-        return $type->toPhpDocNode();
+        return $type->to_php_doc_node();
     }
     /**
      * @param NonEmptyArrayType $type
      */
-    public function mapToPhpParserNode(Type $type, string $typeKind): Identifier
+    public function map_to_php_parser_node(Type $type, string $type_kind): Identifier
     {
         return new Identifier('array');
     }

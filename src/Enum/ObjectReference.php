@@ -1,10 +1,9 @@
 <?php
 
 declare (strict_types=1);
-
 namespace Rector\Enum;
 
-final class ObjectReference
+final class Object_Reference
 {
     /**
      * @var string

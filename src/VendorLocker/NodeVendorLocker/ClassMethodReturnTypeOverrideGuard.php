@@ -1,83 +1,81 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Vendor_Locker\Node_Vendor_Locker;
 
-namespace Rector\VendorLocker\NodeVendorLocker;
-
-use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Analyser\Scope;
-use PHPStan\Reflection\ClassReflection;
-use PHPStan\Reflection\ExtendedFunctionVariant;
-use PHPStan\Reflection\MethodReflection;
-use PHPStan\Type\MixedType;
-use Rector\FileSystem\FilePathHelper;
-use Rector\NodeAnalyzer\MagicClassMethodAnalyzer;
-use Rector\NodeTypeResolver\PHPStan\ParametersAcceptorSelectorVariantsWrapper;
-use Rector\Reflection\ReflectionResolver;
-use Rector\VendorLocker\ParentClassMethodTypeOverrideGuard;
-
-final class ClassMethodReturnTypeOverrideGuard
+use Php_Parser\Node\Stmt\Class_Method;
+use Php_Stan\Analyser\Scope;
+use Php_Stan\Reflection\Class_Reflection;
+use Php_Stan\Reflection\Extended_Function_Variant;
+use Php_Stan\Reflection\Method_Reflection;
+use Php_Stan\Type\Mixed_Type;
+use Rector\File_System\File_Path_Helper;
+use Rector\Node_Analyzer\Magic_Class_Method_Analyzer;
+use Rector\Node_Type_Resolver\Php_Stan\Parameters_Acceptor_Selector_Variants_Wrapper;
+use Rector\Reflection\Reflection_Resolver;
+use Rector\Vendor_Locker\Parent_Class_Method_Type_Override_Guard;
+final class Class_Method_Return_Type_Override_Guard
 {
     /**
      * @readonly
      */
-    private ReflectionResolver $reflectionResolver;
+    private Reflection_Resolver $reflection_resolver;
     /**
      * @readonly
      */
-    private ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard;
+    private Parent_Class_Method_Type_Override_Guard $parent_class_method_type_override_guard;
     /**
      * @readonly
      */
-    private FilePathHelper $filePathHelper;
+    private File_Path_Helper $file_path_helper;
     /**
      * @readonly
      */
-    private MagicClassMethodAnalyzer $magicClassMethodAnalyzer;
-    public function __construct(ReflectionResolver $reflectionResolver, ParentClassMethodTypeOverrideGuard $parentClassMethodTypeOverrideGuard, FilePathHelper $filePathHelper, MagicClassMethodAnalyzer $magicClassMethodAnalyzer)
+    private Magic_Class_Method_Analyzer $magic_class_method_analyzer;
+    public function __construct(Reflection_Resolver $reflection_resolver, Parent_Class_Method_Type_Override_Guard $parent_class_method_type_override_guard, File_Path_Helper $file_path_helper, Magic_Class_Method_Analyzer $magic_class_method_analyzer)
     {
-        $this->reflectionResolver = $reflectionResolver;
-        $this->parentClassMethodTypeOverrideGuard = $parentClassMethodTypeOverrideGuard;
-        $this->filePathHelper = $filePathHelper;
-        $this->magicClassMethodAnalyzer = $magicClassMethodAnalyzer;
+        $this->reflection_resolver = $reflection_resolver;
+        $this->parent_class_method_type_override_guard = $parent_class_method_type_override_guard;
+        $this->file_path_helper = $file_path_helper;
+        $this->magic_class_method_analyzer = $magic_class_method_analyzer;
     }
-    public function shouldSkipClassMethod(ClassMethod $classMethod, Scope $scope): bool
+    public function should_skip_class_method(Class_Method $class_method, Scope $scope): bool
     {
-        if ($this->magicClassMethodAnalyzer->isUnsafeOverridden($classMethod)) {
+        if ($this->magic_class_method_analyzer->is_unsafe_overridden($class_method)) {
             return \true;
         }
         // except magic check on above, early allow add return type on private method
-        if ($classMethod->isPrivate()) {
+        if ($class_method->is_private()) {
             return \false;
         }
-        $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
-        if (!$classReflection instanceof ClassReflection) {
+        $class_reflection = $this->reflection_resolver->resolve_class_reflection($class_method);
+        if (!$class_reflection instanceof Class_Reflection) {
             return \true;
         }
-        if ($classReflection->isAbstract()) {
+        if ($class_reflection->is_abstract()) {
             return \true;
         }
-        if ($classReflection->isInterface()) {
+        if ($class_reflection->is_interface()) {
             return \true;
         }
-        return !$this->isReturnTypeChangeAllowed($classMethod, $scope);
+        return !$this->is_return_type_change_allowed($class_method, $scope);
     }
-    private function isReturnTypeChangeAllowed(ClassMethod $classMethod, Scope $scope): bool
+    private function is_return_type_change_allowed(Class_Method $class_method, Scope $scope): bool
     {
         // make sure return type is not protected by parent contract
-        $parentClassMethodReflection = $this->parentClassMethodTypeOverrideGuard->getParentClassMethod($classMethod);
+        $parent_class_method_reflection = $this->parent_class_method_type_override_guard->get_parent_class_method($class_method);
         // nothing to check
-        if (!$parentClassMethodReflection instanceof MethodReflection) {
-            return !$this->parentClassMethodTypeOverrideGuard->hasParentClassMethod($classMethod);
+        if (!$parent_class_method_reflection instanceof Method_Reflection) {
+            return !$this->parent_class_method_type_override_guard->has_parent_class_method($class_method);
         }
-        $parametersAcceptor = ParametersAcceptorSelectorVariantsWrapper::select($parentClassMethodReflection, $classMethod, $scope);
-        if ($parametersAcceptor instanceof ExtendedFunctionVariant && !$parametersAcceptor->getNativeReturnType() instanceof MixedType) {
+        $parameters_acceptor = Parameters_Acceptor_Selector_Variants_Wrapper::select($parent_class_method_reflection, $class_method, $scope);
+        if ($parameters_acceptor instanceof Extended_Function_Variant && !$parameters_acceptor->get_native_return_type() instanceof Mixed_Type) {
             return \false;
         }
-        $classReflection = $parentClassMethodReflection->getDeclaringClass();
-        $fileName = $classReflection->getFileName();
+        $class_reflection = $parent_class_method_reflection->get_declaring_class();
+        $file_name = $class_reflection->get_file_name();
         // probably internal
-        if ($fileName === null) {
+        if ($file_name === null) {
             return \false;
         }
         /*
@@ -91,15 +89,15 @@ final class ClassMethodReturnTypeOverrideGuard
          *     - both not in /vendor/ -> allowed
          */
         /** @var ClassReflection $currentClassReflection */
-        $currentClassReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
+        $current_class_reflection = $this->reflection_resolver->resolve_class_reflection($class_method);
         /** @var string $currentFileName */
-        $currentFileName = $currentClassReflection->getFileName();
+        $current_file_name = $current_class_reflection->get_file_name();
         // child (current)
-        $normalizedCurrentFileName = $this->filePathHelper->normalizePathAndSchema($currentFileName);
-        $isCurrentInVendor = strpos($normalizedCurrentFileName, '/vendor/') !== \false;
+        $normalized_current_file_name = $this->file_path_helper->normalize_path_and_schema($current_file_name);
+        $is_current_in_vendor = strpos($normalized_current_file_name, '/vendor/') !== \false;
         // parent
-        $normalizedFileName = $this->filePathHelper->normalizePathAndSchema($fileName);
-        $isParentInVendor = strpos($normalizedFileName, '/vendor/') !== \false;
-        return $isCurrentInVendor && $isParentInVendor || !$isCurrentInVendor && !$isParentInVendor;
+        $normalized_file_name = $this->file_path_helper->normalize_path_and_schema($file_name);
+        $is_parent_in_vendor = strpos($normalized_file_name, '/vendor/') !== \false;
+        return $is_current_in_vendor && $is_parent_in_vendor || !$is_current_in_vendor && !$is_parent_in_vendor;
     }
 }

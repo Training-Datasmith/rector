@@ -1,62 +1,60 @@
 <?php
 
 declare (strict_types=1);
-
 namespace Rector\Set;
 
-use Rector\Bridge\SetProviderCollector;
-use Rector\Composer\InstalledPackageResolver;
-use Rector\Set\Enum\SetGroup;
-use Rector\Set\ValueObject\ComposerTriggeredSet;
-
+use Rector\Bridge\Set_Provider_Collector;
+use Rector\Composer\Installed_Package_Resolver;
+use Rector\Set\Enum\Set_Group;
+use Rector\Set\Value_Object\Composer_Triggered_Set;
 /**
  * @see \Rector\Tests\Set\SetManager\SetManagerTest
  */
-final class SetManager
+final class Set_Manager
 {
     /**
      * @readonly
      */
-    private SetProviderCollector $setProviderCollector;
+    private Set_Provider_Collector $set_provider_collector;
     /**
      * @readonly
      */
-    private InstalledPackageResolver $installedPackageResolver;
-    public function __construct(SetProviderCollector $setProviderCollector, InstalledPackageResolver $installedPackageResolver)
+    private Installed_Package_Resolver $installed_package_resolver;
+    public function __construct(Set_Provider_Collector $set_provider_collector, Installed_Package_Resolver $installed_package_resolver)
     {
-        $this->setProviderCollector = $setProviderCollector;
-        $this->installedPackageResolver = $installedPackageResolver;
+        $this->set_provider_collector = $set_provider_collector;
+        $this->installed_package_resolver = $installed_package_resolver;
     }
     /**
      * @return ComposerTriggeredSet[]
      */
-    public function matchComposerTriggered(string $groupName): array
+    public function match_composer_triggered(string $group_name): array
     {
-        $matchedSets = [];
-        foreach ($this->setProviderCollector->provideComposerTriggeredSets() as $composerTriggeredSet) {
-            if ($composerTriggeredSet->getGroupName() === $groupName) {
-                $matchedSets[] = $composerTriggeredSet;
+        $matched_sets = [];
+        foreach ($this->set_provider_collector->provide_composer_triggered_sets() as $composer_triggered_set) {
+            if ($composer_triggered_set->get_group_name() === $group_name) {
+                $matched_sets[] = $composer_triggered_set;
             }
         }
-        return $matchedSets;
+        return $matched_sets;
     }
     /**
      * @param SetGroup::*[] $setGroups
      * @return string[]
      */
-    public function matchBySetGroups(array $setGroups): array
+    public function match_by_set_groups(array $set_groups): array
     {
-        $installedComposerPackages = $this->installedPackageResolver->resolve();
-        $groupLoadedSets = [];
-        foreach ($setGroups as $setGroup) {
-            $composerTriggeredSets = $this->matchComposerTriggered($setGroup);
-            foreach ($composerTriggeredSets as $composerTriggeredSet) {
-                if ($composerTriggeredSet->matchInstalledPackages($installedComposerPackages)) {
+        $installed_composer_packages = $this->installed_package_resolver->resolve();
+        $group_loaded_sets = [];
+        foreach ($set_groups as $set_group) {
+            $composer_triggered_sets = $this->match_composer_triggered($set_group);
+            foreach ($composer_triggered_sets as $composer_triggered_set) {
+                if ($composer_triggered_set->match_installed_packages($installed_composer_packages)) {
                     // it matched composer package + version requirements → load set
-                    $groupLoadedSets[] = realpath($composerTriggeredSet->getSetFilePath());
+                    $group_loaded_sets[] = realpath($composer_triggered_set->get_set_file_path());
                 }
             }
         }
-        return $groupLoadedSets;
+        return $group_loaded_sets;
     }
 }

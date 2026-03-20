@@ -1,26 +1,24 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Version_Bonding;
 
-namespace Rector\VersionBonding;
-
-use Rector\Composer\InstalledPackageResolver;
-use Rector\Contract\Rector\RectorInterface;
-use Rector\VersionBonding\Contract\ComposerPackageConstraintInterface;
-use RectorPrefix202603\Composer\Semver\Semver;
-
+use Rector\Composer\Installed_Package_Resolver;
+use Rector\Contract\Rector\Rector_Interface;
+use Rector\Version_Bonding\Contract\Composer_Package_Constraint_Interface;
+use Rector_Prefix202603\Composer\Semver\Semver;
 /**
  * @see \Rector\Tests\VersionBonding\ComposerPackageConstraintFilterTest
  */
-final class ComposerPackageConstraintFilter
+final class Composer_Package_Constraint_Filter
 {
     /**
      * @readonly
      */
-    private InstalledPackageResolver $installedPackageResolver;
-    public function __construct(InstalledPackageResolver $installedPackageResolver)
+    private Installed_Package_Resolver $installed_package_resolver;
+    public function __construct(Installed_Package_Resolver $installed_package_resolver)
     {
-        $this->installedPackageResolver = $installedPackageResolver;
+        $this->installed_package_resolver = $installed_package_resolver;
     }
     /**
      * @param list<RectorInterface> $rectors
@@ -28,25 +26,25 @@ final class ComposerPackageConstraintFilter
      */
     public function filter(array $rectors): array
     {
-        $activeRectors = [];
+        $active_rectors = [];
         foreach ($rectors as $rector) {
-            if (!$rector instanceof ComposerPackageConstraintInterface) {
-                $activeRectors[] = $rector;
+            if (!$rector instanceof Composer_Package_Constraint_Interface) {
+                $active_rectors[] = $rector;
                 continue;
             }
-            if ($this->satisfiesComposerPackageConstraint($rector)) {
-                $activeRectors[] = $rector;
+            if ($this->satisfies_composer_package_constraint($rector)) {
+                $active_rectors[] = $rector;
             }
         }
-        return $activeRectors;
+        return $active_rectors;
     }
-    private function satisfiesComposerPackageConstraint(ComposerPackageConstraintInterface $rector): bool
+    private function satisfies_composer_package_constraint(Composer_Package_Constraint_Interface $rector): bool
     {
-        $composerPackageConstraint = $rector->provideComposerPackageConstraint();
-        $packageVersion = $this->installedPackageResolver->resolvePackageVersion($composerPackageConstraint->getPackageName());
-        if ($packageVersion === null) {
+        $composer_package_constraint = $rector->provide_composer_package_constraint();
+        $package_version = $this->installed_package_resolver->resolve_package_version($composer_package_constraint->get_package_name());
+        if ($package_version === null) {
             return \false;
         }
-        return Semver::satisfies($packageVersion, $composerPackageConstraint->getConstraint());
+        return Semver::satisfies($package_version, $composer_package_constraint->get_constraint());
     }
 }

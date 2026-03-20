@@ -1,68 +1,66 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Post_Rector\Rector;
 
-namespace Rector\PostRector\Rector;
-
-use PhpParser\Node;
-use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Namespace_;
-use PhpParser\NodeVisitor;
-use Rector\CodingStyle\Application\UseImportsAdder;
-use Rector\NodeTypeResolver\PHPStan\Type\TypeFactory;
-use Rector\PhpParser\Node\FileNode;
-use Rector\PostRector\Collector\UseNodesToAddCollector;
-use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
-
-final class UseAddingPostRector extends \Rector\PostRector\Rector\AbstractPostRector
+use Php_Parser\Node;
+use Php_Parser\Node\Stmt;
+use Php_Parser\Node\Stmt\Namespace_;
+use Php_Parser\Node_Visitor;
+use Rector\Coding_Style\Application\Use_Imports_Adder;
+use Rector\Node_Type_Resolver\Php_Stan\Type\Type_Factory;
+use Rector\Php_Parser\Node\File_Node;
+use Rector\Post_Rector\Collector\Use_Nodes_To_Add_Collector;
+use Rector\Static_Type_Mapper\Value_Object\Type\Fully_Qualified_Object_Type;
+final class Use_Adding_Post_Rector extends \Rector\Post_Rector\Rector\Abstract_Post_Rector
 {
     /**
      * @readonly
      */
-    private TypeFactory $typeFactory;
+    private Type_Factory $type_factory;
     /**
      * @readonly
      */
-    private UseImportsAdder $useImportsAdder;
+    private Use_Imports_Adder $use_imports_adder;
     /**
      * @readonly
      */
-    private UseNodesToAddCollector $useNodesToAddCollector;
-    public function __construct(TypeFactory $typeFactory, UseImportsAdder $useImportsAdder, UseNodesToAddCollector $useNodesToAddCollector)
+    private Use_Nodes_To_Add_Collector $use_nodes_to_add_collector;
+    public function __construct(Type_Factory $type_factory, Use_Imports_Adder $use_imports_adder, Use_Nodes_To_Add_Collector $use_nodes_to_add_collector)
     {
-        $this->typeFactory = $typeFactory;
-        $this->useImportsAdder = $useImportsAdder;
-        $this->useNodesToAddCollector = $useNodesToAddCollector;
+        $this->type_factory = $type_factory;
+        $this->use_imports_adder = $use_imports_adder;
+        $this->use_nodes_to_add_collector = $use_nodes_to_add_collector;
     }
     /**
      * @param Stmt[] $nodes
      * @return Stmt[]
      */
-    public function beforeTraverse(array $nodes): array
+    public function before_traverse(array $nodes): array
     {
         // no nodes → just return
         if ($nodes === []) {
             return $nodes;
         }
-        $rootNode = $this->resolveRootNode($nodes);
-        if (!$rootNode instanceof FileNode && !$rootNode instanceof Namespace_) {
+        $root_node = $this->resolve_root_node($nodes);
+        if (!$root_node instanceof File_Node && !$root_node instanceof Namespace_) {
             return $nodes;
         }
-        $useImportTypes = $this->useNodesToAddCollector->getObjectImportsByFilePath($this->getFile()->getFilePath());
-        $constantUseImportTypes = $this->useNodesToAddCollector->getConstantImportsByFilePath($this->getFile()->getFilePath());
-        $functionUseImportTypes = $this->useNodesToAddCollector->getFunctionImportsByFilePath($this->getFile()->getFilePath());
-        if ($useImportTypes === [] && $constantUseImportTypes === [] && $functionUseImportTypes === []) {
+        $use_import_types = $this->use_nodes_to_add_collector->get_object_imports_by_file_path($this->get_file()->get_file_path());
+        $constant_use_import_types = $this->use_nodes_to_add_collector->get_constant_imports_by_file_path($this->get_file()->get_file_path());
+        $function_use_import_types = $this->use_nodes_to_add_collector->get_function_imports_by_file_path($this->get_file()->get_file_path());
+        if ($use_import_types === [] && $constant_use_import_types === [] && $function_use_import_types === []) {
             return $nodes;
         }
         /** @var FullyQualifiedObjectType[] $useImportTypes */
-        $useImportTypes = $this->typeFactory->uniquateTypes($useImportTypes);
-        $stmts = $rootNode instanceof FileNode ? $rootNode->stmts : $nodes;
-        if ($this->processStmtsWithImportedUses($stmts, $useImportTypes, $constantUseImportTypes, $functionUseImportTypes, $rootNode)) {
-            $this->addRectorClassWithLine($rootNode);
+        $use_import_types = $this->type_factory->uniquate_types($use_import_types);
+        $stmts = $root_node instanceof File_Node ? $root_node->stmts : $nodes;
+        if ($this->process_stmts_with_imported_uses($stmts, $use_import_types, $constant_use_import_types, $function_use_import_types, $root_node)) {
+            $this->add_rector_class_with_line($root_node);
         }
         return $nodes;
     }
-    public function enterNode(Node $node): int
+    public function enter_node(Node $node): int
     {
         /**
          * We stop the traversal because all the work has already been done in the beforeTraverse() function
@@ -72,7 +70,7 @@ final class UseAddingPostRector extends \Rector\PostRector\Rector\AbstractPostRe
          * visitor per execution, using stop traversal here is safe,
          * ref https://github.com/rectorphp/rector-src/blob/fc1e742fa4d9861ccdc5933f3b53613b8223438d/src/PostRector/Application/PostFileProcessor.php#L59-L61
          */
-        return NodeVisitor::STOP_TRAVERSAL;
+        return Node_Visitor::STOP_TRAVERSAL;
     }
     /**
      * @param Stmt[] $stmts
@@ -81,52 +79,52 @@ final class UseAddingPostRector extends \Rector\PostRector\Rector\AbstractPostRe
      * @param FullyQualifiedObjectType[] $functionUseImportTypes
      * @param \Rector\PhpParser\Node\FileNode|\PhpParser\Node\Stmt\Namespace_ $namespace
      */
-    private function processStmtsWithImportedUses(array $stmts, array $useImportTypes, array $constantUseImportTypes, array $functionUseImportTypes, $namespace): bool
+    private function process_stmts_with_imported_uses(array $stmts, array $use_import_types, array $constant_use_import_types, array $function_use_import_types, $namespace): bool
     {
         // A. has namespace? add under it
         if ($namespace instanceof Namespace_) {
             // then add, to prevent adding + removing false positive of same short use
-            return $this->useImportsAdder->addImportsToNamespace($namespace, $useImportTypes, $constantUseImportTypes, $functionUseImportTypes);
+            return $this->use_imports_adder->add_imports_to_namespace($namespace, $use_import_types, $constant_use_import_types, $function_use_import_types);
         }
         // B. no namespace? add in the top
-        $useImportTypes = $this->filterOutNonNamespacedNames($useImportTypes);
+        $use_import_types = $this->filter_out_non_namespaced_names($use_import_types);
         // then add, to prevent adding + removing false positive of same short use
-        return $this->useImportsAdder->addImportsToStmts($namespace, $stmts, $useImportTypes, $constantUseImportTypes, $functionUseImportTypes);
+        return $this->use_imports_adder->add_imports_to_stmts($namespace, $stmts, $use_import_types, $constant_use_import_types, $function_use_import_types);
     }
     /**
      * Prevents
      * @param FullyQualifiedObjectType[] $useImportTypes
      * @return FullyQualifiedObjectType[]
      */
-    private function filterOutNonNamespacedNames(array $useImportTypes): array
+    private function filter_out_non_namespaced_names(array $use_import_types): array
     {
-        $namespacedUseImportTypes = [];
-        foreach ($useImportTypes as $useImportType) {
-            if (strpos($useImportType->getClassName(), '\\') === \false) {
+        $namespaced_use_import_types = [];
+        foreach ($use_import_types as $use_import_type) {
+            if (strpos($use_import_type->get_class_name(), '\\') === \false) {
                 continue;
             }
-            $namespacedUseImportTypes[] = $useImportType;
+            $namespaced_use_import_types[] = $use_import_type;
         }
-        return $namespacedUseImportTypes;
+        return $namespaced_use_import_types;
     }
     /**
      * @param Stmt[] $nodes
      * @return \PhpParser\Node\Stmt\Namespace_|\Rector\PhpParser\Node\FileNode|null
      */
-    private function resolveRootNode(array $nodes)
+    private function resolve_root_node(array $nodes)
     {
         if ($nodes === []) {
             return null;
         }
-        $firstStmt = $nodes[0];
-        if (!$firstStmt instanceof FileNode) {
+        $first_stmt = $nodes[0];
+        if (!$first_stmt instanceof File_Node) {
             return null;
         }
-        foreach ($firstStmt->stmts as $stmt) {
+        foreach ($first_stmt->stmts as $stmt) {
             if ($stmt instanceof Namespace_) {
                 return $stmt;
             }
         }
-        return $firstStmt;
+        return $first_stmt;
     }
 }

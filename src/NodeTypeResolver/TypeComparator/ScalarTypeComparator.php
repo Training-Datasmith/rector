@@ -1,61 +1,59 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Node_Type_Resolver\Type_Comparator;
 
-namespace Rector\NodeTypeResolver\TypeComparator;
-
-use PHPStan\Type\Type;
-
+use Php_Stan\Type\Type;
 /**
  * @see \Rector\Tests\NodeTypeResolver\TypeComparator\ScalarTypeComparatorTest
  */
-final class ScalarTypeComparator
+final class Scalar_Type_Comparator
 {
-    public function areEqualScalar(Type $firstType, Type $secondType): bool
+    public function are_equal_scalar(Type $first_type, Type $second_type): bool
     {
-        if ($firstType->isString()->yes() && $secondType->isString()->yes()) {
+        if ($first_type->is_string()->yes() && $second_type->is_string()->yes()) {
             // prevents "class-string" vs "string"
-            $firstTypeClass = get_class($firstType);
-            $secondTypeClass = get_class($secondType);
-            return $firstTypeClass === $secondTypeClass;
+            $first_type_class = get_class($first_type);
+            $second_type_class = get_class($second_type);
+            return $first_type_class === $second_type_class;
         }
-        if ($firstType->isInteger()->yes() && $secondType->isInteger()->yes()) {
+        if ($first_type->is_integer()->yes() && $second_type->is_integer()->yes()) {
             // prevents "int<min, max>" vs "int"
-            $firstTypeClass = get_class($firstType);
-            $secondTypeClass = get_class($secondType);
-            return $firstTypeClass === $secondTypeClass;
+            $first_type_class = get_class($first_type);
+            $second_type_class = get_class($second_type);
+            return $first_type_class === $second_type_class;
         }
-        if ($firstType->isFloat()->yes() && $secondType->isFloat()->yes()) {
+        if ($first_type->is_float()->yes() && $second_type->is_float()->yes()) {
             return \true;
         }
-        if (!$firstType->isBoolean()->yes()) {
+        if (!$first_type->is_boolean()->yes()) {
             return \false;
         }
-        return $secondType->isBoolean()->yes();
+        return $second_type->is_boolean()->yes();
     }
     /**
      * E.g. first is string, second is bool
      */
-    public function areDifferentScalarTypes(Type $firstType, Type $secondType): bool
+    public function are_different_scalar_types(Type $first_type, Type $second_type): bool
     {
-        if (!$firstType->isScalar()->yes()) {
+        if (!$first_type->is_scalar()->yes()) {
             return \false;
         }
-        if (!$secondType->isScalar()->yes()) {
+        if (!$second_type->is_scalar()->yes()) {
             return \false;
         }
         // treat class-string and string the same
-        if ($firstType->isString()->yes() && $secondType->isString()->yes()) {
+        if ($first_type->is_string()->yes() && $second_type->is_string()->yes()) {
             return \false;
         }
-        if ($firstType->isInteger()->yes() && $secondType->isInteger()->yes()) {
+        if ($first_type->is_integer()->yes() && $second_type->is_integer()->yes()) {
             return \false;
         }
-        if (!$firstType->isString()->yes()) {
-            return get_class($firstType) !== get_class($secondType);
+        if (!$first_type->is_string()->yes()) {
+            return get_class($first_type) !== get_class($second_type);
         }
-        if (!$secondType->isClassString()->yes()) {
-            return get_class($firstType) !== get_class($secondType);
+        if (!$second_type->is_class_string()->yes()) {
+            return get_class($first_type) !== get_class($second_type);
         }
         return \false;
     }

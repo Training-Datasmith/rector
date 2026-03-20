@@ -1,17 +1,15 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Php_Doc_Parser\Node_Visitor;
 
-namespace Rector\PhpDocParser\NodeVisitor;
-
-use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Expression;
-use PhpParser\NodeVisitor;
-use PhpParser\NodeVisitorAbstract;
-
-final class CallableNodeVisitor extends NodeVisitorAbstract
+use Php_Parser\Node;
+use Php_Parser\Node\Expr;
+use Php_Parser\Node\Stmt;
+use Php_Parser\Node\Stmt\Expression;
+use Php_Parser\Node_Visitor;
+use Php_Parser\Node_Visitor_Abstract;
+final class Callable_Node_Visitor extends Node_Visitor_Abstract
 {
     /**
      * @var callable(Node): (int|Node|null|Node[])
@@ -27,15 +25,15 @@ final class CallableNodeVisitor extends NodeVisitorAbstract
     /**
      * @return NodeVisitor::*|Node|null|Node[]
      */
-    public function enterNode(Node $node)
+    public function enter_node(Node $node)
     {
-        $originalNode = $node;
+        $original_node = $node;
         $callable = $this->callable;
         /** @var NodeVisitor::*|Node|null|Node[] $newNode */
-        $newNode = $callable($node);
-        if ($originalNode instanceof Stmt && $newNode instanceof Expr) {
-            return new Expression($newNode);
+        $new_node = $callable($node);
+        if ($original_node instanceof Stmt && $new_node instanceof Expr) {
+            return new Expression($new_node);
         }
-        return $newNode;
+        return $new_node;
     }
 }

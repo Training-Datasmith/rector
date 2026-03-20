@@ -1,26 +1,24 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Php_Attribute\Annotation_To_Attribute_Mapper;
 
-namespace Rector\PhpAttribute\AnnotationToAttributeMapper;
-
-use PhpParser\Node;
-use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Name;
-use PhpParser\Node\Scalar\String_;
-use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
-use Rector\Validation\RectorAssert;
-use RectorPrefix202603\Webmozart\Assert\InvalidArgumentException;
-
+use Php_Parser\Node;
+use Php_Parser\Node\Expr\Class_Const_Fetch;
+use Php_Parser\Node\Name;
+use Php_Parser\Node\Scalar\String_;
+use Rector\Php_Attribute\Contract\Annotation_To_Attribute_Mapper_Interface;
+use Rector\Validation\Rector_Assert;
+use Rector_Prefix202603\Webmozart\Assert\InvalidArgumentException;
 /**
  * @implements AnnotationToAttributeMapperInterface<string>
  */
-final class ClassConstFetchAnnotationToAttributeMapper implements AnnotationToAttributeMapperInterface
+final class Class_Const_Fetch_Annotation_To_Attribute_Mapper implements Annotation_To_Attribute_Mapper_Interface
 {
     /**
      * @param mixed $value
      */
-    public function isCandidate($value): bool
+    public function is_candidate($value): bool
     {
         if (!is_string($value)) {
             return \false;
@@ -46,11 +44,11 @@ final class ClassConstFetchAnnotationToAttributeMapper implements AnnotationToAt
             return new String_($value);
         }
         try {
-            RectorAssert::className(ltrim($class, '\\'));
-            RectorAssert::constantName($constant);
+            Rector_Assert::class_name(ltrim($class, '\\'));
+            Rector_Assert::constant_name($constant);
         } catch (InvalidArgumentException $exception) {
             return new String_($value);
         }
-        return new ClassConstFetch(new Name($class), $constant);
+        return new Class_Const_Fetch(new Name($class), $constant);
     }
 }

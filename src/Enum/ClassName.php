@@ -1,15 +1,14 @@
 <?php
 
 declare (strict_types=1);
-
 namespace Rector\Enum;
 
-final class ClassName
+final class Class_Name
 {
     /**
      * @var string
      */
-    public const TEST_CASE_CLASS = \PHPUnit\Framework\TestCase::class;
+    public const TEST_CASE_CLASS = \Php_Unit\Framework\Test_Case::class;
     /**
      * @var string
      */

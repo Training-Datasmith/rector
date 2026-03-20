@@ -1,26 +1,24 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Value_Object\Reporting;
 
-namespace Rector\ValueObject\Reporting;
-
-use Rector\ChangesReporting\ValueObject\RectorWithLineChange;
-use Rector\Contract\Rector\RectorInterface;
-use Rector\Parallel\ValueObject\BridgeItem;
-use Rector\Util\RectorClassesSorter;
-use RectorPrefix202603\Nette\Utils\Strings;
-use RectorPrefix202603\Symplify\EasyParallel\Contract\SerializableInterface;
-use RectorPrefix202603\Webmozart\Assert\Assert;
-
+use Rector\Changes_Reporting\Value_Object\Rector_With_Line_Change;
+use Rector\Contract\Rector\Rector_Interface;
+use Rector\Parallel\Value_Object\Bridge_Item;
+use Rector\Util\Rector_Classes_Sorter;
+use Rector_Prefix202603\Nette\Utils\Strings;
+use Rector_Prefix202603\Symplify\Easy_Parallel\Contract\Serializable_Interface;
+use Rector_Prefix202603\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\ValueObject\Reporting\FileDiffTest
  */
-final class FileDiff implements SerializableInterface
+final class File_Diff implements Serializable_Interface
 {
     /**
      * @readonly
      */
-    private string $relativeFilePath;
+    private string $relative_file_path;
     /**
      * @readonly
      */
@@ -28,12 +26,12 @@ final class FileDiff implements SerializableInterface
     /**
      * @readonly
      */
-    private string $diffConsoleFormatted;
+    private string $diff_console_formatted;
     /**
      * @var RectorWithLineChange[]
      * @readonly
      */
-    private array $rectorsWithLineChanges = [];
+    private array $rectors_with_line_changes = [];
     /**
      * @see https://en.wikipedia.org/wiki/Diff#Unified_format
      * @see https://regex101.com/r/AUPIX4/2
@@ -51,60 +49,60 @@ final class FileDiff implements SerializableInterface
     /**
      * @param RectorWithLineChange[] $rectorsWithLineChanges
      */
-    public function __construct(string $relativeFilePath, string $diff, string $diffConsoleFormatted, array $rectorsWithLineChanges = [])
+    public function __construct(string $relative_file_path, string $diff, string $diff_console_formatted, array $rectors_with_line_changes = [])
     {
-        $this->relativeFilePath = $relativeFilePath;
+        $this->relative_file_path = $relative_file_path;
         $this->diff = $diff;
-        $this->diffConsoleFormatted = $diffConsoleFormatted;
-        $this->rectorsWithLineChanges = $rectorsWithLineChanges;
-        Assert::allIsInstanceOf($rectorsWithLineChanges, RectorWithLineChange::class);
+        $this->diff_console_formatted = $diff_console_formatted;
+        $this->rectors_with_line_changes = $rectors_with_line_changes;
+        Assert::all_is_instance_of($rectors_with_line_changes, Rector_With_Line_Change::class);
     }
-    public function getDiff(): string
+    public function get_diff(): string
     {
         return $this->diff;
     }
-    public function getDiffConsoleFormatted(): string
+    public function get_diff_console_formatted(): string
     {
-        return $this->diffConsoleFormatted;
+        return $this->diff_console_formatted;
     }
-    public function getRelativeFilePath(): string
+    public function get_relative_file_path(): string
     {
-        return $this->relativeFilePath;
+        return $this->relative_file_path;
     }
-    public function getAbsoluteFilePath(): ?string
+    public function get_absolute_file_path(): ?string
     {
-        return \realpath($this->relativeFilePath) ?: null;
+        return \realpath($this->relative_file_path) ?: null;
     }
     /**
      * @return RectorWithLineChange[]
      */
-    public function getRectorChanges(): array
+    public function get_rector_changes(): array
     {
-        return $this->rectorsWithLineChanges;
+        return $this->rectors_with_line_changes;
     }
     /**
      * @return string[]
      */
-    public function getRectorShortClasses(): array
+    public function get_rector_short_classes(): array
     {
-        $rectorShortClasses = [];
-        foreach ($this->getRectorClasses() as $rectorClass) {
-            $rectorShortClasses[] = (string) Strings::after($rectorClass, '\\', -1);
+        $rector_short_classes = [];
+        foreach ($this->get_rector_classes() as $rector_class) {
+            $rector_short_classes[] = (string) Strings::after($rector_class, '\\', -1);
         }
-        return $rectorShortClasses;
+        return $rector_short_classes;
     }
     /**
      * @return array<class-string<RectorInterface>>
      */
-    public function getRectorClasses(): array
+    public function get_rector_classes(): array
     {
-        $rectorClasses = [];
-        foreach ($this->rectorsWithLineChanges as $rectorWithLineChange) {
-            $rectorClasses[] = $rectorWithLineChange->getRectorClass();
+        $rector_classes = [];
+        foreach ($this->rectors_with_line_changes as $rector_with_line_change) {
+            $rector_classes[] = $rector_with_line_change->get_rector_class();
         }
-        return RectorClassesSorter::sortAndFilterOutPostRectors($rectorClasses);
+        return Rector_Classes_Sorter::sort_and_filter_out_post_rectors($rector_classes);
     }
-    public function getFirstLineNumber(): ?int
+    public function get_first_line_number(): ?int
     {
         $match = Strings::match($this->diff, self::DIFF_HUNK_HEADER_REGEX);
         // probably some error in diff
@@ -113,37 +111,37 @@ final class FileDiff implements SerializableInterface
         }
         return (int) $match[self::FIRST_LINE_KEY];
     }
-    public function getLastLineNumber(): ?int
+    public function get_last_line_number(): ?int
     {
         $match = Strings::match($this->diff, self::DIFF_HUNK_HEADER_REGEX);
-        $firstLine = $this->getFirstLineNumber();
+        $first_line = $this->get_first_line_number();
         // probably some error in diff
         if (!isset($match[self::LINE_RANGE_KEY])) {
-            return $firstLine;
+            return $first_line;
         }
         // line range is not mandatory
         if ($match[self::LINE_RANGE_KEY] === '') {
-            return $firstLine;
+            return $first_line;
         }
-        $lineRange = (int) $match[self::LINE_RANGE_KEY];
-        return $firstLine + $lineRange;
+        $line_range = (int) $match[self::LINE_RANGE_KEY];
+        return $first_line + $line_range;
     }
     /**
      * @return array{relative_file_path: string, diff: string, diff_console_formatted: string, rectors_with_line_changes: RectorWithLineChange[]}
      */
     public function jsonSerialize(): array
     {
-        return [BridgeItem::RELATIVE_FILE_PATH => $this->relativeFilePath, BridgeItem::DIFF => $this->diff, BridgeItem::DIFF_CONSOLE_FORMATTED => $this->diffConsoleFormatted, BridgeItem::RECTORS_WITH_LINE_CHANGES => $this->rectorsWithLineChanges];
+        return [Bridge_Item::RELATIVE_FILE_PATH => $this->relative_file_path, Bridge_Item::DIFF => $this->diff, Bridge_Item::DIFF_CONSOLE_FORMATTED => $this->diff_console_formatted, Bridge_Item::RECTORS_WITH_LINE_CHANGES => $this->rectors_with_line_changes];
     }
     /**
      * @param array<string, mixed> $json
      */
     public static function decode(array $json): self
     {
-        $rectorWithLineChanges = [];
-        foreach ($json[BridgeItem::RECTORS_WITH_LINE_CHANGES] as $rectorWithLineChangesJson) {
-            $rectorWithLineChanges[] = RectorWithLineChange::decode($rectorWithLineChangesJson);
+        $rector_with_line_changes = [];
+        foreach ($json[Bridge_Item::RECTORS_WITH_LINE_CHANGES] as $rector_with_line_changes_json) {
+            $rector_with_line_changes[] = Rector_With_Line_Change::decode($rector_with_line_changes_json);
         }
-        return new self($json[BridgeItem::RELATIVE_FILE_PATH], $json[BridgeItem::DIFF], $json[BridgeItem::DIFF_CONSOLE_FORMATTED], $rectorWithLineChanges);
+        return new self($json[Bridge_Item::RELATIVE_FILE_PATH], $json[Bridge_Item::DIFF], $json[Bridge_Item::DIFF_CONSOLE_FORMATTED], $rector_with_line_changes);
     }
 }

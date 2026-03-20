@@ -1,70 +1,68 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Node_Type_Resolver\Php_Stan;
 
-namespace Rector\NodeTypeResolver\PHPStan;
-
-use PHPStan\Type\ArrayType;
-use PHPStan\Type\Generic\GenericObjectType;
-use PHPStan\Type\MixedType;
-use PHPStan\Type\ObjectType;
-use PHPStan\Type\Type;
-use PHPStan\Type\TypeTraverser;
-use PHPStan\Type\TypeWithClassName;
-use PHPStan\Type\VerbosityLevel;
-use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
-use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
-use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
-
-final class TypeHasher
+use Php_Stan\Type\Array_Type;
+use Php_Stan\Type\Generic\Generic_Object_Type;
+use Php_Stan\Type\Mixed_Type;
+use Php_Stan\Type\Object_Type;
+use Php_Stan\Type\Type;
+use Php_Stan\Type\Type_Traverser;
+use Php_Stan\Type\Type_With_Class_Name;
+use Php_Stan\Type\Verbosity_Level;
+use Rector\Static_Type_Mapper\Value_Object\Type\Aliased_Object_Type;
+use Rector\Static_Type_Mapper\Value_Object\Type\Fully_Qualified_Object_Type;
+use Rector\Static_Type_Mapper\Value_Object\Type\Shortened_Object_Type;
+final class Type_Hasher
 {
-    public function areTypesEqual(Type $firstType, Type $secondType): bool
+    public function are_types_equal(Type $first_type, Type $second_type): bool
     {
-        return $this->createTypeHash($firstType) === $this->createTypeHash($secondType);
+        return $this->create_type_hash($first_type) === $this->create_type_hash($second_type);
     }
-    public function createTypeHash(Type $type): string
+    public function create_type_hash(Type $type): string
     {
-        if ($type instanceof MixedType) {
-            return $type->describe(VerbosityLevel::precise()) . $type->isExplicitMixed();
+        if ($type instanceof Mixed_Type) {
+            return $type->describe(Verbosity_Level::precise()) . $type->is_explicit_mixed();
         }
-        if ($type instanceof ArrayType) {
-            return $this->createTypeHash($type->getIterableValueType()) . $this->createTypeHash($type->getIterableKeyType()) . $type->getItemType()->describe(VerbosityLevel::precise()) . '[]';
+        if ($type instanceof Array_Type) {
+            return $this->create_type_hash($type->get_iterable_value_type()) . $this->create_type_hash($type->get_iterable_key_type()) . $type->get_item_type()->describe(Verbosity_Level::precise()) . '[]';
         }
-        if ($type instanceof GenericObjectType) {
-            return $type->describe(VerbosityLevel::precise());
+        if ($type instanceof Generic_Object_Type) {
+            return $type->describe(Verbosity_Level::precise());
         }
-        if ($type instanceof TypeWithClassName) {
-            return $this->resolveUniqueTypeWithClassNameHash($type);
+        if ($type instanceof Type_With_Class_Name) {
+            return $this->resolve_unique_type_with_class_name_hash($type);
         }
-        if ($type->isConstantValue()->yes()) {
+        if ($type->is_constant_value()->yes()) {
             return get_class($type);
         }
-        $type = $this->normalizeObjectType($type);
-        return $type->describe(VerbosityLevel::value());
+        $type = $this->normalize_object_type($type);
+        return $type->describe(Verbosity_Level::value());
     }
-    private function resolveUniqueTypeWithClassNameHash(TypeWithClassName $typeWithClassName): string
+    private function resolve_unique_type_with_class_name_hash(Type_With_Class_Name $type_with_class_name): string
     {
-        if ($typeWithClassName instanceof ShortenedObjectType) {
-            return $typeWithClassName->getFullyQualifiedName();
+        if ($type_with_class_name instanceof Shortened_Object_Type) {
+            return $type_with_class_name->get_fully_qualified_name();
         }
-        if ($typeWithClassName instanceof AliasedObjectType) {
-            return $typeWithClassName->getFullyQualifiedName();
+        if ($type_with_class_name instanceof Aliased_Object_Type) {
+            return $type_with_class_name->get_fully_qualified_name();
         }
-        return $typeWithClassName->getClassName();
+        return $type_with_class_name->get_class_name();
     }
-    private function normalizeObjectType(Type $type): Type
+    private function normalize_object_type(Type $type): Type
     {
-        return TypeTraverser::map($type, static function (Type $currentType, callable $traverseCallback): Type {
-            if ($currentType instanceof ShortenedObjectType) {
-                return new FullyQualifiedObjectType($currentType->getFullyQualifiedName());
+        return Type_Traverser::map($type, static function (Type $current_type, callable $traverse_callback): Type {
+            if ($current_type instanceof Shortened_Object_Type) {
+                return new Fully_Qualified_Object_Type($current_type->get_fully_qualified_name());
             }
-            if ($currentType instanceof AliasedObjectType) {
-                return new FullyQualifiedObjectType($currentType->getFullyQualifiedName());
+            if ($current_type instanceof Aliased_Object_Type) {
+                return new Fully_Qualified_Object_Type($current_type->get_fully_qualified_name());
             }
-            if ($currentType instanceof ObjectType && !$currentType instanceof GenericObjectType && $currentType->getClassName() !== 'Iterator' && $currentType->getClassName() !== 'iterable') {
-                return new FullyQualifiedObjectType($currentType->getClassName());
+            if ($current_type instanceof Object_Type && !$current_type instanceof Generic_Object_Type && $current_type->get_class_name() !== 'Iterator' && $current_type->get_class_name() !== 'iterable') {
+                return new Fully_Qualified_Object_Type($current_type->get_class_name());
             }
-            return $traverseCallback($currentType);
+            return $traverse_callback($current_type);
         });
     }
 }

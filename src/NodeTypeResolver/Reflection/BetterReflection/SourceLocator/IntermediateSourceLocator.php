@@ -1,33 +1,31 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Node_Type_Resolver\Reflection\Better_Reflection\Source_Locator;
 
-namespace Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocator;
-
-use PHPStan\BetterReflection\Identifier\Identifier;
-use PHPStan\BetterReflection\Identifier\IdentifierType;
-use PHPStan\BetterReflection\Reflection\Reflection;
-use PHPStan\BetterReflection\Reflector\Reflector;
-use PHPStan\BetterReflection\SourceLocator\Type\SourceLocator;
-use PHPStan\File\CouldNotReadFileException;
-use Rector\NodeTypeResolver\Reflection\BetterReflection\SourceLocatorProvider\DynamicSourceLocatorProvider;
-
-final class IntermediateSourceLocator implements SourceLocator
+use Php_Stan\Better_Reflection\Identifier\Identifier;
+use Php_Stan\Better_Reflection\Identifier\Identifier_Type;
+use Php_Stan\Better_Reflection\Reflection\Reflection;
+use Php_Stan\Better_Reflection\Reflector\Reflector;
+use Php_Stan\Better_Reflection\Source_Locator\Type\Source_Locator;
+use Php_Stan\File\Could_Not_Read_File_Exception;
+use Rector\Node_Type_Resolver\Reflection\Better_Reflection\Source_Locator_Provider\Dynamic_Source_Locator_Provider;
+final class Intermediate_Source_Locator implements Source_Locator
 {
     /**
      * @readonly
      */
-    private DynamicSourceLocatorProvider $dynamicSourceLocatorProvider;
-    public function __construct(DynamicSourceLocatorProvider $dynamicSourceLocatorProvider)
+    private Dynamic_Source_Locator_Provider $dynamic_source_locator_provider;
+    public function __construct(Dynamic_Source_Locator_Provider $dynamic_source_locator_provider)
     {
-        $this->dynamicSourceLocatorProvider = $dynamicSourceLocatorProvider;
+        $this->dynamic_source_locator_provider = $dynamic_source_locator_provider;
     }
-    public function locateIdentifier(Reflector $reflector, Identifier $identifier): ?Reflection
+    public function locate_identifier(Reflector $reflector, Identifier $identifier): ?Reflection
     {
-        $sourceLocator = $this->dynamicSourceLocatorProvider->provide();
+        $source_locator = $this->dynamic_source_locator_provider->provide();
         try {
-            $reflection = $sourceLocator->locateIdentifier($reflector, $identifier);
-        } catch (CouldNotReadFileException $exception) {
+            $reflection = $source_locator->locate_identifier($reflector, $identifier);
+        } catch (Could_Not_Read_File_Exception $exception) {
             return null;
         }
         if ($reflection instanceof Reflection) {
@@ -39,12 +37,12 @@ final class IntermediateSourceLocator implements SourceLocator
      * Find all identifiers of a type
      * @return array<int, Reflection>
      */
-    public function locateIdentifiersByType(Reflector $reflector, IdentifierType $identifierType): array
+    public function locate_identifiers_by_type(Reflector $reflector, Identifier_Type $identifier_type): array
     {
-        $sourceLocator = $this->dynamicSourceLocatorProvider->provide();
+        $source_locator = $this->dynamic_source_locator_provider->provide();
         try {
-            $reflections = $sourceLocator->locateIdentifiersByType($reflector, $identifierType);
-        } catch (CouldNotReadFileException $exception) {
+            $reflections = $source_locator->locate_identifiers_by_type($reflector, $identifier_type);
+        } catch (Could_Not_Read_File_Exception $exception) {
             return [];
         }
         if ($reflections !== []) {

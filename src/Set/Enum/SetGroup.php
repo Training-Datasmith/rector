@@ -1,13 +1,12 @@
 <?php
 
 declare (strict_types=1);
-
 namespace Rector\Set\Enum;
 
 /**
  * @api used in sets
  */
-final class SetGroup
+final class Set_Group
 {
     /**
      * @var string

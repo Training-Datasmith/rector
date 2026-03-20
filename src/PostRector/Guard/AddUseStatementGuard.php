@@ -1,52 +1,50 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Post_Rector\Guard;
 
-namespace Rector\PostRector\Guard;
-
-use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\InlineHTML;
-use PhpParser\Node\Stmt\Namespace_;
-use Rector\PhpParser\Node\BetterNodeFinder;
-use Rector\PhpParser\Node\FileNode;
-
-final class AddUseStatementGuard
+use Php_Parser\Node\Stmt;
+use Php_Parser\Node\Stmt\Inline_Html;
+use Php_Parser\Node\Stmt\Namespace_;
+use Rector\Php_Parser\Node\Better_Node_Finder;
+use Rector\Php_Parser\Node\File_Node;
+final class Add_Use_Statement_Guard
 {
     /**
      * @readonly
      */
-    private BetterNodeFinder $betterNodeFinder;
+    private Better_Node_Finder $better_node_finder;
     /**
      * @var array<string, bool>
      */
-    private array $shouldTraverseOnFiles = [];
-    public function __construct(BetterNodeFinder $betterNodeFinder)
+    private array $should_traverse_on_files = [];
+    public function __construct(Better_Node_Finder $better_node_finder)
     {
-        $this->betterNodeFinder = $betterNodeFinder;
+        $this->better_node_finder = $better_node_finder;
     }
     /**
      * @param Stmt[] $stmts
      */
-    public function shouldTraverse(array $stmts, string $filePath): bool
+    public function should_traverse(array $stmts, string $file_path): bool
     {
-        if (isset($this->shouldTraverseOnFiles[$filePath])) {
-            return $this->shouldTraverseOnFiles[$filePath];
+        if (isset($this->should_traverse_on_files[$file_path])) {
+            return $this->should_traverse_on_files[$file_path];
         }
-        $totalNamespaces = 0;
+        $total_namespaces = 0;
         // just loop the first level stmts to locate namespace to improve performance
         // as namespace is always on first level
-        if (isset($stmts[0]) && $stmts[0] instanceof FileNode) {
+        if (isset($stmts[0]) && $stmts[0] instanceof File_Node) {
             $stmts = $stmts[0]->stmts;
         }
         foreach ($stmts as $stmt) {
             if ($stmt instanceof Namespace_) {
-                ++$totalNamespaces;
+                ++$total_namespaces;
             }
             // skip if 2 namespaces are present
-            if ($totalNamespaces === 2) {
-                return $this->shouldTraverseOnFiles[$filePath] = \false;
+            if ($total_namespaces === 2) {
+                return $this->should_traverse_on_files[$file_path] = \false;
             }
         }
-        return $this->shouldTraverseOnFiles[$filePath] = !$this->betterNodeFinder->hasInstancesOf($stmts, [InlineHTML::class]);
+        return $this->should_traverse_on_files[$file_path] = !$this->better_node_finder->has_instances_of($stmts, [Inline_Html::class]);
     }
 }

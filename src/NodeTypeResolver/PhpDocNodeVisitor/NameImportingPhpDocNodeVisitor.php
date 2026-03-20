@@ -1,219 +1,217 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Node_Type_Resolver\Php_Doc_Node_Visitor;
 
-namespace Rector\NodeTypeResolver\PhpDocNodeVisitor;
-
-use PhpParser\Node as PhpParserNode;
-use PHPStan\PhpDocParser\Ast\Node;
-use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
-use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\Type\Type;
-use Rector\Application\Provider\CurrentFileProvider;
-use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
-use Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
-use Rector\CodingStyle\ClassNameImport\ClassNameImportSkipper;
-use Rector\Exception\ShouldNotHappenException;
-use Rector\PhpDocParser\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
-use Rector\PostRector\Collector\UseNodesToAddCollector;
-use Rector\StaticTypeMapper\PhpDocParser\IdentifierPhpDocTypeMapper;
-use Rector\StaticTypeMapper\ValueObject\Type\AliasedObjectType;
-use Rector\StaticTypeMapper\ValueObject\Type\FullyQualifiedObjectType;
-use Rector\StaticTypeMapper\ValueObject\Type\ShortenedObjectType;
-use Rector\ValueObject\Application\File;
-use RectorPrefix202603\Nette\Utils\Strings;
-
-final class NameImportingPhpDocNodeVisitor extends AbstractPhpDocNodeVisitor
+use Php_Parser\Node as PhpParserNode;
+use Php_Stan\Php_Doc_Parser\Ast\Node;
+use Php_Stan\Php_Doc_Parser\Ast\Php_Doc\Template_Tag_Value_Node;
+use Php_Stan\Php_Doc_Parser\Ast\Type\Identifier_Type_Node;
+use Php_Stan\Reflection\Reflection_Provider;
+use Php_Stan\Type\Type;
+use Rector\Application\Provider\Current_File_Provider;
+use Rector\Better_Php_Doc_Parser\Php_Doc\Doctrine_Annotation_Tag_Value_Node;
+use Rector\Better_Php_Doc_Parser\Php_Doc\Spaceless_Php_Doc_Tag_Node;
+use Rector\Better_Php_Doc_Parser\Value_Object\Php_Doc_Attribute_Key;
+use Rector\Coding_Style\Class_Name_Import\Class_Name_Import_Skipper;
+use Rector\Exception\Should_Not_Happen_Exception;
+use Rector\Php_Doc_Parser\Php_Doc_Parser\Php_Doc_Node_Visitor\Abstract_Php_Doc_Node_Visitor;
+use Rector\Post_Rector\Collector\Use_Nodes_To_Add_Collector;
+use Rector\Static_Type_Mapper\Php_Doc_Parser\Identifier_Php_Doc_Type_Mapper;
+use Rector\Static_Type_Mapper\Value_Object\Type\Aliased_Object_Type;
+use Rector\Static_Type_Mapper\Value_Object\Type\Fully_Qualified_Object_Type;
+use Rector\Static_Type_Mapper\Value_Object\Type\Shortened_Object_Type;
+use Rector\Value_Object\Application\File;
+use Rector_Prefix202603\Nette\Utils\Strings;
+final class Name_Importing_Php_Doc_Node_Visitor extends Abstract_Php_Doc_Node_Visitor
 {
     /**
      * @readonly
      */
-    private ClassNameImportSkipper $classNameImportSkipper;
+    private Class_Name_Import_Skipper $class_name_import_skipper;
     /**
      * @readonly
      */
-    private UseNodesToAddCollector $useNodesToAddCollector;
+    private Use_Nodes_To_Add_Collector $use_nodes_to_add_collector;
     /**
      * @readonly
      */
-    private CurrentFileProvider $currentFileProvider;
+    private Current_File_Provider $current_file_provider;
     /**
      * @readonly
      */
-    private ReflectionProvider $reflectionProvider;
+    private Reflection_Provider $reflection_provider;
     /**
      * @readonly
      */
-    private IdentifierPhpDocTypeMapper $identifierPhpDocTypeMapper;
-    private ?PhpParserNode $currentPhpParserNode = null;
-    private bool $hasChanged = \false;
-    public function __construct(ClassNameImportSkipper $classNameImportSkipper, UseNodesToAddCollector $useNodesToAddCollector, CurrentFileProvider $currentFileProvider, ReflectionProvider $reflectionProvider, IdentifierPhpDocTypeMapper $identifierPhpDocTypeMapper)
+    private Identifier_Php_Doc_Type_Mapper $identifier_php_doc_type_mapper;
+    private ?Php_Parser_Node $current_php_parser_node = null;
+    private bool $has_changed = \false;
+    public function __construct(Class_Name_Import_Skipper $class_name_import_skipper, Use_Nodes_To_Add_Collector $use_nodes_to_add_collector, Current_File_Provider $current_file_provider, Reflection_Provider $reflection_provider, Identifier_Php_Doc_Type_Mapper $identifier_php_doc_type_mapper)
     {
-        $this->classNameImportSkipper = $classNameImportSkipper;
-        $this->useNodesToAddCollector = $useNodesToAddCollector;
-        $this->currentFileProvider = $currentFileProvider;
-        $this->reflectionProvider = $reflectionProvider;
-        $this->identifierPhpDocTypeMapper = $identifierPhpDocTypeMapper;
+        $this->class_name_import_skipper = $class_name_import_skipper;
+        $this->use_nodes_to_add_collector = $use_nodes_to_add_collector;
+        $this->current_file_provider = $current_file_provider;
+        $this->reflection_provider = $reflection_provider;
+        $this->identifier_php_doc_type_mapper = $identifier_php_doc_type_mapper;
     }
-    public function beforeTraverse(\PHPStan\PhpDocParser\Ast\Node $node): void
+    public function before_traverse(\Php_Stan\Php_Doc_Parser\Ast\Node $node): void
     {
-        if (!$this->currentPhpParserNode instanceof PhpParserNode) {
-            throw new ShouldNotHappenException('Set "$currentPhpParserNode" first');
+        if (!$this->current_php_parser_node instanceof Php_Parser_Node) {
+            throw new Should_Not_Happen_Exception('Set "$currentPhpParserNode" first');
         }
     }
-    public function enterNode(Node $node): ?Node
+    public function enter_node(Node $node): ?Node
     {
-        if ($node instanceof SpacelessPhpDocTagNode) {
-            return $this->enterSpacelessPhpDocTagNode($node);
+        if ($node instanceof Spaceless_Php_Doc_Tag_Node) {
+            return $this->enter_spaceless_php_doc_tag_node($node);
         }
-        if ($node instanceof DoctrineAnnotationTagValueNode) {
-            $this->processDoctrineAnnotationTagValueNode($node);
+        if ($node instanceof Doctrine_Annotation_Tag_Value_Node) {
+            $this->process_doctrine_annotation_tag_value_node($node);
             return $node;
         }
-        if (!$node instanceof IdentifierTypeNode) {
+        if (!$node instanceof Identifier_Type_Node) {
             return null;
         }
-        if (!$this->currentPhpParserNode instanceof PhpParserNode) {
-            throw new ShouldNotHappenException();
+        if (!$this->current_php_parser_node instanceof Php_Parser_Node) {
+            throw new Should_Not_Happen_Exception();
         }
         // no \, skip early
         if (strpos($node->name, '\\') === \false) {
             return null;
         }
-        $staticType = $this->identifierPhpDocTypeMapper->mapIdentifierTypeNode($node, $this->currentPhpParserNode);
-        $staticType = $this->resolveFullyQualified($staticType);
-        if (!$staticType instanceof FullyQualifiedObjectType) {
+        $static_type = $this->identifier_php_doc_type_mapper->map_identifier_type_node($node, $this->current_php_parser_node);
+        $static_type = $this->resolve_fully_qualified($static_type);
+        if (!$static_type instanceof Fully_Qualified_Object_Type) {
             return null;
         }
-        $file = $this->currentFileProvider->getFile();
+        $file = $this->current_file_provider->get_file();
         if (!$file instanceof File) {
             return null;
         }
-        return $this->processFqnNameImport($this->currentPhpParserNode, $node, $staticType, $file);
+        return $this->process_fqn_name_import($this->current_php_parser_node, $node, $static_type, $file);
     }
-    public function setCurrentNode(PhpParserNode $phpParserNode): void
+    public function set_current_node(Php_Parser_Node $php_parser_node): void
     {
-        $this->hasChanged = \false;
-        $this->currentPhpParserNode = $phpParserNode;
+        $this->has_changed = \false;
+        $this->current_php_parser_node = $php_parser_node;
     }
-    public function hasChanged(): bool
+    public function has_changed(): bool
     {
-        return $this->hasChanged;
+        return $this->has_changed;
     }
-    private function resolveFullyQualified(Type $type): ?FullyQualifiedObjectType
+    private function resolve_fully_qualified(Type $type): ?Fully_Qualified_Object_Type
     {
-        if ($type instanceof ShortenedObjectType || $type instanceof AliasedObjectType) {
-            return new FullyQualifiedObjectType($type->getFullyQualifiedName());
+        if ($type instanceof Shortened_Object_Type || $type instanceof Aliased_Object_Type) {
+            return new Fully_Qualified_Object_Type($type->get_fully_qualified_name());
         }
-        if ($type instanceof FullyQualifiedObjectType) {
+        if ($type instanceof Fully_Qualified_Object_Type) {
             return $type;
         }
         return null;
     }
-    private function processFqnNameImport(PhpParserNode $phpParserNode, IdentifierTypeNode $identifierTypeNode, FullyQualifiedObjectType $fullyQualifiedObjectType, File $file): ?IdentifierTypeNode
+    private function process_fqn_name_import(Php_Parser_Node $php_parser_node, Identifier_Type_Node $identifier_type_node, Fully_Qualified_Object_Type $fully_qualified_object_type, File $file): ?Identifier_Type_Node
     {
-        $parentNode = $identifierTypeNode->getAttribute(PhpDocAttributeKey::PARENT);
-        if ($parentNode instanceof TemplateTagValueNode) {
+        $parent_node = $identifier_type_node->get_attribute(Php_Doc_Attribute_Key::PARENT);
+        if ($parent_node instanceof Template_Tag_Value_Node) {
             // might break
             return null;
         }
         // standardize to FQN
-        if (strncmp($fullyQualifiedObjectType->getClassName(), '@', strlen('@')) === 0) {
-            $fullyQualifiedObjectType = new FullyQualifiedObjectType(ltrim($fullyQualifiedObjectType->getClassName(), '@'));
+        if (strncmp($fully_qualified_object_type->get_class_name(), '@', strlen('@')) === 0) {
+            $fully_qualified_object_type = new Fully_Qualified_Object_Type(ltrim($fully_qualified_object_type->get_class_name(), '@'));
         }
-        if ($this->classNameImportSkipper->shouldSkipNameForFullyQualifiedObjectType($file, $phpParserNode, $fullyQualifiedObjectType)) {
+        if ($this->class_name_import_skipper->should_skip_name_for_fully_qualified_object_type($file, $php_parser_node, $fully_qualified_object_type)) {
             return null;
         }
-        $newNode = new IdentifierTypeNode($fullyQualifiedObjectType->getShortName());
+        $new_node = new Identifier_Type_Node($fully_qualified_object_type->get_short_name());
         // should skip because its already used
-        if ($this->useNodesToAddCollector->isShortImported($file, $fullyQualifiedObjectType) && !$this->useNodesToAddCollector->isImportShortable($file, $fullyQualifiedObjectType)) {
+        if ($this->use_nodes_to_add_collector->is_short_imported($file, $fully_qualified_object_type) && !$this->use_nodes_to_add_collector->is_import_shortable($file, $fully_qualified_object_type)) {
             return null;
         }
-        if ($this->shouldImport($file, $newNode, $identifierTypeNode, $fullyQualifiedObjectType)) {
-            $this->useNodesToAddCollector->addUseImport($fullyQualifiedObjectType);
-            $this->hasChanged = \true;
-            return $newNode;
+        if ($this->should_import($file, $new_node, $identifier_type_node, $fully_qualified_object_type)) {
+            $this->use_nodes_to_add_collector->add_use_import($fully_qualified_object_type);
+            $this->has_changed = \true;
+            return $new_node;
         }
         return null;
     }
-    private function shouldImport(File $file, IdentifierTypeNode $newNode, IdentifierTypeNode $identifierTypeNode, FullyQualifiedObjectType $fullyQualifiedObjectType): bool
+    private function should_import(File $file, Identifier_Type_Node $new_node, Identifier_Type_Node $identifier_type_node, Fully_Qualified_Object_Type $fully_qualified_object_type): bool
     {
-        if ($newNode->name === $identifierTypeNode->name) {
+        if ($new_node->name === $identifier_type_node->name) {
             return \false;
         }
-        if (strncmp($identifierTypeNode->name, '\\', strlen('\\')) === 0) {
-            if ($fullyQualifiedObjectType->getShortName() !== $fullyQualifiedObjectType->getClassName()) {
-                return $fullyQualifiedObjectType->getShortName() !== ltrim($identifierTypeNode->name, '\\');
+        if (strncmp($identifier_type_node->name, '\\', strlen('\\')) === 0) {
+            if ($fully_qualified_object_type->get_short_name() !== $fully_qualified_object_type->get_class_name()) {
+                return $fully_qualified_object_type->get_short_name() !== ltrim($identifier_type_node->name, '\\');
             }
             return \true;
         }
-        $className = $fullyQualifiedObjectType->getClassName();
-        if (!$this->reflectionProvider->hasClass($className)) {
+        $class_name = $fully_qualified_object_type->get_class_name();
+        if (!$this->reflection_provider->has_class($class_name)) {
             return \false;
         }
-        $firstPath = Strings::before($identifierTypeNode->name, '\\' . $newNode->name);
-        if ($firstPath === null) {
-            return !$this->useNodesToAddCollector->hasImport($file, $fullyQualifiedObjectType);
+        $first_path = Strings::before($identifier_type_node->name, '\\' . $new_node->name);
+        if ($first_path === null) {
+            return !$this->use_nodes_to_add_collector->has_import($file, $fully_qualified_object_type);
         }
-        if ($firstPath === '') {
+        if ($first_path === '') {
             return \true;
         }
-        $namespaceParts = explode('\\', ltrim($firstPath, '\\'));
-        return count($namespaceParts) > 1;
+        $namespace_parts = explode('\\', ltrim($first_path, '\\'));
+        return count($namespace_parts) > 1;
     }
-    private function processDoctrineAnnotationTagValueNode(DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode): void
+    private function process_doctrine_annotation_tag_value_node(Doctrine_Annotation_Tag_Value_Node $doctrine_annotation_tag_value_node): void
     {
-        $currentPhpParserNode = $this->currentPhpParserNode;
-        if (!$currentPhpParserNode instanceof PhpParserNode) {
-            throw new ShouldNotHappenException();
+        $current_php_parser_node = $this->current_php_parser_node;
+        if (!$current_php_parser_node instanceof Php_Parser_Node) {
+            throw new Should_Not_Happen_Exception();
         }
-        $identifierTypeNode = $doctrineAnnotationTagValueNode->identifierTypeNode;
-        $staticType = $this->identifierPhpDocTypeMapper->mapIdentifierTypeNode($identifierTypeNode, $currentPhpParserNode);
-        $staticType = $this->resolveFullyQualified($staticType);
-        if (!$staticType instanceof FullyQualifiedObjectType) {
+        $identifier_type_node = $doctrine_annotation_tag_value_node->identifier_type_node;
+        $static_type = $this->identifier_php_doc_type_mapper->map_identifier_type_node($identifier_type_node, $current_php_parser_node);
+        $static_type = $this->resolve_fully_qualified($static_type);
+        if (!$static_type instanceof Fully_Qualified_Object_Type) {
             return;
         }
-        $file = $this->currentFileProvider->getFile();
+        $file = $this->current_file_provider->get_file();
         if (!$file instanceof File) {
             return;
         }
-        $shortentedIdentifierTypeNode = $this->processFqnNameImport($currentPhpParserNode, $identifierTypeNode, $staticType, $file);
-        if (!$shortentedIdentifierTypeNode instanceof IdentifierTypeNode) {
+        $shortented_identifier_type_node = $this->process_fqn_name_import($current_php_parser_node, $identifier_type_node, $static_type, $file);
+        if (!$shortented_identifier_type_node instanceof Identifier_Type_Node) {
             return;
         }
-        $doctrineAnnotationTagValueNode->identifierTypeNode = $shortentedIdentifierTypeNode;
-        $doctrineAnnotationTagValueNode->markAsChanged();
+        $doctrine_annotation_tag_value_node->identifier_type_node = $shortented_identifier_type_node;
+        $doctrine_annotation_tag_value_node->mark_as_changed();
     }
-    private function enterSpacelessPhpDocTagNode(SpacelessPhpDocTagNode $spacelessPhpDocTagNode): ?\Rector\BetterPhpDocParser\PhpDoc\SpacelessPhpDocTagNode
+    private function enter_spaceless_php_doc_tag_node(Spaceless_Php_Doc_Tag_Node $spaceless_php_doc_tag_node): ?\Rector\Better_Php_Doc_Parser\Php_Doc\Spaceless_Php_Doc_Tag_Node
     {
-        if (!$spacelessPhpDocTagNode->value instanceof DoctrineAnnotationTagValueNode) {
+        if (!$spaceless_php_doc_tag_node->value instanceof Doctrine_Annotation_Tag_Value_Node) {
             return null;
         }
         // special case for doctrine annotation
-        if (strncmp($spacelessPhpDocTagNode->name, '@', strlen('@')) !== 0) {
+        if (strncmp($spaceless_php_doc_tag_node->name, '@', strlen('@')) !== 0) {
             return null;
         }
-        $attributeClass = ltrim($spacelessPhpDocTagNode->name, '@\\');
-        $identifierTypeNode = new IdentifierTypeNode($attributeClass);
-        $currentPhpParserNode = $this->currentPhpParserNode;
-        if (!$currentPhpParserNode instanceof PhpParserNode) {
-            throw new ShouldNotHappenException();
+        $attribute_class = ltrim($spaceless_php_doc_tag_node->name, '@\\');
+        $identifier_type_node = new Identifier_Type_Node($attribute_class);
+        $current_php_parser_node = $this->current_php_parser_node;
+        if (!$current_php_parser_node instanceof Php_Parser_Node) {
+            throw new Should_Not_Happen_Exception();
         }
-        $staticType = $this->identifierPhpDocTypeMapper->mapIdentifierTypeNode(new IdentifierTypeNode($attributeClass), $currentPhpParserNode);
-        $staticType = $this->resolveFullyQualified($staticType);
-        if (!$staticType instanceof FullyQualifiedObjectType) {
+        $static_type = $this->identifier_php_doc_type_mapper->map_identifier_type_node(new Identifier_Type_Node($attribute_class), $current_php_parser_node);
+        $static_type = $this->resolve_fully_qualified($static_type);
+        if (!$static_type instanceof Fully_Qualified_Object_Type) {
             return null;
         }
-        $file = $this->currentFileProvider->getFile();
+        $file = $this->current_file_provider->get_file();
         if (!$file instanceof File) {
             return null;
         }
-        $importedName = $this->processFqnNameImport($currentPhpParserNode, $identifierTypeNode, $staticType, $file);
-        if ($importedName instanceof IdentifierTypeNode) {
-            $spacelessPhpDocTagNode->name = '@' . $importedName->name;
-            return $spacelessPhpDocTagNode;
+        $imported_name = $this->process_fqn_name_import($current_php_parser_node, $identifier_type_node, $static_type, $file);
+        if ($imported_name instanceof Identifier_Type_Node) {
+            $spaceless_php_doc_tag_node->name = '@' . $imported_name->name;
+            return $spaceless_php_doc_tag_node;
         }
         return null;
     }

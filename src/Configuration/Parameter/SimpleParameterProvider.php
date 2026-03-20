@@ -1,17 +1,15 @@
 <?php
 
 declare (strict_types=1);
-
 namespace Rector\Configuration\Parameter;
 
 use Rector\Configuration\Option;
-use Rector\Exception\ShouldNotHappenException;
-use RectorPrefix202603\Webmozart\Assert\Assert;
-
+use Rector\Exception\Should_Not_Happen_Exception;
+use Rector_Prefix202603\Webmozart\Assert\Assert;
 /**
  * @api
  */
-final class SimpleParameterProvider
+final class Simple_Parameter_Provider
 {
     /**
      * @var array<string, mixed>
@@ -21,11 +19,11 @@ final class SimpleParameterProvider
      * @param Option::* $name
      * @param mixed $value
      */
-    public static function addParameter(string $name, $value): void
+    public static function add_parameter(string $name, $value): void
     {
         if (is_array($value)) {
-            $mergedParameters = array_merge(self::$parameters[$name] ?? [], $value);
-            self::$parameters[$name] = $mergedParameters;
+            $merged_parameters = array_merge(self::$parameters[$name] ?? [], $value);
+            self::$parameters[$name] = $merged_parameters;
         } else {
             self::$parameters[$name][] = $value;
         }
@@ -34,7 +32,7 @@ final class SimpleParameterProvider
      * @param Option::* $name
      * @param mixed $value
      */
-    public static function setParameter(string $name, $value): void
+    public static function set_parameter(string $name, $value): void
     {
         self::$parameters[$name] = $value;
     }
@@ -42,11 +40,11 @@ final class SimpleParameterProvider
      * @param Option::* $name
      * @return mixed[]
      */
-    public static function provideArrayParameter(string $name): array
+    public static function provide_array_parameter(string $name): array
     {
         $parameter = self::$parameters[$name] ?? [];
-        Assert::isArray($parameter);
-        $arrayIsListFunction = function (array $array): bool {
+        Assert::is_array($parameter);
+        $array_is_list_function = function (array $array): bool {
             if (function_exists('array_is_list')) {
                 return array_is_list($array);
             }
@@ -62,41 +60,41 @@ final class SimpleParameterProvider
             }
             return \true;
         };
-        if ($arrayIsListFunction($parameter)) {
+        if ($array_is_list_function($parameter)) {
             // remove duplicates
-            $uniqueParameters = array_unique($parameter, \SORT_REGULAR);
-            return array_values($uniqueParameters);
+            $unique_parameters = array_unique($parameter, \SORT_REGULAR);
+            return array_values($unique_parameters);
         }
         return $parameter;
     }
     /**
      * @param Option::* $name
      */
-    public static function hasParameter(string $name): bool
+    public static function has_parameter(string $name): bool
     {
         return array_key_exists($name, self::$parameters);
     }
     /**
      * @param Option::* $name
      */
-    public static function provideStringParameter(string $name, ?string $default = null): string
+    public static function provide_string_parameter(string $name, ?string $default = null): string
     {
         if ($default === null) {
-            self::ensureParameterIsSet($name);
+            self::ensure_parameter_is_set($name);
         }
         return self::$parameters[$name] ?? $default;
     }
-    public static function provideIntParameter(string $key): int
+    public static function provide_int_parameter(string $key): int
     {
         return self::$parameters[$key];
     }
     /**
      * @param Option::* $name
      */
-    public static function provideBoolParameter(string $name, ?bool $default = null): bool
+    public static function provide_bool_parameter(string $name, ?bool $default = null): bool
     {
         if ($default === null) {
-            self::ensureParameterIsSet($name);
+            self::ensure_parameter_is_set($name);
         }
         return self::$parameters[$name] ?? $default;
     }
@@ -106,17 +104,17 @@ final class SimpleParameterProvider
      */
     public static function hash(): string
     {
-        $parameterKeys = self::$parameters;
-        return sha1(serialize($parameterKeys));
+        $parameter_keys = self::$parameters;
+        return sha1(serialize($parameter_keys));
     }
     /**
      * @param Option::* $name
      */
-    private static function ensureParameterIsSet(string $name): void
+    private static function ensure_parameter_is_set(string $name): void
     {
         if (array_key_exists($name, self::$parameters)) {
             return;
         }
-        throw new ShouldNotHappenException(sprintf('Parameter "%s" was not found', $name));
+        throw new Should_Not_Happen_Exception(sprintf('Parameter "%s" was not found', $name));
     }
 }

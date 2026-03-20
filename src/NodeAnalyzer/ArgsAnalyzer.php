@@ -1,27 +1,25 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Node_Analyzer;
 
-namespace Rector\NodeAnalyzer;
-
-use PhpParser\Node\Arg;
-use PhpParser\Node\Identifier;
-use Rector\NodeNameResolver\NodeNameResolver;
-
-final class ArgsAnalyzer
+use Php_Parser\Node\Arg;
+use Php_Parser\Node\Identifier;
+use Rector\Node_Name_Resolver\Node_Name_Resolver;
+final class Args_Analyzer
 {
     /**
      * @readonly
      */
-    private NodeNameResolver $nodeNameResolver;
-    public function __construct(NodeNameResolver $nodeNameResolver)
+    private Node_Name_Resolver $node_name_resolver;
+    public function __construct(Node_Name_Resolver $node_name_resolver)
     {
-        $this->nodeNameResolver = $nodeNameResolver;
+        $this->node_name_resolver = $node_name_resolver;
     }
     /**
      * @param Arg[] $args
      */
-    public function hasNamedArg(array $args): bool
+    public function has_named_arg(array $args): bool
     {
         foreach ($args as $arg) {
             if ($arg->name instanceof Identifier) {
@@ -33,23 +31,23 @@ final class ArgsAnalyzer
     /**
      * @param Arg[] $args
      */
-    public function resolveArgPosition(array $args, string $name, int $defaultPosition): int
+    public function resolve_arg_position(array $args, string $name, int $default_position): int
     {
         foreach ($args as $position => $arg) {
             if (!$arg->name instanceof Identifier) {
                 continue;
             }
-            if (!$this->nodeNameResolver->isName($arg->name, $name)) {
+            if (!$this->node_name_resolver->is_name($arg->name, $name)) {
                 continue;
             }
             return $position;
         }
-        return $defaultPosition;
+        return $default_position;
     }
     /**
      * @param Arg[] $args
      */
-    public function resolveFirstNamedArgPosition(array $args): ?int
+    public function resolve_first_named_arg_position(array $args): ?int
     {
         $position = 0;
         foreach ($args as $arg) {

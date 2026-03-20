@@ -1,13 +1,11 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Post_Rector\Value_Object;
 
-namespace Rector\PostRector\ValueObject;
-
-use PhpParser\Modifiers;
-use PHPStan\Type\Type;
-
-final class PropertyMetadata
+use Php_Parser\Modifiers;
+use Php_Stan\Type\Type;
+final class Property_Metadata
 {
     /**
      * @readonly
@@ -27,15 +25,15 @@ final class PropertyMetadata
         $this->type = $type;
         $this->flags = $flags;
     }
-    public function getName(): string
+    public function get_name(): string
     {
         return $this->name;
     }
-    public function getType(): ?Type
+    public function get_type(): ?Type
     {
         return $this->type;
     }
-    public function getFlags(): int
+    public function get_flags(): int
     {
         return $this->flags;
     }

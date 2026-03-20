@@ -1,36 +1,34 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Php_Parser\Node_Visitor;
 
-namespace Rector\PhpParser\NodeVisitor;
-
-use PhpParser\Node;
-use PhpParser\Node\Expr\Closure;
-use PhpParser\NodeVisitorAbstract;
-use Rector\Contract\PhpParser\DecoratingNodeVisitorInterface;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpParser\NodeTraverser\SimpleNodeTraverser;
-use Rector\Symfony\NodeAnalyzer\SymfonyPhpClosureDetector;
-
-final class SymfonyClosureNodeVisitor extends NodeVisitorAbstract implements DecoratingNodeVisitorInterface
+use Php_Parser\Node;
+use Php_Parser\Node\Expr\Closure;
+use Php_Parser\Node_Visitor_Abstract;
+use Rector\Contract\Php_Parser\Decorating_Node_Visitor_Interface;
+use Rector\Node_Type_Resolver\Node\Attribute_Key;
+use Rector\Php_Parser\Node_Traverser\Simple_Node_Traverser;
+use Rector\Symfony\Node_Analyzer\Symfony_Php_Closure_Detector;
+final class Symfony_Closure_Node_Visitor extends Node_Visitor_Abstract implements Decorating_Node_Visitor_Interface
 {
     /**
      * @readonly
      */
-    private SymfonyPhpClosureDetector $symfonyPhpClosureDetector;
-    public function __construct(SymfonyPhpClosureDetector $symfonyPhpClosureDetector)
+    private Symfony_Php_Closure_Detector $symfony_php_closure_detector;
+    public function __construct(Symfony_Php_Closure_Detector $symfony_php_closure_detector)
     {
-        $this->symfonyPhpClosureDetector = $symfonyPhpClosureDetector;
+        $this->symfony_php_closure_detector = $symfony_php_closure_detector;
     }
-    public function enterNode(Node $node): ?Node
+    public function enter_node(Node $node): ?Node
     {
         if (!$node instanceof Closure) {
             return null;
         }
-        if (!$this->symfonyPhpClosureDetector->detect($node)) {
+        if (!$this->symfony_php_closure_detector->detect($node)) {
             return null;
         }
-        SimpleNodeTraverser::decorateWithAttributeValue($node->stmts, AttributeKey::IS_INSIDE_SYMFONY_PHP_CLOSURE, \true);
+        Simple_Node_Traverser::decorate_with_attribute_value($node->stmts, Attribute_Key::IS_INSIDE_SYMFONY_PHP_CLOSURE, \true);
         return null;
     }
 }

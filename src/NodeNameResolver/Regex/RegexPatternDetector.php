@@ -1,10 +1,9 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Node_Name_Resolver\Regex;
 
-namespace Rector\NodeNameResolver\Regex;
-
-final class RegexPatternDetector
+final class Regex_Pattern_Detector
 {
     /**
      * @var string[]
@@ -16,25 +15,25 @@ final class RegexPatternDetector
      * @var array<string, string>
      */
     private const START_AND_END_DELIMITERS = ['(' => ')', '{' => '}', '[' => ']', '<' => '>'];
-    public function isRegexPattern(string $name): bool
+    public function is_regex_pattern(string $name): bool
     {
         if (strlen($name) <= 2) {
             return \false;
         }
-        $firstChar = $name[0];
-        $lastChar = $name[strlen($name) - 1];
-        if ($firstChar !== $lastChar) {
+        $first_char = $name[0];
+        $last_char = $name[strlen($name) - 1];
+        if ($first_char !== $last_char) {
             foreach (self::START_AND_END_DELIMITERS as $start => $end) {
-                if ($firstChar !== $start) {
+                if ($first_char !== $start) {
                     continue;
                 }
-                if ($lastChar !== $end) {
+                if ($last_char !== $end) {
                     continue;
                 }
                 return \true;
             }
             return \false;
         }
-        return in_array($firstChar, self::POSSIBLE_DELIMITERS, \true);
+        return in_array($first_char, self::POSSIBLE_DELIMITERS, \true);
     }
 }

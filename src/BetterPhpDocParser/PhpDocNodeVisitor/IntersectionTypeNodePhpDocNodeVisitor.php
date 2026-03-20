@@ -1,36 +1,34 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Better_Php_Doc_Parser\Php_Doc_Node_Visitor;
 
-namespace Rector\BetterPhpDocParser\PhpDocNodeVisitor;
-
-use PHPStan\PhpDocParser\Ast\Node;
-use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
-use Rector\BetterPhpDocParser\Attributes\AttributeMirrorer;
-use Rector\BetterPhpDocParser\Contract\BasePhpDocNodeVisitorInterface;
-use Rector\BetterPhpDocParser\ValueObject\Type\BracketsAwareIntersectionTypeNode;
-use Rector\PhpDocParser\PhpDocParser\PhpDocNodeVisitor\AbstractPhpDocNodeVisitor;
-
-final class IntersectionTypeNodePhpDocNodeVisitor extends AbstractPhpDocNodeVisitor implements BasePhpDocNodeVisitorInterface
+use Php_Stan\Php_Doc_Parser\Ast\Node;
+use Php_Stan\Php_Doc_Parser\Ast\Type\Intersection_Type_Node;
+use Rector\Better_Php_Doc_Parser\Attributes\Attribute_Mirrorer;
+use Rector\Better_Php_Doc_Parser\Contract\Base_Php_Doc_Node_Visitor_Interface;
+use Rector\Better_Php_Doc_Parser\Value_Object\Type\Brackets_Aware_Intersection_Type_Node;
+use Rector\Php_Doc_Parser\Php_Doc_Parser\Php_Doc_Node_Visitor\Abstract_Php_Doc_Node_Visitor;
+final class Intersection_Type_Node_Php_Doc_Node_Visitor extends Abstract_Php_Doc_Node_Visitor implements Base_Php_Doc_Node_Visitor_Interface
 {
     /**
      * @readonly
      */
-    private AttributeMirrorer $attributeMirrorer;
-    public function __construct(AttributeMirrorer $attributeMirrorer)
+    private Attribute_Mirrorer $attribute_mirrorer;
+    public function __construct(Attribute_Mirrorer $attribute_mirrorer)
     {
-        $this->attributeMirrorer = $attributeMirrorer;
+        $this->attribute_mirrorer = $attribute_mirrorer;
     }
-    public function enterNode(Node $node): ?Node
+    public function enter_node(Node $node): ?Node
     {
-        if (!$node instanceof IntersectionTypeNode) {
+        if (!$node instanceof Intersection_Type_Node) {
             return null;
         }
-        if ($node instanceof BracketsAwareIntersectionTypeNode) {
+        if ($node instanceof Brackets_Aware_Intersection_Type_Node) {
             return null;
         }
-        $bracketsAwareIntersectionTypeNode = new BracketsAwareIntersectionTypeNode($node->types);
-        $this->attributeMirrorer->mirror($node, $bracketsAwareIntersectionTypeNode);
-        return $bracketsAwareIntersectionTypeNode;
+        $brackets_aware_intersection_type_node = new Brackets_Aware_Intersection_Type_Node($node->types);
+        $this->attribute_mirrorer->mirror($node, $brackets_aware_intersection_type_node);
+        return $brackets_aware_intersection_type_node;
     }
 }

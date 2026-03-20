@@ -1,42 +1,40 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Php_Parser\Node_Visitor;
 
-namespace Rector\PhpParser\NodeVisitor;
-
-use PhpParser\Node;
-use PhpParser\Node\Expr\ConstFetch;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Expr\StaticCall;
-use PhpParser\Node\Name;
-use PhpParser\NodeVisitorAbstract;
-use Rector\Contract\PhpParser\DecoratingNodeVisitorInterface;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-
-final class NameNodeVisitor extends NodeVisitorAbstract implements DecoratingNodeVisitorInterface
+use Php_Parser\Node;
+use Php_Parser\Node\Expr\Const_Fetch;
+use Php_Parser\Node\Expr\Func_Call;
+use Php_Parser\Node\Expr\New_;
+use Php_Parser\Node\Expr\Static_Call;
+use Php_Parser\Node\Name;
+use Php_Parser\Node_Visitor_Abstract;
+use Rector\Contract\Php_Parser\Decorating_Node_Visitor_Interface;
+use Rector\Node_Type_Resolver\Node\Attribute_Key;
+final class Name_Node_Visitor extends Node_Visitor_Abstract implements Decorating_Node_Visitor_Interface
 {
-    public function enterNode(Node $node): ?Node
+    public function enter_node(Node $node): ?Node
     {
-        if ($node instanceof FuncCall && $node->name instanceof Name) {
-            $node->name->setAttribute(AttributeKey::IS_FUNCCALL_NAME, \true);
+        if ($node instanceof Func_Call && $node->name instanceof Name) {
+            $node->name->set_attribute(Attribute_Key::IS_FUNCCALL_NAME, \true);
             return null;
         }
-        if ($node instanceof ConstFetch) {
-            $node->name->setAttribute(AttributeKey::IS_CONSTFETCH_NAME, \true);
+        if ($node instanceof Const_Fetch) {
+            $node->name->set_attribute(Attribute_Key::IS_CONSTFETCH_NAME, \true);
             return null;
         }
         if ($node instanceof New_ && $node->class instanceof Name) {
-            $node->class->setAttribute(AttributeKey::IS_NEW_INSTANCE_NAME, \true);
+            $node->class->set_attribute(Attribute_Key::IS_NEW_INSTANCE_NAME, \true);
             return null;
         }
-        if (!$node instanceof StaticCall) {
+        if (!$node instanceof Static_Call) {
             return null;
         }
         if (!$node->class instanceof Name) {
             return null;
         }
-        $node->class->setAttribute(AttributeKey::IS_STATICCALL_CLASS_NAME, \true);
+        $node->class->set_attribute(Attribute_Key::IS_STATICCALL_CLASS_NAME, \true);
         return null;
     }
 }

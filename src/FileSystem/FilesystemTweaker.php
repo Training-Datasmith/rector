@@ -1,10 +1,9 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\File_System;
 
-namespace Rector\FileSystem;
-
-final class FilesystemTweaker
+final class Filesystem_Tweaker
 {
     /**
      * This will turn paths like "src/Symfony/Component/*\/Tests" to existing directory paths
@@ -13,42 +12,42 @@ final class FilesystemTweaker
      *
      * @return string[]
      */
-    public function resolveWithFnmatch(array $paths): array
+    public function resolve_with_fnmatch(array $paths): array
     {
-        $absolutePathsFound = [];
+        $absolute_paths_found = [];
         foreach ($paths as $path) {
             if (strpos($path, '*') !== \false) {
-                $foundPaths = $this->foundInGlob($path);
-                $absolutePathsFound = $this->appendPaths($foundPaths, $absolutePathsFound);
+                $found_paths = $this->found_in_glob($path);
+                $absolute_paths_found = $this->append_paths($found_paths, $absolute_paths_found);
             } else {
-                $absolutePathsFound = $this->appendPaths([$path], $absolutePathsFound);
+                $absolute_paths_found = $this->append_paths([$path], $absolute_paths_found);
             }
         }
-        return $absolutePathsFound;
+        return $absolute_paths_found;
     }
     /**
      * @param string[] $foundPaths
      * @param string[] $absolutePathsFound
      * @return string[]
      */
-    private function appendPaths(array $foundPaths, array $absolutePathsFound): array
+    private function append_paths(array $found_paths, array $absolute_paths_found): array
     {
-        foreach ($foundPaths as $foundPath) {
-            $foundPath = realpath($foundPath);
-            if ($foundPath === \false) {
+        foreach ($found_paths as $found_path) {
+            $found_path = realpath($found_path);
+            if ($found_path === \false) {
                 continue;
             }
-            $absolutePathsFound[] = $foundPath;
+            $absolute_paths_found[] = $found_path;
         }
-        return $absolutePathsFound;
+        return $absolute_paths_found;
     }
     /**
      * @return string[]
      */
-    private function foundInGlob(string $path): array
+    private function found_in_glob(string $path): array
     {
         /** @var string[] $paths */
         $paths = (array) glob($path);
-        return array_filter($paths, \Closure::fromCallable('file_exists'));
+        return array_filter($paths, \Closure::from_callable('file_exists'));
     }
 }

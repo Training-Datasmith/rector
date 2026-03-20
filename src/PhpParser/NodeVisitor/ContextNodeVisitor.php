@@ -1,134 +1,132 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Php_Parser\Node_Visitor;
 
-namespace Rector\PhpParser\NodeVisitor;
-
-use PhpParser\Node;
-use PhpParser\Node\Arg;
-use PhpParser\Node\Attribute;
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ArrayDimFetch;
-use PhpParser\Node\Expr\BinaryOp\BooleanAnd;
-use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\Expr\Isset_;
-use PhpParser\Node\Expr\PostDec;
-use PhpParser\Node\Expr\PostInc;
-use PhpParser\Node\Expr\PreDec;
-use PhpParser\Node\Expr\PreInc;
-use PhpParser\Node\Expr\PropertyFetch;
-use PhpParser\Node\Expr\StaticPropertyFetch;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\Name\FullyQualified;
-use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\Break_;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\Do_;
-use PhpParser\Node\Stmt\Else_;
-use PhpParser\Node\Stmt\ElseIf_;
-use PhpParser\Node\Stmt\For_;
-use PhpParser\Node\Stmt\Foreach_;
-use PhpParser\Node\Stmt\Function_;
-use PhpParser\Node\Stmt\If_;
-use PhpParser\Node\Stmt\Switch_;
-use PhpParser\Node\Stmt\TryCatch;
-use PhpParser\Node\Stmt\Unset_;
-use PhpParser\Node\Stmt\While_;
-use PhpParser\NodeVisitor;
-use PhpParser\NodeVisitorAbstract;
-use Rector\Contract\PhpParser\DecoratingNodeVisitorInterface;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
-use Rector\PhpParser\NodeTraverser\SimpleNodeTraverser;
-
-final class ContextNodeVisitor extends NodeVisitorAbstract implements DecoratingNodeVisitorInterface
+use Php_Parser\Node;
+use Php_Parser\Node\Arg;
+use Php_Parser\Node\Attribute;
+use Php_Parser\Node\Expr\Array_;
+use Php_Parser\Node\Expr\Array_Dim_Fetch;
+use Php_Parser\Node\Expr\Binary_Op\Boolean_And;
+use Php_Parser\Node\Expr\Closure;
+use Php_Parser\Node\Expr\Isset_;
+use Php_Parser\Node\Expr\Post_Dec;
+use Php_Parser\Node\Expr\Post_Inc;
+use Php_Parser\Node\Expr\Pre_Dec;
+use Php_Parser\Node\Expr\Pre_Inc;
+use Php_Parser\Node\Expr\Property_Fetch;
+use Php_Parser\Node\Expr\Static_Property_Fetch;
+use Php_Parser\Node\Expr\Variable;
+use Php_Parser\Node\Name\Fully_Qualified;
+use Php_Parser\Node\Param;
+use Php_Parser\Node\Stmt\Break_;
+use Php_Parser\Node\Stmt\Class_;
+use Php_Parser\Node\Stmt\Do_;
+use Php_Parser\Node\Stmt\Else_;
+use Php_Parser\Node\Stmt\Else_If_;
+use Php_Parser\Node\Stmt\For_;
+use Php_Parser\Node\Stmt\Foreach_;
+use Php_Parser\Node\Stmt\Function_;
+use Php_Parser\Node\Stmt\If_;
+use Php_Parser\Node\Stmt\Switch_;
+use Php_Parser\Node\Stmt\Try_Catch;
+use Php_Parser\Node\Stmt\Unset_;
+use Php_Parser\Node\Stmt\While_;
+use Php_Parser\Node_Visitor;
+use Php_Parser\Node_Visitor_Abstract;
+use Rector\Contract\Php_Parser\Decorating_Node_Visitor_Interface;
+use Rector\Node_Type_Resolver\Node\Attribute_Key;
+use Rector\Php_Doc_Parser\Node_Traverser\Simple_Callable_Node_Traverser;
+use Rector\Php_Parser\Node_Traverser\Simple_Node_Traverser;
+final class Context_Node_Visitor extends Node_Visitor_Abstract implements Decorating_Node_Visitor_Interface
 {
     /**
      * @readonly
      */
-    private SimpleCallableNodeTraverser $simpleCallableNodeTraverser;
-    public function __construct(SimpleCallableNodeTraverser $simpleCallableNodeTraverser)
+    private Simple_Callable_Node_Traverser $simple_callable_node_traverser;
+    public function __construct(Simple_Callable_Node_Traverser $simple_callable_node_traverser)
     {
-        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
+        $this->simple_callable_node_traverser = $simple_callable_node_traverser;
     }
-    public function enterNode(Node $node): ?Node
+    public function enter_node(Node $node): ?Node
     {
         if ($node instanceof For_ || $node instanceof Foreach_ || $node instanceof While_ || $node instanceof Do_ || $node instanceof Switch_) {
-            $this->processContextInLoop($node);
+            $this->process_context_in_loop($node);
             return null;
         }
-        if ($node instanceof ArrayDimFetch) {
-            $this->processInsideArrayDimFetch($node);
+        if ($node instanceof Array_Dim_Fetch) {
+            $this->process_inside_array_dim_fetch($node);
             return null;
         }
         if ($node instanceof Unset_) {
             foreach ($node->vars as $var) {
-                $var->setAttribute(AttributeKey::IS_UNSET_VAR, \true);
+                $var->set_attribute(Attribute_Key::IS_UNSET_VAR, \true);
             }
             return null;
         }
-        if ($node instanceof TryCatch) {
-            SimpleNodeTraverser::decorateWithAttributeValue($node->stmts, AttributeKey::IS_IN_TRY_BLOCK, \true);
+        if ($node instanceof Try_Catch) {
+            Simple_Node_Traverser::decorate_with_attribute_value($node->stmts, Attribute_Key::IS_IN_TRY_BLOCK, \true);
             return null;
         }
         if ($node instanceof Isset_) {
             foreach ($node->vars as $var) {
-                $var->setAttribute(AttributeKey::IS_ISSET_VAR, \true);
+                $var->set_attribute(Attribute_Key::IS_ISSET_VAR, \true);
             }
             return null;
         }
         if ($node instanceof Attribute) {
-            $this->processContextInAttribute($node);
+            $this->process_context_in_attribute($node);
             return null;
         }
-        if ($node instanceof If_ || $node instanceof Else_ || $node instanceof ElseIf_) {
-            $this->processContextInIf($node);
+        if ($node instanceof If_ || $node instanceof Else_ || $node instanceof Else_If_) {
+            $this->process_context_in_if($node);
             return null;
         }
         if ($node instanceof Arg) {
-            $node->value->setAttribute(AttributeKey::IS_ARG_VALUE, \true);
+            $node->value->set_attribute(Attribute_Key::IS_ARG_VALUE, \true);
             return null;
         }
         if ($node instanceof Param) {
-            $node->var->setAttribute(AttributeKey::IS_PARAM_VAR, \true);
+            $node->var->set_attribute(Attribute_Key::IS_PARAM_VAR, \true);
             return null;
         }
-        if ($node instanceof PostDec || $node instanceof PostInc || $node instanceof PreDec || $node instanceof PreInc) {
-            $node->var->setAttribute(AttributeKey::IS_INCREMENT_OR_DECREMENT, \true);
+        if ($node instanceof Post_Dec || $node instanceof Post_Inc || $node instanceof Pre_Dec || $node instanceof Pre_Inc) {
+            $node->var->set_attribute(Attribute_Key::IS_INCREMENT_OR_DECREMENT, \true);
             return null;
         }
-        if ($node instanceof BooleanAnd) {
-            $node->right->setAttribute(AttributeKey::IS_RIGHT_AND, \true);
+        if ($node instanceof Boolean_And) {
+            $node->right->set_attribute(Attribute_Key::IS_RIGHT_AND, \true);
             return null;
         }
-        $this->processContextInClass($node);
+        $this->process_context_in_class($node);
         return null;
     }
-    private function processInsideArrayDimFetch(ArrayDimFetch $arrayDimFetch): void
+    private function process_inside_array_dim_fetch(Array_Dim_Fetch $array_dim_fetch): void
     {
-        if ($arrayDimFetch->var instanceof PropertyFetch || $arrayDimFetch->var instanceof StaticPropertyFetch) {
-            $arrayDimFetch->var->setAttribute(AttributeKey::INSIDE_ARRAY_DIM_FETCH, \true);
+        if ($array_dim_fetch->var instanceof Property_Fetch || $array_dim_fetch->var instanceof Static_Property_Fetch) {
+            $array_dim_fetch->var->set_attribute(Attribute_Key::INSIDE_ARRAY_DIM_FETCH, \true);
         }
     }
-    private function processContextInClass(Node $node): void
+    private function process_context_in_class(Node $node): void
     {
         if ($node instanceof Class_) {
-            if ($node->extends instanceof FullyQualified) {
-                $node->extends->setAttribute(AttributeKey::IS_CLASS_EXTENDS, \true);
+            if ($node->extends instanceof Fully_Qualified) {
+                $node->extends->set_attribute(Attribute_Key::IS_CLASS_EXTENDS, \true);
             }
             foreach ($node->implements as $implement) {
-                $implement->setAttribute(AttributeKey::IS_CLASS_IMPLEMENT, \true);
+                $implement->set_attribute(Attribute_Key::IS_CLASS_IMPLEMENT, \true);
             }
         }
     }
-    private function processContextInAttribute(Attribute $attribute): void
+    private function process_context_in_attribute(Attribute $attribute): void
     {
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($attribute->args, static function (Node $subNode) {
-            if ($subNode instanceof Array_) {
-                $subNode->setAttribute(AttributeKey::IS_ARRAY_IN_ATTRIBUTE, \true);
+        $this->simple_callable_node_traverser->traverse_nodes_with_callable($attribute->args, static function (Node $sub_node) {
+            if ($sub_node instanceof Array_) {
+                $sub_node->set_attribute(Attribute_Key::IS_ARRAY_IN_ATTRIBUTE, \true);
             }
-            if ($subNode instanceof Closure) {
-                $subNode->setAttribute(AttributeKey::IS_CLOSURE_IN_ATTRIBUTE, \true);
+            if ($sub_node instanceof Closure) {
+                $sub_node->set_attribute(Attribute_Key::IS_CLOSURE_IN_ATTRIBUTE, \true);
             }
             return null;
         });
@@ -136,32 +134,32 @@ final class ContextNodeVisitor extends NodeVisitorAbstract implements Decorating
     /**
      * @param \PhpParser\Node\Stmt\If_|\PhpParser\Node\Stmt\Else_|\PhpParser\Node\Stmt\ElseIf_ $node
      */
-    private function processContextInIf($node): void
+    private function process_context_in_if($node): void
     {
         foreach ($node->stmts as $stmt) {
             if ($stmt instanceof Break_) {
-                $stmt->setAttribute(AttributeKey::IS_IN_IF, \true);
+                $stmt->set_attribute(Attribute_Key::IS_IN_IF, \true);
             }
         }
     }
     /**
      * @param \PhpParser\Node\Stmt\For_|\PhpParser\Node\Stmt\Foreach_|\PhpParser\Node\Stmt\While_|\PhpParser\Node\Stmt\Do_|\PhpParser\Node\Stmt\Switch_ $node
      */
-    private function processContextInLoop($node): void
+    private function process_context_in_loop($node): void
     {
         if ($node instanceof Foreach_) {
-            if ($node->keyVar instanceof Variable) {
-                $node->keyVar->setAttribute(AttributeKey::IS_VARIABLE_LOOP, \true);
+            if ($node->key_var instanceof Variable) {
+                $node->key_var->set_attribute(Attribute_Key::IS_VARIABLE_LOOP, \true);
             }
-            $node->valueVar->setAttribute(AttributeKey::IS_VARIABLE_LOOP, \true);
+            $node->value_var->set_attribute(Attribute_Key::IS_VARIABLE_LOOP, \true);
         }
         $stmts = $node instanceof Switch_ ? $node->cases : $node->stmts;
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($stmts, static function (Node $subNode): ?int {
-            if ($subNode instanceof Class_ || $subNode instanceof Function_ || $subNode instanceof Closure) {
-                return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+        $this->simple_callable_node_traverser->traverse_nodes_with_callable($stmts, static function (Node $sub_node): ?int {
+            if ($sub_node instanceof Class_ || $sub_node instanceof Function_ || $sub_node instanceof Closure) {
+                return Node_Visitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
-            if ($subNode instanceof If_ || $subNode instanceof Break_) {
-                $subNode->setAttribute(AttributeKey::IS_IN_LOOP_OR_SWITCH, \true);
+            if ($sub_node instanceof If_ || $sub_node instanceof Break_) {
+                $sub_node->set_attribute(Attribute_Key::IS_IN_LOOP_OR_SWITCH, \true);
             }
             return null;
         });

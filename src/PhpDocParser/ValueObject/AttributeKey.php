@@ -1,13 +1,12 @@
 <?php
 
 declare (strict_types=1);
-
-namespace Rector\PhpDocParser\ValueObject;
+namespace Rector\Php_Doc_Parser\Value_Object;
 
 /**
  * @api
  */
-final class AttributeKey
+final class Attribute_Key
 {
     /**
      * Used in php-parser, do not change

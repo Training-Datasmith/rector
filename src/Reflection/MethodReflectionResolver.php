@@ -1,39 +1,37 @@
 <?php
 
 declare (strict_types=1);
-
 namespace Rector\Reflection;
 
-use PHPStan\Analyser\Scope;
-use PHPStan\Reflection\MethodReflection;
-use PHPStan\Reflection\ReflectionProvider;
-
-final class MethodReflectionResolver
+use Php_Stan\Analyser\Scope;
+use Php_Stan\Reflection\Method_Reflection;
+use Php_Stan\Reflection\Reflection_Provider;
+final class Method_Reflection_Resolver
 {
     /**
      * @readonly
      */
-    private ReflectionProvider $reflectionProvider;
-    public function __construct(ReflectionProvider $reflectionProvider)
+    private Reflection_Provider $reflection_provider;
+    public function __construct(Reflection_Provider $reflection_provider)
     {
-        $this->reflectionProvider = $reflectionProvider;
+        $this->reflection_provider = $reflection_provider;
     }
     /**
      * @param class-string $className
      */
-    public function resolveMethodReflection(string $className, string $methodName, ?Scope $scope): ?MethodReflection
+    public function resolve_method_reflection(string $class_name, string $method_name, ?Scope $scope): ?Method_Reflection
     {
-        if (!$this->reflectionProvider->hasClass($className)) {
+        if (!$this->reflection_provider->has_class($class_name)) {
             return null;
         }
-        $classReflection = $this->reflectionProvider->getClass($className);
+        $class_reflection = $this->reflection_provider->get_class($class_name);
         // better, with support for "@method" annotation methods
         if ($scope instanceof Scope) {
-            if ($classReflection->hasMethod($methodName)) {
-                return $classReflection->getMethod($methodName, $scope);
+            if ($class_reflection->has_method($method_name)) {
+                return $class_reflection->get_method($method_name, $scope);
             }
-        } elseif ($classReflection->hasNativeMethod($methodName)) {
-            return $classReflection->getNativeMethod($methodName);
+        } elseif ($class_reflection->has_native_method($method_name)) {
+            return $class_reflection->get_native_method($method_name);
         }
         return null;
     }

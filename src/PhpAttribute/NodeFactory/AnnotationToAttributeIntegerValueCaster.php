@@ -1,88 +1,86 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Php_Attribute\Node_Factory;
 
-namespace Rector\PhpAttribute\NodeFactory;
-
-use PhpParser\Node\Arg;
-use PhpParser\Node\ArrayItem;
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Scalar\Int_;
-use PhpParser\Node\Scalar\String_;
-use PHPStan\Reflection\ClassReflection;
-use PHPStan\Reflection\ParameterReflection;
-use PHPStan\Reflection\ParametersAcceptorSelector;
-use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\Type\Type;
-use PHPStan\Type\UnionType;
-use Rector\Php80\ValueObject\AnnotationToAttribute;
-use RectorPrefix202603\Webmozart\Assert\Assert;
-
-final class AnnotationToAttributeIntegerValueCaster
+use Php_Parser\Node\Arg;
+use Php_Parser\Node\Array_Item;
+use Php_Parser\Node\Expr\Array_;
+use Php_Parser\Node\Scalar\Int_;
+use Php_Parser\Node\Scalar\String_;
+use Php_Stan\Reflection\Class_Reflection;
+use Php_Stan\Reflection\Parameter_Reflection;
+use Php_Stan\Reflection\Parameters_Acceptor_Selector;
+use Php_Stan\Reflection\Reflection_Provider;
+use Php_Stan\Type\Type;
+use Php_Stan\Type\Union_Type;
+use Rector\Php80\Value_Object\Annotation_To_Attribute;
+use Rector_Prefix202603\Webmozart\Assert\Assert;
+final class Annotation_To_Attribute_Integer_Value_Caster
 {
     /**
      * @readonly
      */
-    private ReflectionProvider $reflectionProvider;
-    public function __construct(ReflectionProvider $reflectionProvider)
+    private Reflection_Provider $reflection_provider;
+    public function __construct(Reflection_Provider $reflection_provider)
     {
-        $this->reflectionProvider = $reflectionProvider;
+        $this->reflection_provider = $reflection_provider;
     }
     /**
      * @param Arg[] $args
      */
-    public function castAttributeTypes(AnnotationToAttribute $annotationToAttribute, array $args): void
+    public function cast_attribute_types(Annotation_To_Attribute $annotation_to_attribute, array $args): void
     {
-        Assert::allIsInstanceOf($args, Arg::class);
-        if (!$this->reflectionProvider->hasClass($annotationToAttribute->getAttributeClass())) {
+        Assert::all_is_instance_of($args, Arg::class);
+        if (!$this->reflection_provider->has_class($annotation_to_attribute->get_attribute_class())) {
             return;
         }
-        $attributeClassReflection = $this->reflectionProvider->getClass($annotationToAttribute->getAttributeClass());
-        if (!$attributeClassReflection->hasConstructor()) {
+        $attribute_class_reflection = $this->reflection_provider->get_class($annotation_to_attribute->get_attribute_class());
+        if (!$attribute_class_reflection->has_constructor()) {
             return;
         }
-        $parameterReflections = $this->resolveConstructorParameterReflections($attributeClassReflection);
-        foreach ($parameterReflections as $parameterReflection) {
+        $parameter_reflections = $this->resolve_constructor_parameter_reflections($attribute_class_reflection);
+        foreach ($parameter_reflections as $parameter_reflection) {
             foreach ($args as $arg) {
                 if (!$arg->value instanceof Array_) {
                     continue;
                 }
-                $arrayItem = current($arg->value->items) ?: null;
-                if (!$arrayItem instanceof ArrayItem) {
+                $array_item = current($arg->value->items) ?: null;
+                if (!$array_item instanceof Array_Item) {
                     continue;
                 }
-                if (!$arrayItem->key instanceof String_) {
+                if (!$array_item->key instanceof String_) {
                     continue;
                 }
-                $keyString = $arrayItem->key;
-                if ($keyString->value !== $parameterReflection->getName()) {
+                $key_string = $array_item->key;
+                if ($key_string->value !== $parameter_reflection->get_name()) {
                     continue;
                 }
                 // ensure type is casted to integer
-                if (!$arrayItem->value instanceof String_) {
+                if (!$array_item->value instanceof String_) {
                     continue;
                 }
-                if (!$this->containsInteger($parameterReflection->getType())) {
+                if (!$this->contains_integer($parameter_reflection->get_type())) {
                     continue;
                 }
-                $valueString = $arrayItem->value;
-                if (!is_numeric($valueString->value)) {
+                $value_string = $array_item->value;
+                if (!is_numeric($value_string->value)) {
                     continue;
                 }
-                $arrayItem->value = new Int_((int) $valueString->value);
+                $array_item->value = new Int_((int) $value_string->value);
             }
         }
     }
-    private function containsInteger(Type $type): bool
+    private function contains_integer(Type $type): bool
     {
-        if ($type->isInteger()->yes()) {
+        if ($type->is_integer()->yes()) {
             return \true;
         }
-        if (!$type instanceof UnionType) {
+        if (!$type instanceof Union_Type) {
             return \false;
         }
-        foreach ($type->getTypes() as $unionedType) {
-            if ($unionedType->isInteger()->yes()) {
+        foreach ($type->get_types() as $unioned_type) {
+            if ($unioned_type->is_integer()->yes()) {
                 return \true;
             }
         }
@@ -91,10 +89,10 @@ final class AnnotationToAttributeIntegerValueCaster
     /**
      * @return ParameterReflection[]
      */
-    private function resolveConstructorParameterReflections(ClassReflection $classReflection): array
+    private function resolve_constructor_parameter_reflections(Class_Reflection $class_reflection): array
     {
-        $extendedMethodReflection = $classReflection->getConstructor();
-        $extendedParametersAcceptor = ParametersAcceptorSelector::combineAcceptors($extendedMethodReflection->getVariants());
-        return $extendedParametersAcceptor->getParameters();
+        $extended_method_reflection = $class_reflection->get_constructor();
+        $extended_parameters_acceptor = Parameters_Acceptor_Selector::combine_acceptors($extended_method_reflection->get_variants());
+        return $extended_parameters_acceptor->get_parameters();
     }
 }

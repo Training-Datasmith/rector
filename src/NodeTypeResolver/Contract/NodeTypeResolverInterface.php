@@ -1,21 +1,19 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Node_Type_Resolver\Contract;
 
-namespace Rector\NodeTypeResolver\Contract;
-
-use PhpParser\Node;
-use PHPStan\Type\Type;
-
+use Php_Parser\Node;
+use Php_Stan\Type\Type;
 /**
  * @template TNode as \PhpParser\Node
  */
-interface NodeTypeResolverInterface
+interface Node_Type_Resolver_Interface
 {
     /**
      * @return array<class-string<TNode>>
      */
-    public function getNodeClasses(): array;
+    public function get_node_classes(): array;
     /**
      * @param TNode $node
      */

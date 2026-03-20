@@ -1,11 +1,9 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Better_Php_Doc_Parser\Value_Object\Type;
 
-namespace Rector\BetterPhpDocParser\ValueObject\Type;
-
-use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-
-final class ShortenedIdentifierTypeNode extends IdentifierTypeNode
+use Php_Stan\Php_Doc_Parser\Ast\Type\Identifier_Type_Node;
+final class Shortened_Identifier_Type_Node extends Identifier_Type_Node
 {
 }

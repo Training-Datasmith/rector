@@ -1,35 +1,33 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Php_Stan_Static_Type_Mapper\Type_Mapper;
 
-namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
-
-use PhpParser\Node\Name;
-use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use PHPStan\Type\ThisType;
-use PHPStan\Type\Type;
-use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
-
+use Php_Parser\Node\Name;
+use Php_Stan\Php_Doc_Parser\Ast\Type\Type_Node;
+use Php_Stan\Type\This_Type;
+use Php_Stan\Type\Type;
+use Rector\Php_Stan_Static_Type_Mapper\Contract\Type_Mapper_Interface;
 /**
  * @implements TypeMapperInterface<ThisType>
  */
-final class ThisTypeMapper implements TypeMapperInterface
+final class This_Type_Mapper implements Type_Mapper_Interface
 {
-    public function getNodeClass(): string
+    public function get_node_class(): string
     {
-        return ThisType::class;
+        return This_Type::class;
     }
     /**
      * @param ThisType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
+    public function map_to_php_stan_php_doc_type_node(Type $type): Type_Node
     {
-        return $type->toPhpDocNode();
+        return $type->to_php_doc_node();
     }
     /**
      * @param ThisType $type
      */
-    public function mapToPhpParserNode(Type $type, string $typeKind): Name
+    public function map_to_php_parser_node(Type $type, string $type_kind): Name
     {
         return new Name('self');
     }

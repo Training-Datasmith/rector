@@ -1,15 +1,13 @@
 <?php
 
 declare (strict_types=1);
-
 namespace Rector\Console;
 
-use RectorPrefix202603\Symfony\Component\Console\Command\Command;
-
+use Rector_Prefix202603\Symfony\Component\Console\Command\Command;
 /**
  * @api
  */
-final class ExitCode
+final class Exit_Code
 {
     /**
      * @var int

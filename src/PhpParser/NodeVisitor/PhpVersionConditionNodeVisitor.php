@@ -1,33 +1,31 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Php_Parser\Node_Visitor;
 
-namespace Rector\PhpParser\NodeVisitor;
-
-use PhpParser\Node;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\Ternary;
-use PhpParser\Node\Stmt\If_;
-use PhpParser\NodeVisitorAbstract;
-use Rector\Contract\PhpParser\DecoratingNodeVisitorInterface;
-use Rector\DeadCode\ConditionResolver;
-use Rector\DeadCode\ValueObject\VersionCompareCondition;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpParser\NodeTraverser\SimpleNodeTraverser;
-
-final class PhpVersionConditionNodeVisitor extends NodeVisitorAbstract implements DecoratingNodeVisitorInterface
+use Php_Parser\Node;
+use Php_Parser\Node\Expr\Func_Call;
+use Php_Parser\Node\Expr\Ternary;
+use Php_Parser\Node\Stmt\If_;
+use Php_Parser\Node_Visitor_Abstract;
+use Rector\Contract\Php_Parser\Decorating_Node_Visitor_Interface;
+use Rector\Dead_Code\Condition_Resolver;
+use Rector\Dead_Code\Value_Object\Version_Compare_Condition;
+use Rector\Node_Type_Resolver\Node\Attribute_Key;
+use Rector\Php_Parser\Node_Traverser\Simple_Node_Traverser;
+final class Php_Version_Condition_Node_Visitor extends Node_Visitor_Abstract implements Decorating_Node_Visitor_Interface
 {
     /**
      * @readonly
      */
-    private ConditionResolver $conditionResolver;
-    public function __construct(ConditionResolver $conditionResolver)
+    private Condition_Resolver $condition_resolver;
+    public function __construct(Condition_Resolver $condition_resolver)
     {
-        $this->conditionResolver = $conditionResolver;
+        $this->condition_resolver = $condition_resolver;
     }
-    public function enterNode(Node $node): ?Node
+    public function enter_node(Node $node): ?Node
     {
-        if (($node instanceof Ternary || $node instanceof If_) && $this->hasVersionCompareCond($node)) {
+        if (($node instanceof Ternary || $node instanceof If_) && $this->has_version_compare_cond($node)) {
             if ($node instanceof Ternary) {
                 $nodes = [$node->else];
                 if ($node->if instanceof Node) {
@@ -36,19 +34,19 @@ final class PhpVersionConditionNodeVisitor extends NodeVisitorAbstract implement
             } else {
                 $nodes = $node->stmts;
             }
-            SimpleNodeTraverser::decorateWithAttributeValue($nodes, AttributeKey::PHP_VERSION_CONDITIONED, \true);
+            Simple_Node_Traverser::decorate_with_attribute_value($nodes, Attribute_Key::PHP_VERSION_CONDITIONED, \true);
         }
         return null;
     }
     /**
      * @param \PhpParser\Node\Stmt\If_|\PhpParser\Node\Expr\Ternary $ifOrTernary
      */
-    private function hasVersionCompareCond($ifOrTernary): bool
+    private function has_version_compare_cond($if_or_ternary): bool
     {
-        if (!$ifOrTernary->cond instanceof FuncCall) {
+        if (!$if_or_ternary->cond instanceof Func_Call) {
             return \false;
         }
-        $versionCompare = $this->conditionResolver->resolveFromExpr($ifOrTernary->cond);
-        return $versionCompare instanceof VersionCompareCondition;
+        $version_compare = $this->condition_resolver->resolve_from_expr($if_or_ternary->cond);
+        return $version_compare instanceof Version_Compare_Condition;
     }
 }

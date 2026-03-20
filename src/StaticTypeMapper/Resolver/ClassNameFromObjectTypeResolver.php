@@ -1,19 +1,17 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Static_Type_Mapper\Resolver;
 
-namespace Rector\StaticTypeMapper\Resolver;
-
-use PHPStan\Type\Type;
-
-final class ClassNameFromObjectTypeResolver
+use Php_Stan\Type\Type;
+final class Class_Name_From_Object_Type_Resolver
 {
     public static function resolve(Type $type): ?string
     {
-        $objectClassNames = $type->getObjectClassNames();
-        if (count($objectClassNames) !== 1) {
+        $object_class_names = $type->get_object_class_names();
+        if (count($object_class_names) !== 1) {
             return null;
         }
-        return $objectClassNames[0];
+        return $object_class_names[0];
     }
 }

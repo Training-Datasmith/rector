@@ -1,92 +1,90 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Static_Type_Mapper;
 
-namespace Rector\StaticTypeMapper;
-
-use PhpParser\Node;
-use PhpParser\Node\ComplexType;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
-use PHPStan\PhpDocParser\Ast\PhpDoc\ParamTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\ReturnTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\TemplateTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\ThrowsTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\VarTagValueNode;
-use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use PHPStan\Type\MixedType;
-use PHPStan\Type\Type;
-use Rector\Exception\NotImplementedYetException;
-use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
-use Rector\PHPStanStaticTypeMapper\PHPStanStaticTypeMapper;
-use Rector\StaticTypeMapper\Mapper\PhpParserNodeMapper;
-use Rector\StaticTypeMapper\Naming\NameScopeFactory;
-use Rector\StaticTypeMapper\PhpDoc\PhpDocTypeMapper;
-
+use Php_Parser\Node;
+use Php_Parser\Node\Complex_Type;
+use Php_Parser\Node\Identifier;
+use Php_Parser\Node\Name;
+use Php_Stan\Php_Doc_Parser\Ast\Php_Doc\Param_Tag_Value_Node;
+use Php_Stan\Php_Doc_Parser\Ast\Php_Doc\Php_Doc_Tag_Value_Node;
+use Php_Stan\Php_Doc_Parser\Ast\Php_Doc\Return_Tag_Value_Node;
+use Php_Stan\Php_Doc_Parser\Ast\Php_Doc\Template_Tag_Value_Node;
+use Php_Stan\Php_Doc_Parser\Ast\Php_Doc\Throws_Tag_Value_Node;
+use Php_Stan\Php_Doc_Parser\Ast\Php_Doc\Var_Tag_Value_Node;
+use Php_Stan\Php_Doc_Parser\Ast\Type\Type_Node;
+use Php_Stan\Type\Mixed_Type;
+use Php_Stan\Type\Type;
+use Rector\Exception\Not_Implemented_Yet_Exception;
+use Rector\Php_Stan_Static_Type_Mapper\Enum\Type_Kind;
+use Rector\Php_Stan_Static_Type_Mapper\Php_Stan_Static_Type_Mapper;
+use Rector\Static_Type_Mapper\Mapper\Php_Parser_Node_Mapper;
+use Rector\Static_Type_Mapper\Naming\Name_Scope_Factory;
+use Rector\Static_Type_Mapper\Php_Doc\Php_Doc_Type_Mapper;
 /**
  * Maps PhpParser <=> PHPStan <=> PHPStan doc <=> string type nodes between all possible formats
  * @see \Rector\Tests\NodeTypeResolver\StaticTypeMapper\StaticTypeMapperTest
  */
-final class StaticTypeMapper
+final class Static_Type_Mapper
 {
     /**
      * @readonly
      */
-    private NameScopeFactory $nameScopeFactory;
+    private Name_Scope_Factory $name_scope_factory;
     /**
      * @readonly
      */
-    private PHPStanStaticTypeMapper $phpStanStaticTypeMapper;
+    private Php_Stan_Static_Type_Mapper $php_stan_static_type_mapper;
     /**
      * @readonly
      */
-    private PhpDocTypeMapper $phpDocTypeMapper;
+    private Php_Doc_Type_Mapper $php_doc_type_mapper;
     /**
      * @readonly
      */
-    private PhpParserNodeMapper $phpParserNodeMapper;
-    public function __construct(NameScopeFactory $nameScopeFactory, PHPStanStaticTypeMapper $phpStanStaticTypeMapper, PhpDocTypeMapper $phpDocTypeMapper, PhpParserNodeMapper $phpParserNodeMapper)
+    private Php_Parser_Node_Mapper $php_parser_node_mapper;
+    public function __construct(Name_Scope_Factory $name_scope_factory, Php_Stan_Static_Type_Mapper $php_stan_static_type_mapper, Php_Doc_Type_Mapper $php_doc_type_mapper, Php_Parser_Node_Mapper $php_parser_node_mapper)
     {
-        $this->nameScopeFactory = $nameScopeFactory;
-        $this->phpStanStaticTypeMapper = $phpStanStaticTypeMapper;
-        $this->phpDocTypeMapper = $phpDocTypeMapper;
-        $this->phpParserNodeMapper = $phpParserNodeMapper;
+        $this->name_scope_factory = $name_scope_factory;
+        $this->php_stan_static_type_mapper = $php_stan_static_type_mapper;
+        $this->php_doc_type_mapper = $php_doc_type_mapper;
+        $this->php_parser_node_mapper = $php_parser_node_mapper;
     }
-    public function mapPHPStanTypeToPHPStanPhpDocTypeNode(Type $phpStanType): TypeNode
+    public function map_php_stan_type_to_php_stan_php_doc_type_node(Type $php_stan_type): Type_Node
     {
-        return $this->phpStanStaticTypeMapper->mapToPHPStanPhpDocTypeNode($phpStanType);
+        return $this->php_stan_static_type_mapper->map_to_php_stan_php_doc_type_node($php_stan_type);
     }
     /**
      * @param TypeKind::* $typeKind
      * @return Name|ComplexType|Identifier|null
      */
-    public function mapPHPStanTypeToPhpParserNode(Type $phpStanType, string $typeKind): ?Node
+    public function map_php_stan_type_to_php_parser_node(Type $php_stan_type, string $type_kind): ?Node
     {
-        return $this->phpStanStaticTypeMapper->mapToPhpParserNode($phpStanType, $typeKind);
+        return $this->php_stan_static_type_mapper->map_to_php_parser_node($php_stan_type, $type_kind);
     }
-    public function mapPhpParserNodePHPStanType(Node $node): Type
+    public function map_php_parser_node_php_stan_type(Node $node): Type
     {
-        return $this->phpParserNodeMapper->mapToPHPStanType($node);
+        return $this->php_parser_node_mapper->map_to_php_stan_type($node);
     }
-    public function mapPHPStanPhpDocTypeToPHPStanType(PhpDocTagValueNode $phpDocTagValueNode, Node $node): Type
+    public function map_php_stan_php_doc_type_to_php_stan_type(Php_Doc_Tag_Value_Node $php_doc_tag_value_node, Node $node): Type
     {
-        if ($phpDocTagValueNode instanceof TemplateTagValueNode) {
+        if ($php_doc_tag_value_node instanceof Template_Tag_Value_Node) {
             // special case
-            if (!$phpDocTagValueNode->bound instanceof TypeNode) {
-                return new MixedType();
+            if (!$php_doc_tag_value_node->bound instanceof Type_Node) {
+                return new Mixed_Type();
             }
-            $nameScope = $this->nameScopeFactory->createNameScopeFromNodeWithoutTemplateTypes($node);
-            return $this->phpDocTypeMapper->mapToPHPStanType($phpDocTagValueNode->bound, $node, $nameScope);
+            $name_scope = $this->name_scope_factory->create_name_scope_from_node_without_template_types($node);
+            return $this->php_doc_type_mapper->map_to_php_stan_type($php_doc_tag_value_node->bound, $node, $name_scope);
         }
-        if ($phpDocTagValueNode instanceof ReturnTagValueNode || $phpDocTagValueNode instanceof ParamTagValueNode || $phpDocTagValueNode instanceof VarTagValueNode || $phpDocTagValueNode instanceof ThrowsTagValueNode) {
-            return $this->mapPHPStanPhpDocTypeNodeToPHPStanType($phpDocTagValueNode->type, $node);
+        if ($php_doc_tag_value_node instanceof Return_Tag_Value_Node || $php_doc_tag_value_node instanceof Param_Tag_Value_Node || $php_doc_tag_value_node instanceof Var_Tag_Value_Node || $php_doc_tag_value_node instanceof Throws_Tag_Value_Node) {
+            return $this->map_php_stan_php_doc_type_node_to_php_stan_type($php_doc_tag_value_node->type, $node);
         }
-        throw new NotImplementedYetException(__METHOD__ . ' for ' . get_class($phpDocTagValueNode));
+        throw new Not_Implemented_Yet_Exception(__METHOD__ . ' for ' . get_class($php_doc_tag_value_node));
     }
-    public function mapPHPStanPhpDocTypeNodeToPHPStanType(TypeNode $typeNode, Node $node): Type
+    public function map_php_stan_php_doc_type_node_to_php_stan_type(Type_Node $type_node, Node $node): Type
     {
-        $nameScope = $this->nameScopeFactory->createNameScopeFromNodeWithoutTemplateTypes($node);
-        return $this->phpDocTypeMapper->mapToPHPStanType($typeNode, $node, $nameScope);
+        $name_scope = $this->name_scope_factory->create_name_scope_from_node_without_template_types($node);
+        return $this->php_doc_type_mapper->map_to_php_stan_type($type_node, $node, $name_scope);
     }
 }

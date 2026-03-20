@@ -1,26 +1,24 @@
 <?php
 
 declare (strict_types=1);
-
 namespace Rector\Util;
 
-use Rector\ValueObject\PhpVersion;
-
-final class PhpVersionFactory
+use Rector\Value_Object\Php_Version;
+final class Php_Version_Factory
 {
     /**
      * @return PhpVersion::*
      */
-    public static function createIntVersion(string $version): int
+    public static function create_int_version(string $version): int
     {
-        $explodeDash = explode('-', $version);
-        if (count($explodeDash) > 1) {
-            $version = $explodeDash[0];
+        $explode_dash = explode('-', $version);
+        if (count($explode_dash) > 1) {
+            $version = $explode_dash[0];
         }
-        $explodeVersion = explode('.', $version);
-        $countExplodedVersion = count($explodeVersion);
-        if ($countExplodedVersion >= 2) {
-            return (int) $explodeVersion[0] * 10000 + (int) $explodeVersion[1] * 100;
+        $explode_version = explode('.', $version);
+        $count_exploded_version = count($explode_version);
+        if ($count_exploded_version >= 2) {
+            return (int) $explode_version[0] * 10000 + (int) $explode_version[1] * 100;
         }
         return (int) $version;
     }

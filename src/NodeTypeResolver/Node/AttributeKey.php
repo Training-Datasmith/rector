@@ -1,15 +1,13 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Node_Type_Resolver\Node;
 
-namespace Rector\NodeTypeResolver\Node;
-
-use PHPStan\Analyser\Scope;
-
+use Php_Stan\Analyser\Scope;
 /**
  * @enum
  */
-final class AttributeKey
+final class Attribute_Key
 {
     /**
      * Internal php-parser key for String_, Int_ and Float_ nodes to hold original value (with "_" separators etc.)

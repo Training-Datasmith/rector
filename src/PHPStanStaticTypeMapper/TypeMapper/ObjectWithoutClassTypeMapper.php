@@ -1,60 +1,58 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Php_Stan_Static_Type_Mapper\Type_Mapper;
 
-namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
-
-use PhpParser\Node;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Name\FullyQualified;
-use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use PHPStan\Type\Accessory\HasMethodType;
-use PHPStan\Type\Accessory\HasPropertyType;
-use PHPStan\Type\ObjectWithoutClassType;
-use PHPStan\Type\Type;
-use Rector\NodeTypeResolver\PHPStan\ObjectWithoutClassTypeWithParentTypes;
-use Rector\Php\PhpVersionProvider;
-use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
-use Rector\ValueObject\PhpVersionFeature;
-
+use Php_Parser\Node;
+use Php_Parser\Node\Identifier;
+use Php_Parser\Node\Name\Fully_Qualified;
+use Php_Stan\Php_Doc_Parser\Ast\Type\Type_Node;
+use Php_Stan\Type\Accessory\Has_Method_Type;
+use Php_Stan\Type\Accessory\Has_Property_Type;
+use Php_Stan\Type\Object_Without_Class_Type;
+use Php_Stan\Type\Type;
+use Rector\Node_Type_Resolver\Php_Stan\Object_Without_Class_Type_With_Parent_Types;
+use Rector\Php\Php_Version_Provider;
+use Rector\Php_Stan_Static_Type_Mapper\Contract\Type_Mapper_Interface;
+use Rector\Value_Object\Php_Version_Feature;
 /**
  * @implements TypeMapperInterface<ObjectWithoutClassType>
  */
-final class ObjectWithoutClassTypeMapper implements TypeMapperInterface
+final class Object_Without_Class_Type_Mapper implements Type_Mapper_Interface
 {
     /**
      * @readonly
      */
-    private PhpVersionProvider $phpVersionProvider;
-    public function __construct(PhpVersionProvider $phpVersionProvider)
+    private Php_Version_Provider $php_version_provider;
+    public function __construct(Php_Version_Provider $php_version_provider)
     {
-        $this->phpVersionProvider = $phpVersionProvider;
+        $this->php_version_provider = $php_version_provider;
     }
-    public function getNodeClass(): string
+    public function get_node_class(): string
     {
-        return ObjectWithoutClassType::class;
+        return Object_Without_Class_Type::class;
     }
     /**
      * @param ObjectWithoutClassType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
+    public function map_to_php_stan_php_doc_type_node(Type $type): Type_Node
     {
-        return $type->toPhpDocNode();
+        return $type->to_php_doc_node();
     }
     /**
      * @param ObjectWithoutClassType|HasMethodType|HasPropertyType $type
      */
-    public function mapToPhpParserNode(Type $type, string $typeKind): ?Node
+    public function map_to_php_parser_node(Type $type, string $type_kind): ?Node
     {
         // special case for anonymous classes that implement another type
-        if ($type instanceof ObjectWithoutClassTypeWithParentTypes) {
-            $parentTypes = $type->getParentTypes();
-            if (count($parentTypes) === 1) {
-                $parentType = $parentTypes[0];
-                return new FullyQualified($parentType->getClassName());
+        if ($type instanceof Object_Without_Class_Type_With_Parent_Types) {
+            $parent_types = $type->get_parent_types();
+            if (count($parent_types) === 1) {
+                $parent_type = $parent_types[0];
+                return new Fully_Qualified($parent_type->get_class_name());
             }
         }
-        if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::OBJECT_TYPE)) {
+        if (!$this->php_version_provider->is_at_least_php_version(Php_Version_Feature::OBJECT_TYPE)) {
             return null;
         }
         return new Identifier('object');

@@ -1,123 +1,121 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Php_Stan_Static_Type_Mapper\Type_Mapper;
 
-namespace Rector\PHPStanStaticTypeMapper\TypeMapper;
-
-use PhpParser\Node;
-use PhpParser\Node\Name\FullyQualified;
-use PHPStan\PhpDocParser\Ast\Node as AstNode;
-use PHPStan\PhpDocParser\Ast\Type\ArrayShapeItemNode;
-use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use PHPStan\PhpDocParser\Ast\Type\UnionTypeNode;
-use PHPStan\Type\IntersectionType;
-use PHPStan\Type\MixedType;
-use PHPStan\Type\ObjectType;
-use PHPStan\Type\ObjectWithoutClassType;
-use PHPStan\Type\Type;
-use Rector\Php\PhpVersionProvider;
-use Rector\PhpDocParser\PhpDocParser\PhpDocNodeTraverser;
-use Rector\PHPStanStaticTypeMapper\Contract\TypeMapperInterface;
-use Rector\PHPStanStaticTypeMapper\Enum\TypeKind;
-use Rector\StaticTypeMapper\Mapper\ScalarStringToTypeMapper;
-use Rector\ValueObject\PhpVersionFeature;
-
+use Php_Parser\Node;
+use Php_Parser\Node\Name\Fully_Qualified;
+use Php_Stan\Php_Doc_Parser\Ast\Node as AstNode;
+use Php_Stan\Php_Doc_Parser\Ast\Type\Array_Shape_Item_Node;
+use Php_Stan\Php_Doc_Parser\Ast\Type\Identifier_Type_Node;
+use Php_Stan\Php_Doc_Parser\Ast\Type\Type_Node;
+use Php_Stan\Php_Doc_Parser\Ast\Type\Union_Type_Node;
+use Php_Stan\Type\Intersection_Type;
+use Php_Stan\Type\Mixed_Type;
+use Php_Stan\Type\Object_Type;
+use Php_Stan\Type\Object_Without_Class_Type;
+use Php_Stan\Type\Type;
+use Rector\Php\Php_Version_Provider;
+use Rector\Php_Doc_Parser\Php_Doc_Parser\Php_Doc_Node_Traverser;
+use Rector\Php_Stan_Static_Type_Mapper\Contract\Type_Mapper_Interface;
+use Rector\Php_Stan_Static_Type_Mapper\Enum\Type_Kind;
+use Rector\Static_Type_Mapper\Mapper\Scalar_String_To_Type_Mapper;
+use Rector\Value_Object\Php_Version_Feature;
 /**
  * @implements TypeMapperInterface<IntersectionType>
  */
-final class IntersectionTypeMapper implements TypeMapperInterface
+final class Intersection_Type_Mapper implements Type_Mapper_Interface
 {
     /**
      * @readonly
      */
-    private PhpVersionProvider $phpVersionProvider;
+    private Php_Version_Provider $php_version_provider;
     /**
      * @readonly
      */
-    private \Rector\PHPStanStaticTypeMapper\TypeMapper\ObjectWithoutClassTypeMapper $objectWithoutClassTypeMapper;
+    private \Rector\Php_Stan_Static_Type_Mapper\Type_Mapper\Object_Without_Class_Type_Mapper $object_without_class_type_mapper;
     /**
      * @readonly
      */
-    private \Rector\PHPStanStaticTypeMapper\TypeMapper\ObjectTypeMapper $objectTypeMapper;
+    private \Rector\Php_Stan_Static_Type_Mapper\Type_Mapper\Object_Type_Mapper $object_type_mapper;
     /**
      * @readonly
      */
-    private ScalarStringToTypeMapper $scalarStringToTypeMapper;
-    public function __construct(PhpVersionProvider $phpVersionProvider, \Rector\PHPStanStaticTypeMapper\TypeMapper\ObjectWithoutClassTypeMapper $objectWithoutClassTypeMapper, \Rector\PHPStanStaticTypeMapper\TypeMapper\ObjectTypeMapper $objectTypeMapper, ScalarStringToTypeMapper $scalarStringToTypeMapper)
+    private Scalar_String_To_Type_Mapper $scalar_string_to_type_mapper;
+    public function __construct(Php_Version_Provider $php_version_provider, \Rector\Php_Stan_Static_Type_Mapper\Type_Mapper\Object_Without_Class_Type_Mapper $object_without_class_type_mapper, \Rector\Php_Stan_Static_Type_Mapper\Type_Mapper\Object_Type_Mapper $object_type_mapper, Scalar_String_To_Type_Mapper $scalar_string_to_type_mapper)
     {
-        $this->phpVersionProvider = $phpVersionProvider;
-        $this->objectWithoutClassTypeMapper = $objectWithoutClassTypeMapper;
-        $this->objectTypeMapper = $objectTypeMapper;
-        $this->scalarStringToTypeMapper = $scalarStringToTypeMapper;
+        $this->php_version_provider = $php_version_provider;
+        $this->object_without_class_type_mapper = $object_without_class_type_mapper;
+        $this->object_type_mapper = $object_type_mapper;
+        $this->scalar_string_to_type_mapper = $scalar_string_to_type_mapper;
     }
-    public function getNodeClass(): string
+    public function get_node_class(): string
     {
-        return IntersectionType::class;
+        return Intersection_Type::class;
     }
     /**
      * @param IntersectionType $type
      */
-    public function mapToPHPStanPhpDocTypeNode(Type $type): TypeNode
+    public function map_to_php_stan_php_doc_type_node(Type $type): Type_Node
     {
-        $typeNode = $type->toPhpDocNode();
-        $phpDocNodeTraverser = new PhpDocNodeTraverser();
-        $phpDocNodeTraverser->traverseWithCallable($typeNode, '', function (AstNode $astNode) {
-            if ($astNode instanceof UnionTypeNode) {
-                return PhpDocNodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+        $type_node = $type->to_php_doc_node();
+        $php_doc_node_traverser = new Php_Doc_Node_Traverser();
+        $php_doc_node_traverser->traverse_with_callable($type_node, '', function (Ast_Node $ast_node) {
+            if ($ast_node instanceof Union_Type_Node) {
+                return Php_Doc_Node_Traverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
-            if ($astNode instanceof ArrayShapeItemNode) {
-                return PhpDocNodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+            if ($ast_node instanceof Array_Shape_Item_Node) {
+                return Php_Doc_Node_Traverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
-            if (!$astNode instanceof IdentifierTypeNode) {
-                return PhpDocNodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+            if (!$ast_node instanceof Identifier_Type_Node) {
+                return Php_Doc_Node_Traverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
-            $type = $this->scalarStringToTypeMapper->mapScalarStringToType($astNode->name);
-            if ($type->isScalar()->yes()) {
-                return PhpDocNodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+            $type = $this->scalar_string_to_type_mapper->map_scalar_string_to_type($ast_node->name);
+            if ($type->is_scalar()->yes()) {
+                return Php_Doc_Node_Traverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
-            if ($type->isArray()->yes()) {
-                return PhpDocNodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+            if ($type->is_array()->yes()) {
+                return Php_Doc_Node_Traverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
-            if ($type instanceof MixedType && $type->isExplicitMixed()) {
-                return PhpDocNodeTraverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+            if ($type instanceof Mixed_Type && $type->is_explicit_mixed()) {
+                return Php_Doc_Node_Traverser::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
-            $astNode->name = '\\' . ltrim($astNode->name, '\\');
-            return $astNode;
+            $ast_node->name = '\\' . ltrim($ast_node->name, '\\');
+            return $ast_node;
         });
-        return $typeNode;
+        return $type_node;
     }
     /**
      * @param IntersectionType $type
      */
-    public function mapToPhpParserNode(Type $type, string $typeKind): ?Node
+    public function map_to_php_parser_node(Type $type, string $type_kind): ?Node
     {
-        if (!$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::INTERSECTION_TYPES)) {
+        if (!$this->php_version_provider->is_at_least_php_version(Php_Version_Feature::INTERSECTION_TYPES)) {
             return null;
         }
-        $intersectionedTypeNodes = [];
-        foreach ($type->getTypes() as $type) {
-            if ($type instanceof ObjectWithoutClassType) {
-                return $this->objectWithoutClassTypeMapper->mapToPhpParserNode($type, $typeKind);
+        $intersectioned_type_nodes = [];
+        foreach ($type->get_types() as $type) {
+            if ($type instanceof Object_Without_Class_Type) {
+                return $this->object_without_class_type_mapper->map_to_php_parser_node($type, $type_kind);
             }
-            if (!$type instanceof ObjectType) {
+            if (!$type instanceof Object_Type) {
                 return null;
             }
-            $resolvedType = $this->objectTypeMapper->mapToPhpParserNode($type, $typeKind);
-            if (!$resolvedType instanceof FullyQualified) {
+            $resolved_type = $this->object_type_mapper->map_to_php_parser_node($type, $type_kind);
+            if (!$resolved_type instanceof Fully_Qualified) {
                 return null;
             }
-            $intersectionedTypeNodes[] = $resolvedType;
+            $intersectioned_type_nodes[] = $resolved_type;
         }
-        if ($intersectionedTypeNodes === []) {
+        if ($intersectioned_type_nodes === []) {
             return null;
         }
-        if (count($intersectionedTypeNodes) === 1) {
-            return current($intersectionedTypeNodes);
+        if (count($intersectioned_type_nodes) === 1) {
+            return current($intersectioned_type_nodes);
         }
-        if ($typeKind === TypeKind::UNION && !$this->phpVersionProvider->isAtLeastPhpVersion(PhpVersionFeature::UNION_INTERSECTION_TYPES)) {
+        if ($type_kind === Type_Kind::UNION && !$this->php_version_provider->is_at_least_php_version(Php_Version_Feature::UNION_INTERSECTION_TYPES)) {
             return null;
         }
-        return new Node\IntersectionType($intersectionedTypeNodes);
+        return new Node\Intersection_Type($intersectioned_type_nodes);
     }
 }

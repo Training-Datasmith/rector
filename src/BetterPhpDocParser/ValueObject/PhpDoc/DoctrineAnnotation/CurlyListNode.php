@@ -1,27 +1,25 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Better_Php_Doc_Parser\Value_Object\Php_Doc\Doctrine_Annotation;
 
-namespace Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation;
-
-use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
-use RectorPrefix202603\Webmozart\Assert\Assert;
-
-final class CurlyListNode extends \Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\AbstractValuesAwareNode
+use Rector\Better_Php_Doc_Parser\Php_Doc\Array_Item_Node;
+use Rector_Prefix202603\Webmozart\Assert\Assert;
+final class Curly_List_Node extends \Rector\Better_Php_Doc_Parser\Value_Object\Php_Doc\Doctrine_Annotation\Abstract_Values_Aware_Node
 {
     /**
      * @var ArrayItemNode[]
      * @readonly
      */
-    private array $arrayItemNodes = [];
+    private array $array_item_nodes = [];
     /**
      * @param ArrayItemNode[] $arrayItemNodes
      */
-    public function __construct(array $arrayItemNodes = [])
+    public function __construct(array $array_item_nodes = [])
     {
-        $this->arrayItemNodes = $arrayItemNodes;
-        Assert::allIsInstanceOf($this->arrayItemNodes, ArrayItemNode::class);
-        parent::__construct($this->arrayItemNodes);
+        $this->array_item_nodes = $array_item_nodes;
+        Assert::all_is_instance_of($this->array_item_nodes, Array_Item_Node::class);
+        parent::__construct($this->array_item_nodes);
     }
     public function __toString(): string
     {
@@ -33,18 +31,18 @@ final class CurlyListNode extends \Rector\BetterPhpDocParser\ValueObject\PhpDoc\
      */
     private function implode(array $array): string
     {
-        $itemContents = '';
-        $lastItemKey = array_key_last($array);
+        $item_contents = '';
+        $last_item_key = array_key_last($array);
         foreach ($array as $key => $value) {
             if (is_int($key)) {
-                $itemContents .= (string) $value;
+                $item_contents .= (string) $value;
             } else {
-                $itemContents .= $key . '=' . $value;
+                $item_contents .= $key . '=' . $value;
             }
-            if ($lastItemKey !== $key) {
-                $itemContents .= ', ';
+            if ($last_item_key !== $key) {
+                $item_contents .= ', ';
             }
         }
-        return '{' . $itemContents . '}';
+        return '{' . $item_contents . '}';
     }
 }

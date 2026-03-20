@@ -1,19 +1,17 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Php_Parser\Parser;
 
-namespace Rector\PhpParser\Parser;
-
-use PhpParser\Node\Stmt;
-use PhpParser\ParserFactory;
-use PhpParser\PhpVersion;
-use PHPStan\Parser\Parser;
-use PHPStan\Parser\RichParser;
-use Rector\DependencyInjection\PHPStan\PHPStanContainerMemento;
-use Rector\PhpParser\ValueObject\StmtsAndTokens;
-use Rector\Util\Reflection\PrivatesAccessor;
-
-final class RectorParser
+use Php_Parser\Node\Stmt;
+use Php_Parser\Parser_Factory;
+use Php_Parser\Php_Version;
+use Php_Stan\Parser\Parser;
+use Php_Stan\Parser\Rich_Parser;
+use Rector\Dependency_Injection\Php_Stan\Php_Stan_Container_Memento;
+use Rector\Php_Parser\Value_Object\Stmts_And_Tokens;
+use Rector\Util\Reflection\Privates_Accessor;
+final class Rector_Parser
 {
     /**
      * @var RichParser
@@ -23,50 +21,50 @@ final class RectorParser
     /**
      * @readonly
      */
-    private PrivatesAccessor $privatesAccessor;
+    private Privates_Accessor $privates_accessor;
     /**
      * @param RichParser $parser
      */
-    public function __construct(Parser $parser, PrivatesAccessor $privatesAccessor)
+    public function __construct(Parser $parser, Privates_Accessor $privates_accessor)
     {
         $this->parser = $parser;
-        $this->privatesAccessor = $privatesAccessor;
-        PHPStanContainerMemento::removeRichVisitors($parser);
+        $this->privates_accessor = $privates_accessor;
+        Php_Stan_Container_Memento::remove_rich_visitors($parser);
     }
     /**
      * @api used by rector-symfony
      *
      * @return Stmt[]
      */
-    public function parseFile(string $filePath): array
+    public function parse_file(string $file_path): array
     {
-        return $this->parser->parseFile($filePath);
+        return $this->parser->parse_file($file_path);
     }
     /**
      * @return Stmt[]
      */
-    public function parseString(string $fileContent): array
+    public function parse_string(string $file_content): array
     {
-        return $this->parser->parseString($fileContent);
+        return $this->parser->parse_string($file_content);
     }
-    public function parseFileContentToStmtsAndTokens(string $fileContent, bool $forNewestSupportedVersion = \true): StmtsAndTokens
+    public function parse_file_content_to_stmts_and_tokens(string $file_content, bool $for_newest_supported_version = \true): Stmts_And_Tokens
     {
-        if (!$forNewestSupportedVersion) {
+        if (!$for_newest_supported_version) {
             // don't directly change PHPStan Parser service
             // to avoid reuse on next file
-            $phpstanParser = clone $this->parser;
-            $parserFactory = new ParserFactory();
-            $parser = $parserFactory->createForVersion(PhpVersion::fromString('7.0'));
-            $this->privatesAccessor->setPrivateProperty($phpstanParser, 'parser', $parser);
-            return $this->resolveStmtsAndTokens($phpstanParser, $fileContent);
+            $phpstan_parser = clone $this->parser;
+            $parser_factory = new Parser_Factory();
+            $parser = $parser_factory->create_for_version(Php_Version::from_string('7.0'));
+            $this->privates_accessor->set_private_property($phpstan_parser, 'parser', $parser);
+            return $this->resolve_stmts_and_tokens($phpstan_parser, $file_content);
         }
-        return $this->resolveStmtsAndTokens($this->parser, $fileContent);
+        return $this->resolve_stmts_and_tokens($this->parser, $file_content);
     }
-    private function resolveStmtsAndTokens(Parser $parser, string $fileContent): StmtsAndTokens
+    private function resolve_stmts_and_tokens(Parser $parser, string $file_content): Stmts_And_Tokens
     {
-        $stmts = $parser->parseString($fileContent);
-        $innerParser = $this->privatesAccessor->getPrivateProperty($parser, 'parser');
-        $tokens = $innerParser->getTokens();
-        return new StmtsAndTokens($stmts, $tokens);
+        $stmts = $parser->parse_string($file_content);
+        $inner_parser = $this->privates_accessor->get_private_property($parser, 'parser');
+        $tokens = $inner_parser->get_tokens();
+        return new Stmts_And_Tokens($stmts, $tokens);
     }
 }

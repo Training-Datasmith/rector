@@ -1,51 +1,49 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Better_Php_Doc_Parser\Php_Doc_Parser;
 
-namespace Rector\BetterPhpDocParser\PhpDocParser;
-
-use PhpParser\Node as PhpNode;
-use PHPStan\PhpDocParser\Ast\Node;
-use PHPStan\PhpDocParser\Ast\PhpDoc\GenericTagValueNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagNode;
-use Rector\BetterPhpDocParser\Contract\PhpDocParser\PhpDocNodeDecoratorInterface;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
-use Rector\PhpDocParser\PhpDocParser\PhpDocNodeTraverser;
-use Rector\StaticTypeMapper\Naming\NameScopeFactory;
-
+use Php_Parser\Node as PhpNode;
+use Php_Stan\Php_Doc_Parser\Ast\Node;
+use Php_Stan\Php_Doc_Parser\Ast\Php_Doc\Generic_Tag_Value_Node;
+use Php_Stan\Php_Doc_Parser\Ast\Php_Doc\Php_Doc_Node;
+use Php_Stan\Php_Doc_Parser\Ast\Php_Doc\Php_Doc_Tag_Node;
+use Rector\Better_Php_Doc_Parser\Contract\Php_Doc_Parser\Php_Doc_Node_Decorator_Interface;
+use Rector\Better_Php_Doc_Parser\Value_Object\Php_Doc_Attribute_Key;
+use Rector\Php_Doc_Parser\Php_Doc_Parser\Php_Doc_Node_Traverser;
+use Rector\Static_Type_Mapper\Naming\Name_Scope_Factory;
 /**
  * Decorate node with fully qualified class name for generic annotations for @uses, @used-by, and @see
  * e.g. @uses Direction::*
  *
  * @see https://docs.phpdoc.org/guide/references/phpdoc/tags/uses.html
  */
-final class PhpDocTagGenericUsesDecorator implements PhpDocNodeDecoratorInterface
+final class Php_Doc_Tag_Generic_Uses_Decorator implements Php_Doc_Node_Decorator_Interface
 {
     /**
      * @readonly
      */
-    private NameScopeFactory $nameScopeFactory;
+    private Name_Scope_Factory $name_scope_factory;
     /**
      * @readonly
      */
-    private PhpDocNodeTraverser $phpDocNodeTraverser;
-    public function __construct(NameScopeFactory $nameScopeFactory, PhpDocNodeTraverser $phpDocNodeTraverser)
+    private Php_Doc_Node_Traverser $php_doc_node_traverser;
+    public function __construct(Name_Scope_Factory $name_scope_factory, Php_Doc_Node_Traverser $php_doc_node_traverser)
     {
-        $this->nameScopeFactory = $nameScopeFactory;
-        $this->phpDocNodeTraverser = $phpDocNodeTraverser;
+        $this->name_scope_factory = $name_scope_factory;
+        $this->php_doc_node_traverser = $php_doc_node_traverser;
     }
-    public function decorate(PhpDocNode $phpDocNode, PhpNode $phpNode): void
+    public function decorate(Php_Doc_Node $php_doc_node, Php_Node $php_node): void
     {
         // iterating all phpdocs has big overhead. peek into the phpdoc to exit early
-        if (strpos($phpDocNode->__toString(), '::') === \false) {
+        if (strpos($php_doc_node->__toString(), '::') === \false) {
             return;
         }
-        $this->phpDocNodeTraverser->traverseWithCallable($phpDocNode, '', function (Node $node) use ($phpNode): ?\PHPStan\PhpDocParser\Ast\Node {
-            if (!$node instanceof PhpDocTagNode) {
+        $this->php_doc_node_traverser->traverse_with_callable($php_doc_node, '', function (Node $node) use ($php_node): ?\Php_Stan\Php_Doc_Parser\Ast\Node {
+            if (!$node instanceof Php_Doc_Tag_Node) {
                 return null;
             }
-            if (!$node->value instanceof GenericTagValueNode) {
+            if (!$node->value instanceof Generic_Tag_Value_Node) {
                 return null;
             }
             if (!in_array($node->name, ['@uses', '@used-by', '@see'], \true)) {
@@ -55,18 +53,18 @@ final class PhpDocTagGenericUsesDecorator implements PhpDocNodeDecoratorInterfac
             if (strpos($reference, '::') === \false) {
                 return null;
             }
-            if ($node->value->hasAttribute(PhpDocAttributeKey::RESOLVED_CLASS)) {
+            if ($node->value->has_attribute(Php_Doc_Attribute_Key::RESOLVED_CLASS)) {
                 return null;
             }
-            $classValue = explode('::', $reference)[0];
-            $className = $this->resolveFullyQualifiedClass($classValue, $phpNode);
-            $node->value->setAttribute(PhpDocAttributeKey::RESOLVED_CLASS, $className);
+            $class_value = explode('::', $reference)[0];
+            $class_name = $this->resolve_fully_qualified_class($class_value, $php_node);
+            $node->value->set_attribute(Php_Doc_Attribute_Key::RESOLVED_CLASS, $class_name);
             return $node;
         });
     }
-    private function resolveFullyQualifiedClass(string $classValue, PhpNode $phpNode): string
+    private function resolve_fully_qualified_class(string $class_value, Php_Node $php_node): string
     {
-        $nameScope = $this->nameScopeFactory->createNameScopeFromNodeWithoutTemplateTypes($phpNode);
-        return $nameScope->resolveStringName($classValue);
+        $name_scope = $this->name_scope_factory->create_name_scope_from_node_without_template_types($php_node);
+        return $name_scope->resolve_string_name($class_value);
     }
 }

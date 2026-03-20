@@ -1,54 +1,52 @@
 <?php
 
 declare (strict_types=1);
-
 namespace Rector\Configuration;
 
-use PhpParser\NodeVisitor;
-use Rector\Bridge\SetProviderCollector;
-use Rector\Bridge\SetRectorsResolver;
-use Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
-use Rector\Composer\InstalledPackageResolver;
-use Rector\Config\Level\CodeQualityLevel;
-use Rector\Config\Level\CodingStyleLevel;
-use Rector\Config\Level\DeadCodeLevel;
-use Rector\Config\Level\TypeDeclarationDocblocksLevel;
-use Rector\Config\Level\TypeDeclarationLevel;
-use Rector\Config\RectorConfig;
-use Rector\Config\RegisteredService;
-use Rector\Configuration\Levels\LevelRulesResolver;
-use Rector\Configuration\Parameter\SimpleParameterProvider;
+use Php_Parser\Node_Visitor;
+use Rector\Bridge\Set_Provider_Collector;
+use Rector\Bridge\Set_Rectors_Resolver;
+use Rector\Caching\Contract\Value_Object\Storage\Cache_Storage_Interface;
+use Rector\Composer\Installed_Package_Resolver;
+use Rector\Config\Level\Code_Quality_Level;
+use Rector\Config\Level\Coding_Style_Level;
+use Rector\Config\Level\Dead_Code_Level;
+use Rector\Config\Level\Type_Declaration_Docblocks_Level;
+use Rector\Config\Level\Type_Declaration_Level;
+use Rector\Config\Rector_Config;
+use Rector\Config\Registered_Service;
+use Rector\Configuration\Levels\Level_Rules_Resolver;
+use Rector\Configuration\Parameter\Simple_Parameter_Provider;
 use Rector\Console\Notifier;
-use Rector\Contract\PhpParser\DecoratingNodeVisitorInterface;
-use Rector\Contract\Rector\ConfigurableRectorInterface;
-use Rector\Contract\Rector\RectorInterface;
-use Rector\Doctrine\Set\DoctrineSetList;
+use Rector\Contract\Php_Parser\Decorating_Node_Visitor_Interface;
+use Rector\Contract\Rector\Configurable_Rector_Interface;
+use Rector\Contract\Rector\Rector_Interface;
+use Rector\Doctrine\Set\Doctrine_Set_List;
 use Rector\Enum\Config\Defaults;
-use Rector\Exception\Configuration\InvalidConfigurationException;
-use Rector\NodeTypeResolver\PHPStan\Scope\Contract\NodeVisitor\ScopeResolverNodeVisitorInterface;
-use Rector\Php\PhpVersionResolver\ComposerJsonPhpVersionResolver;
-use Rector\Php80\Rector\Class_\AnnotationToAttributeRector;
-use Rector\Php80\ValueObject\AnnotationToAttribute;
-use Rector\PHPUnit\Set\PHPUnitSetList;
-use Rector\Set\Contract\SetProviderInterface;
-use Rector\Set\Enum\SetGroup;
-use Rector\Set\SetManager;
-use Rector\Set\ValueObject\DowngradeLevelSetList;
-use Rector\Set\ValueObject\SetList;
-use Rector\Symfony\Set\SymfonyInternalSetList;
-use Rector\Symfony\Set\SymfonySetList;
-use Rector\ValueObject\Configuration\LevelOverflow;
-use Rector\ValueObject\PhpVersion;
-use RectorPrefix202603\Symfony\Component\Console\Input\ArgvInput;
-use RectorPrefix202603\Symfony\Component\Console\Output\ConsoleOutput;
-use RectorPrefix202603\Symfony\Component\Console\Style\SymfonyStyle;
-use RectorPrefix202603\Symfony\Component\Finder\Finder;
-use RectorPrefix202603\Webmozart\Assert\Assert;
-
+use Rector\Exception\Configuration\Invalid_Configuration_Exception;
+use Rector\Node_Type_Resolver\Php_Stan\Scope\Contract\Node_Visitor\Scope_Resolver_Node_Visitor_Interface;
+use Rector\Php\Php_Version_Resolver\Composer_Json_Php_Version_Resolver;
+use Rector\Php80\Rector\Class_\Annotation_To_Attribute_Rector;
+use Rector\Php80\Value_Object\Annotation_To_Attribute;
+use Rector\Php_Unit\Set\Php_Unit_Set_List;
+use Rector\Set\Contract\Set_Provider_Interface;
+use Rector\Set\Enum\Set_Group;
+use Rector\Set\Set_Manager;
+use Rector\Set\Value_Object\Downgrade_Level_Set_List;
+use Rector\Set\Value_Object\Set_List;
+use Rector\Symfony\Set\Symfony_Internal_Set_List;
+use Rector\Symfony\Set\Symfony_Set_List;
+use Rector\Value_Object\Configuration\Level_Overflow;
+use Rector\Value_Object\Php_Version;
+use Rector_Prefix202603\Symfony\Component\Console\Input\Argv_Input;
+use Rector_Prefix202603\Symfony\Component\Console\Output\Console_Output;
+use Rector_Prefix202603\Symfony\Component\Console\Style\Symfony_Style;
+use Rector_Prefix202603\Symfony\Component\Finder\Finder;
+use Rector_Prefix202603\Webmozart\Assert\Assert;
 /**
  * @api
  */
-final class RectorConfigBuilder
+final class Rector_Config_Builder
 {
     /**
      * @var int
@@ -73,218 +71,218 @@ final class RectorConfigBuilder
     /**
      * @var array<class-string<ConfigurableRectorInterface>, mixed[]>
      */
-    private array $rulesWithConfigurations = [];
+    private array $rules_with_configurations = [];
     /**
      * @var string[]
      */
-    private array $fileExtensions = [];
+    private array $file_extensions = [];
     /**
      * @var null|class-string<CacheStorageInterface>
      */
-    private ?string $cacheClass = null;
-    private ?string $cacheDirectory = null;
-    private ?string $containerCacheDirectory = null;
+    private ?string $cache_class = null;
+    private ?string $cache_directory = null;
+    private ?string $container_cache_directory = null;
     private ?bool $parallel = null;
-    private int $parallelTimeoutSeconds = 120;
-    private int $parallelMaxNumberOfProcess = Defaults::PARALLEL_MAX_NUMBER_OF_PROCESS;
-    private int $parallelJobSize = 16;
-    private bool $importNames = \false;
-    private bool $importDocBlockNames = \false;
-    private bool $importShortClasses = \true;
-    private bool $removeUnusedImports = \false;
-    private bool $noDiffs = \false;
-    private ?string $memoryLimit = null;
+    private int $parallel_timeout_seconds = 120;
+    private int $parallel_max_number_of_process = Defaults::PARALLEL_MAX_NUMBER_OF_PROCESS;
+    private int $parallel_job_size = 16;
+    private bool $import_names = \false;
+    private bool $import_doc_block_names = \false;
+    private bool $import_short_classes = \true;
+    private bool $remove_unused_imports = \false;
+    private bool $no_diffs = \false;
+    private ?string $memory_limit = null;
     /**
      * @var string[]
      */
-    private array $autoloadPaths = [];
+    private array $autoload_paths = [];
     /**
      * @var string[]
      */
-    private array $bootstrapFiles = [];
-    private string $indentChar = ' ';
-    private int $indentSize = 4;
+    private array $bootstrap_files = [];
+    private string $indent_char = ' ';
+    private int $indent_size = 4;
     /**
      * @var string[]
      */
-    private array $phpstanConfigs = [];
+    private array $phpstan_configs = [];
     /**
      * @var null|PhpVersion::*
      */
-    private ?int $phpVersion = null;
-    private ?string $symfonyContainerXmlFile = null;
-    private ?string $symfonyContainerPhpFile = null;
+    private ?int $php_version = null;
+    private ?string $symfony_container_xml_file = null;
+    private ?string $symfony_container_php_file = null;
     /**
      * To make sure type declarations set and level are not duplicated,
      * as both contain same rules
      */
-    private ?bool $isTypeCoverageLevelUsed = null;
-    private ?bool $isTypeCoverageDocblockLevelUsed = null;
-    private ?bool $isDeadCodeLevelUsed = null;
-    private ?bool $isCodeQualityLevelUsed = null;
-    private ?bool $isCodingStyleLevelUsed = null;
-    private ?bool $isFluentNewLine = null;
-    private ?bool $isTreatClassesAsFinal = null;
+    private ?bool $is_type_coverage_level_used = null;
+    private ?bool $is_type_coverage_docblock_level_used = null;
+    private ?bool $is_dead_code_level_used = null;
+    private ?bool $is_code_quality_level_used = null;
+    private ?bool $is_coding_style_level_used = null;
+    private ?bool $is_fluent_new_line = null;
+    private ?bool $is_treat_classes_as_final = null;
     /**
      * @var RegisteredService[]
      */
-    private array $registerServices = [];
+    private array $register_services = [];
     /**
      * @var array<SetGroup::*>
      */
-    private array $setGroups = [];
-    private ?bool $reportingRealPath = null;
+    private array $set_groups = [];
+    private ?bool $reporting_real_path = null;
     /**
      * @var string[]
      */
-    private array $groupLoadedSets = [];
-    private ?string $editorUrl = null;
-    private ?bool $isWithPhpSetsUsed = null;
-    private ?bool $isWithPhpLevelUsed = null;
+    private array $group_loaded_sets = [];
+    private ?string $editor_url = null;
+    private ?bool $is_with_php_sets_used = null;
+    private ?bool $is_with_php_level_used = null;
     /**
      * @var array<class-string<SetProviderInterface>,bool>
      */
-    private array $setProviders = [];
+    private array $set_providers = [];
     /**
      * @var LevelOverflow[]
      */
-    private array $levelOverflows = [];
-    public function __invoke(RectorConfig $rectorConfig): void
+    private array $level_overflows = [];
+    public function __invoke(Rector_Config $rector_config): void
     {
-        if ($this->setGroups !== [] || $this->setProviders !== []) {
-            $setProviderCollector = new SetProviderCollector(array_map(\Closure::fromCallable([$rectorConfig, 'make']), \array_keys($this->setProviders)));
-            $setManager = new SetManager($setProviderCollector, new InstalledPackageResolver(getcwd()));
-            $this->groupLoadedSets = $setManager->matchBySetGroups($this->setGroups);
-            SimpleParameterProvider::addParameter(\Rector\Configuration\Option::COMPOSER_BASED_SETS, $this->groupLoadedSets);
+        if ($this->set_groups !== [] || $this->set_providers !== []) {
+            $set_provider_collector = new Set_Provider_Collector(array_map(\Closure::from_callable([$rector_config, 'make']), \array_keys($this->set_providers)));
+            $set_manager = new Set_Manager($set_provider_collector, new Installed_Package_Resolver(getcwd()));
+            $this->group_loaded_sets = $set_manager->match_by_set_groups($this->set_groups);
+            Simple_Parameter_Provider::add_parameter(\Rector\Configuration\Option::COMPOSER_BASED_SETS, $this->group_loaded_sets);
         }
         // not to miss it by accident
-        if ($this->isWithPhpSetsUsed === \true) {
-            $this->sets[] = SetList::PHP_POLYFILLS;
+        if ($this->is_with_php_sets_used === \true) {
+            $this->sets[] = Set_List::PHP_POLYFILLS;
         }
         // merge sets together
-        $this->sets = array_merge($this->sets, $this->groupLoadedSets);
-        $uniqueSets = array_unique($this->sets);
-        if ($this->isWithPhpLevelUsed && $this->isWithPhpSetsUsed) {
-            throw new InvalidConfigurationException(sprintf('Your config uses "withPhp*()" and "withPhpLevel()" methods at the same time.%sPick one of them to avoid rule conflicts.', \PHP_EOL));
+        $this->sets = array_merge($this->sets, $this->group_loaded_sets);
+        $unique_sets = array_unique($this->sets);
+        if ($this->is_with_php_level_used && $this->is_with_php_sets_used) {
+            throw new Invalid_Configuration_Exception(sprintf('Your config uses "withPhp*()" and "withPhpLevel()" methods at the same time.%sPick one of them to avoid rule conflicts.', \PHP_EOL));
         }
-        if (in_array(SetList::TYPE_DECLARATION, $uniqueSets, \true) && $this->isTypeCoverageLevelUsed === \true) {
-            throw new InvalidConfigurationException(sprintf('Your config already enables type declarations set.%sRemove "->withTypeCoverageLevel()" as it only duplicates it, or remove type declaration set.', \PHP_EOL));
+        if (in_array(Set_List::TYPE_DECLARATION, $unique_sets, \true) && $this->is_type_coverage_level_used === \true) {
+            throw new Invalid_Configuration_Exception(sprintf('Your config already enables type declarations set.%sRemove "->withTypeCoverageLevel()" as it only duplicates it, or remove type declaration set.', \PHP_EOL));
         }
-        if (in_array(SetList::TYPE_DECLARATION_DOCBLOCKS, $uniqueSets, \true) && $this->isTypeCoverageDocblockLevelUsed === \true) {
-            throw new InvalidConfigurationException(sprintf('Your config already enables type declarations set.%sRemove "->withTypeCoverageDocblockLevel()" as it only duplicates it, or remove type declaration set.', \PHP_EOL));
+        if (in_array(Set_List::TYPE_DECLARATION_DOCBLOCKS, $unique_sets, \true) && $this->is_type_coverage_docblock_level_used === \true) {
+            throw new Invalid_Configuration_Exception(sprintf('Your config already enables type declarations set.%sRemove "->withTypeCoverageDocblockLevel()" as it only duplicates it, or remove type declaration set.', \PHP_EOL));
         }
-        if (in_array(SetList::DEAD_CODE, $uniqueSets, \true) && $this->isDeadCodeLevelUsed === \true) {
-            throw new InvalidConfigurationException(sprintf('Your config already enables dead code set.%sRemove "->withDeadCodeLevel()" as it only duplicates it, or remove dead code set.', \PHP_EOL));
+        if (in_array(Set_List::DEAD_CODE, $unique_sets, \true) && $this->is_dead_code_level_used === \true) {
+            throw new Invalid_Configuration_Exception(sprintf('Your config already enables dead code set.%sRemove "->withDeadCodeLevel()" as it only duplicates it, or remove dead code set.', \PHP_EOL));
         }
-        if (in_array(SetList::CODE_QUALITY, $uniqueSets, \true) && $this->isCodeQualityLevelUsed === \true) {
-            throw new InvalidConfigurationException(sprintf('Your config already enables code quality set.%sRemove "->withCodeQualityLevel()" as it only duplicates it, or remove code quality set.', \PHP_EOL));
+        if (in_array(Set_List::CODE_QUALITY, $unique_sets, \true) && $this->is_code_quality_level_used === \true) {
+            throw new Invalid_Configuration_Exception(sprintf('Your config already enables code quality set.%sRemove "->withCodeQualityLevel()" as it only duplicates it, or remove code quality set.', \PHP_EOL));
         }
-        if (in_array(SetList::CODING_STYLE, $uniqueSets, \true) && $this->isCodingStyleLevelUsed === \true) {
-            throw new InvalidConfigurationException(sprintf('Your config already enables coding style set.%sRemove "->withCodingStyleLevel()" as it only duplicates it, or remove coding style set.', \PHP_EOL));
+        if (in_array(Set_List::CODING_STYLE, $unique_sets, \true) && $this->is_coding_style_level_used === \true) {
+            throw new Invalid_Configuration_Exception(sprintf('Your config already enables coding style set.%sRemove "->withCodingStyleLevel()" as it only duplicates it, or remove coding style set.', \PHP_EOL));
         }
-        if ($uniqueSets !== []) {
-            $rectorConfig->sets($uniqueSets);
+        if ($unique_sets !== []) {
+            $rector_config->sets($unique_sets);
         }
         // log rules from sets and compare them with explicit rules
-        $setRegisteredRectorClasses = $rectorConfig->getMainRectorClasses();
-        SimpleParameterProvider::addParameter(\Rector\Configuration\Option::SET_REGISTERED_RULES, $setRegisteredRectorClasses);
+        $set_registered_rector_classes = $rector_config->get_main_rector_classes();
+        Simple_Parameter_Provider::add_parameter(\Rector\Configuration\Option::SET_REGISTERED_RULES, $set_registered_rector_classes);
         if ($this->paths !== []) {
-            $rectorConfig->paths($this->paths);
+            $rector_config->paths($this->paths);
         }
         // must be in upper part, as these services might be used by rule registered bellow
-        foreach ($this->registerServices as $registerService) {
-            $rectorConfig->singleton($registerService->getClassName());
-            if ($registerService->getAlias()) {
-                $rectorConfig->alias($registerService->getClassName(), $registerService->getAlias());
+        foreach ($this->register_services as $register_service) {
+            $rector_config->singleton($register_service->get_class_name());
+            if ($register_service->get_alias()) {
+                $rector_config->alias($register_service->get_class_name(), $register_service->get_alias());
             }
-            if ($registerService->getTag()) {
-                $rectorConfig->tag($registerService->getClassName(), $registerService->getTag());
+            if ($register_service->get_tag()) {
+                $rector_config->tag($register_service->get_class_name(), $register_service->get_tag());
             }
         }
         if ($this->skip !== []) {
-            $rectorConfig->skip($this->skip);
+            $rector_config->skip($this->skip);
         }
         if ($this->rules !== []) {
-            $rectorConfig->rules($this->rules);
+            $rector_config->rules($this->rules);
         }
-        foreach ($this->rulesWithConfigurations as $rectorClass => $configurations) {
+        foreach ($this->rules_with_configurations as $rector_class => $configurations) {
             foreach ($configurations as $configuration) {
-                $rectorConfig->ruleWithConfiguration($rectorClass, $configuration);
+                $rector_config->rule_with_configuration($rector_class, $configuration);
             }
         }
-        if ($this->fileExtensions !== []) {
-            $rectorConfig->fileExtensions($this->fileExtensions);
+        if ($this->file_extensions !== []) {
+            $rector_config->file_extensions($this->file_extensions);
         }
-        if ($this->cacheClass !== null) {
-            $rectorConfig->cacheClass($this->cacheClass);
+        if ($this->cache_class !== null) {
+            $rector_config->cache_class($this->cache_class);
         }
-        if ($this->cacheDirectory !== null) {
-            $rectorConfig->cacheDirectory($this->cacheDirectory);
+        if ($this->cache_directory !== null) {
+            $rector_config->cache_directory($this->cache_directory);
         }
-        if ($this->containerCacheDirectory !== null) {
-            $rectorConfig->containerCacheDirectory($this->containerCacheDirectory);
+        if ($this->container_cache_directory !== null) {
+            $rector_config->container_cache_directory($this->container_cache_directory);
         }
-        if ($this->importNames || $this->importDocBlockNames) {
-            $rectorConfig->importNames($this->importNames, $this->importDocBlockNames);
-            $rectorConfig->importShortClasses($this->importShortClasses);
+        if ($this->import_names || $this->import_doc_block_names) {
+            $rector_config->import_names($this->import_names, $this->import_doc_block_names);
+            $rector_config->import_short_classes($this->import_short_classes);
         }
-        if ($this->removeUnusedImports) {
-            $rectorConfig->removeUnusedImports($this->removeUnusedImports);
+        if ($this->remove_unused_imports) {
+            $rector_config->remove_unused_imports($this->remove_unused_imports);
         }
-        if ($this->noDiffs) {
-            $rectorConfig->noDiffs();
+        if ($this->no_diffs) {
+            $rector_config->no_diffs();
         }
-        if ($this->memoryLimit !== null) {
-            $rectorConfig->memoryLimit($this->memoryLimit);
+        if ($this->memory_limit !== null) {
+            $rector_config->memory_limit($this->memory_limit);
         }
-        if ($this->autoloadPaths !== []) {
-            $rectorConfig->autoloadPaths($this->autoloadPaths);
+        if ($this->autoload_paths !== []) {
+            $rector_config->autoload_paths($this->autoload_paths);
         }
-        if ($this->bootstrapFiles !== []) {
-            $rectorConfig->bootstrapFiles($this->bootstrapFiles);
+        if ($this->bootstrap_files !== []) {
+            $rector_config->bootstrap_files($this->bootstrap_files);
         }
-        if ($this->indentChar !== ' ' || $this->indentSize !== 4) {
-            $rectorConfig->indent($this->indentChar, $this->indentSize);
+        if ($this->indent_char !== ' ' || $this->indent_size !== 4) {
+            $rector_config->indent($this->indent_char, $this->indent_size);
         }
-        if ($this->phpstanConfigs !== []) {
-            $rectorConfig->phpstanConfigs($this->phpstanConfigs);
+        if ($this->phpstan_configs !== []) {
+            $rector_config->phpstan_configs($this->phpstan_configs);
         }
-        if ($this->phpVersion !== null) {
-            $rectorConfig->phpVersion($this->phpVersion);
+        if ($this->php_version !== null) {
+            $rector_config->php_version($this->php_version);
         }
         if ($this->parallel !== null) {
             if ($this->parallel) {
-                $rectorConfig->parallel($this->parallelTimeoutSeconds, $this->parallelMaxNumberOfProcess, $this->parallelJobSize);
+                $rector_config->parallel($this->parallel_timeout_seconds, $this->parallel_max_number_of_process, $this->parallel_job_size);
             } else {
-                $rectorConfig->disableParallel();
+                $rector_config->disable_parallel();
             }
         }
-        if ($this->symfonyContainerXmlFile !== null) {
-            $rectorConfig->symfonyContainerXml($this->symfonyContainerXmlFile);
+        if ($this->symfony_container_xml_file !== null) {
+            $rector_config->symfony_container_xml($this->symfony_container_xml_file);
         }
-        if ($this->symfonyContainerPhpFile !== null) {
-            $rectorConfig->symfonyContainerPhp($this->symfonyContainerPhpFile);
+        if ($this->symfony_container_php_file !== null) {
+            $rector_config->symfony_container_php($this->symfony_container_php_file);
         }
-        if ($this->isFluentNewLine !== null) {
-            $rectorConfig->newLineOnFluentCall($this->isFluentNewLine);
+        if ($this->is_fluent_new_line !== null) {
+            $rector_config->new_line_on_fluent_call($this->is_fluent_new_line);
         }
-        if ($this->isTreatClassesAsFinal !== null) {
-            $rectorConfig->treatClassesAsFinal($this->isTreatClassesAsFinal);
+        if ($this->is_treat_classes_as_final !== null) {
+            $rector_config->treat_classes_as_final($this->is_treat_classes_as_final);
         }
-        if ($this->reportingRealPath !== null) {
-            $rectorConfig->reportingRealPath($this->reportingRealPath);
+        if ($this->reporting_real_path !== null) {
+            $rector_config->reporting_real_path($this->reporting_real_path);
         }
-        if ($this->editorUrl !== null) {
-            $rectorConfig->editorUrl($this->editorUrl);
+        if ($this->editor_url !== null) {
+            $rector_config->editor_url($this->editor_url);
         }
-        if ($this->levelOverflows !== []) {
-            $rectorConfig->setOverflowLevels($this->levelOverflows);
+        if ($this->level_overflows !== []) {
+            $rector_config->set_overflow_levels($this->level_overflows);
         }
     }
     /**
      * @param string[] $paths
      */
-    public function withPaths(array $paths): self
+    public function with_paths(array $paths): self
     {
         $this->paths = $paths;
         return $this;
@@ -292,27 +290,27 @@ final class RectorConfigBuilder
     /**
      * @param array<mixed> $skip
      */
-    public function withSkip(array $skip): self
+    public function with_skip(array $skip): self
     {
         $this->skip = array_merge($this->skip, $skip);
         return $this;
     }
-    public function withSkipPath(string $skipPath): self
+    public function with_skip_path(string $skip_path): self
     {
-        if (strpos($skipPath, '*') === \false) {
-            Assert::fileExists($skipPath);
+        if (strpos($skip_path, '*') === \false) {
+            Assert::file_exists($skip_path);
         }
-        return $this->withSkip([$skipPath]);
+        return $this->with_skip([$skip_path]);
     }
     /**
      * Include PHP files from the root directory (including hidden ones),
      * typically ecs.php, rector.php, .php-cs-fixer.dist.php etc.
      */
-    public function withRootFiles(): self
+    public function with_root_files(): self
     {
-        $rootPhpFilesFinder = (new Finder())->files()->in(getcwd())->depth(0)->ignoreDotFiles(\false)->ignoreVCSIgnored(\true)->name('*.php')->name('.*.php')->notName('.phpstorm.meta.php');
-        foreach ($rootPhpFilesFinder as $rootPhpFileFinder) {
-            $path = $rootPhpFileFinder->getRealPath();
+        $root_php_files_finder = (new Finder())->files()->in(getcwd())->depth(0)->ignore_dot_files(\false)->ignore_vcs_ignored(\true)->name('*.php')->name('.*.php')->not_name('.phpstorm.meta.php');
+        foreach ($root_php_files_finder as $root_php_file_finder) {
+            $path = $root_php_file_finder->get_real_path();
             $this->paths[] = $path;
         }
         return $this;
@@ -320,7 +318,7 @@ final class RectorConfigBuilder
     /**
      * @param string[] $sets
      */
-    public function withSets(array $sets): self
+    public function with_sets(array $sets): self
     {
         $this->sets = array_merge($this->sets, $sets);
         return $this;
@@ -328,51 +326,51 @@ final class RectorConfigBuilder
     /**
      * Upgrade your annotations to attributes
      */
-    public function withAttributesSets(bool $symfony = \false, bool $doctrine = \false, bool $mongoDb = \false, bool $gedmo = \false, bool $phpunit = \false, bool $fosRest = \false, bool $jms = \false, bool $sensiolabs = \false, bool $behat = \false, bool $all = \false, bool $symfonyRoute = \false, bool $symfonyValidator = \false): self
+    public function with_attributes_sets(bool $symfony = \false, bool $doctrine = \false, bool $mongo_db = \false, bool $gedmo = \false, bool $phpunit = \false, bool $fos_rest = \false, bool $jms = \false, bool $sensiolabs = \false, bool $behat = \false, bool $all = \false, bool $symfony_route = \false, bool $symfony_validator = \false): self
     {
         // if nothing is passed, enable all as convention in other method
         if (func_get_args() === []) {
             $all = \true;
         }
         if ($symfony || $all) {
-            $this->sets[] = SymfonySetList::ANNOTATIONS_TO_ATTRIBUTES;
+            $this->sets[] = Symfony_Set_List::ANNOTATIONS_TO_ATTRIBUTES;
         }
         // dx for more granular upgrade
-        if ($symfonyRoute) {
+        if ($symfony_route) {
             if ($symfony) {
-                throw new InvalidConfigurationException('$symfonyRoute is already included in $symfony. Use $symfony only');
+                throw new Invalid_Configuration_Exception('$symfonyRoute is already included in $symfony. Use $symfony only');
             }
-            $this->withConfiguredRule(AnnotationToAttributeRector::class, [new AnnotationToAttribute('Symfony\Component\Routing\Annotation\Route')]);
+            $this->with_configured_rule(Annotation_To_Attribute_Rector::class, [new Annotation_To_Attribute('Symfony\Component\Routing\Annotation\Route')]);
         }
-        if ($symfonyValidator) {
+        if ($symfony_validator) {
             if ($symfony) {
-                throw new InvalidConfigurationException('$symfonyValidator is already included in $symfony. Use $symfony only');
+                throw new Invalid_Configuration_Exception('$symfonyValidator is already included in $symfony. Use $symfony only');
             }
-            $this->sets[] = SymfonySetList::SYMFONY_52_VALIDATOR_ATTRIBUTES;
+            $this->sets[] = Symfony_Set_List::SYMFONY_52_VALIDATOR_ATTRIBUTES;
         }
         if ($doctrine || $all) {
-            $this->sets[] = DoctrineSetList::ANNOTATIONS_TO_ATTRIBUTES;
+            $this->sets[] = Doctrine_Set_List::ANNOTATIONS_TO_ATTRIBUTES;
         }
-        if ($mongoDb || $all) {
-            $this->sets[] = DoctrineSetList::MONGODB__ANNOTATIONS_TO_ATTRIBUTES;
+        if ($mongo_db || $all) {
+            $this->sets[] = Doctrine_Set_List::MONGODB__ANNOTATIONS_TO_ATTRIBUTES;
         }
         if ($gedmo || $all) {
-            $this->sets[] = DoctrineSetList::GEDMO_ANNOTATIONS_TO_ATTRIBUTES;
+            $this->sets[] = Doctrine_Set_List::GEDMO_ANNOTATIONS_TO_ATTRIBUTES;
         }
-        if ($fosRest || $all) {
-            $this->sets[] = SymfonyInternalSetList::FOS_REST_ANNOTATIONS_TO_ATTRIBUTES;
+        if ($fos_rest || $all) {
+            $this->sets[] = Symfony_Internal_Set_List::FOS_REST_ANNOTATIONS_TO_ATTRIBUTES;
         }
         if ($jms || $all) {
-            $this->sets[] = SymfonyInternalSetList::JMS_ANNOTATIONS_TO_ATTRIBUTES;
+            $this->sets[] = Symfony_Internal_Set_List::JMS_ANNOTATIONS_TO_ATTRIBUTES;
         }
         if ($sensiolabs || $all) {
-            $this->sets[] = SymfonyInternalSetList::SENSIOLABS_ANNOTATIONS_TO_ATTRIBUTES;
+            $this->sets[] = Symfony_Internal_Set_List::SENSIOLABS_ANNOTATIONS_TO_ATTRIBUTES;
         }
         if ($phpunit || $all) {
-            $this->sets[] = PHPUnitSetList::ANNOTATIONS_TO_ATTRIBUTES;
+            $this->sets[] = Php_Unit_Set_List::ANNOTATIONS_TO_ATTRIBUTES;
         }
         if ($behat || $all) {
-            $this->sets[] = SetList::BEHAT_ANNOTATIONS_TO_ATTRIBUTES;
+            $this->sets[] = Set_List::BEHAT_ANNOTATIONS_TO_ATTRIBUTES;
         }
         return $this;
     }
@@ -380,7 +378,7 @@ final class RectorConfigBuilder
      * What PHP sets should be applied? By default the same version
      * as composer.json has is used
      */
-    public function withPhpSets(
+    public function with_php_sets(
         bool $php83 = \false,
         bool $php82 = \false,
         bool $php81 = \false,
@@ -397,178 +395,180 @@ final class RectorConfigBuilder
         // place on later as BC break when used in php 7.x without named arg
         bool $php84 = \false,
         bool $php85 = \false
-    ): self {
-        if ($this->isWithPhpSetsUsed === \true) {
-            throw new InvalidConfigurationException(sprintf('Method "%s()" can be called only once. It always includes all previous sets UP TO the defined version.%sThe best practise is to call it once with no argument. That way it will pick up PHP version from composer.json and your project will always stay up to date.', __METHOD__, \PHP_EOL));
+    ): self
+    {
+        if ($this->is_with_php_sets_used === \true) {
+            throw new Invalid_Configuration_Exception(sprintf('Method "%s()" can be called only once. It always includes all previous sets UP TO the defined version.%sThe best practise is to call it once with no argument. That way it will pick up PHP version from composer.json and your project will always stay up to date.', __METHOD__, \PHP_EOL));
         }
-        $this->isWithPhpSetsUsed = \true;
-        $pickedArguments = array_filter(func_get_args());
-        if ($pickedArguments !== []) {
-            Notifier::errorWithPhpSetsNotSuitableForPHP74AndLower();
+        $this->is_with_php_sets_used = \true;
+        $picked_arguments = array_filter(func_get_args());
+        if ($picked_arguments !== []) {
+            Notifier::error_with_php_sets_not_suitable_for_php74and_lower();
         }
-        if (count($pickedArguments) > 1) {
-            throw new InvalidConfigurationException(sprintf('Pick only one version target in "withPhpSets()". All rules up to this version will be used.%sTo use your composer.json PHP version, keep arguments empty.', \PHP_EOL));
+        if (count($picked_arguments) > 1) {
+            throw new Invalid_Configuration_Exception(sprintf('Pick only one version target in "withPhpSets()". All rules up to this version will be used.%sTo use your composer.json PHP version, keep arguments empty.', \PHP_EOL));
         }
-        if ($pickedArguments === []) {
-            $projectPhpVersion = ComposerJsonPhpVersionResolver::resolveFromCwdOrFail();
-            $phpLevelSets = \Rector\Configuration\PhpLevelSetResolver::resolveFromPhpVersion($projectPhpVersion);
-            $this->sets = array_merge($this->sets, $phpLevelSets);
+        if ($picked_arguments === []) {
+            $project_php_version = Composer_Json_Php_Version_Resolver::resolve_from_cwd_or_fail();
+            $php_level_sets = \Rector\Configuration\Php_Level_Set_Resolver::resolve_from_php_version($project_php_version);
+            $this->sets = array_merge($this->sets, $php_level_sets);
             return $this;
         }
         if ($php53) {
-            $this->withPhp53Sets();
+            $this->with_php53sets();
             return $this;
         }
         if ($php54) {
-            $this->withPhp54Sets();
+            $this->with_php54sets();
             return $this;
         }
         if ($php55) {
-            $this->withPhp55Sets();
+            $this->with_php55sets();
             return $this;
         }
         if ($php56) {
-            $this->withPhp56Sets();
+            $this->with_php56sets();
             return $this;
         }
         if ($php70) {
-            $this->withPhp70Sets();
+            $this->with_php70sets();
             return $this;
         }
         if ($php71) {
-            $this->withPhp71Sets();
+            $this->with_php71sets();
             return $this;
         }
         if ($php72) {
-            $this->withPhp72Sets();
+            $this->with_php72sets();
             return $this;
         }
         if ($php73) {
-            $this->withPhp73Sets();
+            $this->with_php73sets();
             return $this;
         }
         if ($php74) {
-            $this->withPhp74Sets();
+            $this->with_php74sets();
             return $this;
         }
         if ($php80) {
-            $targetPhpVersion = PhpVersion::PHP_80;
+            $target_php_version = Php_Version::PHP_80;
         } elseif ($php81) {
-            $targetPhpVersion = PhpVersion::PHP_81;
+            $target_php_version = Php_Version::PHP_81;
         } elseif ($php82) {
-            $targetPhpVersion = PhpVersion::PHP_82;
+            $target_php_version = Php_Version::PHP_82;
         } elseif ($php83) {
-            $targetPhpVersion = PhpVersion::PHP_83;
+            $target_php_version = Php_Version::PHP_83;
         } elseif ($php84) {
-            $targetPhpVersion = PhpVersion::PHP_84;
+            $target_php_version = Php_Version::PHP_84;
         } elseif ($php85) {
-            $targetPhpVersion = PhpVersion::PHP_85;
+            $target_php_version = Php_Version::PHP_85;
         } else {
-            throw new InvalidConfigurationException('Invalid PHP version set');
+            throw new Invalid_Configuration_Exception('Invalid PHP version set');
         }
-        $phpLevelSets = \Rector\Configuration\PhpLevelSetResolver::resolveFromPhpVersion($targetPhpVersion);
-        $this->sets = array_merge($this->sets, $phpLevelSets);
+        $php_level_sets = \Rector\Configuration\Php_Level_Set_Resolver::resolve_from_php_version($target_php_version);
+        $this->sets = array_merge($this->sets, $php_level_sets);
         return $this;
     }
     /**
      * Following methods are suitable for PHP 7.4 and lower, before named args
      * Let's keep them without warning, in case Rector is run on both PHP 7.4 and PHP 8.0 in CI
      */
-    public function withPhp53Sets(): self
+    public function with_php53sets(): self
     {
-        $this->isWithPhpSetsUsed = \true;
-        $this->sets = array_merge($this->sets, \Rector\Configuration\PhpLevelSetResolver::resolveFromPhpVersion(PhpVersion::PHP_53));
+        $this->is_with_php_sets_used = \true;
+        $this->sets = array_merge($this->sets, \Rector\Configuration\Php_Level_Set_Resolver::resolve_from_php_version(Php_Version::PHP_53));
         return $this;
     }
-    public function withPhp54Sets(): self
+    public function with_php54sets(): self
     {
-        $this->isWithPhpSetsUsed = \true;
-        $this->sets = array_merge($this->sets, \Rector\Configuration\PhpLevelSetResolver::resolveFromPhpVersion(PhpVersion::PHP_54));
+        $this->is_with_php_sets_used = \true;
+        $this->sets = array_merge($this->sets, \Rector\Configuration\Php_Level_Set_Resolver::resolve_from_php_version(Php_Version::PHP_54));
         return $this;
     }
-    public function withPhp55Sets(): self
+    public function with_php55sets(): self
     {
-        $this->isWithPhpSetsUsed = \true;
-        $this->sets = array_merge($this->sets, \Rector\Configuration\PhpLevelSetResolver::resolveFromPhpVersion(PhpVersion::PHP_55));
+        $this->is_with_php_sets_used = \true;
+        $this->sets = array_merge($this->sets, \Rector\Configuration\Php_Level_Set_Resolver::resolve_from_php_version(Php_Version::PHP_55));
         return $this;
     }
-    public function withPhp56Sets(): self
+    public function with_php56sets(): self
     {
-        $this->isWithPhpSetsUsed = \true;
-        $this->sets = array_merge($this->sets, \Rector\Configuration\PhpLevelSetResolver::resolveFromPhpVersion(PhpVersion::PHP_56));
+        $this->is_with_php_sets_used = \true;
+        $this->sets = array_merge($this->sets, \Rector\Configuration\Php_Level_Set_Resolver::resolve_from_php_version(Php_Version::PHP_56));
         return $this;
     }
-    public function withPhp70Sets(): self
+    public function with_php70sets(): self
     {
-        $this->isWithPhpSetsUsed = \true;
-        $this->sets = array_merge($this->sets, \Rector\Configuration\PhpLevelSetResolver::resolveFromPhpVersion(PhpVersion::PHP_70));
+        $this->is_with_php_sets_used = \true;
+        $this->sets = array_merge($this->sets, \Rector\Configuration\Php_Level_Set_Resolver::resolve_from_php_version(Php_Version::PHP_70));
         return $this;
     }
-    public function withPhp71Sets(): self
+    public function with_php71sets(): self
     {
-        $this->isWithPhpSetsUsed = \true;
-        $this->sets = array_merge($this->sets, \Rector\Configuration\PhpLevelSetResolver::resolveFromPhpVersion(PhpVersion::PHP_71));
+        $this->is_with_php_sets_used = \true;
+        $this->sets = array_merge($this->sets, \Rector\Configuration\Php_Level_Set_Resolver::resolve_from_php_version(Php_Version::PHP_71));
         return $this;
     }
-    public function withPhp72Sets(): self
+    public function with_php72sets(): self
     {
-        $this->isWithPhpSetsUsed = \true;
-        $this->sets = array_merge($this->sets, \Rector\Configuration\PhpLevelSetResolver::resolveFromPhpVersion(PhpVersion::PHP_72));
+        $this->is_with_php_sets_used = \true;
+        $this->sets = array_merge($this->sets, \Rector\Configuration\Php_Level_Set_Resolver::resolve_from_php_version(Php_Version::PHP_72));
         return $this;
     }
-    public function withPhp73Sets(): self
+    public function with_php73sets(): self
     {
-        $this->isWithPhpSetsUsed = \true;
-        $this->sets = array_merge($this->sets, \Rector\Configuration\PhpLevelSetResolver::resolveFromPhpVersion(PhpVersion::PHP_73));
+        $this->is_with_php_sets_used = \true;
+        $this->sets = array_merge($this->sets, \Rector\Configuration\Php_Level_Set_Resolver::resolve_from_php_version(Php_Version::PHP_73));
         return $this;
     }
-    public function withPhp74Sets(): self
+    public function with_php74sets(): self
     {
-        $this->isWithPhpSetsUsed = \true;
-        $this->sets = array_merge($this->sets, \Rector\Configuration\PhpLevelSetResolver::resolveFromPhpVersion(PhpVersion::PHP_74));
+        $this->is_with_php_sets_used = \true;
+        $this->sets = array_merge($this->sets, \Rector\Configuration\Php_Level_Set_Resolver::resolve_from_php_version(Php_Version::PHP_74));
         return $this;
     }
     // there is no withPhp80Sets() and above,
     // as we already use PHP 8.0 and should go with withPhpSets() instead
-    public function withPreparedSets(
-        bool $deadCode = \false,
-        bool $codeQuality = \false,
-        bool $codingStyle = \false,
-        bool $typeDeclarations = \false,
-        bool $typeDeclarationDocblocks = \false,
+    public function with_prepared_sets(
+        bool $dead_code = \false,
+        bool $code_quality = \false,
+        bool $coding_style = \false,
+        bool $type_declarations = \false,
+        bool $type_declaration_docblocks = \false,
         bool $privatization = \false,
         bool $naming = \false,
-        bool $instanceOf = \false,
-        bool $earlyReturn = \false,
+        bool $instance_of = \false,
+        bool $early_return = \false,
         /** @deprecated */
-        bool $strictBooleans = \false,
+        bool $strict_booleans = \false,
         bool $carbon = \false,
-        bool $rectorPreset = \false,
-        bool $phpunitCodeQuality = \false,
-        bool $doctrineCodeQuality = \false,
-        bool $symfonyCodeQuality = \false,
-        bool $symfonyConfigs = \false
-    ): self {
-        Notifier::notifyNotSuitableMethodForPHP74(__METHOD__);
-        if ($strictBooleans) {
+        bool $rector_preset = \false,
+        bool $phpunit_code_quality = \false,
+        bool $doctrine_code_quality = \false,
+        bool $symfony_code_quality = \false,
+        bool $symfony_configs = \false
+    ): self
+    {
+        Notifier::notify_not_suitable_method_for_php74(__METHOD__);
+        if ($strict_booleans) {
             $message = 'The "strictBooleans" set is deprecated as mostly risky and not practical. Remove it from withPreparedSets() method and use "codeQuality" and "codingStyle" sets instead. They already contain more granular and stable rules on same note.';
-            $symfonyStyle = new SymfonyStyle(new ArgvInput(), new ConsoleOutput());
-            $symfonyStyle->warning($message);
+            $symfony_style = new Symfony_Style(new Argv_Input(), new Console_Output());
+            $symfony_style->warning($message);
         }
-        $setMap = [SetList::DEAD_CODE => $deadCode, SetList::CODE_QUALITY => $codeQuality, SetList::CODING_STYLE => $codingStyle, SetList::TYPE_DECLARATION => $typeDeclarations, SetList::TYPE_DECLARATION_DOCBLOCKS => $typeDeclarationDocblocks, SetList::PRIVATIZATION => $privatization, SetList::NAMING => $naming, SetList::INSTANCEOF => $instanceOf, SetList::EARLY_RETURN => $earlyReturn, SetList::CARBON => $carbon, SetList::RECTOR_PRESET => $rectorPreset, PHPUnitSetList::PHPUNIT_CODE_QUALITY => $phpunitCodeQuality, DoctrineSetList::DOCTRINE_CODE_QUALITY => $doctrineCodeQuality, SymfonySetList::SYMFONY_CODE_QUALITY => $symfonyCodeQuality, SymfonySetList::CONFIGS => $symfonyConfigs];
-        foreach ($setMap as $setPath => $isEnabled) {
-            if ($isEnabled) {
-                $this->sets[] = $setPath;
+        $set_map = [Set_List::DEAD_CODE => $dead_code, Set_List::CODE_QUALITY => $code_quality, Set_List::CODING_STYLE => $coding_style, Set_List::TYPE_DECLARATION => $type_declarations, Set_List::TYPE_DECLARATION_DOCBLOCKS => $type_declaration_docblocks, Set_List::PRIVATIZATION => $privatization, Set_List::NAMING => $naming, Set_List::INSTANCEOF => $instance_of, Set_List::EARLY_RETURN => $early_return, Set_List::CARBON => $carbon, Set_List::RECTOR_PRESET => $rector_preset, Php_Unit_Set_List::PHPUNIT_CODE_QUALITY => $phpunit_code_quality, Doctrine_Set_List::DOCTRINE_CODE_QUALITY => $doctrine_code_quality, Symfony_Set_List::SYMFONY_CODE_QUALITY => $symfony_code_quality, Symfony_Set_List::CONFIGS => $symfony_configs];
+        foreach ($set_map as $set_path => $is_enabled) {
+            if ($is_enabled) {
+                $this->sets[] = $set_path;
             }
         }
         return $this;
     }
-    public function withComposerBased(bool $twig = \false, bool $doctrine = \false, bool $phpunit = \false, bool $symfony = \false, bool $netteUtils = \false, bool $laravel = \false): self
+    public function with_composer_based(bool $twig = \false, bool $doctrine = \false, bool $phpunit = \false, bool $symfony = \false, bool $nette_utils = \false, bool $laravel = \false): self
     {
-        $setMap = [SetGroup::TWIG => $twig, SetGroup::DOCTRINE => $doctrine, SetGroup::PHPUNIT => $phpunit, SetGroup::SYMFONY => $symfony, SetGroup::NETTE_UTILS => $netteUtils, SetGroup::LARAVEL => $laravel];
-        foreach ($setMap as $setPath => $isEnabled) {
-            if ($isEnabled) {
-                $this->setGroups[] = $setPath;
+        $set_map = [Set_Group::TWIG => $twig, Set_Group::DOCTRINE => $doctrine, Set_Group::PHPUNIT => $phpunit, Set_Group::SYMFONY => $symfony, Set_Group::NETTE_UTILS => $nette_utils, Set_Group::LARAVEL => $laravel];
+        foreach ($set_map as $set_path => $is_enabled) {
+            if ($is_enabled) {
+                $this->set_groups[] = $set_path;
             }
         }
         return $this;
@@ -576,208 +576,208 @@ final class RectorConfigBuilder
     /**
      * @param array<class-string<RectorInterface>> $rules
      */
-    public function withRules(array $rules): self
+    public function with_rules(array $rules): self
     {
         $this->rules = array_merge($this->rules, $rules);
-        if (SimpleParameterProvider::provideBoolParameter(\Rector\Configuration\Option::IS_RECTORCONFIG_BUILDER_RECREATED, \false) === \false) {
+        if (Simple_Parameter_Provider::provide_bool_parameter(\Rector\Configuration\Option::IS_RECTORCONFIG_BUILDER_RECREATED, \false) === \false) {
             // log all explicitly registered rules on root rector.php
             // we only check the non-configurable rules, as the configurable ones might override them
-            $nonConfigurableRules = array_filter($rules, fn (string $rule): bool => !is_a($rule, ConfigurableRectorInterface::class, \true));
-            SimpleParameterProvider::addParameter(\Rector\Configuration\Option::ROOT_STANDALONE_REGISTERED_RULES, $nonConfigurableRules);
+            $non_configurable_rules = array_filter($rules, fn(string $rule): bool => !is_a($rule, Configurable_Rector_Interface::class, \true));
+            Simple_Parameter_Provider::add_parameter(\Rector\Configuration\Option::ROOT_STANDALONE_REGISTERED_RULES, $non_configurable_rules);
         }
         return $this;
     }
     /**
      * @param string[] $fileExtensions
      */
-    public function withFileExtensions(array $fileExtensions): self
+    public function with_file_extensions(array $file_extensions): self
     {
-        $this->fileExtensions = $fileExtensions;
+        $this->file_extensions = $file_extensions;
         return $this;
     }
     /**
      * @param class-string<CacheStorageInterface>|null $cacheClass
      */
-    public function withCache(?string $cacheDirectory = null, ?string $cacheClass = null, ?string $containerCacheDirectory = null): self
+    public function with_cache(?string $cache_directory = null, ?string $cache_class = null, ?string $container_cache_directory = null): self
     {
-        $this->cacheDirectory = $cacheDirectory;
-        $this->cacheClass = $cacheClass;
-        $this->containerCacheDirectory = $containerCacheDirectory;
+        $this->cache_directory = $cache_directory;
+        $this->cache_class = $cache_class;
+        $this->container_cache_directory = $container_cache_directory;
         return $this;
     }
     /**
      * @param class-string<ConfigurableRectorInterface> $rectorClass
      * @param mixed[] $configuration
      */
-    public function withConfiguredRule(string $rectorClass, array $configuration): self
+    public function with_configured_rule(string $rector_class, array $configuration): self
     {
-        $this->rulesWithConfigurations[$rectorClass][] = $configuration;
+        $this->rules_with_configurations[$rector_class][] = $configuration;
         return $this;
     }
-    public function withParallel(?int $timeoutSeconds = null, ?int $maxNumberOfProcess = null, ?int $jobSize = null): self
+    public function with_parallel(?int $timeout_seconds = null, ?int $max_number_of_process = null, ?int $job_size = null): self
     {
         $this->parallel = \true;
-        if (is_int($timeoutSeconds)) {
-            $this->parallelTimeoutSeconds = $timeoutSeconds;
+        if (is_int($timeout_seconds)) {
+            $this->parallel_timeout_seconds = $timeout_seconds;
         }
-        if (is_int($maxNumberOfProcess)) {
-            $this->parallelMaxNumberOfProcess = $maxNumberOfProcess;
+        if (is_int($max_number_of_process)) {
+            $this->parallel_max_number_of_process = $max_number_of_process;
         }
-        if (is_int($jobSize)) {
-            $this->parallelJobSize = $jobSize;
+        if (is_int($job_size)) {
+            $this->parallel_job_size = $job_size;
         }
         return $this;
     }
-    public function withoutParallel(): self
+    public function without_parallel(): self
     {
         $this->parallel = \false;
         return $this;
     }
-    public function withImportNames(bool $importNames = \true, bool $importDocBlockNames = \true, bool $importShortClasses = \true, bool $removeUnusedImports = \false): self
+    public function with_import_names(bool $import_names = \true, bool $import_doc_block_names = \true, bool $import_short_classes = \true, bool $remove_unused_imports = \false): self
     {
-        $this->importNames = $importNames;
-        $this->importDocBlockNames = $importDocBlockNames;
-        $this->importShortClasses = $importShortClasses;
-        $this->removeUnusedImports = $removeUnusedImports;
+        $this->import_names = $import_names;
+        $this->import_doc_block_names = $import_doc_block_names;
+        $this->import_short_classes = $import_short_classes;
+        $this->remove_unused_imports = $remove_unused_imports;
         return $this;
     }
-    public function withNoDiffs(): self
+    public function with_no_diffs(): self
     {
-        $this->noDiffs = \true;
+        $this->no_diffs = \true;
         return $this;
     }
-    public function withMemoryLimit(string $memoryLimit): self
+    public function with_memory_limit(string $memory_limit): self
     {
-        $this->memoryLimit = $memoryLimit;
+        $this->memory_limit = $memory_limit;
         return $this;
     }
-    public function withIndent(string $indentChar = ' ', int $indentSize = 4): self
+    public function with_indent(string $indent_char = ' ', int $indent_size = 4): self
     {
-        $this->indentChar = $indentChar;
-        $this->indentSize = $indentSize;
+        $this->indent_char = $indent_char;
+        $this->indent_size = $indent_size;
         return $this;
     }
     /**
      * @param string[] $autoloadPaths
      */
-    public function withAutoloadPaths(array $autoloadPaths): self
+    public function with_autoload_paths(array $autoload_paths): self
     {
-        $this->autoloadPaths = $autoloadPaths;
+        $this->autoload_paths = $autoload_paths;
         return $this;
     }
     /**
      * @param string[] $bootstrapFiles
      */
-    public function withBootstrapFiles(array $bootstrapFiles): self
+    public function with_bootstrap_files(array $bootstrap_files): self
     {
-        $this->bootstrapFiles = $bootstrapFiles;
+        $this->bootstrap_files = $bootstrap_files;
         return $this;
     }
     /**
      * @param string[] $phpstanConfigs
      */
-    public function withPHPStanConfigs(array $phpstanConfigs): self
+    public function with_php_stan_configs(array $phpstan_configs): self
     {
-        $this->phpstanConfigs = $phpstanConfigs;
+        $this->phpstan_configs = $phpstan_configs;
         return $this;
     }
     /**
      * @param PhpVersion::* $phpVersion
      */
-    public function withPhpVersion(int $phpVersion): self
+    public function with_php_version(int $php_version): self
     {
-        $this->phpVersion = $phpVersion;
+        $this->php_version = $php_version;
         return $this;
     }
-    public function withSymfonyContainerXml(string $symfonyContainerXmlFile): self
+    public function with_symfony_container_xml(string $symfony_container_xml_file): self
     {
-        if (substr_compare($symfonyContainerXmlFile, '.xml', -strlen('.xml')) !== 0) {
-            throw new InvalidConfigurationException(sprintf('Provided dumped Symfony container must have "xml" suffix. "%s" given', $symfonyContainerXmlFile));
+        if (substr_compare($symfony_container_xml_file, '.xml', -strlen('.xml')) !== 0) {
+            throw new Invalid_Configuration_Exception(sprintf('Provided dumped Symfony container must have "xml" suffix. "%s" given', $symfony_container_xml_file));
         }
-        $this->symfonyContainerXmlFile = $symfonyContainerXmlFile;
+        $this->symfony_container_xml_file = $symfony_container_xml_file;
         return $this;
     }
-    public function withSymfonyContainerPhp(string $symfonyContainerPhpFile): self
+    public function with_symfony_container_php(string $symfony_container_php_file): self
     {
-        if (substr_compare($symfonyContainerPhpFile, '.php', -strlen('.php')) !== 0) {
-            throw new InvalidConfigurationException(sprintf('Provided dumped Symfony container must have "php" suffix. "%s" given', $symfonyContainerPhpFile));
+        if (substr_compare($symfony_container_php_file, '.php', -strlen('.php')) !== 0) {
+            throw new Invalid_Configuration_Exception(sprintf('Provided dumped Symfony container must have "php" suffix. "%s" given', $symfony_container_php_file));
         }
-        $this->symfonyContainerPhpFile = $symfonyContainerPhpFile;
+        $this->symfony_container_php_file = $symfony_container_php_file;
         return $this;
     }
     /**
      * Raise your type coverage from the safest type rules
      * to more affecting ones, one level at a time
      */
-    public function withTypeCoverageLevel(int $level): self
+    public function with_type_coverage_level(int $level): self
     {
         Assert::natural($level);
-        $this->isTypeCoverageLevelUsed = \true;
-        $levelRules = LevelRulesResolver::resolve($level, TypeDeclarationLevel::RULES, __METHOD__);
+        $this->is_type_coverage_level_used = \true;
+        $level_rules = Level_Rules_Resolver::resolve($level, Type_Declaration_Level::RULES, __METHOD__);
         // too high
-        $levelRulesCount = count($levelRules);
-        if ($levelRulesCount + self::MAX_LEVEL_GAP < $level) {
-            $this->levelOverflows[] = new LevelOverflow('withTypeCoverageLevel', $level, $levelRulesCount, 'typeDeclarations', 'TYPE_DECLARATION');
+        $level_rules_count = count($level_rules);
+        if ($level_rules_count + self::MAX_LEVEL_GAP < $level) {
+            $this->level_overflows[] = new Level_Overflow('withTypeCoverageLevel', $level, $level_rules_count, 'typeDeclarations', 'TYPE_DECLARATION');
         }
-        $this->rules = array_merge($this->rules, $levelRules);
+        $this->rules = array_merge($this->rules, $level_rules);
         return $this;
     }
     /**
      * Raise your type coverage docblock from the safest type rules
      * to more affecting ones, one level at a time
      */
-    public function withTypeCoverageDocblockLevel(int $level): self
+    public function with_type_coverage_docblock_level(int $level): self
     {
         Assert::natural($level);
-        $this->isTypeCoverageDocblockLevelUsed = \true;
-        $levelRules = LevelRulesResolver::resolve($level, TypeDeclarationDocblocksLevel::RULES, __METHOD__);
+        $this->is_type_coverage_docblock_level_used = \true;
+        $level_rules = Level_Rules_Resolver::resolve($level, Type_Declaration_Docblocks_Level::RULES, __METHOD__);
         // too high
-        $levelRulesCount = count($levelRules);
-        if ($levelRulesCount + self::MAX_LEVEL_GAP < $level) {
-            $this->levelOverflows[] = new LevelOverflow(__METHOD__, $level, $levelRulesCount, 'typeDeclarationDocblocks', 'TYPE_DECLARATION_DOCBLOCKS');
+        $level_rules_count = count($level_rules);
+        if ($level_rules_count + self::MAX_LEVEL_GAP < $level) {
+            $this->level_overflows[] = new Level_Overflow(__METHOD__, $level, $level_rules_count, 'typeDeclarationDocblocks', 'TYPE_DECLARATION_DOCBLOCKS');
         }
-        $this->rules = array_merge($this->rules, $levelRules);
+        $this->rules = array_merge($this->rules, $level_rules);
         return $this;
     }
     /**
      * Raise your dead-code coverage from the safest rules
      * to more affecting ones, one level at a time
      */
-    public function withDeadCodeLevel(int $level): self
+    public function with_dead_code_level(int $level): self
     {
         Assert::natural($level);
-        $this->isDeadCodeLevelUsed = \true;
-        $levelRules = LevelRulesResolver::resolve($level, DeadCodeLevel::RULES, __METHOD__);
+        $this->is_dead_code_level_used = \true;
+        $level_rules = Level_Rules_Resolver::resolve($level, Dead_Code_Level::RULES, __METHOD__);
         // too high
-        $levelRulesCount = count($levelRules);
-        if ($levelRulesCount + self::MAX_LEVEL_GAP < $level) {
-            $this->levelOverflows[] = new LevelOverflow('withDeadCodeLevel', $level, $levelRulesCount, 'deadCode', 'DEAD_CODE');
+        $level_rules_count = count($level_rules);
+        if ($level_rules_count + self::MAX_LEVEL_GAP < $level) {
+            $this->level_overflows[] = new Level_Overflow('withDeadCodeLevel', $level, $level_rules_count, 'deadCode', 'DEAD_CODE');
         }
-        $this->rules = array_merge($this->rules, $levelRules);
+        $this->rules = array_merge($this->rules, $level_rules);
         return $this;
     }
     /**
      * Raise your PHP level from, one level at a time
      */
-    public function withPhpLevel(int $level): self
+    public function with_php_level(int $level): self
     {
         Assert::natural($level);
-        $this->isWithPhpLevelUsed = \true;
-        $phpVersion = ComposerJsonPhpVersionResolver::resolveFromCwdOrFail();
-        $setRectorsResolver = new SetRectorsResolver();
-        $setFilePaths = \Rector\Configuration\PhpLevelSetResolver::resolveFromPhpVersion($phpVersion);
-        $rectorRulesWithConfiguration = $setRectorsResolver->resolveFromFilePathsIncludingConfiguration($setFilePaths);
-        foreach ($rectorRulesWithConfiguration as $position => $rectorRuleWithConfiguration) {
+        $this->is_with_php_level_used = \true;
+        $php_version = Composer_Json_Php_Version_Resolver::resolve_from_cwd_or_fail();
+        $set_rectors_resolver = new Set_Rectors_Resolver();
+        $set_file_paths = \Rector\Configuration\Php_Level_Set_Resolver::resolve_from_php_version($php_version);
+        $rector_rules_with_configuration = $set_rectors_resolver->resolve_from_file_paths_including_configuration($set_file_paths);
+        foreach ($rector_rules_with_configuration as $position => $rector_rule_with_configuration) {
             // add rules until level is reached
             if ($position > $level) {
                 break;
             }
-            if (is_string($rectorRuleWithConfiguration)) {
-                $this->rules[] = $rectorRuleWithConfiguration;
-            } elseif (is_array($rectorRuleWithConfiguration)) {
-                foreach ($rectorRuleWithConfiguration as $rectorRule => $rectorRuleConfiguration) {
+            if (is_string($rector_rule_with_configuration)) {
+                $this->rules[] = $rector_rule_with_configuration;
+            } elseif (is_array($rector_rule_with_configuration)) {
+                foreach ($rector_rule_with_configuration as $rector_rule => $rector_rule_configuration) {
                     /** @var class-string<ConfigurableRectorInterface> $rectorRule */
-                    $this->withConfiguredRule($rectorRule, $rectorRuleConfiguration);
+                    $this->with_configured_rule($rector_rule, $rector_rule_configuration);
                 }
             }
         }
@@ -787,19 +787,19 @@ final class RectorConfigBuilder
      * Raise your code quality from the safest rules
      * to more affecting ones, one level at a time
      */
-    public function withCodeQualityLevel(int $level): self
+    public function with_code_quality_level(int $level): self
     {
         Assert::natural($level);
-        $this->isCodeQualityLevelUsed = \true;
-        $levelRules = LevelRulesResolver::resolve($level, CodeQualityLevel::RULES, __METHOD__);
+        $this->is_code_quality_level_used = \true;
+        $level_rules = Level_Rules_Resolver::resolve($level, Code_Quality_Level::RULES, __METHOD__);
         // too high
-        $levelRulesCount = count($levelRules);
-        if ($levelRulesCount + self::MAX_LEVEL_GAP < $level) {
-            $this->levelOverflows[] = new LevelOverflow('withCodeQualityLevel', $level, $levelRulesCount, 'codeQuality', 'CODE_QUALITY');
+        $level_rules_count = count($level_rules);
+        if ($level_rules_count + self::MAX_LEVEL_GAP < $level) {
+            $this->level_overflows[] = new Level_Overflow('withCodeQualityLevel', $level, $level_rules_count, 'codeQuality', 'CODE_QUALITY');
         }
-        $this->rules = array_merge($this->rules, $levelRules);
-        foreach (CodeQualityLevel::RULES_WITH_CONFIGURATION as $rectorClass => $configuration) {
-            $this->rulesWithConfigurations[$rectorClass][] = $configuration;
+        $this->rules = array_merge($this->rules, $level_rules);
+        foreach (Code_Quality_Level::RULES_WITH_CONFIGURATION as $rector_class => $configuration) {
+            $this->rules_with_configurations[$rector_class][] = $configuration;
         }
         return $this;
     }
@@ -807,39 +807,39 @@ final class RectorConfigBuilder
      * Raise your coding style from the safest rules
      * to more affecting ones, one level at a time
      */
-    public function withCodingStyleLevel(int $level): self
+    public function with_coding_style_level(int $level): self
     {
         Assert::natural($level);
-        $this->isCodingStyleLevelUsed = \true;
-        $levelRules = LevelRulesResolver::resolve($level, CodingStyleLevel::RULES, __METHOD__);
+        $this->is_coding_style_level_used = \true;
+        $level_rules = Level_Rules_Resolver::resolve($level, Coding_Style_Level::RULES, __METHOD__);
         // too high
-        $levelRulesCount = count($levelRules);
-        if ($levelRulesCount + self::MAX_LEVEL_GAP < $level) {
-            $this->levelOverflows[] = new LevelOverflow('withCodingStyleLevel', $level, $levelRulesCount, 'codingStyle', 'CODING_STYLE');
+        $level_rules_count = count($level_rules);
+        if ($level_rules_count + self::MAX_LEVEL_GAP < $level) {
+            $this->level_overflows[] = new Level_Overflow('withCodingStyleLevel', $level, $level_rules_count, 'codingStyle', 'CODING_STYLE');
         }
-        $this->rules = array_merge($this->rules, $levelRules);
-        foreach (CodingStyleLevel::RULES_WITH_CONFIGURATION as $rectorClass => $configuration) {
-            $this->rulesWithConfigurations[$rectorClass][] = $configuration;
+        $this->rules = array_merge($this->rules, $level_rules);
+        foreach (Coding_Style_Level::RULES_WITH_CONFIGURATION as $rector_class => $configuration) {
+            $this->rules_with_configurations[$rector_class][] = $configuration;
         }
         return $this;
     }
-    public function withFluentCallNewLine(bool $isFluentNewLine = \true): self
+    public function with_fluent_call_new_line(bool $is_fluent_new_line = \true): self
     {
-        $this->isFluentNewLine = $isFluentNewLine;
+        $this->is_fluent_new_line = $is_fluent_new_line;
         return $this;
     }
-    public function withTreatClassesAsFinal(bool $isTreatClassesAsFinal = \true): self
+    public function with_treat_classes_as_final(bool $is_treat_classes_as_final = \true): self
     {
-        $this->isTreatClassesAsFinal = $isTreatClassesAsFinal;
+        $this->is_treat_classes_as_final = $is_treat_classes_as_final;
         return $this;
     }
-    public function registerService(string $className, ?string $alias = null, ?string $tag = null): self
+    public function register_service(string $class_name, ?string $alias = null, ?string $tag = null): self
     {
         // BC layer since 2.2.9
-        if ($tag === ScopeResolverNodeVisitorInterface::class) {
-            $tag = DecoratingNodeVisitorInterface::class;
+        if ($tag === Scope_Resolver_Node_Visitor_Interface::class) {
+            $tag = Decorating_Node_Visitor_Interface::class;
         }
-        $this->registerServices[] = new RegisteredService($className, $alias, $tag);
+        $this->register_services[] = new Registered_Service($class_name, $alias, $tag);
         return $this;
     }
     /**
@@ -847,62 +847,62 @@ final class RectorConfigBuilder
      * @see https://getrector.com/documentation/creating-a-node-visitor
      * @param class-string $decoratingNodeVisitorClass
      */
-    public function registerDecoratingNodeVisitor(string $decoratingNodeVisitorClass): self
+    public function register_decorating_node_visitor(string $decorating_node_visitor_class): self
     {
-        Assert::isAOf($decoratingNodeVisitorClass, NodeVisitor::class);
-        $this->registerServices[] = new RegisteredService($decoratingNodeVisitorClass, null, DecoratingNodeVisitorInterface::class);
+        Assert::is_a_of($decorating_node_visitor_class, Node_Visitor::class);
+        $this->register_services[] = new Registered_Service($decorating_node_visitor_class, null, Decorating_Node_Visitor_Interface::class);
         return $this;
     }
-    public function withDowngradeSets(bool $php84 = \false, bool $php83 = \false, bool $php82 = \false, bool $php81 = \false, bool $php80 = \false, bool $php74 = \false, bool $php73 = \false, bool $php72 = \false, bool $php71 = \false): self
+    public function with_downgrade_sets(bool $php84 = \false, bool $php83 = \false, bool $php82 = \false, bool $php81 = \false, bool $php80 = \false, bool $php74 = \false, bool $php73 = \false, bool $php72 = \false, bool $php71 = \false): self
     {
-        $pickedArguments = array_filter(func_get_args());
-        if (count($pickedArguments) !== 1) {
-            throw new InvalidConfigurationException('Pick only one PHP version target in "withDowngradeSets()". All rules down to this version will be used.');
+        $picked_arguments = array_filter(func_get_args());
+        if (count($picked_arguments) !== 1) {
+            throw new Invalid_Configuration_Exception('Pick only one PHP version target in "withDowngradeSets()". All rules down to this version will be used.');
         }
         if ($php84) {
-            $this->sets[] = DowngradeLevelSetList::DOWN_TO_PHP_84;
+            $this->sets[] = Downgrade_Level_Set_List::DOWN_TO_PHP_84;
         } elseif ($php83) {
-            $this->sets[] = DowngradeLevelSetList::DOWN_TO_PHP_83;
+            $this->sets[] = Downgrade_Level_Set_List::DOWN_TO_PHP_83;
         } elseif ($php82) {
-            $this->sets[] = DowngradeLevelSetList::DOWN_TO_PHP_82;
+            $this->sets[] = Downgrade_Level_Set_List::DOWN_TO_PHP_82;
         } elseif ($php81) {
-            $this->sets[] = DowngradeLevelSetList::DOWN_TO_PHP_81;
+            $this->sets[] = Downgrade_Level_Set_List::DOWN_TO_PHP_81;
         } elseif ($php80) {
-            $this->sets[] = DowngradeLevelSetList::DOWN_TO_PHP_80;
+            $this->sets[] = Downgrade_Level_Set_List::DOWN_TO_PHP_80;
         } elseif ($php74) {
-            $this->sets[] = DowngradeLevelSetList::DOWN_TO_PHP_74;
+            $this->sets[] = Downgrade_Level_Set_List::DOWN_TO_PHP_74;
         } elseif ($php73) {
-            $this->sets[] = DowngradeLevelSetList::DOWN_TO_PHP_73;
+            $this->sets[] = Downgrade_Level_Set_List::DOWN_TO_PHP_73;
         } elseif ($php72) {
-            $this->sets[] = DowngradeLevelSetList::DOWN_TO_PHP_72;
+            $this->sets[] = Downgrade_Level_Set_List::DOWN_TO_PHP_72;
         } elseif ($php71) {
-            $this->sets[] = DowngradeLevelSetList::DOWN_TO_PHP_71;
+            $this->sets[] = Downgrade_Level_Set_List::DOWN_TO_PHP_71;
         }
         return $this;
     }
-    public function withRealPathReporting(bool $absolutePath = \true): self
+    public function with_real_path_reporting(bool $absolute_path = \true): self
     {
-        $this->reportingRealPath = $absolutePath;
+        $this->reporting_real_path = $absolute_path;
         return $this;
     }
-    public function withEditorUrl(string $editorUrl): self
+    public function with_editor_url(string $editor_url): self
     {
-        $this->editorUrl = $editorUrl;
+        $this->editor_url = $editor_url;
         return $this;
     }
     /**
      * @param class-string<SetProviderInterface> ...$setProviders
      */
-    public function withSetProviders(string ...$setProviders): self
+    public function with_set_providers(string ...$set_providers): self
     {
-        foreach ($setProviders as $setProvider) {
-            if (\array_key_exists($setProvider, $this->setProviders)) {
+        foreach ($set_providers as $set_provider) {
+            if (\array_key_exists($set_provider, $this->set_providers)) {
                 continue;
             }
-            if (!is_a($setProvider, SetProviderInterface::class, \true)) {
-                throw new InvalidConfigurationException(sprintf('Set provider "%s" must implement "%s"', $setProvider, SetProviderInterface::class));
+            if (!is_a($set_provider, Set_Provider_Interface::class, \true)) {
+                throw new Invalid_Configuration_Exception(sprintf('Set provider "%s" must implement "%s"', $set_provider, Set_Provider_Interface::class));
             }
-            $this->setProviders[$setProvider] = \true;
+            $this->set_providers[$set_provider] = \true;
         }
         return $this;
     }

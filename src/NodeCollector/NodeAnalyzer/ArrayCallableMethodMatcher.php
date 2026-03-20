@@ -1,57 +1,55 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Node_Collector\Node_Analyzer;
 
-namespace Rector\NodeCollector\NodeAnalyzer;
-
-use PhpParser\Node\ArrayItem;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Scalar\MagicConst\Class_;
-use PhpParser\Node\Scalar\String_;
-use PHPStan\Analyser\Scope;
-use PHPStan\Reflection\ClassReflection;
-use PHPStan\Reflection\ParametersAcceptorSelector;
-use PHPStan\Reflection\ReflectionProvider;
-use PHPStan\Type\MixedType;
-use PHPStan\Type\ObjectType;
-use PHPStan\Type\ThisType;
-use PHPStan\Type\Type;
-use PHPStan\Type\TypeWithClassName;
-use Rector\Enum\ObjectReference;
-use Rector\NodeCollector\ValueObject\ArrayCallable;
-use Rector\NodeCollector\ValueObject\ArrayCallableDynamicMethod;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\PhpParser\Node\Value\ValueResolver;
-use Rector\Reflection\ReflectionResolver;
-use Rector\ValueObject\MethodName;
-
-final class ArrayCallableMethodMatcher
+use Php_Parser\Node\Array_Item;
+use Php_Parser\Node\Expr;
+use Php_Parser\Node\Expr\Array_;
+use Php_Parser\Node\Expr\Class_Const_Fetch;
+use Php_Parser\Node\Scalar\Magic_Const\Class_;
+use Php_Parser\Node\Scalar\String_;
+use Php_Stan\Analyser\Scope;
+use Php_Stan\Reflection\Class_Reflection;
+use Php_Stan\Reflection\Parameters_Acceptor_Selector;
+use Php_Stan\Reflection\Reflection_Provider;
+use Php_Stan\Type\Mixed_Type;
+use Php_Stan\Type\Object_Type;
+use Php_Stan\Type\This_Type;
+use Php_Stan\Type\Type;
+use Php_Stan\Type\Type_With_Class_Name;
+use Rector\Enum\Object_Reference;
+use Rector\Node_Collector\Value_Object\Array_Callable;
+use Rector\Node_Collector\Value_Object\Array_Callable_Dynamic_Method;
+use Rector\Node_Type_Resolver\Node\Attribute_Key;
+use Rector\Node_Type_Resolver\Node_Type_Resolver;
+use Rector\Php_Parser\Node\Value\Value_Resolver;
+use Rector\Reflection\Reflection_Resolver;
+use Rector\Value_Object\Method_Name;
+final class Array_Callable_Method_Matcher
 {
     /**
      * @readonly
      */
-    private NodeTypeResolver $nodeTypeResolver;
+    private Node_Type_Resolver $node_type_resolver;
     /**
      * @readonly
      */
-    private ValueResolver $valueResolver;
+    private Value_Resolver $value_resolver;
     /**
      * @readonly
      */
-    private ReflectionProvider $reflectionProvider;
+    private Reflection_Provider $reflection_provider;
     /**
      * @readonly
      */
-    private ReflectionResolver $reflectionResolver;
-    public function __construct(NodeTypeResolver $nodeTypeResolver, ValueResolver $valueResolver, ReflectionProvider $reflectionProvider, ReflectionResolver $reflectionResolver)
+    private Reflection_Resolver $reflection_resolver;
+    public function __construct(Node_Type_Resolver $node_type_resolver, Value_Resolver $value_resolver, Reflection_Provider $reflection_provider, Reflection_Resolver $reflection_resolver)
     {
-        $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->valueResolver = $valueResolver;
-        $this->reflectionProvider = $reflectionProvider;
-        $this->reflectionResolver = $reflectionResolver;
+        $this->node_type_resolver = $node_type_resolver;
+        $this->value_resolver = $value_resolver;
+        $this->reflection_provider = $reflection_provider;
+        $this->reflection_resolver = $reflection_resolver;
     }
     /**
      * Matches array like: "[$this, 'methodName']" → ['ClassName', 'methodName']
@@ -60,61 +58,61 @@ final class ArrayCallableMethodMatcher
      * @see https://github.com/rectorphp/rector-src/pull/909
      * @return null|\Rector\NodeCollector\ValueObject\ArrayCallableDynamicMethod|\Rector\NodeCollector\ValueObject\ArrayCallable
      */
-    public function match(Array_ $array, Scope $scope, ?string $classMethodName = null)
+    public function match(Array_ $array, Scope $scope, ?string $class_method_name = null)
     {
         if (count($array->items) !== 2) {
             return null;
         }
-        if ($this->shouldSkipNullItems($array)) {
+        if ($this->should_skip_null_items($array)) {
             return null;
         }
         /** @var ArrayItem[] $items */
         $items = $array->items;
         // $this, self, static, FQN
-        $firstItemValue = $items[0]->value;
-        $callerType = $this->resolveCallerType($firstItemValue, $scope, $classMethodName);
-        if (!$callerType instanceof TypeWithClassName) {
+        $first_item_value = $items[0]->value;
+        $caller_type = $this->resolve_caller_type($first_item_value, $scope, $class_method_name);
+        if (!$caller_type instanceof Type_With_Class_Name) {
             return null;
         }
-        if ($array->getAttribute(AttributeKey::IS_ARRAY_IN_ATTRIBUTE) === \true) {
+        if ($array->get_attribute(Attribute_Key::IS_ARRAY_IN_ATTRIBUTE) === \true) {
             return null;
         }
-        $values = $this->valueResolver->getValue($array);
-        $className = $callerType->getClassName();
-        $secondItemValue = $items[1]->value;
+        $values = $this->value_resolver->get_value($array);
+        $class_name = $caller_type->get_class_name();
+        $second_item_value = $items[1]->value;
         if ($values === null) {
-            return new ArrayCallableDynamicMethod();
+            return new Array_Callable_Dynamic_Method();
         }
-        if ($this->shouldSkipAssociativeArray($values)) {
+        if ($this->should_skip_associative_array($values)) {
             return null;
         }
-        if (!$secondItemValue instanceof String_) {
+        if (!$second_item_value instanceof String_) {
             return null;
         }
-        if ($this->isCallbackAtFunctionNames($array, ['register_shutdown_function', 'forward_static_call'])) {
+        if ($this->is_callback_at_function_names($array, ['register_shutdown_function', 'forward_static_call'])) {
             return null;
         }
-        $methodName = $secondItemValue->value;
-        if ($methodName === MethodName::CONSTRUCT) {
+        $method_name = $second_item_value->value;
+        if ($method_name === Method_Name::CONSTRUCT) {
             return null;
         }
         // skip non-existing methods
-        if (!$callerType->hasMethod($methodName)->yes()) {
+        if (!$caller_type->has_method($method_name)->yes()) {
             return null;
         }
-        return new ArrayCallable($firstItemValue, $className, $methodName);
+        return new Array_Callable($first_item_value, $class_name, $method_name);
     }
-    private function shouldSkipNullItems(Array_ $array): bool
+    private function should_skip_null_items(Array_ $array): bool
     {
-        if (!$array->items[0] instanceof ArrayItem) {
+        if (!$array->items[0] instanceof Array_Item) {
             return \true;
         }
-        return !$array->items[1] instanceof ArrayItem;
+        return !$array->items[1] instanceof Array_Item;
     }
     /**
      * @param mixed $values
      */
-    private function shouldSkipAssociativeArray($values): bool
+    private function should_skip_associative_array($values): bool
     {
         if (!is_array($values)) {
             return \false;
@@ -125,70 +123,70 @@ final class ArrayCallableMethodMatcher
     /**
      * @param string[] $functionNames
      */
-    private function isCallbackAtFunctionNames(Array_ $array, array $functionNames): bool
+    private function is_callback_at_function_names(Array_ $array, array $function_names): bool
     {
-        $fromFuncCallName = $array->getAttribute(AttributeKey::FROM_FUNC_CALL_NAME);
-        if ($fromFuncCallName === null) {
+        $from_func_call_name = $array->get_attribute(Attribute_Key::FROM_FUNC_CALL_NAME);
+        if ($from_func_call_name === null) {
             return \false;
         }
-        return in_array($fromFuncCallName, $functionNames, \true);
+        return in_array($from_func_call_name, $function_names, \true);
     }
     /**
      * @param \PhpParser\Node\Expr\ClassConstFetch|\PhpParser\Node\Scalar\MagicConst\Class_ $classContext
      * @return \PHPStan\Type\MixedType|\PHPStan\Type\ObjectType
      */
-    private function resolveClassContextType($classContext, Scope $scope, ?string $classMethodName)
+    private function resolve_class_context_type($class_context, Scope $scope, ?string $class_method_name)
     {
-        $classConstantReference = $this->valueResolver->getValue($classContext);
+        $class_constant_reference = $this->value_resolver->get_value($class_context);
         // non-class value
-        if (!is_string($classConstantReference)) {
-            return new MixedType();
+        if (!is_string($class_constant_reference)) {
+            return new Mixed_Type();
         }
-        if ($this->isRequiredClassReflectionResolution($classConstantReference)) {
-            $classReflection = $this->reflectionResolver->resolveClassReflection($classContext);
-            if (!$classReflection instanceof ClassReflection || !$classReflection->isClass()) {
-                return new MixedType();
+        if ($this->is_required_class_reflection_resolution($class_constant_reference)) {
+            $class_reflection = $this->reflection_resolver->resolve_class_reflection($class_context);
+            if (!$class_reflection instanceof Class_Reflection || !$class_reflection->is_class()) {
+                return new Mixed_Type();
             }
-            $classConstantReference = $classReflection->getName();
+            $class_constant_reference = $class_reflection->get_name();
         }
-        if (!$this->reflectionProvider->hasClass($classConstantReference)) {
-            return new MixedType();
+        if (!$this->reflection_provider->has_class($class_constant_reference)) {
+            return new Mixed_Type();
         }
-        $classReflection = $this->reflectionProvider->getClass($classConstantReference);
-        $hasConstruct = $classReflection->hasMethod(MethodName::CONSTRUCT);
-        if (!$hasConstruct) {
-            return new ObjectType($classConstantReference, null, $classReflection);
+        $class_reflection = $this->reflection_provider->get_class($class_constant_reference);
+        $has_construct = $class_reflection->has_method(Method_Name::CONSTRUCT);
+        if (!$has_construct) {
+            return new Object_Type($class_constant_reference, null, $class_reflection);
         }
-        if (is_string($classMethodName) && $classReflection->hasNativeMethod($classMethodName)) {
-            return new ObjectType($classConstantReference, null, $classReflection);
+        if (is_string($class_method_name) && $class_reflection->has_native_method($class_method_name)) {
+            return new Object_Type($class_constant_reference, null, $class_reflection);
         }
-        $extendedMethodReflection = $classReflection->getMethod(MethodName::CONSTRUCT, $scope);
-        $extendedParametersAcceptor = ParametersAcceptorSelector::combineAcceptors($extendedMethodReflection->getVariants());
-        foreach ($extendedParametersAcceptor->getParameters() as $extendedParameterReflection) {
-            if (!$extendedParameterReflection->getDefaultValue() instanceof Type) {
-                return new MixedType();
+        $extended_method_reflection = $class_reflection->get_method(Method_Name::CONSTRUCT, $scope);
+        $extended_parameters_acceptor = Parameters_Acceptor_Selector::combine_acceptors($extended_method_reflection->get_variants());
+        foreach ($extended_parameters_acceptor->get_parameters() as $extended_parameter_reflection) {
+            if (!$extended_parameter_reflection->get_default_value() instanceof Type) {
+                return new Mixed_Type();
             }
         }
-        return new ObjectType($classConstantReference, null, $classReflection);
+        return new Object_Type($class_constant_reference, null, $class_reflection);
     }
-    private function resolveCallerType(Expr $expr, Scope $scope, ?string $classMethodName): Type
+    private function resolve_caller_type(Expr $expr, Scope $scope, ?string $class_method_name): Type
     {
-        if ($expr instanceof ClassConstFetch || $expr instanceof Class_) {
+        if ($expr instanceof Class_Const_Fetch || $expr instanceof Class_) {
             // class context means self|static ::class or __CLASS__
-            $callerType = $this->resolveClassContextType($expr, $scope, $classMethodName);
+            $caller_type = $this->resolve_class_context_type($expr, $scope, $class_method_name);
         } else {
-            $callerType = $this->nodeTypeResolver->getType($expr);
+            $caller_type = $this->node_type_resolver->get_type($expr);
         }
-        if ($callerType instanceof ThisType) {
-            return $callerType->getStaticObjectType();
+        if ($caller_type instanceof This_Type) {
+            return $caller_type->get_static_object_type();
         }
-        return $callerType;
+        return $caller_type;
     }
-    private function isRequiredClassReflectionResolution(string $classConstantReference): bool
+    private function is_required_class_reflection_resolution(string $class_constant_reference): bool
     {
-        if ($classConstantReference === ObjectReference::STATIC) {
+        if ($class_constant_reference === Object_Reference::STATIC) {
             return \true;
         }
-        return $classConstantReference === '__CLASS__';
+        return $class_constant_reference === '__CLASS__';
     }
 }

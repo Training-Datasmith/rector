@@ -1,20 +1,18 @@
 <?php
 
 declare (strict_types=1);
-
 namespace Rector\Console\Formatter;
 
-use Rector\Util\NewLineSplitter;
-use RectorPrefix202603\Nette\Utils\Strings;
-use RectorPrefix202603\Symfony\Component\Console\Formatter\OutputFormatter;
-
+use Rector\Util\New_Line_Splitter;
+use Rector_Prefix202603\Nette\Utils\Strings;
+use Rector_Prefix202603\Symfony\Component\Console\Formatter\Output_Formatter;
 /**
  * Inspired by @see https://github.com/FriendsOfPHP/PHP-CS-Fixer/blob/master/src/Differ/DiffConsoleFormatter.php to be
  * used as standalone class, without need to require whole package by Dariusz Rumiński <dariusz.ruminski@gmail.com>
  *
  * @see \Rector\Tests\Console\Formatter\ColorConsoleDiffFormatterTest
  */
-final class ColorConsoleDiffFormatter
+final class Color_Console_Diff_Formatter
 {
     /**
      * @see https://regex101.com/r/ovLMDF/1
@@ -46,52 +44,52 @@ final class ColorConsoleDiffFormatter
     }
     public function format(string $diff): string
     {
-        return $this->formatWithTemplate($diff, $this->template);
+        return $this->format_with_template($diff, $this->template);
     }
-    private function formatWithTemplate(string $diff, string $template): string
+    private function format_with_template(string $diff, string $template): string
     {
-        $escapedDiff = OutputFormatter::escape(rtrim($diff));
-        $escapedDiffLines = NewLineSplitter::split($escapedDiff);
+        $escaped_diff = Output_Formatter::escape(rtrim($diff));
+        $escaped_diff_lines = New_Line_Splitter::split($escaped_diff);
         // remove description of added + remove, obvious on diffs
         // decorize lines
-        foreach ($escapedDiffLines as $key => $escapedDiffLine) {
-            if ($escapedDiffLine === '--- Original') {
-                unset($escapedDiffLines[$key]);
+        foreach ($escaped_diff_lines as $key => $escaped_diff_line) {
+            if ($escaped_diff_line === '--- Original') {
+                unset($escaped_diff_lines[$key]);
                 continue;
             }
-            if ($escapedDiffLine === '+++ New') {
-                unset($escapedDiffLines[$key]);
+            if ($escaped_diff_line === '+++ New') {
+                unset($escaped_diff_lines[$key]);
                 continue;
             }
-            if ($escapedDiffLine === ' ') {
-                $escapedDiffLines[$key] = '';
+            if ($escaped_diff_line === ' ') {
+                $escaped_diff_lines[$key] = '';
                 continue;
             }
-            $escapedDiffLine = $this->makePlusLinesGreen($escapedDiffLine);
-            $escapedDiffLine = $this->makeMinusLinesRed($escapedDiffLine);
-            $escapedDiffLine = $this->makeAtNoteCyan($escapedDiffLine);
-            $escapedDiffLine = $this->normalizeLineAtDiff($escapedDiffLine);
+            $escaped_diff_line = $this->make_plus_lines_green($escaped_diff_line);
+            $escaped_diff_line = $this->make_minus_lines_red($escaped_diff_line);
+            $escaped_diff_line = $this->make_at_note_cyan($escaped_diff_line);
+            $escaped_diff_line = $this->normalize_line_at_diff($escaped_diff_line);
             // final decorized line
-            $escapedDiffLines[$key] = $escapedDiffLine;
+            $escaped_diff_lines[$key] = $escaped_diff_line;
         }
-        return sprintf($template, implode(\PHP_EOL, $escapedDiffLines));
+        return sprintf($template, implode(\PHP_EOL, $escaped_diff_lines));
     }
     /**
      * Remove number diff, eg; @@ -67,6 +67,8 @@ to become @@ @@
      */
-    private function normalizeLineAtDiff(string $string): string
+    private function normalize_line_at_diff(string $string): string
     {
         return Strings::replace($string, self::AT_DIFF_LINE_REGEX, '<fg=cyan>@@ @@</fg=cyan>');
     }
-    private function makePlusLinesGreen(string $string): string
+    private function make_plus_lines_green(string $string): string
     {
         return Strings::replace($string, self::PLUS_START_REGEX, '<fg=green>$1</fg=green>');
     }
-    private function makeMinusLinesRed(string $string): string
+    private function make_minus_lines_red(string $string): string
     {
         return Strings::replace($string, self::MINUS_START_REGEX, '<fg=red>$1</fg=red>');
     }
-    private function makeAtNoteCyan(string $string): string
+    private function make_at_note_cyan(string $string): string
     {
         return Strings::replace($string, self::AT_START_REGEX, '<fg=cyan>$1</fg=cyan>');
     }

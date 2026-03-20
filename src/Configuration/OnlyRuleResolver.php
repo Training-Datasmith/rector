@@ -1,17 +1,15 @@
 <?php
 
 declare (strict_types=1);
-
 namespace Rector\Configuration;
 
-use Rector\Contract\Rector\RectorInterface;
-use Rector\Exception\Configuration\RectorRuleNameAmbiguousException;
-use Rector\Exception\Configuration\RectorRuleNotFoundException;
-
+use Rector\Contract\Rector\Rector_Interface;
+use Rector\Exception\Configuration\Rector_Rule_Name_Ambiguous_Exception;
+use Rector\Exception\Configuration\Rector_Rule_Not_Found_Exception;
 /**
  * @see \Rector\Tests\Configuration\OnlyRuleResolverTest
  */
-final class OnlyRuleResolver
+final class Only_Rule_Resolver
 {
     /**
      * @var RectorInterface[]
@@ -53,13 +51,13 @@ final class OnlyRuleResolver
         if (count($matching) > 1) {
             sort($matching);
             $message = sprintf('Short rule name "%s" is ambiguous. Specify the full rule name:' . \PHP_EOL . '- ' . implode(\PHP_EOL . '- ', $matching), $rule);
-            throw new RectorRuleNameAmbiguousException($message);
+            throw new Rector_Rule_Name_Ambiguous_Exception($message);
         }
         if (strpos($rule, '\\') === \false) {
             $message = sprintf('Rule "%s" was not found.%sThe rule has no namespace. Make sure to escape the backslashes, and add quotes around the rule name: --only="My\Rector\Rule"', $rule, \PHP_EOL);
         } else {
             $message = sprintf('Rule "%s" was not found.%sMake sure it is registered in your config or in one of the sets', $rule, \PHP_EOL);
         }
-        throw new RectorRuleNotFoundException($message);
+        throw new Rector_Rule_Not_Found_Exception($message);
     }
 }

@@ -1,12 +1,10 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Node_Type_Resolver\Contract;
 
-namespace Rector\NodeTypeResolver\Contract;
-
-use Rector\NodeTypeResolver\NodeTypeResolver;
-
-interface NodeTypeResolverAwareInterface
+use Rector\Node_Type_Resolver\Node_Type_Resolver;
+interface Node_Type_Resolver_Aware_Interface
 {
-    public function autowire(NodeTypeResolver $nodeTypeResolver): void;
+    public function autowire(Node_Type_Resolver $node_type_resolver): void;
 }

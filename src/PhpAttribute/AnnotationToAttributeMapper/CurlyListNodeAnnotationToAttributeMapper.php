@@ -1,66 +1,64 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Php_Attribute\Annotation_To_Attribute_Mapper;
 
-namespace Rector\PhpAttribute\AnnotationToAttributeMapper;
-
-use PhpParser\Node\ArrayItem;
-use PhpParser\Node\Expr\Array_;
-use PhpParser\Node\Scalar\Int_;
-use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
-use Rector\PhpAttribute\AnnotationToAttributeMapper;
-use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
-use Rector\PhpAttribute\Enum\DocTagNodeState;
-use RectorPrefix202603\Webmozart\Assert\Assert;
-
+use Php_Parser\Node\Array_Item;
+use Php_Parser\Node\Expr\Array_;
+use Php_Parser\Node\Scalar\Int_;
+use Rector\Better_Php_Doc_Parser\Value_Object\Php_Doc\Doctrine_Annotation\Curly_List_Node;
+use Rector\Php_Attribute\Annotation_To_Attribute_Mapper;
+use Rector\Php_Attribute\Contract\Annotation_To_Attribute_Mapper_Interface;
+use Rector\Php_Attribute\Enum\Doc_Tag_Node_State;
+use Rector_Prefix202603\Webmozart\Assert\Assert;
 /**
  * @implements AnnotationToAttributeMapperInterface<CurlyListNode>
  */
-final class CurlyListNodeAnnotationToAttributeMapper implements AnnotationToAttributeMapperInterface
+final class Curly_List_Node_Annotation_To_Attribute_Mapper implements Annotation_To_Attribute_Mapper_Interface
 {
-    private AnnotationToAttributeMapper $annotationToAttributeMapper;
+    private Annotation_To_Attribute_Mapper $annotation_to_attribute_mapper;
     /**
      * Avoid circular reference
      */
-    public function autowire(AnnotationToAttributeMapper $annotationToAttributeMapper): void
+    public function autowire(Annotation_To_Attribute_Mapper $annotation_to_attribute_mapper): void
     {
-        $this->annotationToAttributeMapper = $annotationToAttributeMapper;
+        $this->annotation_to_attribute_mapper = $annotation_to_attribute_mapper;
     }
     /**
      * @param mixed $value
      */
-    public function isCandidate($value): bool
+    public function is_candidate($value): bool
     {
-        return $value instanceof CurlyListNode;
+        return $value instanceof Curly_List_Node;
     }
     /**
      * @param CurlyListNode $value
      */
     public function map($value): Array_
     {
-        $arrayItems = [];
-        $arrayItemNodes = $value->getValues();
+        $array_items = [];
+        $array_item_nodes = $value->get_values();
         $loop = -1;
-        foreach ($arrayItemNodes as $arrayItemNode) {
-            $valueExpr = $this->annotationToAttributeMapper->map($arrayItemNode);
+        foreach ($array_item_nodes as $array_item_node) {
+            $value_expr = $this->annotation_to_attribute_mapper->map($array_item_node);
             // remove node
-            if ($valueExpr === DocTagNodeState::REMOVE_ARRAY) {
+            if ($value_expr === Doc_Tag_Node_State::REMOVE_ARRAY) {
                 continue;
             }
-            Assert::isInstanceOf($valueExpr, ArrayItem::class);
-            if (!is_numeric($arrayItemNode->key)) {
-                $arrayItems[] = $valueExpr;
+            Assert::is_instance_of($value_expr, Array_Item::class);
+            if (!is_numeric($array_item_node->key)) {
+                $array_items[] = $value_expr;
                 continue;
             }
             ++$loop;
-            $arrayItemNodeKey = (int) $arrayItemNode->key;
-            if ($loop === $arrayItemNodeKey) {
-                $arrayItems[] = $valueExpr;
+            $array_item_node_key = (int) $array_item_node->key;
+            if ($loop === $array_item_node_key) {
+                $array_items[] = $value_expr;
                 continue;
             }
-            $valueExpr->key = new Int_($arrayItemNodeKey);
-            $arrayItems[] = $valueExpr;
+            $value_expr->key = new Int_($array_item_node_key);
+            $array_items[] = $value_expr;
         }
-        return new Array_($arrayItems);
+        return new Array_($array_items);
     }
 }

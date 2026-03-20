@@ -1,24 +1,22 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Node_Name_Resolver\Node_Name_Resolver;
 
-namespace Rector\NodeNameResolver\NodeNameResolver;
-
-use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\ClassConstFetch;
-use PhpParser\Node\Identifier;
-use PHPStan\Analyser\Scope;
-use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
-
+use Php_Parser\Node;
+use Php_Parser\Node\Expr;
+use Php_Parser\Node\Expr\Class_Const_Fetch;
+use Php_Parser\Node\Identifier;
+use Php_Stan\Analyser\Scope;
+use Rector\Node_Name_Resolver\Contract\Node_Name_Resolver_Interface;
 /**
  * @implements NodeNameResolverInterface<ClassConstFetch>
  */
-final class ClassConstFetchNameResolver implements NodeNameResolverInterface
+final class Class_Const_Fetch_Name_Resolver implements Node_Name_Resolver_Interface
 {
-    public function getNode(): string
+    public function get_node(): string
     {
-        return ClassConstFetch::class;
+        return Class_Const_Fetch::class;
     }
     /**
      * @param ClassConstFetch $node
@@ -31,8 +29,8 @@ final class ClassConstFetchNameResolver implements NodeNameResolverInterface
         if (!$node->name instanceof Identifier) {
             return null;
         }
-        $class = $node->class->toString();
-        $name = $node->name->toString();
+        $class = $node->class->to_string();
+        $name = $node->name->to_string();
         return $class . '::' . $name;
     }
 }

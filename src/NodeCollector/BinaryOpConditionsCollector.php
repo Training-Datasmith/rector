@@ -1,16 +1,14 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Node_Collector;
 
-namespace Rector\NodeCollector;
-
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\BinaryOp;
-
+use Php_Parser\Node\Expr;
+use Php_Parser\Node\Expr\Binary_Op;
 /**
  * @see \Rector\Tests\NodeCollector\BinaryOpConditionsCollectorTest
  */
-final class BinaryOpConditionsCollector
+final class Binary_Op_Conditions_Collector
 {
     /**
      * Collects operands of a sequence of applications of a given left-associative binary operation.
@@ -25,19 +23,19 @@ final class BinaryOpConditionsCollector
      * @param class-string<BinaryOp> $binaryOpClass
      * @return array<int, Expr>
      */
-    public function findConditions(Expr $expr, string $binaryOpClass): array
+    public function find_conditions(Expr $expr, string $binary_op_class): array
     {
-        if (get_class($expr) !== $binaryOpClass) {
+        if (get_class($expr) !== $binary_op_class) {
             // Different binary operators, as well as non-BinaryOp expressions
             // are considered trivial case of a single operand (no operators).
             return [$expr];
         }
         $conditions = [];
         /** @var BinaryOp|Expr $expr */
-        while ($expr instanceof BinaryOp) {
+        while ($expr instanceof Binary_Op) {
             $conditions[] = $expr->right;
             $expr = $expr->left;
-            if ($binaryOpClass !== get_class($expr)) {
+            if ($binary_op_class !== get_class($expr)) {
                 $conditions[] = $expr;
                 break;
             }

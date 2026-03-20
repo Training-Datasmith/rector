@@ -1,36 +1,34 @@
 <?php
 
 declare (strict_types=1);
-
 namespace Rector\Caching;
 
-use Rector\Caching\Detector\ChangedFilesDetector;
-
-final class UnchangedFilesFilter
+use Rector\Caching\Detector\Changed_Files_Detector;
+final class Unchanged_Files_Filter
 {
     /**
      * @readonly
      */
-    private ChangedFilesDetector $changedFilesDetector;
-    public function __construct(ChangedFilesDetector $changedFilesDetector)
+    private Changed_Files_Detector $changed_files_detector;
+    public function __construct(Changed_Files_Detector $changed_files_detector)
     {
-        $this->changedFilesDetector = $changedFilesDetector;
+        $this->changed_files_detector = $changed_files_detector;
     }
     /**
      * @param string[] $filePaths
      * @return string[]
      */
-    public function filterFilePaths(array $filePaths): array
+    public function filter_file_paths(array $file_paths): array
     {
-        $changedFileInfos = [];
-        $filePaths = array_unique($filePaths);
-        foreach ($filePaths as $filePath) {
-            if (!$this->changedFilesDetector->hasFileChanged($filePath)) {
+        $changed_file_infos = [];
+        $file_paths = array_unique($file_paths);
+        foreach ($file_paths as $file_path) {
+            if (!$this->changed_files_detector->has_file_changed($file_path)) {
                 continue;
             }
-            $changedFileInfos[] = $filePath;
-            $this->changedFilesDetector->invalidateFile($filePath);
+            $changed_file_infos[] = $file_path;
+            $this->changed_files_detector->invalidate_file($file_path);
         }
-        return $changedFileInfos;
+        return $changed_file_infos;
     }
 }

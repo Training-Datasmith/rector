@@ -1,36 +1,34 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Node_Name_Resolver\Node_Name_Resolver;
 
-namespace Rector\NodeNameResolver\NodeNameResolver;
-
-use PhpParser\Node;
-use PhpParser\Node\Identifier;
-use PhpParser\Node\Name;
-use PhpParser\Node\Stmt\ClassLike;
-use PHPStan\Analyser\Scope;
-use Rector\NodeNameResolver\Contract\NodeNameResolverInterface;
-
+use Php_Parser\Node;
+use Php_Parser\Node\Identifier;
+use Php_Parser\Node\Name;
+use Php_Parser\Node\Stmt\Class_Like;
+use Php_Stan\Analyser\Scope;
+use Rector\Node_Name_Resolver\Contract\Node_Name_Resolver_Interface;
 /**
  * @implements NodeNameResolverInterface<ClassLike>
  */
-final class ClassNameResolver implements NodeNameResolverInterface
+final class Class_Name_Resolver implements Node_Name_Resolver_Interface
 {
-    public function getNode(): string
+    public function get_node(): string
     {
-        return ClassLike::class;
+        return Class_Like::class;
     }
     /**
      * @param ClassLike $node
      */
     public function resolve(Node $node, ?Scope $scope): ?string
     {
-        if ($node->namespacedName instanceof Name) {
-            return $node->namespacedName->toString();
+        if ($node->namespaced_name instanceof Name) {
+            return $node->namespaced_name->to_string();
         }
         if (!$node->name instanceof Identifier) {
             return null;
         }
-        return $node->name->toString();
+        return $node->name->to_string();
     }
 }

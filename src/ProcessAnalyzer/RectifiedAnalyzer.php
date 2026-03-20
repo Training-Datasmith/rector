@@ -1,57 +1,55 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Process_Analyzer;
 
-namespace Rector\ProcessAnalyzer;
-
-use PhpParser\Node;
-use Rector\Contract\Rector\RectorInterface;
-use Rector\NodeAnalyzer\ScopeAnalyzer;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-
+use Php_Parser\Node;
+use Rector\Contract\Rector\Rector_Interface;
+use Rector\Node_Analyzer\Scope_Analyzer;
+use Rector\Node_Type_Resolver\Node\Attribute_Key;
 /**
  * This service verify if the Node:
  *
  *      - already applied same Rector rule before current Rector rule on last previous Rector rule.
  *      - just re-printed but token start still >= 0
  */
-final class RectifiedAnalyzer
+final class Rectified_Analyzer
 {
     /**
      * @readonly
      */
-    private ScopeAnalyzer $scopeAnalyzer;
-    public function __construct(ScopeAnalyzer $scopeAnalyzer)
+    private Scope_Analyzer $scope_analyzer;
+    public function __construct(Scope_Analyzer $scope_analyzer)
     {
-        $this->scopeAnalyzer = $scopeAnalyzer;
+        $this->scope_analyzer = $scope_analyzer;
     }
     /**
      * @param class-string<RectorInterface> $rectorClass
      */
-    public function hasRectified(string $rectorClass, Node $node): bool
+    public function has_rectified(string $rector_class, Node $node): bool
     {
-        $originalNode = $node->getAttribute(AttributeKey::ORIGINAL_NODE);
-        if ($this->hasConsecutiveCreatedByRule($rectorClass, $node, $originalNode)) {
+        $original_node = $node->get_attribute(Attribute_Key::ORIGINAL_NODE);
+        if ($this->has_consecutive_created_by_rule($rector_class, $node, $original_node)) {
             return \true;
         }
-        return $this->isJustReprintedOverlappedTokenStart($node, $originalNode);
+        return $this->is_just_reprinted_overlapped_token_start($node, $original_node);
     }
     /**
      * @param class-string<RectorInterface> $rectorClass
      */
-    private function hasConsecutiveCreatedByRule(string $rectorClass, Node $node, ?Node $originalNode): bool
+    private function has_consecutive_created_by_rule(string $rector_class, Node $node, ?Node $original_node): bool
     {
-        $createdByRuleNode = $originalNode ?? $node;
+        $created_by_rule_node = $original_node ?? $node;
         /** @var class-string<RectorInterface>[] $createdByRule */
-        $createdByRule = $createdByRuleNode->getAttribute(AttributeKey::CREATED_BY_RULE) ?? [];
-        if ($createdByRule === []) {
+        $created_by_rule = $created_by_rule_node->get_attribute(Attribute_Key::CREATED_BY_RULE) ?? [];
+        if ($created_by_rule === []) {
             return \false;
         }
-        return end($createdByRule) === $rectorClass;
+        return end($created_by_rule) === $rector_class;
     }
-    private function isJustReprintedOverlappedTokenStart(Node $node, ?Node $originalNode): bool
+    private function is_just_reprinted_overlapped_token_start(Node $node, ?Node $original_node): bool
     {
-        if ($originalNode instanceof Node) {
+        if ($original_node instanceof Node) {
             return \false;
         }
         /**
@@ -60,13 +58,13 @@ final class RectifiedAnalyzer
          * - Node's original node is null
          * - Parent Node's original node is null
          */
-        $startTokenPos = $node->getStartTokenPos();
-        if ($startTokenPos >= 0) {
+        $start_token_pos = $node->get_start_token_pos();
+        if ($start_token_pos >= 0) {
             return \true;
         }
-        if (!$this->scopeAnalyzer->isRefreshable($node)) {
+        if (!$this->scope_analyzer->is_refreshable($node)) {
             return \false;
         }
-        return !in_array(AttributeKey::SCOPE, array_keys($node->getAttributes()), \true);
+        return !in_array(Attribute_Key::SCOPE, array_keys($node->get_attributes()), \true);
     }
 }

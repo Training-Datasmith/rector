@@ -1,48 +1,46 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Static_Type_Mapper\Php_Doc_Parser;
 
-namespace Rector\StaticTypeMapper\PhpDocParser;
-
-use PhpParser\Node;
-use PHPStan\Analyser\NameScope;
-use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\IntersectionTypeNode;
-use PHPStan\PhpDocParser\Ast\Type\TypeNode;
-use PHPStan\Type\IntersectionType;
-use PHPStan\Type\MixedType;
-use PHPStan\Type\Type;
-use Rector\StaticTypeMapper\Contract\PhpDocParser\PhpDocTypeMapperInterface;
-
+use Php_Parser\Node;
+use Php_Stan\Analyser\Name_Scope;
+use Php_Stan\Php_Doc_Parser\Ast\Type\Identifier_Type_Node;
+use Php_Stan\Php_Doc_Parser\Ast\Type\Intersection_Type_Node;
+use Php_Stan\Php_Doc_Parser\Ast\Type\Type_Node;
+use Php_Stan\Type\Intersection_Type;
+use Php_Stan\Type\Mixed_Type;
+use Php_Stan\Type\Type;
+use Rector\Static_Type_Mapper\Contract\Php_Doc_Parser\Php_Doc_Type_Mapper_Interface;
 /**
  * @implements PhpDocTypeMapperInterface<IntersectionTypeNode>
  */
-final class IntersectionPhpDocTypeMapper implements PhpDocTypeMapperInterface
+final class Intersection_Php_Doc_Type_Mapper implements Php_Doc_Type_Mapper_Interface
 {
     /**
      * @readonly
      */
-    private \Rector\StaticTypeMapper\PhpDocParser\IdentifierPhpDocTypeMapper $identifierPhpDocTypeMapper;
-    public function __construct(\Rector\StaticTypeMapper\PhpDocParser\IdentifierPhpDocTypeMapper $identifierPhpDocTypeMapper)
+    private \Rector\Static_Type_Mapper\Php_Doc_Parser\Identifier_Php_Doc_Type_Mapper $identifier_php_doc_type_mapper;
+    public function __construct(\Rector\Static_Type_Mapper\Php_Doc_Parser\Identifier_Php_Doc_Type_Mapper $identifier_php_doc_type_mapper)
     {
-        $this->identifierPhpDocTypeMapper = $identifierPhpDocTypeMapper;
+        $this->identifier_php_doc_type_mapper = $identifier_php_doc_type_mapper;
     }
-    public function getNodeType(): string
+    public function get_node_type(): string
     {
-        return IntersectionTypeNode::class;
+        return Intersection_Type_Node::class;
     }
     /**
      * @param IntersectionTypeNode $typeNode
      */
-    public function mapToPHPStanType(TypeNode $typeNode, Node $node, NameScope $nameScope): Type
+    public function map_to_php_stan_type(Type_Node $type_node, Node $node, Name_Scope $name_scope): Type
     {
-        $intersectionedTypes = [];
-        foreach ($typeNode->types as $intersectionedTypeNode) {
-            if (!$intersectionedTypeNode instanceof IdentifierTypeNode) {
-                return new MixedType();
+        $intersectioned_types = [];
+        foreach ($type_node->types as $intersectioned_type_node) {
+            if (!$intersectioned_type_node instanceof Identifier_Type_Node) {
+                return new Mixed_Type();
             }
-            $intersectionedTypes[] = $this->identifierPhpDocTypeMapper->mapIdentifierTypeNode($intersectionedTypeNode, $node);
+            $intersectioned_types[] = $this->identifier_php_doc_type_mapper->map_identifier_type_node($intersectioned_type_node, $node);
         }
-        return new IntersectionType($intersectionedTypes);
+        return new Intersection_Type($intersectioned_types);
     }
 }

@@ -1,35 +1,33 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Better_Php_Doc_Parser\Php_Doc_Manipulator;
 
-namespace Rector\BetterPhpDocParser\PhpDocManipulator;
-
-use PhpParser\Node;
-use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
-use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
-use Rector\BetterPhpDocParser\PhpDoc\StringNode;
-use Rector\BetterPhpDocParser\PhpDocInfo\PhpDocInfo;
-use Rector\BetterPhpDocParser\PhpDocParser\ClassAnnotationMatcher;
-use Rector\BetterPhpDocParser\ValueObject\PhpDoc\DoctrineAnnotation\CurlyListNode;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
-use Rector\Enum\ClassName;
-use Rector\Renaming\Collector\RenamedNameCollector;
-use RectorPrefix202603\Nette\Utils\Strings;
-
-final class PhpDocClassRenamer
+use Php_Parser\Node;
+use Rector\Better_Php_Doc_Parser\Php_Doc\Array_Item_Node;
+use Rector\Better_Php_Doc_Parser\Php_Doc\Doctrine_Annotation_Tag_Value_Node;
+use Rector\Better_Php_Doc_Parser\Php_Doc\String_Node;
+use Rector\Better_Php_Doc_Parser\Php_Doc_Info\Php_Doc_Info;
+use Rector\Better_Php_Doc_Parser\Php_Doc_Parser\Class_Annotation_Matcher;
+use Rector\Better_Php_Doc_Parser\Value_Object\Php_Doc\Doctrine_Annotation\Curly_List_Node;
+use Rector\Better_Php_Doc_Parser\Value_Object\Php_Doc_Attribute_Key;
+use Rector\Enum\Class_Name;
+use Rector\Renaming\Collector\Renamed_Name_Collector;
+use Rector_Prefix202603\Nette\Utils\Strings;
+final class Php_Doc_Class_Renamer
 {
     /**
      * @readonly
      */
-    private ClassAnnotationMatcher $classAnnotationMatcher;
+    private Class_Annotation_Matcher $class_annotation_matcher;
     /**
      * @readonly
      */
-    private RenamedNameCollector $renamedNameCollector;
-    public function __construct(ClassAnnotationMatcher $classAnnotationMatcher, RenamedNameCollector $renamedNameCollector)
+    private Renamed_Name_Collector $renamed_name_collector;
+    public function __construct(Class_Annotation_Matcher $class_annotation_matcher, Renamed_Name_Collector $renamed_name_collector)
     {
-        $this->classAnnotationMatcher = $classAnnotationMatcher;
-        $this->renamedNameCollector = $renamedNameCollector;
+        $this->class_annotation_matcher = $class_annotation_matcher;
+        $this->renamed_name_collector = $renamed_name_collector;
     }
     /**
      * Covers annotations like @ORM, @Serializer, @Assert etc
@@ -37,121 +35,121 @@ final class PhpDocClassRenamer
      *
      * @param string[] $oldToNewClasses
      */
-    public function changeTypeInAnnotationTypes(Node $node, PhpDocInfo $phpDocInfo, array $oldToNewClasses, bool &$hasChanged): bool
+    public function change_type_in_annotation_types(Node $node, Php_Doc_Info $php_doc_info, array $old_to_new_classes, bool &$has_changed): bool
     {
-        $this->processAssertChoiceTagValueNode($oldToNewClasses, $phpDocInfo, $hasChanged);
-        $this->processDoctrineRelationTagValueNode($node, $oldToNewClasses, $phpDocInfo, $hasChanged);
-        $this->processSerializerTypeTagValueNode($oldToNewClasses, $phpDocInfo, $hasChanged);
-        return $hasChanged;
+        $this->process_assert_choice_tag_value_node($old_to_new_classes, $php_doc_info, $has_changed);
+        $this->process_doctrine_relation_tag_value_node($node, $old_to_new_classes, $php_doc_info, $has_changed);
+        $this->process_serializer_type_tag_value_node($old_to_new_classes, $php_doc_info, $has_changed);
+        return $has_changed;
     }
     /**
      * @param array<string, string> $oldToNewClasses
      */
-    private function processAssertChoiceTagValueNode(array $oldToNewClasses, PhpDocInfo $phpDocInfo, bool &$hasChanged): void
+    private function process_assert_choice_tag_value_node(array $old_to_new_classes, Php_Doc_Info $php_doc_info, bool &$has_changed): void
     {
-        $assertChoiceDoctrineAnnotationTagValueNode = $phpDocInfo->findOneByAnnotationClass('Symfony\Component\Validator\Constraints\Choice');
-        if (!$assertChoiceDoctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
+        $assert_choice_doctrine_annotation_tag_value_node = $php_doc_info->find_one_by_annotation_class('Symfony\Component\Validator\Constraints\Choice');
+        if (!$assert_choice_doctrine_annotation_tag_value_node instanceof Doctrine_Annotation_Tag_Value_Node) {
             return;
         }
-        $callbackArrayItemNode = $assertChoiceDoctrineAnnotationTagValueNode->getValue('callback');
-        if (!$callbackArrayItemNode instanceof ArrayItemNode) {
+        $callback_array_item_node = $assert_choice_doctrine_annotation_tag_value_node->get_value('callback');
+        if (!$callback_array_item_node instanceof Array_Item_Node) {
             return;
         }
-        $callbackClass = $callbackArrayItemNode->value;
+        $callback_class = $callback_array_item_node->value;
         // array is needed for callable
-        if (!$callbackClass instanceof CurlyListNode) {
+        if (!$callback_class instanceof Curly_List_Node) {
             return;
         }
-        $callableCallbackArrayItems = $callbackClass->getValues();
-        $classNameArrayItemNode = $callableCallbackArrayItems[0];
-        $classNameStringNode = $classNameArrayItemNode->value;
-        if (!$classNameStringNode instanceof StringNode) {
+        $callable_callback_array_items = $callback_class->get_values();
+        $class_name_array_item_node = $callable_callback_array_items[0];
+        $class_name_string_node = $class_name_array_item_node->value;
+        if (!$class_name_string_node instanceof String_Node) {
             return;
         }
-        foreach ($oldToNewClasses as $oldClass => $newClass) {
-            if ($classNameStringNode->value !== $oldClass) {
+        foreach ($old_to_new_classes as $old_class => $new_class) {
+            if ($class_name_string_node->value !== $old_class) {
                 continue;
             }
-            $this->renamedNameCollector->add($oldClass);
-            $classNameStringNode->value = $newClass;
+            $this->renamed_name_collector->add($old_class);
+            $class_name_string_node->value = $new_class;
             // trigger reprint
-            $classNameArrayItemNode->setAttribute(PhpDocAttributeKey::ORIG_NODE, null);
-            $hasChanged = \true;
+            $class_name_array_item_node->set_attribute(Php_Doc_Attribute_Key::ORIG_NODE, null);
+            $has_changed = \true;
             break;
         }
     }
     /**
      * @param array<string, string> $oldToNewClasses
      */
-    private function processDoctrineRelationTagValueNode(Node $node, array $oldToNewClasses, PhpDocInfo $phpDocInfo, bool &$hasChanged): void
+    private function process_doctrine_relation_tag_value_node(Node $node, array $old_to_new_classes, Php_Doc_Info $php_doc_info, bool &$has_changed): void
     {
-        $doctrineAnnotationTagValueNode = $phpDocInfo->getByAnnotationClasses(['Doctrine\ORM\Mapping\OneToMany', 'Doctrine\ORM\Mapping\ManyToMany', 'Doctrine\ORM\Mapping\Embedded']);
-        if (!$doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
+        $doctrine_annotation_tag_value_node = $php_doc_info->get_by_annotation_classes(['Doctrine\ORM\Mapping\OneToMany', 'Doctrine\ORM\Mapping\ManyToMany', 'Doctrine\ORM\Mapping\Embedded']);
+        if (!$doctrine_annotation_tag_value_node instanceof Doctrine_Annotation_Tag_Value_Node) {
             return;
         }
-        $this->processDoctrineToMany($doctrineAnnotationTagValueNode, $node, $oldToNewClasses, $hasChanged);
+        $this->process_doctrine_to_many($doctrine_annotation_tag_value_node, $node, $old_to_new_classes, $has_changed);
     }
     /**
      * @param array<string, string> $oldToNewClasses
      */
-    private function processSerializerTypeTagValueNode(array $oldToNewClasses, PhpDocInfo $phpDocInfo, bool &$hasChanged): void
+    private function process_serializer_type_tag_value_node(array $old_to_new_classes, Php_Doc_Info $php_doc_info, bool &$has_changed): void
     {
-        $doctrineAnnotationTagValueNode = $phpDocInfo->findOneByAnnotationClass(ClassName::JMS_TYPE);
-        if (!$doctrineAnnotationTagValueNode instanceof DoctrineAnnotationTagValueNode) {
+        $doctrine_annotation_tag_value_node = $php_doc_info->find_one_by_annotation_class(Class_Name::JMS_TYPE);
+        if (!$doctrine_annotation_tag_value_node instanceof Doctrine_Annotation_Tag_Value_Node) {
             return;
         }
-        $classNameArrayItemNode = $doctrineAnnotationTagValueNode->getSilentValue();
-        foreach ($oldToNewClasses as $oldClass => $newClass) {
-            if ($classNameArrayItemNode instanceof ArrayItemNode && $classNameArrayItemNode->value instanceof StringNode) {
-                $classNameStringNode = $classNameArrayItemNode->value;
-                if ($classNameStringNode->value === $oldClass) {
-                    $classNameStringNode->value = $newClass;
+        $class_name_array_item_node = $doctrine_annotation_tag_value_node->get_silent_value();
+        foreach ($old_to_new_classes as $old_class => $new_class) {
+            if ($class_name_array_item_node instanceof Array_Item_Node && $class_name_array_item_node->value instanceof String_Node) {
+                $class_name_string_node = $class_name_array_item_node->value;
+                if ($class_name_string_node->value === $old_class) {
+                    $class_name_string_node->value = $new_class;
                     continue;
                 }
-                $this->renamedNameCollector->add($oldClass);
-                $classNameStringNode->value = Strings::replace($classNameStringNode->value, '#\b' . preg_quote($oldClass, '#') . 'b#', $newClass);
-                $classNameArrayItemNode->setAttribute(PhpDocAttributeKey::ORIG_NODE, null);
-                $hasChanged = \true;
+                $this->renamed_name_collector->add($old_class);
+                $class_name_string_node->value = Strings::replace($class_name_string_node->value, '#\b' . preg_quote($old_class, '#') . 'b#', $new_class);
+                $class_name_array_item_node->set_attribute(Php_Doc_Attribute_Key::ORIG_NODE, null);
+                $has_changed = \true;
             }
-            $currentTypeArrayItemNode = $doctrineAnnotationTagValueNode->getValue('type');
-            if (!$currentTypeArrayItemNode instanceof ArrayItemNode) {
+            $current_type_array_item_node = $doctrine_annotation_tag_value_node->get_value('type');
+            if (!$current_type_array_item_node instanceof Array_Item_Node) {
                 continue;
             }
-            $currentTypeStringNode = $currentTypeArrayItemNode->value;
-            if (!$currentTypeStringNode instanceof StringNode) {
+            $current_type_string_node = $current_type_array_item_node->value;
+            if (!$current_type_string_node instanceof String_Node) {
                 continue;
             }
-            if ($currentTypeStringNode->value === $oldClass) {
-                $currentTypeStringNode->value = $newClass;
-                $hasChanged = \true;
+            if ($current_type_string_node->value === $old_class) {
+                $current_type_string_node->value = $new_class;
+                $has_changed = \true;
             }
         }
     }
     /**
      * @param array<string, string> $oldToNewClasses
      */
-    private function processDoctrineToMany(DoctrineAnnotationTagValueNode $doctrineAnnotationTagValueNode, Node $node, array $oldToNewClasses, bool &$hasChanged): void
+    private function process_doctrine_to_many(Doctrine_Annotation_Tag_Value_Node $doctrine_annotation_tag_value_node, Node $node, array $old_to_new_classes, bool &$has_changed): void
     {
-        $classKey = $doctrineAnnotationTagValueNode->hasClassName('Doctrine\ORM\Mapping\Embedded') ? 'class' : 'targetEntity';
-        $targetEntityArrayItemNode = $doctrineAnnotationTagValueNode->getValue($classKey);
-        if (!$targetEntityArrayItemNode instanceof ArrayItemNode) {
+        $class_key = $doctrine_annotation_tag_value_node->has_class_name('Doctrine\ORM\Mapping\Embedded') ? 'class' : 'targetEntity';
+        $target_entity_array_item_node = $doctrine_annotation_tag_value_node->get_value($class_key);
+        if (!$target_entity_array_item_node instanceof Array_Item_Node) {
             return;
         }
-        $targetEntityStringNode = $targetEntityArrayItemNode->value;
-        if (!$targetEntityStringNode instanceof StringNode) {
+        $target_entity_string_node = $target_entity_array_item_node->value;
+        if (!$target_entity_string_node instanceof String_Node) {
             return;
         }
-        $targetEntityClass = $targetEntityStringNode->value;
+        $target_entity_class = $target_entity_string_node->value;
         // resolve to FQN
-        $tagFullyQualifiedName = $this->classAnnotationMatcher->resolveTagFullyQualifiedName($targetEntityClass, $node);
-        foreach ($oldToNewClasses as $oldClass => $newClass) {
-            if ($tagFullyQualifiedName !== $oldClass) {
+        $tag_fully_qualified_name = $this->class_annotation_matcher->resolve_tag_fully_qualified_name($target_entity_class, $node);
+        foreach ($old_to_new_classes as $old_class => $new_class) {
+            if ($tag_fully_qualified_name !== $old_class) {
                 continue;
             }
-            $this->renamedNameCollector->add($oldClass);
-            $targetEntityStringNode->value = $newClass;
-            $targetEntityArrayItemNode->setAttribute(PhpDocAttributeKey::ORIG_NODE, null);
-            $hasChanged = \true;
+            $this->renamed_name_collector->add($old_class);
+            $target_entity_string_node->value = $new_class;
+            $target_entity_array_item_node->set_attribute(Php_Doc_Attribute_Key::ORIG_NODE, null);
+            $has_changed = \true;
         }
     }
 }

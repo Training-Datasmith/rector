@@ -1,36 +1,34 @@
 <?php
 
 declare (strict_types=1);
-
 namespace Rector\Skipper\Skipper;
 
-use Rector\Skipper\Matcher\FileInfoMatcher;
-
-final class SkipSkipper
+use Rector\Skipper\Matcher\File_Info_Matcher;
+final class Skip_Skipper
 {
     /**
      * @readonly
      */
-    private FileInfoMatcher $fileInfoMatcher;
-    public function __construct(FileInfoMatcher $fileInfoMatcher)
+    private File_Info_Matcher $file_info_matcher;
+    public function __construct(File_Info_Matcher $file_info_matcher)
     {
-        $this->fileInfoMatcher = $fileInfoMatcher;
+        $this->file_info_matcher = $file_info_matcher;
     }
     /**
      * @param array<string, string[]|null> $skippedClasses
      * @param object|string $checker
      */
-    public function doesMatchSkip($checker, string $filePath, array $skippedClasses): bool
+    public function does_match_skip($checker, string $file_path, array $skipped_classes): bool
     {
-        foreach ($skippedClasses as $skippedClass => $skippedFiles) {
-            if (!is_a($checker, $skippedClass, \true)) {
+        foreach ($skipped_classes as $skipped_class => $skipped_files) {
+            if (!is_a($checker, $skipped_class, \true)) {
                 continue;
             }
             // skip everywhere
-            if (!is_array($skippedFiles)) {
+            if (!is_array($skipped_files)) {
                 return \true;
             }
-            if ($this->fileInfoMatcher->doesFileInfoMatchPatterns($filePath, $skippedFiles)) {
+            if ($this->file_info_matcher->does_file_info_match_patterns($file_path, $skipped_files)) {
                 return \true;
             }
         }

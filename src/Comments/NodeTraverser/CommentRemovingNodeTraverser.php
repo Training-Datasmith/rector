@@ -1,16 +1,14 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Comments\Node_Traverser;
 
-namespace Rector\Comments\NodeTraverser;
-
-use PhpParser\NodeTraverser;
-use Rector\Comments\NodeVisitor\CommentRemovingNodeVisitor;
-
-final class CommentRemovingNodeTraverser extends NodeTraverser
+use Php_Parser\Node_Traverser;
+use Rector\Comments\Node_Visitor\Comment_Removing_Node_Visitor;
+final class Comment_Removing_Node_Traverser extends Node_Traverser
 {
-    public function __construct(CommentRemovingNodeVisitor $commentRemovingNodeVisitor)
+    public function __construct(Comment_Removing_Node_Visitor $comment_removing_node_visitor)
     {
-        parent::__construct($commentRemovingNodeVisitor);
+        parent::__construct($comment_removing_node_visitor);
     }
 }

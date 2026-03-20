@@ -1,50 +1,48 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Php_Parser\Node_Visitor;
 
-namespace Rector\PhpParser\NodeVisitor;
-
-use PhpParser\Node;
-use PhpParser\Node\ArrayItem;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\AssignOp;
-use PhpParser\Node\Expr\AssignRef;
-use PhpParser\Node\Expr\List_;
-use PhpParser\NodeVisitorAbstract;
-use Rector\Contract\PhpParser\DecoratingNodeVisitorInterface;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-
+use Php_Parser\Node;
+use Php_Parser\Node\Array_Item;
+use Php_Parser\Node\Expr\Assign;
+use Php_Parser\Node\Expr\Assign_Op;
+use Php_Parser\Node\Expr\Assign_Ref;
+use Php_Parser\Node\Expr\List_;
+use Php_Parser\Node_Visitor_Abstract;
+use Rector\Contract\Php_Parser\Decorating_Node_Visitor_Interface;
+use Rector\Node_Type_Resolver\Node\Attribute_Key;
 /**
  * Inspired by https://github.com/phpstan/phpstan-src/blob/1.7.x/src/Parser/NewAssignedToPropertyVisitor.php
  */
-final class AssignedToNodeVisitor extends NodeVisitorAbstract implements DecoratingNodeVisitorInterface
+final class Assigned_To_Node_Visitor extends Node_Visitor_Abstract implements Decorating_Node_Visitor_Interface
 {
-    public function enterNode(Node $node): ?Node
+    public function enter_node(Node $node): ?Node
     {
-        if ($node instanceof AssignOp) {
-            $node->var->setAttribute(AttributeKey::IS_ASSIGN_OP_VAR, \true);
+        if ($node instanceof Assign_Op) {
+            $node->var->set_attribute(Attribute_Key::IS_ASSIGN_OP_VAR, \true);
             return null;
         }
-        if ($node instanceof AssignRef) {
-            $node->expr->setAttribute(AttributeKey::IS_ASSIGN_REF_EXPR, \true);
+        if ($node instanceof Assign_Ref) {
+            $node->expr->set_attribute(Attribute_Key::IS_ASSIGN_REF_EXPR, \true);
             return null;
         }
         if (!$node instanceof Assign) {
             return null;
         }
-        $node->var->setAttribute(AttributeKey::IS_BEING_ASSIGNED, \true);
+        $node->var->set_attribute(Attribute_Key::IS_BEING_ASSIGNED, \true);
         if ($node->var instanceof List_) {
             foreach ($node->var->items as $item) {
-                if ($item instanceof ArrayItem) {
-                    $item->value->setAttribute(AttributeKey::IS_BEING_ASSIGNED, \true);
+                if ($item instanceof Array_Item) {
+                    $item->value->set_attribute(Attribute_Key::IS_BEING_ASSIGNED, \true);
                 }
             }
         }
-        $node->expr->setAttribute(AttributeKey::IS_ASSIGNED_TO, \true);
+        $node->expr->set_attribute(Attribute_Key::IS_ASSIGNED_TO, \true);
         if ($node->expr instanceof Assign) {
-            $node->var->setAttribute(AttributeKey::IS_MULTI_ASSIGN, \true);
-            $node->expr->setAttribute(AttributeKey::IS_MULTI_ASSIGN, \true);
-            $node->expr->var->setAttribute(AttributeKey::IS_ASSIGNED_TO, \true);
+            $node->var->set_attribute(Attribute_Key::IS_MULTI_ASSIGN, \true);
+            $node->expr->set_attribute(Attribute_Key::IS_MULTI_ASSIGN, \true);
+            $node->expr->var->set_attribute(Attribute_Key::IS_ASSIGNED_TO, \true);
         }
         return null;
     }

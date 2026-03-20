@@ -1,12 +1,10 @@
 <?php
 
 declare (strict_types=1);
-
 namespace Rector\Configuration;
 
-use Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
-use Rector\Caching\ValueObject\Storage\FileCacheStorage;
-
+use Rector\Caching\Contract\Value_Object\Storage\Cache_Storage_Interface;
+use Rector\Caching\Value_Object\Storage\File_Cache_Storage;
 final class Option
 {
     /**
@@ -136,7 +134,7 @@ final class Option
      * @var class-string<CacheStorageInterface>
      * @internal
      */
-    public const CACHE_CLASS = FileCacheStorage::class;
+    public const CACHE_CLASS = File_Cache_Storage::class;
     /**
      * @var string
      */

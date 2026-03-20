@@ -1,46 +1,44 @@
 <?php
 
 declare (strict_types=1);
-
 namespace Rector\Autoloading;
 
 use Rector\Configuration\Option;
-use Rector\Configuration\Parameter\SimpleParameterProvider;
-use Rector\StaticReflection\DynamicSourceLocatorDecorator;
-use RectorPrefix202603\Symfony\Component\Console\Input\InputInterface;
-use RectorPrefix202603\Webmozart\Assert\Assert;
-
+use Rector\Configuration\Parameter\Simple_Parameter_Provider;
+use Rector\Static_Reflection\Dynamic_Source_Locator_Decorator;
+use Rector_Prefix202603\Symfony\Component\Console\Input\Input_Interface;
+use Rector_Prefix202603\Webmozart\Assert\Assert;
 /**
  * Should it pass autoload files/directories to PHPStan analyzer?
  */
-final class AdditionalAutoloader
+final class Additional_Autoloader
 {
     /**
      * @readonly
      */
-    private DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator;
-    public function __construct(DynamicSourceLocatorDecorator $dynamicSourceLocatorDecorator)
+    private Dynamic_Source_Locator_Decorator $dynamic_source_locator_decorator;
+    public function __construct(Dynamic_Source_Locator_Decorator $dynamic_source_locator_decorator)
     {
-        $this->dynamicSourceLocatorDecorator = $dynamicSourceLocatorDecorator;
+        $this->dynamic_source_locator_decorator = $dynamic_source_locator_decorator;
     }
-    public function autoloadInput(InputInterface $input): void
+    public function autoload_input(Input_Interface $input): void
     {
-        if (!$input->hasOption(Option::AUTOLOAD_FILE)) {
+        if (!$input->has_option(Option::AUTOLOAD_FILE)) {
             return;
         }
         /** @var string|null $autoloadFile */
-        $autoloadFile = $input->getOption(Option::AUTOLOAD_FILE);
-        if ($autoloadFile === null) {
+        $autoload_file = $input->get_option(Option::AUTOLOAD_FILE);
+        if ($autoload_file === null) {
             return;
         }
-        Assert::fileExists($autoloadFile, sprintf('Extra autoload file %s was not found', $autoloadFile));
-        require_once $autoloadFile;
+        Assert::file_exists($autoload_file, sprintf('Extra autoload file %s was not found', $autoload_file));
+        require_once $autoload_file;
     }
-    public function autoloadPaths(): void
+    public function autoload_paths(): void
     {
-        $autoloadPaths = SimpleParameterProvider::provideArrayParameter(Option::AUTOLOAD_PATHS);
-        $autoloadPaths = $this->dynamicSourceLocatorDecorator->addPaths($autoloadPaths);
+        $autoload_paths = Simple_Parameter_Provider::provide_array_parameter(Option::AUTOLOAD_PATHS);
+        $autoload_paths = $this->dynamic_source_locator_decorator->add_paths($autoload_paths);
         // set values of Option::AUTOLOAD_PATHS with transformed paths
-        SimpleParameterProvider::setParameter(Option::AUTOLOAD_PATHS, $autoloadPaths);
+        Simple_Parameter_Provider::set_parameter(Option::AUTOLOAD_PATHS, $autoload_paths);
     }
 }

@@ -1,10 +1,9 @@
 <?php
 
 declare (strict_types=1);
-
 namespace Rector\Util;
 
-final class ArrayParametersMerger
+final class Array_Parameters_Merger
 {
     /**
      * Merges configurations. Left has higher priority than right one.
@@ -18,7 +17,7 @@ final class ArrayParametersMerger
     public function merge($left, $right)
     {
         if (is_array($left) && is_array($right)) {
-            return $this->mergeLeftToRightWithCallable($left, $right, \Closure::fromCallable([$this, 'merge']));
+            return $this->merge_left_to_right_with_callable($left, $right, \Closure::from_callable([$this, 'merge']));
         }
         if ($left !== null) {
             return $left;
@@ -33,7 +32,7 @@ final class ArrayParametersMerger
      * @param array<int|string, mixed> $right
      * @return mixed[]
      */
-    private function mergeLeftToRightWithCallable(array $left, array $right, callable $mergeCallback): array
+    private function merge_left_to_right_with_callable(array $left, array $right, callable $merge_callback): array
     {
         foreach ($left as $key => $val) {
             if (is_int($key)) {
@@ -43,7 +42,7 @@ final class ArrayParametersMerger
                 }
             } else {
                 if (isset($right[$key])) {
-                    $val = $mergeCallback($val, $right[$key]);
+                    $val = $merge_callback($val, $right[$key]);
                 }
                 $right[$key] = $val;
             }

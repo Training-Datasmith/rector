@@ -1,14 +1,12 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Node_Type_Resolver\Php_Stan\Scope\Contract\Node_Visitor;
 
-namespace Rector\NodeTypeResolver\PHPStan\Scope\Contract\NodeVisitor;
-
-use PhpParser\NodeVisitor;
-
+use Php_Parser\Node_Visitor;
 /**
  * @deprecated Since 2.2.9. Use \Rector\Contract\PhpParser\DecoratingNodeVisitorInterface instead
  */
-interface ScopeResolverNodeVisitorInterface extends NodeVisitor
+interface Scope_Resolver_Node_Visitor_Interface extends Node_Visitor
 {
 }

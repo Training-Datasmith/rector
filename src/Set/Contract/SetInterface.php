@@ -1,12 +1,11 @@
 <?php
 
 declare (strict_types=1);
-
 namespace Rector\Set\Contract;
 
-interface SetInterface
+interface Set_Interface
 {
-    public function getGroupName(): string;
-    public function getName(): string;
-    public function getSetFilePath(): string;
+    public function get_group_name(): string;
+    public function get_name(): string;
+    public function get_set_file_path(): string;
 }

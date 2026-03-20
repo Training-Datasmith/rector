@@ -1,55 +1,53 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Vendor_Locker\Node_Vendor_Locker;
 
-namespace Rector\VendorLocker\NodeVendorLocker;
-
-use PhpParser\Node\Stmt\ClassMethod;
-use PHPStan\Reflection\ClassReflection;
-use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\Reflection\ReflectionResolver;
-
-final class ClassMethodParamVendorLockResolver
+use Php_Parser\Node\Stmt\Class_Method;
+use Php_Stan\Reflection\Class_Reflection;
+use Rector\Node_Name_Resolver\Node_Name_Resolver;
+use Rector\Reflection\Reflection_Resolver;
+final class Class_Method_Param_Vendor_Lock_Resolver
 {
     /**
      * @readonly
      */
-    private NodeNameResolver $nodeNameResolver;
+    private Node_Name_Resolver $node_name_resolver;
     /**
      * @readonly
      */
-    private ReflectionResolver $reflectionResolver;
-    public function __construct(NodeNameResolver $nodeNameResolver, ReflectionResolver $reflectionResolver)
+    private Reflection_Resolver $reflection_resolver;
+    public function __construct(Node_Name_Resolver $node_name_resolver, Reflection_Resolver $reflection_resolver)
     {
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->reflectionResolver = $reflectionResolver;
+        $this->node_name_resolver = $node_name_resolver;
+        $this->reflection_resolver = $reflection_resolver;
     }
-    public function isVendorLocked(ClassMethod $classMethod): bool
+    public function is_vendor_locked(Class_Method $class_method): bool
     {
-        if ($classMethod->isMagic()) {
+        if ($class_method->is_magic()) {
             return \true;
         }
-        if ($classMethod->isPrivate()) {
+        if ($class_method->is_private()) {
             return \false;
         }
-        $classReflection = $this->reflectionResolver->resolveClassReflection($classMethod);
-        if (!$classReflection instanceof ClassReflection) {
+        $class_reflection = $this->reflection_resolver->resolve_class_reflection($class_method);
+        if (!$class_reflection instanceof Class_Reflection) {
             return \false;
         }
         /** @var string $methodName */
-        $methodName = $this->nodeNameResolver->getName($classMethod);
+        $method_name = $this->node_name_resolver->get_name($class_method);
         // has interface vendor lock? → better skip it, as PHPStan has access only to just analyzed classes
-        return $this->hasParentInterfaceMethod($classReflection, $methodName);
+        return $this->has_parent_interface_method($class_reflection, $method_name);
     }
     /**
      * Has interface even in our project?
      * Better skip it, as PHPStan has access only to just analyzed classes.
      * This might change type, that works for current class, but breaks another implementer.
      */
-    private function hasParentInterfaceMethod(ClassReflection $classReflection, string $methodName): bool
+    private function has_parent_interface_method(Class_Reflection $class_reflection, string $method_name): bool
     {
-        foreach ($classReflection->getInterfaces() as $interfaceClassReflection) {
-            if ($interfaceClassReflection->hasMethod($methodName)) {
+        foreach ($class_reflection->get_interfaces() as $interface_class_reflection) {
+            if ($interface_class_reflection->has_method($method_name)) {
                 return \true;
             }
         }

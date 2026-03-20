@@ -1,63 +1,61 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Changes_Reporting\Output;
 
-namespace Rector\ChangesReporting\Output;
-
-use Rector\ChangesReporting\Contract\Output\OutputFormatterInterface;
-use Rector\Parallel\ValueObject\Bridge;
-use Rector\ValueObject\Configuration;
-use Rector\ValueObject\Error\SystemError;
-use Rector\ValueObject\ProcessResult;
-use RectorPrefix202603\Nette\Utils\Json;
-
-final class JsonOutputFormatter implements OutputFormatterInterface
+use Rector\Changes_Reporting\Contract\Output\Output_Formatter_Interface;
+use Rector\Parallel\Value_Object\Bridge;
+use Rector\Value_Object\Configuration;
+use Rector\Value_Object\Error\System_Error;
+use Rector\Value_Object\Process_Result;
+use Rector_Prefix202603\Nette\Utils\Json;
+final class Json_Output_Formatter implements Output_Formatter_Interface
 {
     /**
      * @var string
      */
     public const NAME = 'json';
-    public function getName(): string
+    public function get_name(): string
     {
         return self::NAME;
     }
-    public function report(ProcessResult $processResult, Configuration $configuration): void
+    public function report(Process_Result $process_result, Configuration $configuration): void
     {
-        $errorsJson = ['totals' => ['changed_files' => $processResult->getTotalChanged()]];
-        $fileDiffs = $processResult->getFileDiffs();
-        ksort($fileDiffs);
-        foreach ($fileDiffs as $fileDiff) {
-            $filePath = $configuration->isReportingWithRealPath() ? $fileDiff->getAbsoluteFilePath() ?? '' : $fileDiff->getRelativeFilePath();
-            $errorsJson[Bridge::FILE_DIFFS][] = ['file' => $filePath, 'diff' => $fileDiff->getDiff(), 'applied_rectors' => $fileDiff->getRectorClasses()];
+        $errors_json = ['totals' => ['changed_files' => $process_result->get_total_changed()]];
+        $file_diffs = $process_result->get_file_diffs();
+        ksort($file_diffs);
+        foreach ($file_diffs as $file_diff) {
+            $file_path = $configuration->is_reporting_with_real_path() ? $file_diff->get_absolute_file_path() ?? '' : $file_diff->get_relative_file_path();
+            $errors_json[Bridge::FILE_DIFFS][] = ['file' => $file_path, 'diff' => $file_diff->get_diff(), 'applied_rectors' => $file_diff->get_rector_classes()];
             // for Rector CI
-            $errorsJson['changed_files'][] = $filePath;
+            $errors_json['changed_files'][] = $file_path;
         }
-        $systemErrors = $processResult->getSystemErrors();
-        $errorsJson['totals']['errors'] = count($systemErrors);
-        $errorsData = $this->createErrorsData($systemErrors, $configuration->isReportingWithRealPath());
-        if ($errorsData !== []) {
-            $errorsJson['errors'] = $errorsData;
+        $system_errors = $process_result->get_system_errors();
+        $errors_json['totals']['errors'] = count($system_errors);
+        $errors_data = $this->create_errors_data($system_errors, $configuration->is_reporting_with_real_path());
+        if ($errors_data !== []) {
+            $errors_json['errors'] = $errors_data;
         }
-        $json = Json::encode($errorsJson, \true);
+        $json = Json::encode($errors_json, \true);
         echo $json . \PHP_EOL;
     }
     /**
      * @param SystemError[] $errors
      * @return mixed[]
      */
-    private function createErrorsData(array $errors, bool $absoluteFilePath): array
+    private function create_errors_data(array $errors, bool $absolute_file_path): array
     {
-        $errorsData = [];
+        $errors_data = [];
         foreach ($errors as $error) {
-            $errorDataJson = ['message' => $error->getMessage(), 'file' => $absoluteFilePath ? $error->getAbsoluteFilePath() : $error->getRelativeFilePath()];
-            if ($error->getRectorClass() !== null) {
-                $errorDataJson['caused_by'] = $error->getRectorClass();
+            $error_data_json = ['message' => $error->get_message(), 'file' => $absolute_file_path ? $error->get_absolute_file_path() : $error->get_relative_file_path()];
+            if ($error->get_rector_class() !== null) {
+                $error_data_json['caused_by'] = $error->get_rector_class();
             }
-            if ($error->getLine() !== null) {
-                $errorDataJson['line'] = $error->getLine();
+            if ($error->get_line() !== null) {
+                $error_data_json['line'] = $error->get_line();
             }
-            $errorsData[] = $errorDataJson;
+            $errors_data[] = $error_data_json;
         }
-        return $errorsData;
+        return $errors_data;
     }
 }

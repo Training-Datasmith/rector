@@ -1,33 +1,31 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Node_Type_Resolver\Php_Doc\Node_Analyzer;
 
-namespace Rector\NodeTypeResolver\PhpDoc\NodeAnalyzer;
-
-use PhpParser\Node;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocNode;
-use Rector\NodeTypeResolver\PhpDocNodeVisitor\NameImportingPhpDocNodeVisitor;
-use Rector\PhpDocParser\PhpDocParser\PhpDocNodeTraverser;
-
-final class DocBlockNameImporter
+use Php_Parser\Node;
+use Php_Stan\Php_Doc_Parser\Ast\Php_Doc\Php_Doc_Node;
+use Rector\Node_Type_Resolver\Php_Doc_Node_Visitor\Name_Importing_Php_Doc_Node_Visitor;
+use Rector\Php_Doc_Parser\Php_Doc_Parser\Php_Doc_Node_Traverser;
+final class Doc_Block_Name_Importer
 {
     /**
      * @readonly
      */
-    private NameImportingPhpDocNodeVisitor $nameImportingPhpDocNodeVisitor;
-    public function __construct(NameImportingPhpDocNodeVisitor $nameImportingPhpDocNodeVisitor)
+    private Name_Importing_Php_Doc_Node_Visitor $name_importing_php_doc_node_visitor;
+    public function __construct(Name_Importing_Php_Doc_Node_Visitor $name_importing_php_doc_node_visitor)
     {
-        $this->nameImportingPhpDocNodeVisitor = $nameImportingPhpDocNodeVisitor;
+        $this->name_importing_php_doc_node_visitor = $name_importing_php_doc_node_visitor;
     }
-    public function importNames(PhpDocNode $phpDocNode, Node $node): bool
+    public function import_names(Php_Doc_Node $php_doc_node, Node $node): bool
     {
-        if ($phpDocNode->children === []) {
+        if ($php_doc_node->children === []) {
             return \false;
         }
-        $this->nameImportingPhpDocNodeVisitor->setCurrentNode($node);
-        $phpDocNodeTraverser = new PhpDocNodeTraverser();
-        $phpDocNodeTraverser->addPhpDocNodeVisitor($this->nameImportingPhpDocNodeVisitor);
-        $phpDocNodeTraverser->traverse($phpDocNode);
-        return $this->nameImportingPhpDocNodeVisitor->hasChanged();
+        $this->name_importing_php_doc_node_visitor->set_current_node($node);
+        $php_doc_node_traverser = new Php_Doc_Node_Traverser();
+        $php_doc_node_traverser->add_php_doc_node_visitor($this->name_importing_php_doc_node_visitor);
+        $php_doc_node_traverser->traverse($php_doc_node);
+        return $this->name_importing_php_doc_node_visitor->has_changed();
     }
 }

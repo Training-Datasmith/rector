@@ -1,32 +1,30 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Skipper\Skip_Voter;
 
-namespace Rector\Skipper\SkipVoter;
-
-use PHPStan\Reflection\ReflectionProvider;
-use Rector\Skipper\SkipCriteriaResolver\SkippedClassResolver;
-use Rector\Skipper\Skipper\SkipSkipper;
-
-final class ClassSkipVoter
+use Php_Stan\Reflection\Reflection_Provider;
+use Rector\Skipper\Skip_Criteria_Resolver\Skipped_Class_Resolver;
+use Rector\Skipper\Skipper\Skip_Skipper;
+final class Class_Skip_Voter
 {
     /**
      * @readonly
      */
-    private SkipSkipper $skipSkipper;
+    private Skip_Skipper $skip_skipper;
     /**
      * @readonly
      */
-    private SkippedClassResolver $skippedClassResolver;
+    private Skipped_Class_Resolver $skipped_class_resolver;
     /**
      * @readonly
      */
-    private ReflectionProvider $reflectionProvider;
-    public function __construct(SkipSkipper $skipSkipper, SkippedClassResolver $skippedClassResolver, ReflectionProvider $reflectionProvider)
+    private Reflection_Provider $reflection_provider;
+    public function __construct(Skip_Skipper $skip_skipper, Skipped_Class_Resolver $skipped_class_resolver, Reflection_Provider $reflection_provider)
     {
-        $this->skipSkipper = $skipSkipper;
-        $this->skippedClassResolver = $skippedClassResolver;
-        $this->reflectionProvider = $reflectionProvider;
+        $this->skip_skipper = $skip_skipper;
+        $this->skipped_class_resolver = $skipped_class_resolver;
+        $this->reflection_provider = $reflection_provider;
     }
     /**
      * @param string|object $element
@@ -36,14 +34,14 @@ final class ClassSkipVoter
         if (is_object($element)) {
             return \true;
         }
-        return $this->reflectionProvider->hasClass($element);
+        return $this->reflection_provider->has_class($element);
     }
     /**
      * @param string|object $element
      */
-    public function shouldSkip($element, string $filePath): bool
+    public function should_skip($element, string $file_path): bool
     {
-        $skippedClasses = $this->skippedClassResolver->resolve();
-        return $this->skipSkipper->doesMatchSkip($element, $filePath, $skippedClasses);
+        $skipped_classes = $this->skipped_class_resolver->resolve();
+        return $this->skip_skipper->does_match_skip($element, $file_path, $skipped_classes);
     }
 }

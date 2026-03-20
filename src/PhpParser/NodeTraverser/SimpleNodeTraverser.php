@@ -1,31 +1,30 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Php_Parser\Node_Traverser;
 
-namespace Rector\PhpParser\NodeTraverser;
-
-use PhpParser\Node;
-use PhpParser\Node\FunctionLike;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\NodeTraverser;
-use PhpParser\NodeVisitor;
-use PhpParser\NodeVisitorAbstract;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-
-final class SimpleNodeTraverser
+use Php_Parser\Node;
+use Php_Parser\Node\Function_Like;
+use Php_Parser\Node\Stmt\Class_;
+use Php_Parser\Node_Traverser;
+use Php_Parser\Node_Visitor;
+use Php_Parser\Node_Visitor_Abstract;
+use Rector\Node_Type_Resolver\Node\Attribute_Key;
+final class Simple_Node_Traverser
 {
     /**
      * @param Node[]|Node $nodesOrNode
      * @param AttributeKey::* $attributeKey
      * @param mixed $value
      */
-    public static function decorateWithAttributeValue($nodesOrNode, string $attributeKey, $value): void
+    public static function decorate_with_attribute_value($nodes_or_node, string $attribute_key, $value): void
     {
-        $callableNodeVisitor = new class ($attributeKey, $value) extends NodeVisitorAbstract {
+        $callable_node_visitor = new class($attribute_key, $value) extends Node_Visitor_Abstract
+        {
             /**
              * @readonly
              */
-            private string $attributeKey;
+            private string $attribute_key;
             /**
              * @readonly
              * @var mixed
@@ -34,23 +33,23 @@ final class SimpleNodeTraverser
             /**
              * @param mixed $value
              */
-            public function __construct(string $attributeKey, $value)
+            public function __construct(string $attribute_key, $value)
             {
-                $this->attributeKey = $attributeKey;
+                $this->attribute_key = $attribute_key;
                 $this->value = $value;
             }
-            public function enterNode(Node $node): ?int
+            public function enter_node(Node $node): ?int
             {
                 // avoid nested functions or classes
-                if ($node instanceof Class_ || $node instanceof FunctionLike) {
-                    return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+                if ($node instanceof Class_ || $node instanceof Function_Like) {
+                    return Node_Visitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
                 }
-                $node->setAttribute($this->attributeKey, $this->value);
+                $node->set_attribute($this->attribute_key, $this->value);
                 return null;
             }
         };
-        $nodeTraverser = new NodeTraverser($callableNodeVisitor);
-        $nodes = $nodesOrNode instanceof Node ? [$nodesOrNode] : $nodesOrNode;
-        $nodeTraverser->traverse($nodes);
+        $node_traverser = new Node_Traverser($callable_node_visitor);
+        $nodes = $nodes_or_node instanceof Node ? [$nodes_or_node] : $nodes_or_node;
+        $node_traverser->traverse($nodes);
     }
 }

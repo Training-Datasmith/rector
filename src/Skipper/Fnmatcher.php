@@ -1,17 +1,16 @@
 <?php
 
 declare (strict_types=1);
-
 namespace Rector\Skipper;
 
 final class Fnmatcher
 {
-    public function match(string $matchingPath, string $filePath): bool
+    public function match(string $matching_path, string $file_path): bool
     {
-        if (\fnmatch($matchingPath, $filePath)) {
+        if (\fnmatch($matching_path, $file_path)) {
             return \true;
         }
         // in case of relative compare
-        return \fnmatch('*/' . $matchingPath, $filePath);
+        return \fnmatch('*/' . $matching_path, $file_path);
     }
 }

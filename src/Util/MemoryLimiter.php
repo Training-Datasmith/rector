@@ -1,17 +1,15 @@
 <?php
 
 declare (strict_types=1);
-
 namespace Rector\Util;
 
-use Rector\Exception\Configuration\InvalidConfigurationException;
-use Rector\ValueObject\Configuration;
-use RectorPrefix202603\Nette\Utils\Strings;
-
+use Rector\Exception\Configuration\Invalid_Configuration_Exception;
+use Rector\Value_Object\Configuration;
+use Rector_Prefix202603\Nette\Utils\Strings;
 /**
  * @inspiration https://github.com/phpstan/phpstan-src/commit/ccc046ca473dcdb5ce9225cc05d7808f2e327f40
  */
-final class MemoryLimiter
+final class Memory_Limiter
 {
     /**
      * @see https://regex101.com/r/pmiGUM/1
@@ -20,24 +18,24 @@ final class MemoryLimiter
     private const VALID_MEMORY_LIMIT_REGEX = '#^-?\d+[kMG]?$#i';
     public function adjust(Configuration $configuration): void
     {
-        $memoryLimit = $configuration->getMemoryLimit();
-        if ($memoryLimit === null) {
+        $memory_limit = $configuration->get_memory_limit();
+        if ($memory_limit === null) {
             return;
         }
-        $this->validateMemoryLimitFormat($memoryLimit);
-        $memorySetResult = ini_set('memory_limit', $memoryLimit);
-        if ($memorySetResult === \false) {
-            $errorMessage = sprintf('Memory limit "%s" cannot be set.', $memoryLimit);
-            throw new InvalidConfigurationException($errorMessage);
+        $this->validate_memory_limit_format($memory_limit);
+        $memory_set_result = ini_set('memory_limit', $memory_limit);
+        if ($memory_set_result === \false) {
+            $error_message = sprintf('Memory limit "%s" cannot be set.', $memory_limit);
+            throw new Invalid_Configuration_Exception($error_message);
         }
     }
-    private function validateMemoryLimitFormat(string $memoryLimit): void
+    private function validate_memory_limit_format(string $memory_limit): void
     {
-        $memoryLimitFormatMatch = Strings::match($memoryLimit, self::VALID_MEMORY_LIMIT_REGEX);
-        if ($memoryLimitFormatMatch !== null) {
+        $memory_limit_format_match = Strings::match($memory_limit, self::VALID_MEMORY_LIMIT_REGEX);
+        if ($memory_limit_format_match !== null) {
             return;
         }
-        $errorMessage = sprintf('Invalid memory limit format "%s".', $memoryLimit);
-        throw new InvalidConfigurationException($errorMessage);
+        $error_message = sprintf('Invalid memory limit format "%s".', $memory_limit);
+        throw new Invalid_Configuration_Exception($error_message);
     }
 }

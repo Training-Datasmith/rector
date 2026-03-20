@@ -1,37 +1,35 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Php_Attribute;
 
-namespace Rector\PhpAttribute;
-
-use PhpParser\BuilderHelpers;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Scalar\String_;
-use Rector\BetterPhpDocParser\PhpDoc\ArrayItemNode;
-use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
-use Rector\BetterPhpDocParser\PhpDoc\StringNode;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-use Rector\PhpAttribute\Contract\AnnotationToAttributeMapperInterface;
-use Rector\PhpAttribute\Enum\DocTagNodeState;
-use RectorPrefix202603\Webmozart\Assert\Assert;
-
+use Php_Parser\Builder_Helpers;
+use Php_Parser\Node\Expr;
+use Php_Parser\Node\Scalar\String_;
+use Rector\Better_Php_Doc_Parser\Php_Doc\Array_Item_Node;
+use Rector\Better_Php_Doc_Parser\Php_Doc\Doctrine_Annotation_Tag_Value_Node;
+use Rector\Better_Php_Doc_Parser\Php_Doc\String_Node;
+use Rector\Node_Type_Resolver\Node\Attribute_Key;
+use Rector\Php_Attribute\Contract\Annotation_To_Attribute_Mapper_Interface;
+use Rector\Php_Attribute\Enum\Doc_Tag_Node_State;
+use Rector_Prefix202603\Webmozart\Assert\Assert;
 /**
  * @see \Rector\Tests\PhpAttribute\AnnotationToAttributeMapper\AnnotationToAttributeMapperTest
  */
-final class AnnotationToAttributeMapper
+final class Annotation_To_Attribute_Mapper
 {
     /**
      * @var AnnotationToAttributeMapperInterface[]
      * @readonly
      */
-    private array $annotationToAttributeMappers;
+    private array $annotation_to_attribute_mappers;
     /**
      * @param AnnotationToAttributeMapperInterface[] $annotationToAttributeMappers
      */
-    public function __construct(array $annotationToAttributeMappers)
+    public function __construct(array $annotation_to_attribute_mappers)
     {
-        $this->annotationToAttributeMappers = $annotationToAttributeMappers;
-        Assert::notEmpty($annotationToAttributeMappers);
+        $this->annotation_to_attribute_mappers = $annotation_to_attribute_mappers;
+        Assert::not_empty($annotation_to_attribute_mappers);
     }
     /**
      * @return mixed|DocTagNodeState::REMOVE_ARRAY
@@ -39,25 +37,25 @@ final class AnnotationToAttributeMapper
      */
     public function map($value)
     {
-        foreach ($this->annotationToAttributeMappers as $annotationToAttributeMapper) {
-            if ($annotationToAttributeMapper->isCandidate($value)) {
-                return $annotationToAttributeMapper->map($value);
+        foreach ($this->annotation_to_attribute_mappers as $annotation_to_attribute_mapper) {
+            if ($annotation_to_attribute_mapper->is_candidate($value)) {
+                return $annotation_to_attribute_mapper->map($value);
             }
         }
         if ($value instanceof Expr) {
             return $value;
         }
         // remove node, as handled elsewhere
-        if ($value instanceof DoctrineAnnotationTagValueNode) {
-            return DocTagNodeState::REMOVE_ARRAY;
+        if ($value instanceof Doctrine_Annotation_Tag_Value_Node) {
+            return Doc_Tag_Node_State::REMOVE_ARRAY;
         }
-        if ($value instanceof ArrayItemNode) {
-            return BuilderHelpers::normalizeValue((string) $value);
+        if ($value instanceof Array_Item_Node) {
+            return Builder_Helpers::normalize_value((string) $value);
         }
-        if ($value instanceof StringNode) {
-            return new String_($value->value, [AttributeKey::KIND => $value->getAttribute(AttributeKey::KIND)]);
+        if ($value instanceof String_Node) {
+            return new String_($value->value, [Attribute_Key::KIND => $value->get_attribute(Attribute_Key::KIND)]);
         }
         // fallback
-        return BuilderHelpers::normalizeValue($value);
+        return Builder_Helpers::normalize_value($value);
     }
 }

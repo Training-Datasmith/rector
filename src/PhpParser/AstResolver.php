@@ -1,293 +1,291 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Php_Parser;
 
-namespace Rector\PhpParser;
-
-use PhpParser\Node;
-use PhpParser\Node\Expr;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\MethodCall;
-use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Expr\NullsafeMethodCall;
-use PhpParser\Node\Name;
-use PhpParser\Node\Param;
-use PhpParser\Node\Stmt;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassLike;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Enum_;
-use PhpParser\Node\Stmt\Function_;
-use PhpParser\Node\Stmt\Interface_;
-use PhpParser\Node\Stmt\Property;
-use PhpParser\Node\Stmt\Trait_;
-use PHPStan\Reflection\ClassReflection;
-use PHPStan\Reflection\FunctionReflection;
-use PHPStan\Reflection\MethodReflection;
-use PHPStan\Reflection\Php\PhpFunctionReflection;
-use PHPStan\Reflection\Php\PhpPropertyReflection;
-use PHPStan\Reflection\ReflectionProvider;
-use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\NodeTypeResolver\NodeScopeAndMetadataDecorator;
-use Rector\NodeTypeResolver\NodeTypeResolver;
-use Rector\PhpParser\Node\BetterNodeFinder;
-use Rector\PhpParser\Parser\RectorParser;
-use Rector\Reflection\MethodReflectionResolver;
-use Rector\StaticTypeMapper\Resolver\ClassNameFromObjectTypeResolver;
-use Rector\ValueObject\MethodName;
+use Php_Parser\Node;
+use Php_Parser\Node\Expr;
+use Php_Parser\Node\Expr\Func_Call;
+use Php_Parser\Node\Expr\Method_Call;
+use Php_Parser\Node\Expr\New_;
+use Php_Parser\Node\Expr\Nullsafe_Method_Call;
+use Php_Parser\Node\Name;
+use Php_Parser\Node\Param;
+use Php_Parser\Node\Stmt;
+use Php_Parser\Node\Stmt\Class_;
+use Php_Parser\Node\Stmt\Class_Like;
+use Php_Parser\Node\Stmt\Class_Method;
+use Php_Parser\Node\Stmt\Enum_;
+use Php_Parser\Node\Stmt\Function_;
+use Php_Parser\Node\Stmt\Interface_;
+use Php_Parser\Node\Stmt\Property;
+use Php_Parser\Node\Stmt\Trait_;
+use Php_Stan\Reflection\Class_Reflection;
+use Php_Stan\Reflection\Function_Reflection;
+use Php_Stan\Reflection\Method_Reflection;
+use Php_Stan\Reflection\Php\Php_Function_Reflection;
+use Php_Stan\Reflection\Php\Php_Property_Reflection;
+use Php_Stan\Reflection\Reflection_Provider;
+use Rector\Node_Name_Resolver\Node_Name_Resolver;
+use Rector\Node_Type_Resolver\Node_Scope_And_Metadata_Decorator;
+use Rector\Node_Type_Resolver\Node_Type_Resolver;
+use Rector\Php_Parser\Node\Better_Node_Finder;
+use Rector\Php_Parser\Parser\Rector_Parser;
+use Rector\Reflection\Method_Reflection_Resolver;
+use Rector\Static_Type_Mapper\Resolver\Class_Name_From_Object_Type_Resolver;
+use Rector\Value_Object\Method_Name;
 use Throwable;
-
 /**
  * The nodes provided by this resolver is for read-only analysis only!
  * They are not part of node tree processed by Rector, so any changes will not make effect in final printed file.
  */
-final class AstResolver
+final class Ast_Resolver
 {
     /**
      * @readonly
      */
-    private RectorParser $rectorParser;
+    private Rector_Parser $rector_parser;
     /**
      * @readonly
      */
-    private NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator;
+    private Node_Scope_And_Metadata_Decorator $node_scope_and_metadata_decorator;
     /**
      * @readonly
      */
-    private NodeNameResolver $nodeNameResolver;
+    private Node_Name_Resolver $node_name_resolver;
     /**
      * @readonly
      */
-    private ReflectionProvider $reflectionProvider;
+    private Reflection_Provider $reflection_provider;
     /**
      * @readonly
      */
-    private NodeTypeResolver $nodeTypeResolver;
+    private Node_Type_Resolver $node_type_resolver;
     /**
      * @readonly
      */
-    private MethodReflectionResolver $methodReflectionResolver;
+    private Method_Reflection_Resolver $method_reflection_resolver;
     /**
      * @readonly
      */
-    private BetterNodeFinder $betterNodeFinder;
+    private Better_Node_Finder $better_node_finder;
     /**
      * Parsing files is very heavy performance, so this will help to leverage it
      * The value can be also null, when no statements could be parsed from the file.
      *
      * @var array<string, Stmt[]|null>
      */
-    private array $parsedFileNodes = [];
-    public function __construct(RectorParser $rectorParser, NodeScopeAndMetadataDecorator $nodeScopeAndMetadataDecorator, NodeNameResolver $nodeNameResolver, ReflectionProvider $reflectionProvider, NodeTypeResolver $nodeTypeResolver, MethodReflectionResolver $methodReflectionResolver, BetterNodeFinder $betterNodeFinder)
+    private array $parsed_file_nodes = [];
+    public function __construct(Rector_Parser $rector_parser, Node_Scope_And_Metadata_Decorator $node_scope_and_metadata_decorator, Node_Name_Resolver $node_name_resolver, Reflection_Provider $reflection_provider, Node_Type_Resolver $node_type_resolver, Method_Reflection_Resolver $method_reflection_resolver, Better_Node_Finder $better_node_finder)
     {
-        $this->rectorParser = $rectorParser;
-        $this->nodeScopeAndMetadataDecorator = $nodeScopeAndMetadataDecorator;
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->reflectionProvider = $reflectionProvider;
-        $this->nodeTypeResolver = $nodeTypeResolver;
-        $this->methodReflectionResolver = $methodReflectionResolver;
-        $this->betterNodeFinder = $betterNodeFinder;
+        $this->rector_parser = $rector_parser;
+        $this->node_scope_and_metadata_decorator = $node_scope_and_metadata_decorator;
+        $this->node_name_resolver = $node_name_resolver;
+        $this->reflection_provider = $reflection_provider;
+        $this->node_type_resolver = $node_type_resolver;
+        $this->method_reflection_resolver = $method_reflection_resolver;
+        $this->better_node_finder = $better_node_finder;
     }
     /**
      * @api downgrade
      * @return \PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Trait_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Enum_|null
      */
-    public function resolveClassFromName(string $className)
+    public function resolve_class_from_name(string $class_name)
     {
-        if (!$this->reflectionProvider->hasClass($className)) {
+        if (!$this->reflection_provider->has_class($class_name)) {
             return null;
         }
-        $classReflection = $this->reflectionProvider->getClass($className);
-        return $this->resolveClassFromClassReflection($classReflection);
+        $class_reflection = $this->reflection_provider->get_class($class_name);
+        return $this->resolve_class_from_class_reflection($class_reflection);
     }
-    public function resolveClassMethodFromMethodReflection(MethodReflection $methodReflection): ?ClassMethod
+    public function resolve_class_method_from_method_reflection(Method_Reflection $method_reflection): ?Class_Method
     {
-        $classReflection = $methodReflection->getDeclaringClass();
-        $fileName = $classReflection->getFileName();
-        $nodes = $this->parseFileNameToDecoratedNodes($fileName);
-        $classLikeName = $classReflection->getName();
-        $methodName = $methodReflection->getName();
+        $class_reflection = $method_reflection->get_declaring_class();
+        $file_name = $class_reflection->get_file_name();
+        $nodes = $this->parse_file_name_to_decorated_nodes($file_name);
+        $class_like_name = $class_reflection->get_name();
+        $method_name = $method_reflection->get_name();
         /** @var ClassMethod|null $classMethod */
-        $classMethod = null;
-        $this->betterNodeFinder->findFirst($nodes, function (Node $node) use ($classLikeName, $methodName, &$classMethod): bool {
-            if (!$node instanceof ClassLike) {
+        $class_method = null;
+        $this->better_node_finder->find_first($nodes, function (Node $node) use ($class_like_name, $method_name, &$class_method): bool {
+            if (!$node instanceof Class_Like) {
                 return \false;
             }
-            if (!$this->nodeNameResolver->isName($node, $classLikeName)) {
+            if (!$this->node_name_resolver->is_name($node, $class_like_name)) {
                 return \false;
             }
-            $method = $node->getMethod($methodName);
-            if ($method instanceof ClassMethod) {
-                $classMethod = $method;
+            $method = $node->get_method($method_name);
+            if ($method instanceof Class_Method) {
+                $class_method = $method;
                 return \true;
             }
             return \false;
         });
-        return $classMethod;
+        return $class_method;
     }
     /**
      * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\New_ $call
      * @return \PhpParser\Node\Stmt\ClassMethod|\PhpParser\Node\Stmt\Function_|null
      */
-    public function resolveClassMethodOrFunctionFromCall($call)
+    public function resolve_class_method_or_function_from_call($call)
     {
-        if ($call instanceof FuncCall) {
-            return $this->resolveFunctionFromFuncCall($call);
+        if ($call instanceof Func_Call) {
+            return $this->resolve_function_from_func_call($call);
         }
-        return $this->resolveClassMethodFromCall($call);
+        return $this->resolve_class_method_from_call($call);
     }
-    public function resolveFunctionFromFunctionReflection(FunctionReflection $functionReflection): ?Function_
+    public function resolve_function_from_function_reflection(Function_Reflection $function_reflection): ?Function_
     {
-        if (!$functionReflection instanceof PhpFunctionReflection) {
+        if (!$function_reflection instanceof Php_Function_Reflection) {
             return null;
         }
-        $fileName = $functionReflection->getFileName();
-        $nodes = $this->parseFileNameToDecoratedNodes($fileName);
-        $functionName = $functionReflection->getName();
+        $file_name = $function_reflection->get_file_name();
+        $nodes = $this->parse_file_name_to_decorated_nodes($file_name);
+        $function_name = $function_reflection->get_name();
         /** @var Function_|null $functionNode */
-        $functionNode = $this->betterNodeFinder->findFirst($nodes, function (Node $node) use ($functionName): bool {
+        $function_node = $this->better_node_finder->find_first($nodes, function (Node $node) use ($function_name): bool {
             if (!$node instanceof Function_) {
                 return \false;
             }
-            return $this->nodeNameResolver->isName($node, $functionName);
+            return $this->node_name_resolver->is_name($node, $function_name);
         });
-        return $functionNode;
+        return $function_node;
     }
     /**
      * @param class-string $className
      */
-    public function resolveClassMethod(string $className, string $methodName): ?ClassMethod
+    public function resolve_class_method(string $class_name, string $method_name): ?Class_Method
     {
-        $methodReflection = $this->methodReflectionResolver->resolveMethodReflection($className, $methodName, null);
-        if (!$methodReflection instanceof MethodReflection) {
+        $method_reflection = $this->method_reflection_resolver->resolve_method_reflection($class_name, $method_name, null);
+        if (!$method_reflection instanceof Method_Reflection) {
             return null;
         }
-        $classMethod = $this->resolveClassMethodFromMethodReflection($methodReflection);
-        if (!$classMethod instanceof ClassMethod) {
-            return $this->locateClassMethodInTrait($methodName, $methodReflection);
+        $class_method = $this->resolve_class_method_from_method_reflection($method_reflection);
+        if (!$class_method instanceof Class_Method) {
+            return $this->locate_class_method_in_trait($method_name, $method_reflection);
         }
-        return $classMethod;
+        return $class_method;
     }
     /**
      * @param \PhpParser\Node\Expr\MethodCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\NullsafeMethodCall|\PhpParser\Node\Expr\New_ $call
      */
-    public function resolveClassMethodFromCall($call): ?ClassMethod
+    public function resolve_class_method_from_call($call): ?Class_Method
     {
         if ($call instanceof New_) {
             if ($call->class instanceof Class_) {
                 return null;
             }
-            $className = $this->nodeNameResolver->getName($call->class);
-            if ($className === null) {
+            $class_name = $this->node_name_resolver->get_name($call->class);
+            if ($class_name === null) {
                 return null;
             }
-            return $this->resolveClassMethod($className, MethodName::CONSTRUCT);
+            return $this->resolve_class_method($class_name, Method_Name::CONSTRUCT);
         }
-        $callerStaticType = $call instanceof MethodCall || $call instanceof NullsafeMethodCall ? $this->nodeTypeResolver->getType($call->var) : $this->nodeTypeResolver->getType($call->class);
-        $className = ClassNameFromObjectTypeResolver::resolve($callerStaticType);
-        if ($className === null) {
+        $caller_static_type = $call instanceof Method_Call || $call instanceof Nullsafe_Method_Call ? $this->node_type_resolver->get_type($call->var) : $this->node_type_resolver->get_type($call->class);
+        $class_name = Class_Name_From_Object_Type_Resolver::resolve($caller_static_type);
+        if ($class_name === null) {
             return null;
         }
-        $methodName = $this->nodeNameResolver->getName($call->name);
-        if ($methodName === null) {
+        $method_name = $this->node_name_resolver->get_name($call->name);
+        if ($method_name === null) {
             return null;
         }
-        return $this->resolveClassMethod($className, $methodName);
+        return $this->resolve_class_method($class_name, $method_name);
     }
     /**
      * @return \PhpParser\Node\Stmt\Trait_|\PhpParser\Node\Stmt\Class_|\PhpParser\Node\Stmt\Interface_|\PhpParser\Node\Stmt\Enum_|null
      */
-    public function resolveClassFromClassReflection(ClassReflection $classReflection)
+    public function resolve_class_from_class_reflection(Class_Reflection $class_reflection)
     {
-        if ($classReflection->isBuiltin()) {
+        if ($class_reflection->is_builtin()) {
             return null;
         }
-        $fileName = $classReflection->getFileName();
-        $stmts = $this->parseFileNameToDecoratedNodes($fileName);
-        $className = $classReflection->getName();
+        $file_name = $class_reflection->get_file_name();
+        $stmts = $this->parse_file_name_to_decorated_nodes($file_name);
+        $class_name = $class_reflection->get_name();
         /** @var Class_|Trait_|Interface_|Enum_|null $classLike */
-        $classLike = $this->betterNodeFinder->findFirst($stmts, function (Node $node) use ($className): bool {
-            if (!$node instanceof ClassLike) {
+        $class_like = $this->better_node_finder->find_first($stmts, function (Node $node) use ($class_name): bool {
+            if (!$node instanceof Class_Like) {
                 return \false;
             }
-            return $this->nodeNameResolver->isName($node, $className);
+            return $this->node_name_resolver->is_name($node, $class_name);
         });
-        return $classLike;
+        return $class_like;
     }
     /**
      * @return Trait_[]
      */
-    public function parseClassReflectionTraits(ClassReflection $classReflection): array
+    public function parse_class_reflection_traits(Class_Reflection $class_reflection): array
     {
         /** @var ClassReflection[] $classLikes */
-        $classLikes = $classReflection->getTraits(\true);
+        $class_likes = $class_reflection->get_traits(\true);
         $traits = [];
-        foreach ($classLikes as $classLike) {
-            $fileName = $classLike->getFileName();
-            $nodes = $this->parseFileNameToDecoratedNodes($fileName);
-            $traitName = $classLike->getName();
-            $traitNode = $this->betterNodeFinder->findFirst($nodes, function (Node $node) use ($traitName): bool {
+        foreach ($class_likes as $class_like) {
+            $file_name = $class_like->get_file_name();
+            $nodes = $this->parse_file_name_to_decorated_nodes($file_name);
+            $trait_name = $class_like->get_name();
+            $trait_node = $this->better_node_finder->find_first($nodes, function (Node $node) use ($trait_name): bool {
                 if (!$node instanceof Trait_) {
                     return \false;
                 }
-                return $this->nodeNameResolver->isName($node, $traitName);
+                return $this->node_name_resolver->is_name($node, $trait_name);
             });
-            if (!$traitNode instanceof Trait_) {
+            if (!$trait_node instanceof Trait_) {
                 continue;
             }
-            $traits[] = $traitNode;
+            $traits[] = $trait_node;
         }
         return $traits;
     }
     /**
      * @return \PhpParser\Node\Stmt\Property|\PhpParser\Node\Param|null
      */
-    public function resolvePropertyFromPropertyReflection(PhpPropertyReflection $phpPropertyReflection)
+    public function resolve_property_from_property_reflection(Php_Property_Reflection $php_property_reflection)
     {
-        $classReflection = $phpPropertyReflection->getDeclaringClass();
-        $fileName = $classReflection->getFileName();
-        $nodes = $this->parseFileNameToDecoratedNodes($fileName);
+        $class_reflection = $php_property_reflection->get_declaring_class();
+        $file_name = $class_reflection->get_file_name();
+        $nodes = $this->parse_file_name_to_decorated_nodes($file_name);
         if ($nodes === []) {
             return null;
         }
-        $nativeReflectionProperty = $phpPropertyReflection->getNativeReflection();
-        $desiredClassName = $classReflection->getName();
-        $desiredPropertyName = $nativeReflectionProperty->getName();
-        $propertyNode = null;
-        $this->betterNodeFinder->findFirst($nodes, function (Node $node) use ($desiredClassName, $desiredPropertyName, &$propertyNode): bool {
-            if (!$node instanceof ClassLike) {
+        $native_reflection_property = $php_property_reflection->get_native_reflection();
+        $desired_class_name = $class_reflection->get_name();
+        $desired_property_name = $native_reflection_property->get_name();
+        $property_node = null;
+        $this->better_node_finder->find_first($nodes, function (Node $node) use ($desired_class_name, $desired_property_name, &$property_node): bool {
+            if (!$node instanceof Class_Like) {
                 return \false;
             }
-            if (!$this->nodeNameResolver->isName($node, $desiredClassName)) {
+            if (!$this->node_name_resolver->is_name($node, $desired_class_name)) {
                 return \false;
             }
-            $property = $node->getProperty($desiredPropertyName);
+            $property = $node->get_property($desired_property_name);
             if ($property instanceof Property) {
-                $propertyNode = $property;
+                $property_node = $property;
                 return \true;
             }
             return \false;
         });
-        if ($propertyNode instanceof Property) {
-            return $propertyNode;
+        if ($property_node instanceof Property) {
+            return $property_node;
         }
         // promoted property
-        return $this->findPromotedPropertyByName($nodes, $desiredClassName, $desiredPropertyName);
+        return $this->find_promoted_property_by_name($nodes, $desired_class_name, $desired_property_name);
     }
     /**
      * @return Stmt[]
      */
-    public function parseFileNameToDecoratedNodes(?string $fileName): array
+    public function parse_file_name_to_decorated_nodes(?string $file_name): array
     {
         // probably native PHP → un-parseable
-        if ($fileName === null) {
+        if ($file_name === null) {
             return [];
         }
-        if (isset($this->parsedFileNodes[$fileName])) {
-            return $this->parsedFileNodes[$fileName];
+        if (isset($this->parsed_file_nodes[$file_name])) {
+            return $this->parsed_file_nodes[$file_name];
         }
         try {
-            $stmts = $this->rectorParser->parseFile($fileName);
+            $stmts = $this->rector_parser->parse_file($file_name);
         } catch (Throwable $throwable) {
             /**
              * phpstan.phar contains jetbrains/phpstorm-stubs which the code is not downgraded
@@ -296,67 +294,67 @@ final class AstResolver
              * @see https://github.com/rectorphp/rector/issues/8193 on php 8.0
              * @see https://github.com/rectorphp/rector/issues/8145 on php 7.4
              */
-            if (strpos($fileName, 'phpstan.phar') !== \false) {
+            if (strpos($file_name, 'phpstan.phar') !== \false) {
                 return [];
             }
             throw $throwable;
         }
-        return $this->parsedFileNodes[$fileName] = $this->nodeScopeAndMetadataDecorator->decorateNodesFromFile($fileName, $stmts);
+        return $this->parsed_file_nodes[$file_name] = $this->node_scope_and_metadata_decorator->decorate_nodes_from_file($file_name, $stmts);
     }
-    private function locateClassMethodInTrait(string $methodName, MethodReflection $methodReflection): ?ClassMethod
+    private function locate_class_method_in_trait(string $method_name, Method_Reflection $method_reflection): ?Class_Method
     {
-        $classReflection = $methodReflection->getDeclaringClass();
-        $traits = $this->parseClassReflectionTraits($classReflection);
+        $class_reflection = $method_reflection->get_declaring_class();
+        $traits = $this->parse_class_reflection_traits($class_reflection);
         /** @var ClassMethod|null $classMethod */
-        $classMethod = $this->betterNodeFinder->findFirst($traits, function (Node $node) use ($methodName): bool {
-            if (!$node instanceof ClassMethod) {
+        $class_method = $this->better_node_finder->find_first($traits, function (Node $node) use ($method_name): bool {
+            if (!$node instanceof Class_Method) {
                 return \false;
             }
-            return $this->nodeNameResolver->isName($node, $methodName);
+            return $this->node_name_resolver->is_name($node, $method_name);
         });
-        return $classMethod;
+        return $class_method;
     }
     /**
      * @param Stmt[] $stmts
      */
-    private function findPromotedPropertyByName(array $stmts, string $desiredClassName, string $desiredPropertyName): ?Param
+    private function find_promoted_property_by_name(array $stmts, string $desired_class_name, string $desired_property_name): ?Param
     {
         /** @var Param|null $paramNode */
-        $paramNode = null;
-        $this->betterNodeFinder->findFirst($stmts, function (Node $node) use ($desiredClassName, $desiredPropertyName, &$paramNode): bool {
+        $param_node = null;
+        $this->better_node_finder->find_first($stmts, function (Node $node) use ($desired_class_name, $desired_property_name, &$param_node): bool {
             if (!$node instanceof Class_) {
                 return \false;
             }
-            if (!$this->nodeNameResolver->isName($node, $desiredClassName)) {
+            if (!$this->node_name_resolver->is_name($node, $desired_class_name)) {
                 return \false;
             }
-            $constructClassMethod = $node->getMethod(MethodName::CONSTRUCT);
-            if (!$constructClassMethod instanceof ClassMethod) {
+            $construct_class_method = $node->get_method(Method_Name::CONSTRUCT);
+            if (!$construct_class_method instanceof Class_Method) {
                 return \false;
             }
-            foreach ($constructClassMethod->getParams() as $param) {
-                if (!$param->isPromoted()) {
+            foreach ($construct_class_method->get_params() as $param) {
+                if (!$param->is_promoted()) {
                     continue;
                 }
-                if ($this->nodeNameResolver->isName($param, $desiredPropertyName)) {
-                    $paramNode = $param;
+                if ($this->node_name_resolver->is_name($param, $desired_property_name)) {
+                    $param_node = $param;
                     return \true;
                 }
             }
             return \false;
         });
-        return $paramNode;
+        return $param_node;
     }
-    private function resolveFunctionFromFuncCall(FuncCall $funcCall): ?Function_
+    private function resolve_function_from_func_call(Func_Call $func_call): ?Function_
     {
-        if ($funcCall->name instanceof Expr) {
+        if ($func_call->name instanceof Expr) {
             return null;
         }
-        $functionName = new Name((string) $this->nodeNameResolver->getName($funcCall));
-        if (!$this->reflectionProvider->hasFunction($functionName, null)) {
+        $function_name = new Name((string) $this->node_name_resolver->get_name($func_call));
+        if (!$this->reflection_provider->has_function($function_name, null)) {
             return null;
         }
-        $functionReflection = $this->reflectionProvider->getFunction($functionName, null);
-        return $this->resolveFunctionFromFunctionReflection($functionReflection);
+        $function_reflection = $this->reflection_provider->get_function($function_name, null);
+        return $this->resolve_function_from_function_reflection($function_reflection);
     }
 }

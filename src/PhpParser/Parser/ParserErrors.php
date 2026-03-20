@@ -1,12 +1,10 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Php_Parser\Parser;
 
-namespace Rector\PhpParser\Parser;
-
-use PHPStan\Parser\ParserErrorsException;
-
-final class ParserErrors
+use Php_Stan\Parser\Parser_Errors_Exception;
+final class Parser_Errors
 {
     /**
      * @readonly
@@ -16,16 +14,16 @@ final class ParserErrors
      * @readonly
      */
     private int $line;
-    public function __construct(ParserErrorsException $parserErrorsException)
+    public function __construct(Parser_Errors_Exception $parser_errors_exception)
     {
-        $this->message = $parserErrorsException->getMessage();
-        $this->line = $parserErrorsException->getAttributes()['startLine'] ?? $parserErrorsException->getLine();
+        $this->message = $parser_errors_exception->get_message();
+        $this->line = $parser_errors_exception->get_attributes()['startLine'] ?? $parser_errors_exception->get_line();
     }
-    public function getMessage(): string
+    public function get_message(): string
     {
         return $this->message;
     }
-    public function getLine(): int
+    public function get_line(): int
     {
         return $this->line;
     }

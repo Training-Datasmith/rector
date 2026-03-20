@@ -1,40 +1,38 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Node_Analyzer;
 
-namespace Rector\NodeAnalyzer;
-
-use Rector\Reflection\ReflectionResolver;
-
-final class VariadicAnalyzer
+use Rector\Reflection\Reflection_Resolver;
+final class Variadic_Analyzer
 {
     /**
      * @readonly
      */
-    private ReflectionResolver $reflectionResolver;
-    public function __construct(ReflectionResolver $reflectionResolver)
+    private Reflection_Resolver $reflection_resolver;
+    public function __construct(Reflection_Resolver $reflection_resolver)
     {
-        $this->reflectionResolver = $reflectionResolver;
+        $this->reflection_resolver = $reflection_resolver;
     }
     /**
      * @param \PhpParser\Node\Expr\FuncCall|\PhpParser\Node\Expr\StaticCall|\PhpParser\Node\Expr\MethodCall $call
      */
-    public function hasVariadicParameters(\PhpParser\Node\Expr\CallLike $call): bool
+    public function has_variadic_parameters(\Php_Parser\Node\Expr\Call_Like $call): bool
     {
-        $functionLikeReflection = $this->reflectionResolver->resolveFunctionLikeReflectionFromCall($call);
-        if ($functionLikeReflection === null) {
+        $function_like_reflection = $this->reflection_resolver->resolve_function_like_reflection_from_call($call);
+        if ($function_like_reflection === null) {
             return \false;
         }
-        return $this->hasVariadicVariant($functionLikeReflection);
+        return $this->has_variadic_variant($function_like_reflection);
     }
     /**
      * @param \PHPStan\Reflection\MethodReflection|\PHPStan\Reflection\FunctionReflection $functionLikeReflection
      */
-    private function hasVariadicVariant($functionLikeReflection): bool
+    private function has_variadic_variant($function_like_reflection): bool
     {
-        foreach ($functionLikeReflection->getVariants() as $parametersAcceptor) {
+        foreach ($function_like_reflection->get_variants() as $parameters_acceptor) {
             // can be any number of arguments → nothing to limit here
-            if ($parametersAcceptor->isVariadic()) {
+            if ($parameters_acceptor->is_variadic()) {
                 return \true;
             }
         }

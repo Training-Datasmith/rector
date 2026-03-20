@@ -1,31 +1,29 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Node_Manipulator;
 
-namespace Rector\NodeManipulator;
-
-use PhpParser\Node\FunctionLike;
-use Rector\NodeNameResolver\NodeNameResolver;
-
-final class FunctionLikeManipulator
+use Php_Parser\Node\Function_Like;
+use Rector\Node_Name_Resolver\Node_Name_Resolver;
+final class Function_Like_Manipulator
 {
     /**
      * @readonly
      */
-    private NodeNameResolver $nodeNameResolver;
-    public function __construct(NodeNameResolver $nodeNameResolver)
+    private Node_Name_Resolver $node_name_resolver;
+    public function __construct(Node_Name_Resolver $node_name_resolver)
     {
-        $this->nodeNameResolver = $nodeNameResolver;
+        $this->node_name_resolver = $node_name_resolver;
     }
     /**
      * @return string[]
      */
-    public function resolveParamNames(FunctionLike $functionLike): array
+    public function resolve_param_names(Function_Like $function_like): array
     {
-        $paramNames = [];
-        foreach ($functionLike->getParams() as $param) {
-            $paramNames[] = $this->nodeNameResolver->getName($param);
+        $param_names = [];
+        foreach ($function_like->get_params() as $param) {
+            $param_names[] = $this->node_name_resolver->get_name($param);
         }
-        return $paramNames;
+        return $param_names;
     }
 }

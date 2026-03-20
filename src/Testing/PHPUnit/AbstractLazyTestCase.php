@@ -1,32 +1,30 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Testing\Php_Unit;
 
-namespace Rector\Testing\PHPUnit;
-
-use PHPUnit\Framework\TestCase;
-use PHPUnit\Runner\Version;
-use Rector\Config\RectorConfig;
-use Rector\DependencyInjection\LazyContainerFactory;
-
-abstract class AbstractLazyTestCase extends TestCase
+use Php_Unit\Framework\Test_Case;
+use Php_Unit\Runner\Version;
+use Rector\Config\Rector_Config;
+use Rector\Dependency_Injection\Lazy_Container_Factory;
+abstract class Abstract_Lazy_Test_Case extends Test_Case
 {
-    protected static ?RectorConfig $rectorConfig = null;
-    protected function setUp(): void
+    protected static ?Rector_Config $rector_config = null;
+    protected function set_up(): void
     {
         // this is needed to have always the same preloaded nikic/php-parser classes
         // in both bare AbstractLazyTestCase lazy tests and AbstractRectorTestCase tests
-        $this->includePreloadFilesAndScoperAutoload();
+        $this->include_preload_files_and_scoper_autoload();
     }
     /**
      * @api
      * @param string[] $configFiles
      */
-    protected function bootFromConfigFiles(array $configFiles): void
+    protected function boot_from_config_files(array $config_files): void
     {
-        $rectorConfig = self::getContainer();
-        foreach ($configFiles as $configFile) {
-            $rectorConfig->import($configFile);
+        $rector_config = self::get_container();
+        foreach ($config_files as $config_file) {
+            $rector_config->import($config_file);
         }
     }
     /**
@@ -36,22 +34,22 @@ abstract class AbstractLazyTestCase extends TestCase
      */
     protected function make(string $class): object
     {
-        return self::getContainer()->make($class);
+        return self::get_container()->make($class);
     }
-    protected static function getContainer(): RectorConfig
+    protected static function get_container(): Rector_Config
     {
-        if (!self::$rectorConfig instanceof RectorConfig) {
-            $lazyContainerFactory = new LazyContainerFactory();
-            self::$rectorConfig = $lazyContainerFactory->create();
+        if (!self::$rector_config instanceof Rector_Config) {
+            $lazy_container_factory = new Lazy_Container_Factory();
+            self::$rector_config = $lazy_container_factory->create();
         }
-        self::$rectorConfig->boot();
-        return self::$rectorConfig;
+        self::$rector_config->boot();
+        return self::$rector_config;
     }
-    protected function isWindows(): bool
+    protected function is_windows(): bool
     {
         return strncasecmp(\PHP_OS, 'WIN', 3) === 0;
     }
-    private function includePreloadFilesAndScoperAutoload(): void
+    private function include_preload_files_and_scoper_autoload(): void
     {
         if (file_exists(__DIR__ . '/../../../preload.php')) {
             if (file_exists(__DIR__ . '/../../../vendor')) {

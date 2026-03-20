@@ -1,8 +1,7 @@
 <?php
 
 declare (strict_types=1);
-
-namespace Rector\Parallel\ValueObject;
+namespace Rector\Parallel\Value_Object;
 
 /**
  * @enum

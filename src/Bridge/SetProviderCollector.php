@@ -1,80 +1,78 @@
 <?php
 
 declare (strict_types=1);
-
 namespace Rector\Bridge;
 
-use Rector\Doctrine\Set\SetProvider\DoctrineSetProvider;
-use Rector\PHPUnit\Set\SetProvider\PHPUnitSetProvider;
-use Rector\Set\Contract\SetInterface;
-use Rector\Set\Contract\SetProviderInterface;
-use Rector\Set\SetProvider\CoreSetProvider;
-use Rector\Set\SetProvider\PHPSetProvider;
-use Rector\Set\ValueObject\ComposerTriggeredSet;
-use Rector\Symfony\Set\SetProvider\Symfony3SetProvider;
-use Rector\Symfony\Set\SetProvider\Symfony4SetProvider;
-use Rector\Symfony\Set\SetProvider\Symfony5SetProvider;
-use Rector\Symfony\Set\SetProvider\Symfony6SetProvider;
-use Rector\Symfony\Set\SetProvider\Symfony7SetProvider;
-use Rector\Symfony\Set\SetProvider\SymfonySetProvider;
-use Rector\Symfony\Set\SetProvider\TwigSetProvider;
-
+use Rector\Doctrine\Set\Set_Provider\Doctrine_Set_Provider;
+use Rector\Php_Unit\Set\Set_Provider\Php_Unit_Set_Provider;
+use Rector\Set\Contract\Set_Interface;
+use Rector\Set\Contract\Set_Provider_Interface;
+use Rector\Set\Set_Provider\Core_Set_Provider;
+use Rector\Set\Set_Provider\Php_Set_Provider;
+use Rector\Set\Value_Object\Composer_Triggered_Set;
+use Rector\Symfony\Set\Set_Provider\Symfony3set_Provider;
+use Rector\Symfony\Set\Set_Provider\Symfony4set_Provider;
+use Rector\Symfony\Set\Set_Provider\Symfony5set_Provider;
+use Rector\Symfony\Set\Set_Provider\Symfony6set_Provider;
+use Rector\Symfony\Set\Set_Provider\Symfony7set_Provider;
+use Rector\Symfony\Set\Set_Provider\Symfony_Set_Provider;
+use Rector\Symfony\Set\Set_Provider\Twig_Set_Provider;
 /**
  * @api
  *
  * Utils class to ease building bridges by 3rd-party tools
  */
-final class SetProviderCollector
+final class Set_Provider_Collector
 {
     /**
      * @var SetProviderInterface[]
      * @readonly
      */
-    private array $setProviders;
+    private array $set_providers;
     /**
      * @param SetProviderInterface[] $extraSetProviders
      */
-    public function __construct(array $extraSetProviders = [])
+    public function __construct(array $extra_set_providers = [])
     {
-        $setProviders = [
+        $set_providers = [
             // register all known set providers here
-            new PHPSetProvider(),
-            new CoreSetProvider(),
-            new PHPUnitSetProvider(),
-            new SymfonySetProvider(),
-            new Symfony3SetProvider(),
-            new Symfony4SetProvider(),
-            new Symfony5SetProvider(),
-            new Symfony6SetProvider(),
-            new Symfony7SetProvider(),
-            new DoctrineSetProvider(),
-            new TwigSetProvider(),
+            new Php_Set_Provider(),
+            new Core_Set_Provider(),
+            new Php_Unit_Set_Provider(),
+            new Symfony_Set_Provider(),
+            new Symfony3set_Provider(),
+            new Symfony4set_Provider(),
+            new Symfony5set_Provider(),
+            new Symfony6set_Provider(),
+            new Symfony7set_Provider(),
+            new Doctrine_Set_Provider(),
+            new Twig_Set_Provider(),
         ];
-        $this->setProviders = array_merge($setProviders, $extraSetProviders);
+        $this->set_providers = array_merge($set_providers, $extra_set_providers);
     }
     /**
      * @return array<SetProviderInterface>
      */
     public function provide(): array
     {
-        return $this->setProviders;
+        return $this->set_providers;
     }
     /**
      * @return array<SetInterface>
      */
-    public function provideSets(): array
+    public function provide_sets(): array
     {
         $sets = [];
-        foreach ($this->setProviders as $setProvider) {
-            $sets = array_merge($sets, $setProvider->provide());
+        foreach ($this->set_providers as $set_provider) {
+            $sets = array_merge($sets, $set_provider->provide());
         }
         return $sets;
     }
     /**
      * @return array<ComposerTriggeredSet>
      */
-    public function provideComposerTriggeredSets(): array
+    public function provide_composer_triggered_sets(): array
     {
-        return array_filter($this->provideSets(), fn (SetInterface $set): bool => $set instanceof ComposerTriggeredSet);
+        return array_filter($this->provide_sets(), fn(Set_Interface $set): bool => $set instanceof Composer_Triggered_Set);
     }
 }

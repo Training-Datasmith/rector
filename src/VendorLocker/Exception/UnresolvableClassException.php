@@ -1,11 +1,9 @@
 <?php
 
 declare (strict_types=1);
-
-namespace Rector\VendorLocker\Exception;
+namespace Rector\Vendor_Locker\Exception;
 
 use Exception;
-
-final class UnresolvableClassException extends Exception
+final class Unresolvable_Class_Exception extends Exception
 {
 }

@@ -1,59 +1,57 @@
 <?php
 
 declare (strict_types=1);
-
 namespace Rector\Configuration;
 
-use PHPStan\Type\ObjectType;
-use Rector\Contract\DependencyInjection\ResettableInterface;
-
-final class RenamedClassesDataCollector implements ResettableInterface
+use Php_Stan\Type\Object_Type;
+use Rector\Contract\Dependency_Injection\Resettable_Interface;
+final class Renamed_Classes_Data_Collector implements Resettable_Interface
 {
     /**
      * @var array<string, string>
      */
-    private array $oldToNewClasses = [];
+    private array $old_to_new_classes = [];
     public function reset(): void
     {
-        $this->oldToNewClasses = [];
+        $this->old_to_new_classes = [];
     }
     /**
      * keep public modifier and use internally on matchClassName() method
      * to keep API as on Configuration level
      */
-    public function hasOldClass(string $oldClass): bool
+    public function has_old_class(string $old_class): bool
     {
-        return isset($this->oldToNewClasses[$oldClass]);
+        return isset($this->old_to_new_classes[$old_class]);
     }
     /**
      * @param array<string, string> $oldToNewClasses
      */
-    public function addOldToNewClasses(array $oldToNewClasses): void
+    public function add_old_to_new_classes(array $old_to_new_classes): void
     {
         /** @var array<string, string> $oldToNewClasses */
-        $oldToNewClasses = array_merge($this->oldToNewClasses, $oldToNewClasses);
-        $this->oldToNewClasses = $oldToNewClasses;
+        $old_to_new_classes = array_merge($this->old_to_new_classes, $old_to_new_classes);
+        $this->old_to_new_classes = $old_to_new_classes;
     }
     /**
      * @return array<string, string>
      */
-    public function getOldToNewClasses(): array
+    public function get_old_to_new_classes(): array
     {
-        return $this->oldToNewClasses;
+        return $this->old_to_new_classes;
     }
-    public function matchClassName(ObjectType $objectType): ?ObjectType
+    public function match_class_name(Object_Type $object_type): ?Object_Type
     {
-        $className = $objectType->getClassName();
-        if (!$this->hasOldClass($className)) {
+        $class_name = $object_type->get_class_name();
+        if (!$this->has_old_class($class_name)) {
             return null;
         }
-        return new ObjectType($this->oldToNewClasses[$className]);
+        return new Object_Type($this->old_to_new_classes[$class_name]);
     }
     /**
      * @return string[]
      */
-    public function getOldClasses(): array
+    public function get_old_classes(): array
     {
-        return array_keys($this->oldToNewClasses);
+        return array_keys($this->old_to_new_classes);
     }
 }

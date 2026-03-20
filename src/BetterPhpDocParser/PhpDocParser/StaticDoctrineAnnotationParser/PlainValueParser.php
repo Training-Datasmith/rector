@@ -1,141 +1,139 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Better_Php_Doc_Parser\Php_Doc_Parser\Static_Doctrine_Annotation_Parser;
 
-namespace Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser;
-
-use PhpParser\Node;
-use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprFalseNode;
-use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprIntegerNode;
-use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprNode;
-use PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprTrueNode;
-use PHPStan\PhpDocParser\Ast\Type\IdentifierTypeNode;
-use PHPStan\PhpDocParser\Lexer\Lexer;
-use Rector\BetterPhpDocParser\PhpDoc\DoctrineAnnotationTagValueNode;
-use Rector\BetterPhpDocParser\PhpDoc\StringNode;
-use Rector\BetterPhpDocParser\PhpDocParser\ClassAnnotationMatcher;
-use Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser;
-use Rector\BetterPhpDocParser\ValueObject\Parser\BetterTokenIterator;
-use Rector\BetterPhpDocParser\ValueObject\PhpDocAttributeKey;
-
-final class PlainValueParser
+use Php_Parser\Node;
+use Php_Stan\Php_Doc_Parser\Ast\Const_Expr\Const_Expr_False_Node;
+use Php_Stan\Php_Doc_Parser\Ast\Const_Expr\Const_Expr_Integer_Node;
+use Php_Stan\Php_Doc_Parser\Ast\Const_Expr\Const_Expr_Node;
+use Php_Stan\Php_Doc_Parser\Ast\Const_Expr\Const_Expr_True_Node;
+use Php_Stan\Php_Doc_Parser\Ast\Type\Identifier_Type_Node;
+use Php_Stan\Php_Doc_Parser\Lexer\Lexer;
+use Rector\Better_Php_Doc_Parser\Php_Doc\Doctrine_Annotation_Tag_Value_Node;
+use Rector\Better_Php_Doc_Parser\Php_Doc\String_Node;
+use Rector\Better_Php_Doc_Parser\Php_Doc_Parser\Class_Annotation_Matcher;
+use Rector\Better_Php_Doc_Parser\Php_Doc_Parser\Static_Doctrine_Annotation_Parser;
+use Rector\Better_Php_Doc_Parser\Value_Object\Parser\Better_Token_Iterator;
+use Rector\Better_Php_Doc_Parser\Value_Object\Php_Doc_Attribute_Key;
+final class Plain_Value_Parser
 {
     /**
      * @readonly
      */
-    private ClassAnnotationMatcher $classAnnotationMatcher;
-    private StaticDoctrineAnnotationParser $staticDoctrineAnnotationParser;
-    private \Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser\ArrayParser $arrayParser;
-    public function __construct(ClassAnnotationMatcher $classAnnotationMatcher)
+    private Class_Annotation_Matcher $class_annotation_matcher;
+    private Static_Doctrine_Annotation_Parser $static_doctrine_annotation_parser;
+    private \Rector\Better_Php_Doc_Parser\Php_Doc_Parser\Static_Doctrine_Annotation_Parser\Array_Parser $array_parser;
+    public function __construct(Class_Annotation_Matcher $class_annotation_matcher)
     {
-        $this->classAnnotationMatcher = $classAnnotationMatcher;
+        $this->class_annotation_matcher = $class_annotation_matcher;
     }
-    public function autowire(StaticDoctrineAnnotationParser $staticDoctrineAnnotationParser, \Rector\BetterPhpDocParser\PhpDocParser\StaticDoctrineAnnotationParser\ArrayParser $arrayParser): void
+    public function autowire(Static_Doctrine_Annotation_Parser $static_doctrine_annotation_parser, \Rector\Better_Php_Doc_Parser\Php_Doc_Parser\Static_Doctrine_Annotation_Parser\Array_Parser $array_parser): void
     {
-        $this->staticDoctrineAnnotationParser = $staticDoctrineAnnotationParser;
-        $this->arrayParser = $arrayParser;
+        $this->static_doctrine_annotation_parser = $static_doctrine_annotation_parser;
+        $this->array_parser = $array_parser;
     }
     /**
      * @return string|mixed[]|ConstExprNode|DoctrineAnnotationTagValueNode|StringNode
      */
-    public function parseValue(BetterTokenIterator $tokenIterator, Node $currentPhpNode)
+    public function parse_value(Better_Token_Iterator $token_iterator, Node $current_php_node)
     {
-        $currentTokenValue = $tokenIterator->currentTokenValue();
+        $current_token_value = $token_iterator->current_token_value();
         // temporary hackaround multi-line doctrine annotations
-        if ($tokenIterator->isCurrentTokenType(Lexer::TOKEN_END)) {
-            return $currentTokenValue;
+        if ($token_iterator->is_current_token_type(Lexer::TOKEN_END)) {
+            return $current_token_value;
         }
         // consume the token
-        $isOpenCurlyArray = $tokenIterator->isCurrentTokenType(Lexer::TOKEN_OPEN_CURLY_BRACKET);
-        if ($isOpenCurlyArray) {
-            return $this->arrayParser->parseCurlyArray($tokenIterator, $currentPhpNode);
+        $is_open_curly_array = $token_iterator->is_current_token_type(Lexer::TOKEN_OPEN_CURLY_BRACKET);
+        if ($is_open_curly_array) {
+            return $this->array_parser->parse_curly_array($token_iterator, $current_php_node);
         }
-        $tokenIterator->next();
+        $token_iterator->next();
         // normalize value
-        $constExprNode = $this->matchConstantValue($currentTokenValue);
-        if ($constExprNode instanceof ConstExprNode) {
-            return $constExprNode;
+        $const_expr_node = $this->match_constant_value($current_token_value);
+        if ($const_expr_node instanceof Const_Expr_Node) {
+            return $const_expr_node;
         }
-        $currentTokenValue = $this->parseStringValue($tokenIterator, $currentTokenValue);
+        $current_token_value = $this->parse_string_value($token_iterator, $current_token_value);
         // nested entity!, supported in attribute since PHP 8.1
-        if ($tokenIterator->isCurrentTokenType(Lexer::TOKEN_OPEN_PARENTHESES)) {
-            return $this->parseNestedDoctrineAnnotationTagValueNode($currentTokenValue, $tokenIterator, $currentPhpNode);
+        if ($token_iterator->is_current_token_type(Lexer::TOKEN_OPEN_PARENTHESES)) {
+            return $this->parse_nested_doctrine_annotation_tag_value_node($current_token_value, $token_iterator, $current_php_node);
         }
-        $start = $tokenIterator->currentPosition();
+        $start = $token_iterator->current_position();
         // from "quote to quote"
-        if ($currentTokenValue === '"') {
+        if ($current_token_value === '"') {
             do {
-                $tokenIterator->next();
-            } while (strpos($tokenIterator->currentTokenValue(), '"') === \false);
+                $token_iterator->next();
+            } while (strpos($token_iterator->current_token_value(), '"') === \false);
         }
-        $end = $tokenIterator->currentPosition();
+        $end = $token_iterator->current_position();
         if ($start + 1 < $end) {
-            return new StringNode($tokenIterator->printFromTo($start, $end));
+            return new String_Node($token_iterator->print_from_to($start, $end));
         }
-        return $currentTokenValue;
+        return $current_token_value;
     }
-    private function parseStringValue(BetterTokenIterator $tokenIterator, string $currentTokenValue): string
+    private function parse_string_value(Better_Token_Iterator $token_iterator, string $current_token_value): string
     {
-        if (strncmp($currentTokenValue, '"', strlen('"')) === 0 && substr_compare($currentTokenValue, '"', -strlen('"')) !== 0) {
-            $currentTokenValue = $this->parseMultilineOrWhiteSpacedString($tokenIterator, $currentTokenValue);
+        if (strncmp($current_token_value, '"', strlen('"')) === 0 && substr_compare($current_token_value, '"', -strlen('"')) !== 0) {
+            $current_token_value = $this->parse_multiline_or_white_spaced_string($token_iterator, $current_token_value);
         } else {
-            while ($tokenIterator->isCurrentTokenType(Lexer::TOKEN_DOUBLE_COLON) || $tokenIterator->isCurrentTokenType(Lexer::TOKEN_IDENTIFIER)) {
-                $currentTokenValue .= $tokenIterator->currentTokenValue();
-                $tokenIterator->next();
+            while ($token_iterator->is_current_token_type(Lexer::TOKEN_DOUBLE_COLON) || $token_iterator->is_current_token_type(Lexer::TOKEN_IDENTIFIER)) {
+                $current_token_value .= $token_iterator->current_token_value();
+                $token_iterator->next();
             }
         }
-        return $currentTokenValue;
+        return $current_token_value;
     }
-    private function parseMultilineOrWhiteSpacedString(BetterTokenIterator $tokenIterator, string $currentTokenValue): string
+    private function parse_multiline_or_white_spaced_string(Better_Token_Iterator $token_iterator, string $current_token_value): string
     {
-        while (strncmp($currentTokenValue, '"', strlen('"')) === 0 && substr_compare($currentTokenValue, '"', -strlen('"')) !== 0) {
-            if (!$tokenIterator->isCurrentTokenType(Lexer::TOKEN_PHPDOC_EOL)) {
-                $currentTokenValue .= ' ';
+        while (strncmp($current_token_value, '"', strlen('"')) === 0 && substr_compare($current_token_value, '"', -strlen('"')) !== 0) {
+            if (!$token_iterator->is_current_token_type(Lexer::TOKEN_PHPDOC_EOL)) {
+                $current_token_value .= ' ';
             }
-            if (strncmp($currentTokenValue, '"', strlen('"')) === 0 && strpos($tokenIterator->currentTokenValue(), '"') !== \false && $currentTokenValue !== $tokenIterator->currentTokenValue()) {
+            if (strncmp($current_token_value, '"', strlen('"')) === 0 && strpos($token_iterator->current_token_value(), '"') !== \false && $current_token_value !== $token_iterator->current_token_value()) {
                 //starts with '"' and current token contains '"', should be the end
-                $currentTokenValue .= substr($tokenIterator->currentTokenValue(), 0, strpos($tokenIterator->currentTokenValue(), '"') + 1);
-                $tokenIterator->next();
+                $current_token_value .= substr($token_iterator->current_token_value(), 0, strpos($token_iterator->current_token_value(), '"') + 1);
+                $token_iterator->next();
                 break;
             }
-            $currentTokenValue .= $tokenIterator->currentTokenValue();
-            $tokenIterator->next();
+            $current_token_value .= $token_iterator->current_token_value();
+            $token_iterator->next();
         }
-        if (strncmp($currentTokenValue, '"', strlen('"')) === 0 && substr_compare($currentTokenValue, '"', -strlen('"')) === 0) {
-            return trim(str_replace('"', '', $currentTokenValue));
+        if (strncmp($current_token_value, '"', strlen('"')) === 0 && substr_compare($current_token_value, '"', -strlen('"')) === 0) {
+            return trim(str_replace('"', '', $current_token_value));
         }
-        return $currentTokenValue;
+        return $current_token_value;
     }
-    private function parseNestedDoctrineAnnotationTagValueNode(string $currentTokenValue, BetterTokenIterator $tokenIterator, Node $currentPhpNode): DoctrineAnnotationTagValueNode
+    private function parse_nested_doctrine_annotation_tag_value_node(string $current_token_value, Better_Token_Iterator $token_iterator, Node $current_php_node): Doctrine_Annotation_Tag_Value_Node
     {
         // @todo
-        $annotationShortName = $currentTokenValue;
-        $values = $this->staticDoctrineAnnotationParser->resolveAnnotationMethodCall($tokenIterator, $currentPhpNode);
-        $fullyQualifiedAnnotationClass = $this->classAnnotationMatcher->resolveTagFullyQualifiedName($annotationShortName, $currentPhpNode);
+        $annotation_short_name = $current_token_value;
+        $values = $this->static_doctrine_annotation_parser->resolve_annotation_method_call($token_iterator, $current_php_node);
+        $fully_qualified_annotation_class = $this->class_annotation_matcher->resolve_tag_fully_qualified_name($annotation_short_name, $current_php_node);
         // keep the last ")"
-        $tokenIterator->tryConsumeTokenType(Lexer::TOKEN_PHPDOC_EOL);
-        if ($tokenIterator->currentTokenValue() === ')') {
-            $tokenIterator->consumeTokenType(Lexer::TOKEN_CLOSE_PARENTHESES);
+        $token_iterator->try_consume_token_type(Lexer::TOKEN_PHPDOC_EOL);
+        if ($token_iterator->current_token_value() === ')') {
+            $token_iterator->consume_token_type(Lexer::TOKEN_CLOSE_PARENTHESES);
         }
         // keep original name to differentiate between short and FQN class
-        $identifierTypeNode = new IdentifierTypeNode($annotationShortName);
-        $identifierTypeNode->setAttribute(PhpDocAttributeKey::RESOLVED_CLASS, $fullyQualifiedAnnotationClass);
-        return new DoctrineAnnotationTagValueNode($identifierTypeNode, $annotationShortName, $values);
+        $identifier_type_node = new Identifier_Type_Node($annotation_short_name);
+        $identifier_type_node->set_attribute(Php_Doc_Attribute_Key::RESOLVED_CLASS, $fully_qualified_annotation_class);
+        return new Doctrine_Annotation_Tag_Value_Node($identifier_type_node, $annotation_short_name, $values);
     }
-    private function matchConstantValue(string $currentTokenValue): ?\PHPStan\PhpDocParser\Ast\ConstExpr\ConstExprNode
+    private function match_constant_value(string $current_token_value): ?\Php_Stan\Php_Doc_Parser\Ast\Const_Expr\Const_Expr_Node
     {
-        if (strtolower($currentTokenValue) === 'false') {
-            return new ConstExprFalseNode();
+        if (strtolower($current_token_value) === 'false') {
+            return new Const_Expr_False_Node();
         }
-        if (strtolower($currentTokenValue) === 'true') {
-            return new ConstExprTrueNode();
+        if (strtolower($current_token_value) === 'true') {
+            return new Const_Expr_True_Node();
         }
-        if (!is_numeric($currentTokenValue)) {
+        if (!is_numeric($current_token_value)) {
             return null;
         }
-        if ((string) (int) $currentTokenValue !== $currentTokenValue) {
+        if ((string) (int) $current_token_value !== $current_token_value) {
             return null;
         }
-        return new ConstExprIntegerNode($currentTokenValue);
+        return new Const_Expr_Integer_Node($current_token_value);
     }
 }

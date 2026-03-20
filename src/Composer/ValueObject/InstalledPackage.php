@@ -1,10 +1,9 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Composer\Value_Object;
 
-namespace Rector\Composer\ValueObject;
-
-final class InstalledPackage
+final class Installed_Package
 {
     /**
      * @readonly
@@ -19,11 +18,11 @@ final class InstalledPackage
         $this->name = $name;
         $this->version = $version;
     }
-    public function getName(): string
+    public function get_name(): string
     {
         return $this->name;
     }
-    public function getVersion(): string
+    public function get_version(): string
     {
         return $this->version;
     }

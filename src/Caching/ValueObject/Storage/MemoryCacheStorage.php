@@ -1,16 +1,14 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Caching\Value_Object\Storage;
 
-namespace Rector\Caching\ValueObject\Storage;
-
-use Rector\Caching\Contract\ValueObject\Storage\CacheStorageInterface;
-use Rector\Caching\ValueObject\CacheItem;
-
+use Rector\Caching\Contract\Value_Object\Storage\Cache_Storage_Interface;
+use Rector\Caching\Value_Object\Cache_Item;
 /**
  * inspired by https://github.com/phpstan/phpstan-src/blob/560652088406d7461c2c4ad4897784e33f8ab312/src/Cache/MemoryCacheStorage.php
  */
-final class MemoryCacheStorage implements CacheStorageInterface
+final class Memory_Cache_Storage implements Cache_Storage_Interface
 {
     /**
      * @var array<string, CacheItem>
@@ -19,23 +17,23 @@ final class MemoryCacheStorage implements CacheStorageInterface
     /**
      * @return null|mixed
      */
-    public function load(string $key, string $variableKey)
+    public function load(string $key, string $variable_key)
     {
         if (!isset($this->storage[$key])) {
             return null;
         }
         $item = $this->storage[$key];
-        if (!$item->isVariableKeyValid($variableKey)) {
+        if (!$item->is_variable_key_valid($variable_key)) {
             return null;
         }
-        return $item->getData();
+        return $item->get_data();
     }
     /**
      * @param mixed $data
      */
-    public function save(string $key, string $variableKey, $data): void
+    public function save(string $key, string $variable_key, $data): void
     {
-        $this->storage[$key] = new CacheItem($variableKey, $data);
+        $this->storage[$key] = new Cache_Item($variable_key, $data);
     }
     public function clean(string $key): void
     {

@@ -1,114 +1,112 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Node_Analyzer;
 
-namespace Rector\NodeAnalyzer;
-
-use PhpParser\Node;
-use PhpParser\Node\Expr\Assign;
-use PhpParser\Node\Expr\CallLike;
-use PhpParser\Node\Expr\Closure;
-use PhpParser\Node\Expr\Error;
-use PhpParser\Node\Expr\FuncCall;
-use PhpParser\Node\Expr\New_;
-use PhpParser\Node\Expr\Variable;
-use PhpParser\Node\NullableType;
-use PhpParser\Node\Param;
-use PhpParser\Node\Stmt\Class_;
-use PhpParser\Node\Stmt\ClassMethod;
-use PhpParser\Node\Stmt\Function_;
-use PhpParser\NodeVisitor;
-use Rector\NodeManipulator\FuncCallManipulator;
-use Rector\NodeNameResolver\NodeNameResolver;
-use Rector\PhpDocParser\NodeTraverser\SimpleCallableNodeTraverser;
-use Rector\PhpParser\Comparing\NodeComparator;
-use Rector\PhpParser\Node\BetterNodeFinder;
-
-final class ParamAnalyzer
+use Php_Parser\Node;
+use Php_Parser\Node\Expr\Assign;
+use Php_Parser\Node\Expr\Call_Like;
+use Php_Parser\Node\Expr\Closure;
+use Php_Parser\Node\Expr\Error;
+use Php_Parser\Node\Expr\Func_Call;
+use Php_Parser\Node\Expr\New_;
+use Php_Parser\Node\Expr\Variable;
+use Php_Parser\Node\Nullable_Type;
+use Php_Parser\Node\Param;
+use Php_Parser\Node\Stmt\Class_;
+use Php_Parser\Node\Stmt\Class_Method;
+use Php_Parser\Node\Stmt\Function_;
+use Php_Parser\Node_Visitor;
+use Rector\Node_Manipulator\Func_Call_Manipulator;
+use Rector\Node_Name_Resolver\Node_Name_Resolver;
+use Rector\Php_Doc_Parser\Node_Traverser\Simple_Callable_Node_Traverser;
+use Rector\Php_Parser\Comparing\Node_Comparator;
+use Rector\Php_Parser\Node\Better_Node_Finder;
+final class Param_Analyzer
 {
     /**
      * @readonly
      */
-    private NodeComparator $nodeComparator;
+    private Node_Comparator $node_comparator;
     /**
      * @readonly
      */
-    private NodeNameResolver $nodeNameResolver;
+    private Node_Name_Resolver $node_name_resolver;
     /**
      * @readonly
      */
-    private FuncCallManipulator $funcCallManipulator;
+    private Func_Call_Manipulator $func_call_manipulator;
     /**
      * @readonly
      */
-    private SimpleCallableNodeTraverser $simpleCallableNodeTraverser;
+    private Simple_Callable_Node_Traverser $simple_callable_node_traverser;
     /**
      * @readonly
      */
-    private BetterNodeFinder $betterNodeFinder;
+    private Better_Node_Finder $better_node_finder;
     /**
      * @var string[]
      */
     private const VARIADIC_FUNCTION_NAMES = ['func_get_arg', 'func_get_args', 'func_num_args', 'get_defined_vars'];
-    public function __construct(NodeComparator $nodeComparator, NodeNameResolver $nodeNameResolver, FuncCallManipulator $funcCallManipulator, SimpleCallableNodeTraverser $simpleCallableNodeTraverser, BetterNodeFinder $betterNodeFinder)
+    public function __construct(Node_Comparator $node_comparator, Node_Name_Resolver $node_name_resolver, Func_Call_Manipulator $func_call_manipulator, Simple_Callable_Node_Traverser $simple_callable_node_traverser, Better_Node_Finder $better_node_finder)
     {
-        $this->nodeComparator = $nodeComparator;
-        $this->nodeNameResolver = $nodeNameResolver;
-        $this->funcCallManipulator = $funcCallManipulator;
-        $this->simpleCallableNodeTraverser = $simpleCallableNodeTraverser;
-        $this->betterNodeFinder = $betterNodeFinder;
+        $this->node_comparator = $node_comparator;
+        $this->node_name_resolver = $node_name_resolver;
+        $this->func_call_manipulator = $func_call_manipulator;
+        $this->simple_callable_node_traverser = $simple_callable_node_traverser;
+        $this->better_node_finder = $better_node_finder;
     }
-    public function isParamUsedInClassMethod(ClassMethod $classMethod, Param $param): bool
+    public function is_param_used_in_class_method(Class_Method $class_method, Param $param): bool
     {
-        if ($param->isPromoted()) {
+        if ($param->is_promoted()) {
             return \true;
         }
-        $isParamUsed = \false;
+        $is_param_used = \false;
         if ($param->var instanceof Error) {
             return \false;
         }
-        $this->simpleCallableNodeTraverser->traverseNodesWithCallable($classMethod->stmts, function (Node $node) use (&$isParamUsed, $param): ?int {
-            if ($this->isVariadicFuncCall($node)) {
-                $isParamUsed = \true;
-                return NodeVisitor::STOP_TRAVERSAL;
+        $this->simple_callable_node_traverser->traverse_nodes_with_callable($class_method->stmts, function (Node $node) use (&$is_param_used, $param): ?int {
+            if ($this->is_variadic_func_call($node)) {
+                $is_param_used = \true;
+                return Node_Visitor::STOP_TRAVERSAL;
             }
-            if ($this->isUsedAsArg($node, $param)) {
-                $isParamUsed = \true;
-                return NodeVisitor::STOP_TRAVERSAL;
+            if ($this->is_used_as_arg($node, $param)) {
+                $is_param_used = \true;
+                return Node_Visitor::STOP_TRAVERSAL;
             }
             // skip nested anonymous class
             if ($node instanceof Class_ || $node instanceof Function_) {
-                return NodeVisitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
+                return Node_Visitor::DONT_TRAVERSE_CURRENT_AND_CHILDREN;
             }
-            if ($node instanceof Variable && $this->nodeComparator->areNodesEqual($node, $param->var)) {
-                $isParamUsed = \true;
-                return NodeVisitor::STOP_TRAVERSAL;
+            if ($node instanceof Variable && $this->node_comparator->are_nodes_equal($node, $param->var)) {
+                $is_param_used = \true;
+                return Node_Visitor::STOP_TRAVERSAL;
             }
-            if ($node instanceof Closure && $this->isVariableInClosureUses($node, $param->var)) {
-                $isParamUsed = \true;
-                return NodeVisitor::STOP_TRAVERSAL;
+            if ($node instanceof Closure && $this->is_variable_in_closure_uses($node, $param->var)) {
+                $is_param_used = \true;
+                return Node_Visitor::STOP_TRAVERSAL;
             }
-            if ($this->isParamUsed($node, $param)) {
-                $isParamUsed = \true;
-                return NodeVisitor::STOP_TRAVERSAL;
+            if ($this->is_param_used($node, $param)) {
+                $is_param_used = \true;
+                return Node_Visitor::STOP_TRAVERSAL;
             }
             return null;
         });
-        return $isParamUsed;
+        return $is_param_used;
     }
     /**
      * @param Param[] $params
      */
-    public function hasPropertyPromotion(array $params): bool
+    public function has_property_promotion(array $params): bool
     {
         foreach ($params as $param) {
-            if ($param->isPromoted()) {
+            if ($param->is_promoted()) {
                 return \true;
             }
         }
         return \false;
     }
-    public function isNullable(Param $param): bool
+    public function is_nullable(Param $param): bool
     {
         if ($param->variadic) {
             return \false;
@@ -116,60 +114,60 @@ final class ParamAnalyzer
         if (!$param->type instanceof Node) {
             return \false;
         }
-        return $param->type instanceof NullableType;
+        return $param->type instanceof Nullable_Type;
     }
-    public function isParamReassign(ClassMethod $classMethod, Param $param): bool
+    public function is_param_reassign(Class_Method $class_method, Param $param): bool
     {
-        $paramName = $this->nodeNameResolver->getName($param);
-        return (bool) $this->betterNodeFinder->findFirstInFunctionLikeScoped($classMethod, function (Node $node) use ($paramName): bool {
+        $param_name = $this->node_name_resolver->get_name($param);
+        return (bool) $this->better_node_finder->find_first_in_function_like_scoped($class_method, function (Node $node) use ($param_name): bool {
             if (!$node instanceof Assign) {
                 return \false;
             }
             if (!$node->var instanceof Variable) {
                 return \false;
             }
-            return $this->nodeNameResolver->isName($node->var, $paramName);
+            return $this->node_name_resolver->is_name($node->var, $param_name);
         });
     }
-    private function isVariableInClosureUses(Closure $closure, Variable $variable): bool
+    private function is_variable_in_closure_uses(Closure $closure, Variable $variable): bool
     {
         foreach ($closure->uses as $use) {
-            if ($this->nodeComparator->areNodesEqual($use->var, $variable)) {
+            if ($this->node_comparator->are_nodes_equal($use->var, $variable)) {
                 return \true;
             }
         }
         return \false;
     }
-    private function isUsedAsArg(Node $node, Param $param): bool
+    private function is_used_as_arg(Node $node, Param $param): bool
     {
-        if ($node instanceof New_ || $node instanceof CallLike) {
-            if ($node->isFirstClassCallable()) {
+        if ($node instanceof New_ || $node instanceof Call_Like) {
+            if ($node->is_first_class_callable()) {
                 return \false;
             }
-            foreach ($node->getArgs() as $arg) {
-                if ($this->nodeComparator->areNodesEqual($param->var, $arg->value)) {
+            foreach ($node->get_args() as $arg) {
+                if ($this->node_comparator->are_nodes_equal($param->var, $arg->value)) {
                     return \true;
                 }
             }
         }
         return \false;
     }
-    private function isParamUsed(Node $node, Param $param): bool
+    private function is_param_used(Node $node, Param $param): bool
     {
-        if (!$node instanceof FuncCall) {
+        if (!$node instanceof Func_Call) {
             return \false;
         }
-        if (!$this->nodeNameResolver->isName($node, 'compact')) {
+        if (!$this->node_name_resolver->is_name($node, 'compact')) {
             return \false;
         }
-        $arguments = $this->funcCallManipulator->extractArgumentsFromCompactFuncCalls([$node]);
-        return $this->nodeNameResolver->isNames($param, $arguments);
+        $arguments = $this->func_call_manipulator->extract_arguments_from_compact_func_calls([$node]);
+        return $this->node_name_resolver->is_names($param, $arguments);
     }
-    private function isVariadicFuncCall(Node $node): bool
+    private function is_variadic_func_call(Node $node): bool
     {
-        if (!$node instanceof FuncCall) {
+        if (!$node instanceof Func_Call) {
             return \false;
         }
-        return $this->nodeNameResolver->isNames($node, self::VARIADIC_FUNCTION_NAMES);
+        return $this->node_name_resolver->is_names($node, self::VARIADIC_FUNCTION_NAMES);
     }
 }

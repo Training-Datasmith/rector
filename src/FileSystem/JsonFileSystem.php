@@ -1,28 +1,26 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\File_System;
 
-namespace Rector\FileSystem;
-
-use RectorPrefix202603\Nette\Utils\FileSystem;
-use RectorPrefix202603\Nette\Utils\Json;
-
-final class JsonFileSystem
+use Rector_Prefix202603\Nette\Utils\File_System;
+use Rector_Prefix202603\Nette\Utils\Json;
+final class Json_File_System
 {
     /**
      * @return array<string, mixed>
      */
-    public static function readFilePath(string $filePath): array
+    public static function read_file_path(string $file_path): array
     {
-        $fileContents = FileSystem::read($filePath);
-        return Json::decode($fileContents, \true);
+        $file_contents = File_System::read($file_path);
+        return Json::decode($file_contents, \true);
     }
     /**
      * @param array<string, mixed> $data
      */
-    public static function writeFile(string $filePath, array $data): void
+    public static function write_file(string $file_path, array $data): void
     {
         $json = Json::encode($data, \true);
-        FileSystem::write($filePath, $json, null);
+        File_System::write($file_path, $json, null);
     }
 }

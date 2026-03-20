@@ -1,17 +1,15 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Better_Php_Doc_Parser\Php_Doc;
 
-namespace Rector\BetterPhpDocParser\PhpDoc;
-
-use PhpParser\Node\Scalar\String_;
-use PHPStan\PhpDocParser\Ast\NodeAttributes;
-use PHPStan\PhpDocParser\Ast\PhpDoc\PhpDocTagValueNode;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-
-final class StringNode implements PhpDocTagValueNode
+use Php_Parser\Node\Scalar\String_;
+use Php_Stan\Php_Doc_Parser\Ast\Node_Attributes;
+use Php_Stan\Php_Doc_Parser\Ast\Php_Doc\Php_Doc_Tag_Value_Node;
+use Rector\Node_Type_Resolver\Node\Attribute_Key;
+final class String_Node implements Php_Doc_Tag_Value_Node
 {
-    use NodeAttributes;
+    use Node_Attributes;
     public string $value;
     public function __construct(string $value)
     {
@@ -22,7 +20,7 @@ final class StringNode implements PhpDocTagValueNode
         } else {
             $kind = String_::KIND_SINGLE_QUOTED;
         }
-        $this->setAttribute(AttributeKey::KIND, $kind);
+        $this->set_attribute(Attribute_Key::KIND, $kind);
     }
     public function __toString(): string
     {

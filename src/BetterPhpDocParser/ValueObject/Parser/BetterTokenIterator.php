@@ -1,13 +1,11 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Better_Php_Doc_Parser\Value_Object\Parser;
 
-namespace Rector\BetterPhpDocParser\ValueObject\Parser;
-
-use PHPStan\PhpDocParser\Parser\TokenIterator;
-use Rector\Exception\ShouldNotHappenException;
-
-final class BetterTokenIterator extends TokenIterator
+use Php_Stan\Php_Doc_Parser\Parser\Token_Iterator;
+use Rector\Exception\Should_Not_Happen_Exception;
+final class Better_Token_Iterator extends Token_Iterator
 {
     /**
      * @param array<int, mixed> $tokens
@@ -22,37 +20,37 @@ final class BetterTokenIterator extends TokenIterator
     /**
      * @param int[] $types
      */
-    public function isNextTokenTypes(array $types): bool
+    public function is_next_token_types(array $types): bool
     {
         foreach ($types as $type) {
-            if ($this->isNextTokenType($type)) {
+            if ($this->is_next_token_type($type)) {
                 return \true;
             }
         }
         return \false;
     }
-    public function isTokenTypeOnPosition(int $tokenType, int $position): bool
+    public function is_token_type_on_position(int $token_type, int $position): bool
     {
-        $tokens = $this->getTokens();
+        $tokens = $this->get_tokens();
         $token = $tokens[$position] ?? null;
         if ($token === null) {
             return \false;
         }
-        return $token[1] === $tokenType;
+        return $token[1] === $token_type;
     }
-    public function isNextTokenType(int $tokenType): bool
+    public function is_next_token_type(int $token_type): bool
     {
-        if ($this->nextTokenType() === null) {
+        if ($this->next_token_type() === null) {
             return \false;
         }
-        return $this->nextTokenType() === $tokenType;
+        return $this->next_token_type() === $token_type;
     }
-    public function printFromTo(int $from, int $to): string
+    public function print_from_to(int $from, int $to): string
     {
         if ($to < $from) {
-            throw new ShouldNotHappenException('Arguments are flipped');
+            throw new Should_Not_Happen_Exception('Arguments are flipped');
         }
-        $tokens = $this->getTokens();
+        $tokens = $this->get_tokens();
         $content = '';
         foreach ($tokens as $key => $token) {
             if ($key < $from) {
@@ -65,42 +63,42 @@ final class BetterTokenIterator extends TokenIterator
         }
         return $content;
     }
-    public function currentPosition(): int
+    public function current_position(): int
     {
-        return $this->currentTokenIndex();
+        return $this->current_token_index();
     }
     public function count(): int
     {
-        return count($this->getTokens());
+        return count($this->get_tokens());
     }
     /**
      * @return array<array{0: string, 1: int}>
      */
-    public function partialTokens(int $start, int $end): array
+    public function partial_tokens(int $start, int $end): array
     {
-        return array_slice($this->getTokens(), $start, $end - $start + 1);
+        return array_slice($this->get_tokens(), $start, $end - $start + 1);
     }
-    public function containsTokenType(int $type): bool
+    public function contains_token_type(int $type): bool
     {
-        foreach ($this->getTokens() as $token) {
+        foreach ($this->get_tokens() as $token) {
             if ($token[1] === $type) {
                 return \true;
             }
         }
         return \false;
     }
-    private function nextTokenType(): ?int
+    private function next_token_type(): ?int
     {
-        $tokens = $this->getTokens();
+        $tokens = $this->get_tokens();
         // does next token exist?
-        $nextIndex = $this->currentPosition() + 1;
-        if (!isset($tokens[$nextIndex])) {
+        $next_index = $this->current_position() + 1;
+        if (!isset($tokens[$next_index])) {
             return null;
         }
-        $this->pushSavePoint();
+        $this->push_save_point();
         $this->next();
-        $nextTokenType = $this->currentTokenType();
+        $next_token_type = $this->current_token_type();
         $this->rollback();
-        return $nextTokenType;
+        return $next_token_type;
     }
 }

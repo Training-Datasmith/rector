@@ -1,10 +1,9 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Php_Attribute\Enum;
 
-namespace Rector\PhpAttribute\Enum;
-
-final class DocTagNodeState
+final class Doc_Tag_Node_State
 {
     /**
      * @var string

@@ -1,35 +1,33 @@
 <?php
 
 declare (strict_types=1);
-
 namespace Rector\Comments;
 
-use PhpParser\Node;
-use Rector\Comments\NodeTraverser\CommentRemovingNodeTraverser;
-
+use Php_Parser\Node;
+use Rector\Comments\Node_Traverser\Comment_Removing_Node_Traverser;
 /**
  * @see \Rector\Tests\Comments\CommentRemover\CommentRemoverTest
  */
-final class CommentRemover
+final class Comment_Remover
 {
     /**
      * @readonly
      */
-    private CommentRemovingNodeTraverser $commentRemovingNodeTraverser;
-    public function __construct(CommentRemovingNodeTraverser $commentRemovingNodeTraverser)
+    private Comment_Removing_Node_Traverser $comment_removing_node_traverser;
+    public function __construct(Comment_Removing_Node_Traverser $comment_removing_node_traverser)
     {
-        $this->commentRemovingNodeTraverser = $commentRemovingNodeTraverser;
+        $this->comment_removing_node_traverser = $comment_removing_node_traverser;
     }
     /**
      * @param Node[]|Node|null $node
      * @return Node[]|null
      */
-    public function removeFromNode($node): ?array
+    public function remove_from_node($node): ?array
     {
         if ($node === null) {
             return null;
         }
         $nodes = is_array($node) ? $node : [$node];
-        return $this->commentRemovingNodeTraverser->traverse($nodes);
+        return $this->comment_removing_node_traverser->traverse($nodes);
     }
 }

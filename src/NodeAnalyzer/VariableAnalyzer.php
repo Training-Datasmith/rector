@@ -1,23 +1,21 @@
 <?php
 
 declare (strict_types=1);
+namespace Rector\Node_Analyzer;
 
-namespace Rector\NodeAnalyzer;
-
-use PhpParser\Node\Expr\Variable;
-use Rector\NodeTypeResolver\Node\AttributeKey;
-
-final class VariableAnalyzer
+use Php_Parser\Node\Expr\Variable;
+use Rector\Node_Type_Resolver\Node\Attribute_Key;
+final class Variable_Analyzer
 {
-    public function isStaticOrGlobal(Variable $variable): bool
+    public function is_static_or_global(Variable $variable): bool
     {
-        if ($variable->getAttribute(AttributeKey::IS_GLOBAL_VAR) === \true) {
+        if ($variable->get_attribute(Attribute_Key::IS_GLOBAL_VAR) === \true) {
             return \true;
         }
-        return $variable->getAttribute(AttributeKey::IS_STATIC_VAR) === \true;
+        return $variable->get_attribute(Attribute_Key::IS_STATIC_VAR) === \true;
     }
-    public function isUsedByReference(Variable $variable): bool
+    public function is_used_by_reference(Variable $variable): bool
     {
-        return $variable->getAttribute(AttributeKey::IS_BYREF_VAR) === \true;
+        return $variable->get_attribute(Attribute_Key::IS_BYREF_VAR) === \true;
     }
 }
