@@ -8,9 +8,13 @@ use PHPUnit\Framework\TestCase;
 use Rector\Exception\Reflection\MissingPrivatePropertyException;
 use Rector\Util\Reflection\PrivatesAccessor;
 
-class PrivatesAccessorParentFixture
+class PrivatesAccessorGrandParentFixture
 {
-    private string $secret = 'from-parent';
+    private string $secret = 'from-gp';
+}
+
+class PrivatesAccessorParentFixture extends PrivatesAccessorGrandParentFixture
+{
 }
 
 final class PrivatesAccessorChildFixture extends PrivatesAccessorParentFixture
@@ -34,10 +38,10 @@ final class PrivatesAccessorTest extends TestCase
         $this->assertSame('own', $this->accessor->getPrivateProperty($obj, 'secret'));
     }
 
-    public function testReadsParentPrivate(): void
+    public function testReadsGrandparentPrivateThroughGrandchild(): void
     {
         $obj = new PrivatesAccessorChildFixture();
-        $this->assertSame('from-parent', $this->accessor->getPrivateProperty($obj, 'secret'));
+        $this->assertSame('from-gp', $this->accessor->getPrivateProperty($obj, 'secret'));
     }
 
     public function testMissingPropertyOnSubclassThrowsDedicatedException(): void

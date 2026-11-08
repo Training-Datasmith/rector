@@ -100,7 +100,10 @@ proof_revert system-error-null testMissingRelativePathReturnsNull \
 proof_revert file-path-helper-phar testPharDotDotAboveRootDoesNotThrow \
     'sed -i "/if (!is_string(\$removedPart)) {/,+2d" "$EXPORT_DIR/src/FileSystem/FilePathHelper.php"'
 
-proof_revert privates-accessor-parent testMissingPropertyOnSubclassThrowsDedicatedException \
+proof_revert privates-accessor-grandparent testReadsGrandparentPrivateThroughGrandchild \
+    "git -C \"$REPO_ROOT\" show \"$BASE:src/Util/Reflection/PrivatesAccessor.php\" > \"\$EXPORT_DIR/src/Util/Reflection/PrivatesAccessor.php\""
+
+proof_revert privates-accessor-missing testMissingPropertyOnSubclassThrowsDedicatedException \
     "git -C \"$REPO_ROOT\" show \"$BASE:src/Util/Reflection/PrivatesAccessor.php\" > \"\$EXPORT_DIR/src/Util/Reflection/PrivatesAccessor.php\""
 
 proof_revert file-hasher-is-file testMissingFileThrows \

@@ -42,7 +42,7 @@ final class FilePathHelperTest extends TestCase
 
     public function testPharExitClearsScheme(): void
     {
-        $this->assertSame('phar://outside', $this->helper->normalizePathAndSchema('phar://pkg.phar/../outside'));
+        $this->assertSame('outside', $this->helper->normalizePathAndSchema('phar://pkg.phar/../outside'));
     }
 
     public function testPharDotDotAboveRootDoesNotThrow(): void

@@ -52,35 +52,56 @@ mkdir -p /opt/phpunit
 cd /opt/phpunit
 composer require --no-interaction --no-progress phpunit/phpunit:9.6.38
 
-OUTPUT="$(mktemp)"
-set +e
-php -d error_reporting=-1 /opt/phpunit/vendor/bin/phpunit \
-  --configuration /repo/phpunit.xml.dist \
-  --order-by=random \
-  --random-order-seed=20261108 \
-  --do-not-cache-result \
-  --colors=never \
-  --log-junit /work/junit.xml \
-  2>&1 | tee "$OUTPUT"
-STATUS=${PIPESTATUS[0]}
-set -e
+PHPUnit() {
+  php -d error_reporting=-1 -d zend.assertions=1 -d assert.exception=1 \
+    /opt/phpunit/vendor/bin/phpunit "$@"
+}
 
-if grep -qE "PHP (Notice|Warning|Deprecated|Strict Standards|Parse error|Fatal error)" "$OUTPUT"; then
-  echo "PHP diagnostic detected in test output" >&2
-  exit 1
-fi
+run_suite() {
+  local seed="$1"
+  local label="$2"
+  local junit_arg=()
+  if [ "$label" = "seed-20261108" ]; then
+    junit_arg=(--log-junit /work/junit.xml)
+  fi
+  OUTPUT="$(mktemp)"
+  set +e
+  PHPUnit \
+    --configuration /repo/phpunit.xml.dist \
+    --order-by=random \
+    --random-order-seed="$seed" \
+    --do-not-cache-result \
+    --colors=never \
+    "${junit_arg[@]}" \
+    2>&1 | tee "$OUTPUT"
+  STATUS=${PIPESTATUS[0]}
+  set -e
 
-if ! grep -qE "^OK \((110 tests," "$OUTPUT"; then
-  echo "Expected clean OK summary for 110 tests" >&2
-  exit 1
-fi
+  if grep -qE "PHP (Notice|Warning|Deprecated|Strict Standards|Parse error|Fatal error)" "$OUTPUT"; then
+    echo "PHP diagnostic detected in test output ($label)" >&2
+    rm -f "$OUTPUT"
+    exit 1
+  fi
 
-if grep -qE "skipped|risky|warnings|incomplete" "$OUTPUT"; then
-  echo "Summary indicates skipped/risky/warnings/incomplete" >&2
-  exit 1
-fi
+  if ! grep -qE "^OK \\(110 tests," "$OUTPUT"; then
+    echo "Expected clean OK summary for 110 tests ($label)" >&2
+    cat "$OUTPUT" >&2
+    rm -f "$OUTPUT"
+    exit 1
+  fi
 
-exit "$STATUS"
+  if grep -qE "skipped|risky|warnings|incomplete" "$OUTPUT"; then
+    echo "Summary indicates skipped/risky/warnings/incomplete ($label)" >&2
+    rm -f "$OUTPUT"
+    exit 1
+  fi
+
+  rm -f "$OUTPUT"
+  return "$STATUS"
+}
+
+run_suite 20261108 seed-20261108
+run_suite 7 seed-7
 '
 
 cat "$WORK_DIR/junit.xml" >/dev/null

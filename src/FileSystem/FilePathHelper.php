@@ -59,7 +59,6 @@ final class FilePathHelper
         $path = Strings::replace($normalizedPath, self::TWO_AND_MORE_SLASHES_REGEX, '/');
         $pathRoot = strncmp($path, '/', strlen('/')) === 0 ? $directorySeparator : '';
         $pathParts = explode('/', trim($path, '/'));
-        /** @var string $scheme */
         $normalizedPathParts = $this->normalizePathParts($pathParts, $scheme);
         $pathStart = $scheme !== self::SCHEME_UNDEFINED ? $scheme . '://' : '';
         return PathNormalizer::normalize($pathStart . $pathRoot . implode($directorySeparator, $normalizedPathParts));
@@ -75,7 +74,7 @@ final class FilePathHelper
      * @param string[] $pathParts
      * @return string[]
      */
-    private function normalizePathParts(array $pathParts, string $scheme): array
+    private function normalizePathParts(array $pathParts, string &$scheme): array
     {
         $normalizedPathParts = [];
         foreach ($pathParts as $pathPart) {
