@@ -86,8 +86,10 @@ final class FilePathHelper
                 $normalizedPathParts[] = $pathPart;
                 continue;
             }
-            /** @var string $removedPart */
             $removedPart = array_pop($normalizedPathParts);
+            if (!is_string($removedPart)) {
+                continue;
+            }
             if ($scheme !== 'phar') {
                 continue;
             }

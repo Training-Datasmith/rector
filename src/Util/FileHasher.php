@@ -26,6 +26,9 @@ final class FileHasher
         $configHash = '';
         $algo = $this->getAlgo();
         foreach ($files as $file) {
+            if (!is_file($file)) {
+                throw new ShouldNotHappenException(sprintf('File %s is not readable', $file));
+            }
             $hash = hash_file($algo, $file);
             if ($hash === \false) {
                 throw new ShouldNotHappenException(sprintf('File %s is not readable', $file));

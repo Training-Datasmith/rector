@@ -54,7 +54,7 @@ final class SystemError implements SerializableInterface
         if ($this->relativeFilePath === null) {
             return null;
         }
-        return \realpath($this->relativeFilePath);
+        return \realpath($this->relativeFilePath) ?: null;
     }
     /**
      * @return array{

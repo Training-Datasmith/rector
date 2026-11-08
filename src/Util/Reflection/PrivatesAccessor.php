@@ -63,16 +63,12 @@ final class PrivatesAccessor
     }
     private function resolvePropertyReflection(object $object, string $propertyName): ReflectionProperty
     {
-        if (property_exists($object, $propertyName)) {
-            $reflection = new ReflectionProperty($object, $propertyName);
-            if (\PHP_VERSION_ID < 80100) {
-                $reflection->setAccessible(\true);
+        for ($class = get_class($object); $class !== false; $class = get_parent_class($class)) {
+            $reflectionClass = new ReflectionClass($class);
+            if (!$reflectionClass->hasProperty($propertyName)) {
+                continue;
             }
-            return $reflection;
-        }
-        $parentClass = get_parent_class($object);
-        if ($parentClass !== \false) {
-            $reflection = new ReflectionProperty($parentClass, $propertyName);
+            $reflection = $reflectionClass->getProperty($propertyName);
             if (\PHP_VERSION_ID < 80100) {
                 $reflection->setAccessible(\true);
             }
